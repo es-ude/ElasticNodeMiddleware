@@ -1,0 +1,12 @@
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries")
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+default_embedded_binaries(
+    main_files = glob(["*.c"]),
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//app/setup:Setup",
+        "//:Library",
+        "//elasticnodemiddleware:HdrOnlyLib",
+        ],
+)

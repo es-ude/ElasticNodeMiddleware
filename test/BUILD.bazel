@@ -1,0 +1,10 @@
+load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for_every_file", "unity_test")
+
+generate_a_unity_test_for_every_file(
+    cexception = False,
+    file_list = glob(["*_Test.c"]),
+    deps = [
+        "//:Library",
+        "//elasticnodemiddleware:HdrOnlyLib",
+    ],
+)

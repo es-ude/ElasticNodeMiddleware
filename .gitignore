@@ -1,0 +1,4 @@
+.vscode/
+.clwb/
+bazel-*
+user.bazelrc
