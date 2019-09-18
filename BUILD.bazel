@@ -9,3 +9,28 @@ cc_library(
         "//elasticnodemiddleware:HdrOnlyLib"
     ]
 )
+
+cc_library(
+    name = "RegisterAbstractionLib",
+    srcs = ["src/registerAbstraction.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:RegisterAbstractionLibHdr"],
+)
+
+
+
+cc_library(
+    name = "ElasticNodeMiddlewareLib",
+    srcs = ["src/elasticNodeMiddleware.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
+)
+
+
+cc_library(
+    name = "ElasticNodeMiddlewareLibTest",
+    srcs = ["src/elasticNodeMiddleware.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdrTest"],
+    copts = ["-DTEST"],
+)

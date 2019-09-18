@@ -1,10 +1,27 @@
-load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for_every_file", "unity_test")
+load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for_every_file", "mock", "unity_test")
 
-generate_a_unity_test_for_every_file(
-    cexception = False,
-    file_list = glob(["*_Test.c"]),
+#generate_a_unity_test_for_every_file(
+#    cexception = False,
+#    file_list = glob(["*_Test.c"]),
+#    deps = [
+#        "//:Library",
+#        "//elasticnodemiddleware:HdrOnlyLib",
+#    ],
+#)
+
+mock(
+    name = "mock_RegisterAbstraction",
+    srcs = ["//elasticnodemiddleware:registerAbstraction.h"],
+    deps = ["//elasticnodemiddleware:RegisterAbstractionLibHdr"],
+)
+
+unity_test(
+    file_name = "elasticNodeMiddleware_Test.c",
     deps = [
-        "//:Library",
-        "//elasticnodemiddleware:HdrOnlyLib",
+        "mock_RegisterAbstraction",
+        "//:ElasticNodeMiddlewareLibTest",
+        "//:Library"
     ],
+    copts = ["-DTEST"],
+
 )
