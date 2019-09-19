@@ -2,12 +2,11 @@
 // Created by annika on 17.09.19.
 //
 
-
 #ifndef ELASTICNODEMIDDLEWARE_FPGAPINS_H
 #define ELASTICNODEMIDDLEWARE_FPGAPINS_H
 
 #ifdef TEST
-#warning bal
+
 #else
 #include <avr/io.h>
 
@@ -29,6 +28,7 @@
 #define DDR_FPGA_POWER_INT &DDRB
 #define PORT_FPGA_POWER_INT &PORTB
 #define P_FPGA_POWER_INT PB0
+
 #endif
 
 #endif //ELASTICNODEMIDDLEWARE_FPGAPINS_H

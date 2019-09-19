@@ -1,10 +1,4 @@
 cc_library(
-   name = "HdrOnlyLib",
-   hdrs = glob(["**/*.h"]),
-   visibility = ["//visibility:public"],
-)
-
-cc_library(
     name = "RegisterAbstractionLibHdr",
     hdrs = ["registerAbstraction.h"],
     visibility = ["//visibility:public"],
@@ -12,22 +6,18 @@ cc_library(
 
 exports_files(
     srcs = [
-        "registerAbstraction.h",
         "elasticNodeMiddleware.h",
-        "fpgaPins.h"
+        "fpgaPins.h",
+        "registerAbstraction.h",
     ],
     visibility = ["//visibility:public"],
 )
 
 cc_library(
     name = "ElasticNodeMiddlewareLibHdr",
-    hdrs = ["elasticNodeMiddleware.h", "fpgaPins.h"],
+    hdrs = [
+        "elasticNodeMiddleware.h",
+        "fpgaPins.h",
+    ],
     visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "ElasticNodeMiddlewareLibHdrTest",
-    hdrs = ["elasticNodeMiddleware.h", "fpgaPins.h"],
-    visibility = ["//visibility:public"],
-    copts = ["-DTEST"],
 )

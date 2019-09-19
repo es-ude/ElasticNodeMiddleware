@@ -20,8 +20,5 @@ unity_test(
     deps = [
         "mock_RegisterAbstraction",
         "//:ElasticNodeMiddlewareLibTest",
-        "//:Library"
     ],
-    copts = ["-DTEST"],
-
 )
