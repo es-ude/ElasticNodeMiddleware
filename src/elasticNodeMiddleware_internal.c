@@ -1,0 +1,31 @@
+//
+// Created by annika on 26.09.19.
+//
+
+#include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
+#include "elasticnodemiddleware/fpgaPins.h"
+#include "elasticnodemiddleware/fpgaRegisters.h"
+#include "elasticnodemiddleware/registerAbstraction.h"
+
+
+void elasticnode_fpgaPowerOn_internal(){
+
+    abstraction_setRegisterBitsHigh(PORT_FPGA_PROGRAM_B, (1 << P_FPGA_PROGRAM_B));
+    abstraction_setRegisterBitsHigh(DDR_FPGA_PROGRAM_B, (1 << P_FPGA_PROGRAM_B));
+
+    abstraction_setRegisterBitsHigh(DDR_FPGA_POWER_SRAM, (1 << P_FPGA_POWER_SRAM));
+    abstraction_setRegisterBitsLow(PORT_FPGA_POWER_SRAM, (1 << P_FPGA_POWER_SRAM));
+    abstraction_setRegisterBitsHigh(DDR_FPGA_POWER_AUX, (1 << P_FPGA_POWER_AUX));
+    abstraction_setRegisterBitsLow(PORT_FPGA_POWER_AUX, (1 << P_FPGA_POWER_AUX));
+    abstraction_setRegisterBitsHigh(DDR_FPGA_POWER_IO, (1 << P_FPGA_POWER_IO));
+    abstraction_setRegisterBitsLow(PORT_FPGA_POWER_IO, (1 << P_FPGA_POWER_IO));
+    abstraction_setRegisterBitsHigh(DDR_FPGA_POWER_INT, (1 << P_FPGA_POWER_INT));
+    abstraction_setRegisterBitsLow(PORT_FPGA_POWER_INT, (1 << P_FPGA_POWER_INT));
+
+    //single control --> register do not exist
+
+    //disable interface
+    abstraction_setRegisterBitsLow(DDR_FPGA_CCLK, (1 << P_FPGA_CCLK));
+
+    abstraction_setRegisterBitsHigh(PORT_FPGA_PROGRAM_B, (1 << P_FPGA_PROGRAM_B));
+}

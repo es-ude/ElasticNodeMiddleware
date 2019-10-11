@@ -1,14 +1,44 @@
+exports_files(
+    srcs = [
+        "elasticNodeMiddleware.h",
+        "elasticNodeMiddleware_internal.h",
+        "fpgaPins.h",
+        "fpgaRegisters.h",
+        "reconfigure_multiboot.h",
+        "reconfigure_multiboot_internal.h",
+        "registerAbstraction.h",
+        "xmem.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 cc_library(
     name = "RegisterAbstractionLibHdr",
     hdrs = ["registerAbstraction.h"],
     visibility = ["//visibility:public"],
 )
 
-exports_files(
-    srcs = [
+cc_library(
+    name = "XMemLibHdr",
+    hdrs = [
+        "fpgaPins.h",
+        "fpgaRegisters.h",
+        "registerAbstraction.h",
+        "xmem.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "Reconfigure_MultibootLibHdr",
+    hdrs = [
         "elasticNodeMiddleware.h",
         "fpgaPins.h",
+        "fpgaRegisters.h",
+        "reconfigure_multiboot.h",
+        "reconfigure_multiboot_internal.h",
         "registerAbstraction.h",
+        "xmem.h",
     ],
     visibility = ["//visibility:public"],
 )
@@ -17,7 +47,11 @@ cc_library(
     name = "ElasticNodeMiddlewareLibHdr",
     hdrs = [
         "elasticNodeMiddleware.h",
+        "elasticNodeMiddleware_internal.h",
         "fpgaPins.h",
+        "fpgaRegisters.h",
+        "registerAbstraction.h",
+        "xmem.h",
     ],
     visibility = ["//visibility:public"],
 )

@@ -15,10 +15,64 @@ mock(
     deps = ["//elasticnodemiddleware:RegisterAbstractionLibHdr"],
 )
 
+mock(
+    name = "mock_ElasticNodeMiddleware_Internal",
+    srcs = ["//elasticnodemiddleware:elasticNodeMiddleware_internal.h"],
+    deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
+)
+
+mock(
+    name = "mock_Reconfigure_Multiboot_Internal",
+    srcs = ["//elasticnodemiddleware:reconfigure_multiboot_internal.h"],
+    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
+)
+
+mock(
+    name = "mock_ElasticNodemiddleware",
+    srcs = ["//elasticnodemiddleware:elasticNodeMiddleware.h"],
+    deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
+)
+
+mock(
+    name = "mock_Xmem",
+    srcs = ["//elasticnodemiddleware:xmem.h"],
+    copts = ["-DTEST"],
+    deps = ["//elasticnodemiddleware:XMemLibHdr"],
+)
+
 unity_test(
+    copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
     deps = [
+        "mock_ElasticNodeMiddleware_Internal",
         "mock_RegisterAbstraction",
         "//:ElasticNodeMiddlewareLibTest",
+    ],
+)
+
+unity_test(
+    cexception = False,
+    file_name = "registerAbstraction_Test.c",
+    deps = ["//:RegisterAbstractionLib"],
+)
+
+unity_test(
+    copts = ["-DTEST"],
+    file_name = "xmem_Test.c",
+    deps = [
+        "mock_RegisterAbstraction",
+        "//:XMemLibTest",
+    ],
+)
+
+unity_test(
+    copts = ["-DTEST"],
+    file_name = "reconfigure_multiboot_Test.c",
+    deps = [
+        "mock_ElasticNodemiddleware",
+        "mock_Reconfigure_Multiboot_Internal",
+        "mock_RegisterAbstraction",
+        "mock_Xmem",
+        "//:Reconfigure_multibootLibTest",
     ],
 )

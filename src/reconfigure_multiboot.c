@@ -1,0 +1,56 @@
+//
+// Created by annika on 10.10.19.
+//
+
+#include "elasticnodemiddleware/reconfigure_multiboot.h"
+#include "elasticnodemiddleware/reconfigure_multiboot_internal.h"
+#include "elasticnodemiddleware/fpgaPins.h"
+#include "elasticnodemiddleware/fpgaRegisters.h"
+#include "elasticnodemiddleware/registerAbstraction.h"
+#include "elasticnodemiddleware/elasticNodeMiddleware.h"
+#include "elasticnodemiddleware/xmem.h"
+
+volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
+//volatile uint8_t *multiboot =  (uint8_t *)(XMEM_OFFSET + 0x05);
+
+void initMultiboot() {
+
+    abstraction_setRegisterBitsLow(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
+    abstraction_setRegisterBitsHigh(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
+    abstraction_setRegisterBitsHigh(FPGA_DONE_INT_CONTROL_REG, (1 << FPGA_DONE_INT_CONTROL));
+
+    fpgaMultibootClearComplete_internal();
+    fpgaDoneResponse = FPGA_DONE_NOTHING;
+}
+
+void fpgaMultiboot(uint32_t address) {
+
+    elasticnode_fpgaPowerOn();
+
+    enableXmem();
+
+    fpgaSetDoneReponse_internal(FPGA_DONE_PRINT);
+    fpgaMultibootClearComplete_internal();
+
+  /*  for (uint8_t i = 0; i < 3; i++)
+    {
+        *(multiboot + i) = (uint8_t) (0xff & (address >> (i * 8)));
+    }
+*/
+    disableXmem();
+}
+
+void fpgaMultibootClearComplete() {
+    fpgaMultibootCompleteFlag = 0;
+
+    //for testing
+    ptr_fpgaMultibootCompleteFlag = &fpgaMultibootCompleteFlag;
+}
+
+uint8_t fpgaMultibootComplete(void) {
+    return fpgaMultibootCompleteFlag;
+}
+
+void fpgaSetDoneReponse(uint8_t response) {
+    fpgaMultibootCompleteFlag = response;
+}

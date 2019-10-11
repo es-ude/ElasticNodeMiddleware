@@ -9,15 +9,51 @@ cc_library(
 
 cc_library(
     name = "ElasticNodeMiddlewareLib",
-    srcs = ["src/elasticNodeMiddleware.c"],
+    srcs = [
+        "src/elasticNodeMiddleware.c",
+        "src/elasticNodeMiddleware_internal.c",
+    ],
     visibility = ["//visibility:public"],
     deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
 )
 
 cc_library(
     name = "ElasticNodeMiddlewareLibTest",
-    srcs = ["src/elasticNodeMiddleware.c"],
+    srcs = [
+        "src/elasticNodeMiddleware.c",
+        "src/elasticNodeMiddleware_internal.c",
+    ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
+)
+
+cc_library(
+    name = "XMemLib",
+    srcs = ["src/xmem.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:XMemLibHdr"],
+)
+
+cc_library(
+    name = "XMemLibTest",
+    srcs = ["src/xmem.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:XMemLibHdr"],
+)
+
+cc_library(
+    name = "Reconfigure_multibootLib",
+    srcs = ["src/reconfigure_multiboot.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
+)
+
+cc_library(
+    name = "Reconfigure_multibootLibTest",
+    srcs = ["src/reconfigure_multiboot.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
 )

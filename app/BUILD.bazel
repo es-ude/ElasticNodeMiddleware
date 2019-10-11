@@ -6,7 +6,5 @@ default_embedded_binaries(
     copts = cpu_frequency_flag(),
     deps = [
         "//app/setup:Setup",
-        "//:Library",
-        "//elasticnodemiddleware:HdrOnlyLib",
         ],
 )

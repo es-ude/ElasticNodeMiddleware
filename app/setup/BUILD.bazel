@@ -4,6 +4,5 @@ cc_library(
     name = "Setup",
     srcs = glob(["*.c"]),
     hdrs = glob(["*.h"]),
-    deps = ["//:Library"],
     visibility = ["//visibility:public"],
 )

@@ -7,27 +7,60 @@
 
 #ifdef TEST
 
+#define P_FPGA_PROGRAM_B 2
+
+#define P_FPGA_POWER_SRAM 5
+#define P_FPGA_POWER_AUX 4
+#define P_FPGA_POWER_IO 7
+#define P_FPGA_POWER_INT 0
+#define P_FPGA_CCLK 1
+
+#define P_FPGA_INIT_B 3
+
+#define P_FPGA_DONE 6
+
+#define P_XMEM_WR 0
+#define P_XMEM_RD 1
+#define P_XMEM_ALE 2
+
+#define SPE 6
+#define SRW10 6
+#define SRW11 1
+#define XMBK 7
+#define XMM1 1
+
+#define XMEM_A_MASK 0xff
+#define XMEM_AD_MASK 0xff
+
+#define FPGA_DONE_INT_CONTROL 0
+#define FPGA_DONE_INT 6
+
 #else
 #include <avr/io.h>
 
-#define DDR_FPGA_PROGRAM_B &DDRF
-#define PORT_FPGA_PROGRAM_B &PORTF
+
 #define P_FPGA_PROGRAM_B PF2
 
-#define FPGA_POWER_CONTROL_MULTI 1
-
-#define DDR_FPGA_POWER_SRAM &DDRE
-#define PORT_FPGA_POWER_SRAM &PORTE
 #define P_FPGA_POWER_SRAM PE5
-#define DDR_FPGA_POWER_AUX &DDRE
-#define PORT_FPGA_POWER_AUX &PORTE
 #define P_FPGA_POWER_AUX PE4
-#define DDR_FPGA_POWER_IO &DDRE
-#define PORT_FPGA_POWER_IO &PORTE
 #define P_FPGA_POWER_IO PE7
-#define DDR_FPGA_POWER_INT &DDRB
-#define PORT_FPGA_POWER_INT &PORTB
 #define P_FPGA_POWER_INT PB0
+
+#define P_FPGA_CCLK PB1
+
+#define P_FPGA_INIT_B PF3
+
+#define P_FPGA_DONE PB6
+
+#define P_XMEM_WR PE0
+#define P_XMEM_RD PE1
+#define P_XMEM_ALE PE2
+
+#define XMEM_A_MASK 0xff
+#define XMEM_AD_MASK 0xff
+
+#define FPGA_DONE_INT_CONTROL PCIE0
+#define FPGA_DONE_INT PCINT6
 
 #endif
 
