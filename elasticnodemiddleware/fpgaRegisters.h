@@ -25,6 +25,7 @@ extern uint8_t* PORT_FPGA_INIT_B;
 
 extern uint8_t* DDR_FPGA_DONE;
 extern uint8_t* PORT_FPGA_DONE;
+extern uint8_t* PIN_FPGA_DONE;
 
 extern uint8_t* DDR_XMEM_A;
 extern uint8_t* DDR_XMEM_AD;
@@ -63,6 +64,7 @@ extern uint8_t* FPGA_DONE_INT_CONTROL_REG;
 
 #define DDR_FPGA_DONE &DDRB
 #define PORT_FPGA_DONE &PORTB
+#define PIN_FPGA_DONE &PINB
 
 #define DDR_XMEM_RD &DDRE
 #define DDR_XMEM_A &DDRC

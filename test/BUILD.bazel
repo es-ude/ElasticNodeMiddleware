@@ -9,6 +9,7 @@ load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for
 #    ],
 #)
 
+
 mock(
     name = "mock_RegisterAbstraction",
     srcs = ["//elasticnodemiddleware:registerAbstraction.h"],
@@ -30,6 +31,7 @@ mock(
 mock(
     name = "mock_ElasticNodemiddleware",
     srcs = ["//elasticnodemiddleware:elasticNodeMiddleware.h"],
+    copts = ["-DTEST"],
     deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
 )
 
@@ -73,6 +75,7 @@ unity_test(
         "mock_Reconfigure_Multiboot_Internal",
         "mock_RegisterAbstraction",
         "mock_Xmem",
+
         "//:Reconfigure_multibootLibTest",
     ],
 )

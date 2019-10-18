@@ -12,6 +12,7 @@ void abstraction_setRegisterBitsHigh(volatile uint8_t* targetRegister, uint8_t b
 void abstraction_setRegisterBitsLow(volatile uint8_t*  targetRegister, uint8_t bitmask);
 
 uint8_t abstraction_isBitSet(volatile uint8_t* targetRegister, uint8_t bitToRead);
+uint8_t abstraction_getBit(volatile uint8_t* targetRegister, uint8_t bitToRead);
 
 uint8_t abstraction_getRegisterValue(volatile uint8_t* targetRegister);
 

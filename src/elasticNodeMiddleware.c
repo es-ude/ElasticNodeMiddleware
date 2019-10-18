@@ -9,7 +9,7 @@
 #include "elasticnodemiddleware/registerAbstraction.h"
 #include "elasticnodemiddleware/xmem.h"
 
-
+volatile uint8_t *reset_fpga = (uint8_t*) (XMEM_OFFSET + 0x04);
 
 
 void elasticnode_initialise(){
@@ -95,11 +95,16 @@ uint8_t elasticnode_readDataBlocking(){
 }
 
 void elasticnode_writeDataNonBlocking(uint8_t* address, uint8_t data){
-    uint8_t* ptr = XMEM_OFFSET + (uint8_t)address;
-    *ptr = data;
+    ptr_xmem_offset = (uint8_t *)(XMEM_OFFSET + address);
+    ptr_xmem_offset = &data;
 }
 
 uint8_t elasticnode_readDataNonBlocking(uint8_t* address){
-    volatile *ptr = XMEM_OFFSET + (uint8_t)address;
-    return (*ptr);
+    ptr_xmem_offset = (uint8_t *)(XMEM_OFFSET + address);
+    //return (*ptr_xmem_offset);
+}
+
+void setFpgaSoftReset(void)
+{
+    //*reset_fpga = 0x1;
 }

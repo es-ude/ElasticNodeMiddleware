@@ -18,8 +18,8 @@ extern uint8_t* XMEM_ENABLE_REG;
 //iom64: SRE = 7
 #define XMEM_ENABLE_P 7
 
-extern uint8_t* XMEM_OFFSET;
-
+//extern uint8_t* XMEM_OFFSET;
+#define XMEM_OFFSET 0x2000
 
 #else
 #include <avr/io.h>

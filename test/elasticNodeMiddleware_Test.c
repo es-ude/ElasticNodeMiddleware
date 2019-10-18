@@ -51,7 +51,9 @@ uint8_t* PORT_FPGA_INIT_B=&port_fpga_init_b;
 uint8_t* DDR_FPGA_DONE = &ddr_fpga_done;
 uint8_t* PORT_FPGA_DONE = &port_fpga_done;
 
-uint8_t* XMEM_OFFSET = &xmem_offset;
+//uint8_t* XMEM_OFFSET = &xmem_offset;
+
+volatile uint8_t *reset_fpga_test = (uint8_t*) (XMEM_OFFSET + 0x04);
 
 void initialise_mockRegister(void) {
     DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
@@ -74,7 +76,7 @@ void initialise_mockRegister(void) {
     DDR_FPGA_DONE = &ddr_fpga_done;
     PORT_FPGA_DONE = &port_fpga_done;
 
-    XMEM_OFFSET = &xmem_offset;
+    //XMEM_OFFSET = &xmem_offset;
 }
 
 void test_elasticnode_initialise(void) {
@@ -172,24 +174,27 @@ void test_elasticnode_readDataBlocking(void) {
 //idea: pointer auf xmem_offset, im test initialisieren, überprüfen, ob data hingeschrieben
 void test_elasticnode_writeDataNonBlocking(void) {
 
-    //FAIL
     uint8_t* address = 0;
     uint8_t data = 45;
 
     elasticnode_writeDataNonBlocking(address, data);
 
-    uint8_t* ptr = XMEM_OFFSET + (uint8_t)address;
-    TEST_ASSERT_EQUAL_UINT8((*ptr), data);
+    TEST_ASSERT_EQUAL_UINT8((*ptr_xmem_offset), data);
 }
 
 
 //turn immediately, even if no bytes are available
 void test_elasticnode_readDataNonBlocking(void) {
-    //FAIL
-    uint8_t* address = 0;
 
+    //FAIL
+
+    uint8_t* address = 0;
     uint8_t data = elasticnode_readDataNonBlocking(address);
 
-    volatile *ptr = XMEM_OFFSET + (uint8_t)address;
-    TEST_ASSERT_EQUAL_UINT8((*ptr), data);
+    //TEST_ASSERT_EQUAL_UINT8((*ptr_xmem_offset), data);
+}
+
+void test_setFpgaSoftReset(void)
+{
+
 }

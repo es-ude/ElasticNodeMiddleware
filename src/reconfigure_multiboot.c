@@ -11,7 +11,7 @@
 #include "elasticnodemiddleware/xmem.h"
 
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
-//volatile uint8_t *multiboot =  (uint8_t *)(XMEM_OFFSET + 0x05);
+//uint8_t *multiboot =  (uint8_t *)(XMEM_OFFSET + 0x05);
 
 void initMultiboot() {
 
@@ -23,6 +23,11 @@ void initMultiboot() {
     fpgaDoneResponse = FPGA_DONE_NOTHING;
 }
 
+void initPtrMultiboot() {
+    multiboot = (uint8_t*) (XMEM_OFFSET + 0x05);
+    //segmentation fault by using multiboot derefernciated
+}
+
 void fpgaMultiboot(uint32_t address) {
 
     elasticnode_fpgaPowerOn();
@@ -32,11 +37,13 @@ void fpgaMultiboot(uint32_t address) {
     fpgaSetDoneReponse_internal(FPGA_DONE_PRINT);
     fpgaMultibootClearComplete_internal();
 
-  /*  for (uint8_t i = 0; i < 3; i++)
+    initPtrMultiboot();
+    for (uint8_t i = 0; i < 3; i++)
     {
-        *(multiboot + i) = (uint8_t) (0xff & (address >> (i * 8)));
+        //Segmentation Fault during writing
+        //*(multiboot + i) = (uint8_t) (0xff & (address >> (i * 8)));
     }
-*/
+
     disableXmem();
 }
 
@@ -53,4 +60,37 @@ uint8_t fpgaMultibootComplete(void) {
 
 void fpgaSetDoneReponse(uint8_t response) {
     fpgaMultibootCompleteFlag = response;
+}
+
+void interruptSR() {
+
+    if (abstraction_getBit(PIN_FPGA_DONE, P_FPGA_DONE)){
+        float duration;
+        fpgaMultibootCompleteFlag = 1;
+        switch (fpgaDoneResponse) {
+            case FPGA_DONE_PRINT:
+                duration = -1;
+                cli();
+
+                //debugWriteLine("FPGA Done INT");
+                //debugWriteFloatFull(duration);
+                //debugNewLine();
+                //debugDone();
+                break;
+            case FPGA_DONE_MULTIBOOT:
+
+                //fpgaSoftReset();
+                fpgaMultiboot_internal(0);
+                break;
+            case 0:
+            default:
+                break;
+        }
+        sei();
+    }
+}
+
+ISR(FPGA_DONE_INT_VECTOR)
+{
+    interruptSR();
 }

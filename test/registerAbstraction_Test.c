@@ -113,6 +113,13 @@ void test_abstraction_isBitSetDoesNotAffectMemory(void) {
     TEST_ASSERT_EQUAL_UINT32(expectedMemory, myRegsiterAndSurroudingArea);
 }
 
+void test_abstraction_getBit(void) {
+    uint8_t myRegister = 0x34;
+    uint8_t bitToRead = 3;
+    uint8_t testBit = abstraction_getBit(&myRegister, bitToRead);
+    TEST_ASSERT_EQUAL_UINT8(0, testBit);
+}
+
 void test_abstraction_getRegisterValue(void) {
     uint8_t myRegister = 0x1F;
     uint8_t registerValue = abstraction_getRegisterValue(&myRegister);

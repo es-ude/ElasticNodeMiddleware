@@ -22,10 +22,12 @@
  * write data to FPGA (non-blocking)
  * read data from FPGA (non-blocking)
  * */
-
 #include <stdint.h>
 #define FPGA_DONE_NOTHING 0
 #define FPGA_DONE_PRINT 1
+#define FPGA_DONE_MULTIBOOT 2
+
+uint8_t* ptr_xmem_offset;
 
 void elasticnode_initialise();
 
@@ -46,5 +48,18 @@ uint8_t elasticnode_readDataBlocking();
 
 void elasticnode_writeDataNonBlocking(uint8_t* address, uint8_t data);
 uint8_t elasticnode_readDataNonBlocking(uint8_t* address);
+
+void setFpgaSoftReset();
+
+#ifdef TEST
+
+void cli();
+void sei();
+
+#else
+
+#include <avr/interrupt.h>
+
+#endif
 
 #endif //ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_H
