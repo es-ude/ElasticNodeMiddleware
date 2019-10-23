@@ -18,9 +18,8 @@ uint8_t* FPGA_DONE_INT_REG = &fpga_done_int_reg;
 uint8_t* FPGA_DONE_INT_CONTROL_REG = &fpga_done_int_control_reg;
 uint8_t* PIN_FPGA_DONE = &pin_fpga_done;
 
-volatile uint8_t fpgaDoneResponseTest;
-volatile uint8_t fpgaMultibootCompleteFlagTest;
-
+uint8_t memoryarea[2000];
+const uint8_t* externalMockMemory = &memoryarea;
 
 void initalise_reconfigure_multiboot_mockRegister(void) {
     FPGA_DONE_INT_REG = &fpga_done_int_reg;
@@ -36,14 +35,15 @@ void test_initMultiboot(void) {
     abstraction_setRegisterBitsHigh_Expect(FPGA_DONE_INT_CONTROL_REG, (1 << FPGA_DONE_INT_CONTROL));
 
     fpgaMultibootClearComplete_internal_Expect();
-    fpgaDoneResponseTest = FPGA_DONE_NOTHING;
     initMultiboot();
+
+    TEST_ASSERT_EQUAL_UINT8((*ptr_fpgaDoneResponse), fpgaDoneResponse);
 }
 
 void test_initPtrMultiboot(void) {
     initalise_reconfigure_multiboot_mockRegister();
     initPtrMultiboot();
-    //TEST_ASSERT_EQUAL_UINT8((&multiboot), (XMEM_OFFSET + 0x05));
+    TEST_ASSERT_EQUAL_UINT8((&multiboot), XMEM_OFFSET);
 }
 
 void test_fpgaMultiboot(void) {
@@ -60,19 +60,20 @@ void test_fpgaMultiboot(void) {
 
     disableXmem_Expect();
 
-    initPtrMultiboot();
+    initPtrMultiboot_internal_Expect();
 
-    fpgaMultiboot(address);
+    sei_Expect();
+
     uint8_t tmp0 = (uint8_t) (0xff & (address >> (0 * 8)));
-    //Segmentation Fault during reading
-    //uint8_t test = *multiboot;
-    //TEST_ASSERT_EQUAL_UINT8((*(multiboot+0)), tmp0);
+    TEST_ASSERT_EQUAL_UINT8((*(multiboot+0)), tmp0);
 
     uint8_t tmp1 = (uint8_t) (0xff & (address >> (1 * 8)));
-    //TEST_ASSERT_EQUAL_UINT8((*(multiboot+1)), tmp1);
+    TEST_ASSERT_EQUAL_UINT8((*(multiboot+1)), tmp1);
 
     uint8_t tmp2 = (uint8_t) (0xff & (address >> (2 * 8)));
-    //TEST_ASSERT_EQUAL_UINT8((*(multiboot+2)), tmp2);
+    TEST_ASSERT_EQUAL_UINT8((*(multiboot+2)), tmp2);
+
+    fpgaMultiboot(address);
 }
 
 void test_fpgaMultibootClearComplete(void) {
@@ -107,17 +108,13 @@ void test_interruptSR(void) {
 
     abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE, 1);
 
-        float duration;
-
-        //nicht richtigen Wert verändern!
-        fpgaMultibootCompleteFlagTest = 1;
-        switch (fpgaDoneResponseTest) {
+        switch (fpgaDoneResponse) {
             case FPGA_DONE_PRINT:
 
-                duration = -1;
                 cli_Expect();
 
-                //implementierung fehlt
+                //TODO: implement for debugging
+
                 //debugWriteLine("FPGA Done INT");
                 //debugWriteFloatFull(duration);
                 //debugNewLine();
@@ -126,8 +123,7 @@ void test_interruptSR(void) {
                 break;
             case FPGA_DONE_MULTIBOOT:
 
-                //implementierung fehlt
-                //fpgaSoftReset()
+                elasticnode_fpgaSoftReset_Expect();
                 fpgaMultiboot_internal_Expect(0);
                 break;
             case 0:
@@ -137,4 +133,5 @@ void test_interruptSR(void) {
         sei_Expect();
 
     interruptSR();
+    TEST_ASSERT_EQUAL_UINT8((*ptr_fpgaMultibootCompleteFlag), 1);
 }

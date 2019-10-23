@@ -8,5 +8,12 @@
 #include <stdint.h>
 
 void elasticnode_fpgaPowerOn_internal();
+void elasticnode_setFpgaSoftReset_internal();
+void elasticnode_clearFpgaSoftReset_internal();
+
+#ifdef TEST
+void _delay_ms(uint8_t delay);
+
+#endif
 
 #endif //ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_INTERNAL_H

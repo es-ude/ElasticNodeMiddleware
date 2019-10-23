@@ -27,7 +27,9 @@
 #define FPGA_DONE_PRINT 1
 #define FPGA_DONE_MULTIBOOT 2
 
-uint8_t* ptr_xmem_offset;
+volatile uint8_t* ptr_xmem_offset;
+#define RESET_DELAY 10
+volatile uint8_t *reset_fpga;
 
 void elasticnode_initialise();
 
@@ -39,17 +41,18 @@ void elasticnode_fpgaPowerOff();
 void elasticnode_fpgaSleep(uint8_t sleepmode);
 */
 
-//'c'
 void elasticnode_configure();
 uint8_t elasticnode_getLoadedConfiguration();
 
-void elasticnode_writeDataBlocking(uint8_t* address, uint8_t data);
-uint8_t elasticnode_readDataBlocking();
+void elasticnode_writeDataBlocking(uint8_t address, uint8_t data);
+void elasticnode_readDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_return);
+//void elasticnode_writeDataNonBlocking(uint8_t* address, uint8_t data);
+//uint8_t elasticnode_readDataNonBlocking();
 
-void elasticnode_writeDataNonBlocking(uint8_t* address, uint8_t data);
-uint8_t elasticnode_readDataNonBlocking(uint8_t* address);
-
-void setFpgaSoftReset();
+void elasticnode_initReset_FPGA();
+void elasticnode_setFpgaSoftReset();
+void elasticnode_fpgaSoftReset();
+void elasticnode_clearFpgaSoftReset();
 
 #ifdef TEST
 
@@ -59,6 +62,7 @@ void sei();
 #else
 
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 #endif
 

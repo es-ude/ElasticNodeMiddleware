@@ -3,6 +3,7 @@
 //
 
 #include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
+#include "elasticnodemiddleware/elasticNodeMiddleware.h"
 #include "elasticnodemiddleware/fpgaPins.h"
 #include "elasticnodemiddleware/fpgaRegisters.h"
 #include "elasticnodemiddleware/registerAbstraction.h"
@@ -28,4 +29,13 @@ void elasticnode_fpgaPowerOn_internal(){
     abstraction_setRegisterBitsLow(DDR_FPGA_CCLK, (1 << P_FPGA_CCLK));
 
     abstraction_setRegisterBitsHigh(PORT_FPGA_PROGRAM_B, (1 << P_FPGA_PROGRAM_B));
+}
+
+void elasticnode_setFpgaSoftReset_internal(void)
+{
+    *reset_fpga = 0x1;
+}
+
+void elasticnode_clearFpgaSoftReset_internal() {
+    *reset_fpga = 0x0;
 }

@@ -8,8 +8,10 @@
 #include "elasticnodemiddleware/fpgaRegisters.h"
 #include "elasticnodemiddleware/registerAbstraction.h"
 #include "elasticnodemiddleware/xmem.h"
+#include "elasticnodemiddleware/reconfigure_multiboot.h"
 
-volatile uint8_t *reset_fpga = (uint8_t*) (XMEM_OFFSET + 0x04);
+//in header
+//volatile uint8_t *reset_fpga = (uint8_t*) (XMEM_OFFSET + 0x04);
 
 
 void elasticnode_initialise(){
@@ -78,33 +80,52 @@ void elasticnode_fpgaPowerOff(){
 void elasticnode_fpgaSleep(uint8_t sleepmode){
 }*/
 
-void elasticnode_configure(){
-
+void elasticnode_configure(uint32_t address){
+    fpgaMultiboot(address);
+    while(!fpgaMultibootComplete());
 }
 
 uint8_t elasticnode_getLoadedConfiguration(){
-
+    //letzte adresse zurückgeben
+    return &multiboot;
 }
 
-void elasticnode_writeDataBlocking(uint8_t* address, uint8_t data){
-
+void elasticnode_writeDataBlocking(uint8_t address, uint8_t data){
+    ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET + address);
+    for(uint8_t j=0; j<data; j++){
+        *ptr_xmem_offset = data;
+    }
 }
 
-uint8_t elasticnode_readDataBlocking(){
-
+void elasticnode_readDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_return){
+    ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET + address);
+    for(uint8_t i = 0; i < size; i++) {
+        *(ptr_return + i) = *(ptr_xmem_offset + i);
+    }
 }
 
+/*
 void elasticnode_writeDataNonBlocking(uint8_t* address, uint8_t data){
-    ptr_xmem_offset = (uint8_t *)(XMEM_OFFSET + address);
-    ptr_xmem_offset = &data;
 }
 
 uint8_t elasticnode_readDataNonBlocking(uint8_t* address){
-    ptr_xmem_offset = (uint8_t *)(XMEM_OFFSET + address);
-    //return (*ptr_xmem_offset);
+}
+*/
+
+
+void elasticnode_initReset_FPGA() {
+    reset_fpga = (uint8_t*) (XMEM_OFFSET + 0x04);
+}
+void elasticnode_setFpgaSoftReset(void){
+    *reset_fpga = 0x1;
 }
 
-void setFpgaSoftReset(void)
-{
-    //*reset_fpga = 0x1;
+void elasticnode_clearFpgaSoftReset() {
+    *reset_fpga = 0x0;
+}
+
+void elasticnode_fpgaSoftReset() {
+    elasticnode_setFpgaSoftReset_internal();
+    _delay_ms(RESET_DELAY);
+    elasticnode_clearFpgaSoftReset_internal();
 }

@@ -29,6 +29,13 @@ mock(
 )
 
 mock(
+    name = "mock_Reconfigure_Multiboot",
+    srcs = ["//elasticnodemiddleware:reconfigure_multiboot.h"],
+    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
+    copts = ["-DTEST"],
+)
+
+mock(
     name = "mock_ElasticNodemiddleware",
     srcs = ["//elasticnodemiddleware:elasticNodeMiddleware.h"],
     copts = ["-DTEST"],
@@ -48,6 +55,7 @@ unity_test(
     deps = [
         "mock_ElasticNodeMiddleware_Internal",
         "mock_RegisterAbstraction",
+        "mock_Reconfigure_Multiboot",
         "//:ElasticNodeMiddlewareLibTest",
     ],
 )

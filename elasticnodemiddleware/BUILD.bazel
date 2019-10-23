@@ -52,6 +52,7 @@ cc_library(
         "fpgaRegisters.h",
         "registerAbstraction.h",
         "xmem.h",
+        "reconfigure_multiboot.h"
     ],
     visibility = ["//visibility:public"],
 )

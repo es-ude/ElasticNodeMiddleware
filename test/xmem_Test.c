@@ -29,6 +29,13 @@ uint8_t* SPCR = &sprc;
 uint8_t* XMCRA = &xmcra;
 uint8_t* XMCRB = &xmcrb;
 
+uint8_t memoryarea[2000];
+const uint8_t* externalMockMemory = &memoryarea;
+
+void prepare_externalMockMemory() {
+
+}
+
 void initialise_xmem_mockRegister(void) {
     XMEM_ENABLE_REG = &xmem_enable_reg;
     DDR_XMEM_A = &ddr_xmem_a;

@@ -11,6 +11,8 @@
 //for testing
 volatile uint8_t* ptr_fpgaMultibootCompleteFlag;
 volatile uint8_t fpgaMultibootCompleteFlag;
+volatile uint8_t* ptr_fpgaDoneResponse;
+volatile uint8_t fpgaDoneResponse;
 volatile uint8_t* multiboot;
 
 void initMultiboot();
