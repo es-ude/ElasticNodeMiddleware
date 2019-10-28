@@ -29,8 +29,6 @@ uint8_t ddr_fpga_init_b;
 uint8_t port_fpga_done;
 uint8_t ddr_fpga_done;
 
-uint8_t xmem_offset;
-
 uint8_t* DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
 uint8_t* PORT_FPGA_PROGRAM_B = &port_fpga_program_b;
 
@@ -51,7 +49,7 @@ uint8_t* PORT_FPGA_INIT_B=&port_fpga_init_b;
 uint8_t* DDR_FPGA_DONE = &ddr_fpga_done;
 uint8_t* PORT_FPGA_DONE = &port_fpga_done;
 
-uint8_t memoryarea[2000];
+uint8_t memoryarea; //[2000]; ??? why array?
 const uint8_t* externalMockMemory = &memoryarea;
 
 void initialise_mockRegister(void) {
@@ -74,8 +72,6 @@ void initialise_mockRegister(void) {
 
     DDR_FPGA_DONE = &ddr_fpga_done;
     PORT_FPGA_DONE = &port_fpga_done;
-
-    //XMEM_OFFSET = &xmem_offset;
 }
 
 void test_elasticnode_initialise(void) {
@@ -156,7 +152,7 @@ void test_elasticnode_fpgaPowerOff(void) {
 
 void test_elasticnode_configure() {
     initialise_mockRegister();
-    uint32_t address = 0x23409;
+    //uint32_t address = 0x23409;
 
     //Test not possible, flag
     //fpgaMultiboot_Expect(address);
@@ -167,21 +163,48 @@ void test_elasticnode_getConfiguration() {
     initialise_mockRegister();
 
     uint8_t address = elasticnode_getLoadedConfiguration();
-
-    TEST_ASSERT_EQUAL_UINT8((&multiboot), address);
+    TEST_ASSERT_EQUAL_UINT8((*multiboot), address);
 }
 
 //block until it has written all of the data to the file
-void test_elasticnode_writeDataBlocking(void){
+void test_elasticnode_writeOneByteBlocking(void){
     initialise_mockRegister();
     uint8_t address = 0;
     uint8_t data = 34;
 
-    elasticnode_writeDataBlocking(address, data);
+    elasticnode_writeOneByteBlocking(address, data);
 
     TEST_ASSERT_EQUAL_UINT8((*ptr_xmem_offset), data);
 }
 
+void test_elasticnode_writeDataBlocking(void) {
+    initialise_mockRegister();
+
+    uint8_t address = 0;
+    uint8_t destination;
+    uint8_t* ptr_data = &destination;
+    uint8_t size = 3;
+
+    for(uint8_t i =0; i<3; i++) {
+        *ptr_data = i;
+    }
+
+    elasticnode_writeDataBlocking(address, size, ptr_data);
+
+    TEST_ASSERT_EQUAL_UINT8(*(ptr_xmem_offset), *ptr_data);
+    TEST_ASSERT_EQUAL_UINT8(*(ptr_xmem_offset +1), *(ptr_data +1));
+    TEST_ASSERT_EQUAL_UINT8(*(ptr_xmem_offset +2), *(ptr_data + 2));
+}
+
+void test_elasticnode_readOneByteBlocking(void) {
+    initialise_mockRegister();
+
+    uint8_t address = 0;
+
+    uint8_t byte = elasticnode_readOneByteBlocking(address);
+
+    TEST_ASSERT_EQUAL_UINT8(byte,(*ptr_xmem_offset));
+}
 
 // waits until at least one byte is available to return to the application
 void test_elasticnode_readDataBlocking(void) {
@@ -201,7 +224,7 @@ void test_elasticnode_readDataBlocking(void) {
 void test_elasticnode_initReset_FPGA() {
     initialise_mockRegister();
     elasticnode_initReset_FPGA();
-    TEST_ASSERT_EQUAL_UINT8((*reset_fpga), XMEM_OFFSET);
+    TEST_ASSERT_EQUAL_PTR((reset_fpga), (XMEM_OFFSET + 0x04));
 }
 void test_elasticnode_setFpgaSoftReset(void) {
     initialise_mockRegister();

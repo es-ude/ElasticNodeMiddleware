@@ -44,7 +44,9 @@ void elasticnode_fpgaSleep(uint8_t sleepmode);
 void elasticnode_configure();
 uint8_t elasticnode_getLoadedConfiguration();
 
-void elasticnode_writeDataBlocking(uint8_t address, uint8_t data);
+void elasticnode_writeOneByteBlocking(uint8_t address, uint8_t data);
+void elasticnode_writeDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_data);
+uint8_t elasticnode_readOneByteBlocking(uint8_t address);
 void elasticnode_readDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_return);
 //void elasticnode_writeDataNonBlocking(uint8_t* address, uint8_t data);
 //uint8_t elasticnode_readDataNonBlocking();

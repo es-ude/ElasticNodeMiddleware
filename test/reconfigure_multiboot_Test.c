@@ -18,7 +18,7 @@ uint8_t* FPGA_DONE_INT_REG = &fpga_done_int_reg;
 uint8_t* FPGA_DONE_INT_CONTROL_REG = &fpga_done_int_control_reg;
 uint8_t* PIN_FPGA_DONE = &pin_fpga_done;
 
-uint8_t memoryarea[2000];
+uint8_t memoryarea; //[2000]; why array?
 const uint8_t* externalMockMemory = &memoryarea;
 
 void initalise_reconfigure_multiboot_mockRegister(void) {
@@ -35,15 +35,16 @@ void test_initMultiboot(void) {
     abstraction_setRegisterBitsHigh_Expect(FPGA_DONE_INT_CONTROL_REG, (1 << FPGA_DONE_INT_CONTROL));
 
     fpgaMultibootClearComplete_internal_Expect();
-    initMultiboot();
+    reconfigure_initMultiboot();
 
     TEST_ASSERT_EQUAL_UINT8((*ptr_fpgaDoneResponse), fpgaDoneResponse);
 }
 
 void test_initPtrMultiboot(void) {
     initalise_reconfigure_multiboot_mockRegister();
-    initPtrMultiboot();
-    TEST_ASSERT_EQUAL_UINT8((&multiboot), XMEM_OFFSET);
+    reconfigure_initPtrMultiboot();
+    TEST_ASSERT_EQUAL_PTR(multiboot, (XMEM_OFFSET + 0x05));
+
 }
 
 void test_fpgaMultiboot(void) {
@@ -73,13 +74,13 @@ void test_fpgaMultiboot(void) {
     uint8_t tmp2 = (uint8_t) (0xff & (address >> (2 * 8)));
     TEST_ASSERT_EQUAL_UINT8((*(multiboot+2)), tmp2);
 
-    fpgaMultiboot(address);
+    reconfigure_fpgaMultiboot(address);
 }
 
 void test_fpgaMultibootClearComplete(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    fpgaMultibootClearComplete();
+    reconfigure_fpgaMultibootClearComplete();
 
     uint8_t tmp = *ptr_fpgaMultibootCompleteFlag;
     TEST_ASSERT_EQUAL_UINT8(0, tmp);
@@ -89,7 +90,7 @@ void test_fpgaMultibootComplete(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
     uint8_t expected = *ptr_fpgaMultibootCompleteFlag;
-    uint8_t flag = fpgaMultibootComplete();
+    uint8_t flag = reconfigure_fpgaMultibootComplete();
 
     TEST_ASSERT_EQUAL_UINT8(expected, flag);
 }
@@ -98,7 +99,7 @@ void test_fpgaSetDoneReponse(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
     uint8_t response = 123;
-    fpgaSetDoneReponse(response);
+    reconfigure_fpgaSetDoneReponse(response);
 
     TEST_ASSERT_EQUAL_UINT8(response, (*ptr_fpgaMultibootCompleteFlag));
 }
@@ -132,6 +133,6 @@ void test_interruptSR(void) {
         }
         sei_Expect();
 
-    interruptSR();
+    reconfigure_interruptSR();
     TEST_ASSERT_EQUAL_UINT8((*ptr_fpgaMultibootCompleteFlag), 1);
 }

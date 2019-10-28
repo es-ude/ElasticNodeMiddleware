@@ -10,7 +10,7 @@
 #include "elasticnodemiddleware/elasticNodeMiddleware.h"
 #include "elasticnodemiddleware/xmem.h"
 
-void initMultiboot() {
+void reconfigure_initMultiboot() {
 
     abstraction_setRegisterBitsLow(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
     abstraction_setRegisterBitsHigh(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
@@ -23,11 +23,11 @@ void initMultiboot() {
     ptr_fpgaDoneResponse = &fpgaDoneResponse;
 }
 
-void initPtrMultiboot() {
+void reconfigure_initPtrMultiboot() {
     multiboot = (uint8_t*) (XMEM_OFFSET + 0x05);
 }
 
-void fpgaMultiboot(uint32_t address) {
+void reconfigure_fpgaMultiboot(uint32_t address) {
 
     elasticnode_fpgaPowerOn();
 
@@ -46,22 +46,22 @@ void fpgaMultiboot(uint32_t address) {
     sei();
 }
 
-void fpgaMultibootClearComplete() {
+void reconfigure_fpgaMultibootClearComplete() {
     fpgaMultibootCompleteFlag = 0;
 
     //for testing
     ptr_fpgaMultibootCompleteFlag = &fpgaMultibootCompleteFlag;
 }
 
-uint8_t fpgaMultibootComplete(void) {
+uint8_t reconfigure_fpgaMultibootComplete(void) {
     return fpgaMultibootCompleteFlag;
 }
 
-void fpgaSetDoneReponse(uint8_t response) {
+void reconfigure_fpgaSetDoneReponse(uint8_t response) {
     fpgaMultibootCompleteFlag = response;
 }
 
-void interruptSR() {
+void reconfigure_interruptSR() {
 
     if (abstraction_getBit(PIN_FPGA_DONE, P_FPGA_DONE)){
         //float duration;
@@ -91,5 +91,5 @@ void interruptSR() {
 
 ISR(FPGA_DONE_INT_VECTOR)
 {
-    interruptSR();
+    reconfigure_interruptSR();
 }

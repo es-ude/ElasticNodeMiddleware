@@ -81,20 +81,36 @@ void elasticnode_fpgaSleep(uint8_t sleepmode){
 }*/
 
 void elasticnode_configure(uint32_t address){
-    fpgaMultiboot(address);
-    while(!fpgaMultibootComplete());
+    reconfigure_fpgaMultiboot(address);
+    while(!reconfigure_fpgaMultibootComplete());
 }
 
 uint8_t elasticnode_getLoadedConfiguration(){
     //letzte adresse zurückgeben
-    return &multiboot;
+    multiboot = (uint8_t*) (XMEM_OFFSET + 0x05);
+    return *multiboot;
 }
 
-void elasticnode_writeDataBlocking(uint8_t address, uint8_t data){
+void elasticnode_writeOneByteBlocking(uint8_t address, uint8_t data){
     ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET + address);
     for(uint8_t j=0; j<data; j++){
         *ptr_xmem_offset = data;
     }
+}
+
+void elasticnode_writeDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_data){
+    ptr_xmem_offset = (uint8_t*) (XMEM_OFFSET + address);
+    for(uint8_t k=0; k<size; k++) {
+        *(ptr_xmem_offset+k) = *(ptr_data+k);
+    }
+
+}
+
+uint8_t elasticnode_readOneByteBlocking(uint8_t address){
+    ptr_xmem_offset = (uint8_t*) (XMEM_OFFSET + address);
+    uint8_t byte = *ptr_xmem_offset;
+
+    return byte;
 }
 
 void elasticnode_readDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_return){
