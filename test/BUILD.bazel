@@ -49,6 +49,12 @@ mock(
     deps = ["//elasticnodemiddleware:XMemLibHdr"],
 )
 
+mock(
+    name = "mock_Leds_Internal",
+    srcs = ["//elasticnodemiddleware:leds_internal.h"],
+    deps = ["//elasticnodemiddleware:LedsLibHdr"],
+)
+
 unity_test(
     copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
@@ -86,4 +92,24 @@ unity_test(
 
         "//:Reconfigure_multibootLibTest",
     ],
+)
+
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "configuration_flash_Test.c",
+    deps = [
+        "mock_ElasticNodemiddleware",
+        "//:ConfigurationLibTest"
+    ]
+)
+
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "leds_Test.c",
+    deps = [
+        "//:LedsLibTest",
+        "mock_Leds_Internal",
+    ]
 )

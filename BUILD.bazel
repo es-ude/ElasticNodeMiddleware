@@ -57,3 +57,33 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
 )
+
+cc_library(
+    name = "ConfigurationLib",
+    srcs = ["src/configuration_flash.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:ConfigurationFlashLibHdr"],
+)
+
+cc_library(
+    name = "ConfigurationLibTest",
+    srcs = ["src/configuration_flash.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:ConfigurationFlashLibHdr"],
+)
+
+cc_library(
+    name = "LedsLib",
+    srcs = ["src/leds.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:LedsLibHdr"],
+)
+
+cc_library(
+    name = "LedsLibTest",
+    copts = ["-DTEST"],
+    srcs = ["src/leds.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:LedsLibHdr"],
+)

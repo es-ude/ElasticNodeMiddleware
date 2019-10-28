@@ -8,6 +8,8 @@ exports_files(
         "reconfigure_multiboot_internal.h",
         "registerAbstraction.h",
         "xmem.h",
+        "configuration_flash.h",
+        "leds_internal.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -54,5 +56,18 @@ cc_library(
         "xmem.h",
         "reconfigure_multiboot.h"
     ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "ConfigurationFlashLibHdr",
+    hdrs = ["configuration_flash.h",
+            "elasticNodeMiddleware.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "LedsLibHdr",
+    hdrs = ["leds.h", "leds_internal.h"],
     visibility = ["//visibility:public"],
 )
