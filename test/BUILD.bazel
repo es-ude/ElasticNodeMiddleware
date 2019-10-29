@@ -55,6 +55,23 @@ mock(
     deps = ["//elasticnodemiddleware:LedsLibHdr"],
 )
 
+mock(
+    name = "mock_Leds",
+    srcs = ["//elasticnodemiddleware:leds.h"],
+    deps = ["//elasticnodemiddleware:LedsLibHdr"],
+)
+
+mock(
+    name = "mock_Lufa",
+    srcs = ["//elasticnodemiddleware:lufa.h"],
+    deps = ["//elasticnodemiddleware:LufaLibHdr"],
+)
+
+mock(
+    name = "mock_Configuration_Flash_internal",
+    srcs = ["//elasticnodemiddleware:configuration_flash_internal.h"],
+    deps = ["//elasticnodemiddleware:ConfigurationFlashLibHdr"]
+)
 unity_test(
     copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
@@ -100,7 +117,10 @@ unity_test(
     file_name = "configuration_flash_Test.c",
     deps = [
         "mock_ElasticNodemiddleware",
-        "//:ConfigurationLibTest"
+        "//:ConfigurationLibTest",
+        "mock_Leds",
+        "mock_Lufa",
+        "mock_Configuration_Flash_internal"
     ]
 )
 
@@ -111,5 +131,6 @@ unity_test(
     deps = [
         "//:LedsLibTest",
         "mock_Leds_Internal",
+        "mock_RegisterAbstraction"
     ]
 )

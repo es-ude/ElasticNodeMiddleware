@@ -9,7 +9,10 @@ exports_files(
         "registerAbstraction.h",
         "xmem.h",
         "configuration_flash.h",
-        "leds_internal.h"
+        "leds_internal.h",
+        "leds.h",
+        "lufa.h",
+        "configuration_flash_internal.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -61,13 +64,29 @@ cc_library(
 
 cc_library(
     name = "ConfigurationFlashLibHdr",
-    hdrs = ["configuration_flash.h",
-            "elasticNodeMiddleware.h"],
+    hdrs = [
+        "configuration_flash.h",
+        "elasticNodeMiddleware.h",
+        "leds.h",
+        "lufa.h",
+        "configuration_flash_internal.h"],
     visibility = ["//visibility:public"],
 )
 
 cc_library(
     name = "LedsLibHdr",
-    hdrs = ["leds.h", "leds_internal.h"],
+    hdrs = [
+        "leds.h",
+        "leds_internal.h",
+        "fpgaRegisters.h",
+        "fpgaPins.h",
+        "registerAbstraction.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "LufaLibHdr",
+    hdrs = [
+        "lufa.h"],
     visibility = ["//visibility:public"],
 )

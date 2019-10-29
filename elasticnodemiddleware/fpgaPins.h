@@ -5,6 +5,7 @@
 #ifndef ELASTICNODEMIDDLEWARE_FPGAPINS_H
 #define ELASTICNODEMIDDLEWARE_FPGAPINS_H
 
+
 #ifdef TEST
 
 #define P_FPGA_PROGRAM_B 2
@@ -35,6 +36,11 @@
 #define FPGA_DONE_INT_CONTROL 0
 #define FPGA_DONE_INT 6
 
+#define P_LED_0 7
+#define P_LED_1 6
+#define P_LED_2 5
+#define P_LED_3 4
+
 #else
 #include <avr/io.h>
 
@@ -61,6 +67,11 @@
 
 #define FPGA_DONE_INT_CONTROL PCIE0
 #define FPGA_DONE_INT PCINT6
+
+#define P_LED_0 PD7
+#define P_LED_1 PD6
+#define P_LED_2 PD5
+#define P_LED_3 PD4
 
 #endif
 

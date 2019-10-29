@@ -60,14 +60,16 @@ cc_library(
 
 cc_library(
     name = "ConfigurationLib",
-    srcs = ["src/configuration_flash.c"],
+    srcs = [
+        "src/configuration_flash.c",
+            ],
     visibility = ["//visibility:public"],
     deps = ["//elasticnodemiddleware:ConfigurationFlashLibHdr"],
 )
 
 cc_library(
     name = "ConfigurationLibTest",
-    srcs = ["src/configuration_flash.c"],
+    srcs = ["src/configuration_flash.c",],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = ["//elasticnodemiddleware:ConfigurationFlashLibHdr"],
@@ -86,4 +88,11 @@ cc_library(
     srcs = ["src/leds.c"],
     visibility = ["//visibility:public"],
     deps = ["//elasticnodemiddleware:LedsLibHdr"],
+)
+
+cc_library(
+    name = "LufaLib",
+    srcs = ["src/lufa.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//elasticnodemiddleware:LufaLibHdr"],
 )
