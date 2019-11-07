@@ -16,7 +16,7 @@ exports_files(
     ],
     visibility = ["//visibility:public"],
 )
-
+#bazel documentation dependency diagram
 cc_library(
     name = "RegisterAbstractionLibHdr",
     hdrs = ["registerAbstraction.h"],
@@ -37,6 +37,7 @@ cc_library(
 cc_library(
     name = "Reconfigure_MultibootLibHdr",
     hdrs = [
+        "elasticNodeMiddleware_internal.h",
         "elasticNodeMiddleware.h",
         "fpgaPins.h",
         "fpgaRegisters.h",
@@ -59,34 +60,5 @@ cc_library(
         "xmem.h",
         "reconfigure_multiboot.h"
     ],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "ConfigurationFlashLibHdr",
-    hdrs = [
-        "configuration_flash.h",
-        "elasticNodeMiddleware.h",
-        "leds.h",
-        "lufa.h",
-        "configuration_flash_internal.h"],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "LedsLibHdr",
-    hdrs = [
-        "leds.h",
-        "leds_internal.h",
-        "fpgaRegisters.h",
-        "fpgaPins.h",
-        "registerAbstraction.h"],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "LufaLibHdr",
-    hdrs = [
-        "lufa.h"],
     visibility = ["//visibility:public"],
 )

@@ -29,11 +29,9 @@
 
 volatile uint8_t* ptr_xmem_offset;
 #define RESET_DELAY 10
-volatile uint8_t *reset_fpga;
 
 void elasticnode_initialise();
 
-void elasticnode_fpgaPowerOn();
 void elasticnode_fpgaPowerOff();
 
 /*
@@ -41,20 +39,18 @@ void elasticnode_fpgaPowerOff();
 void elasticnode_fpgaSleep(uint8_t sleepmode);
 */
 
-void elasticnode_configure();
+void elasticnode_configureFrom(uint32_t address);
 uint8_t elasticnode_getLoadedConfiguration();
 
 void elasticnode_writeOneByteBlocking(uint8_t address, uint8_t data);
 void elasticnode_writeDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_data);
 uint8_t elasticnode_readOneByteBlocking(uint8_t address);
 void elasticnode_readDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_return);
-//void elasticnode_writeDataNonBlocking(uint8_t* address, uint8_t data);
-//uint8_t elasticnode_readDataNonBlocking();
+
+//TODO: read + write non-blocking might be implemented
 
 void elasticnode_initReset_FPGA();
-void elasticnode_setFpgaSoftReset();
 void elasticnode_fpgaSoftReset();
-void elasticnode_clearFpgaSoftReset();
 
 #ifdef TEST
 

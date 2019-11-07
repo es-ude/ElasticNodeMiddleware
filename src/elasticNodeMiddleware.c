@@ -80,8 +80,8 @@ void elasticnode_fpgaPowerOff(){
 void elasticnode_fpgaSleep(uint8_t sleepmode){
 }*/
 
-void elasticnode_configure(uint32_t address){
-    reconfigure_fpgaMultiboot(address);
+void elasticnode_configureFrom(uint32_t address){
+    //reconfigure_fpgaMultiboot(address);
     while(!reconfigure_fpgaMultibootComplete());
 }
 
@@ -91,11 +91,10 @@ uint8_t elasticnode_getLoadedConfiguration(){
     return *multiboot;
 }
 
+//lokale vaiable volatile die drauf zeigt
 void elasticnode_writeOneByteBlocking(uint8_t address, uint8_t data){
     ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET + address);
-    for(uint8_t j=0; j<data; j++){
-        *ptr_xmem_offset = data;
-    }
+    *ptr_xmem_offset = data;
 }
 
 void elasticnode_writeDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_data){
@@ -108,11 +107,11 @@ void elasticnode_writeDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_d
 
 uint8_t elasticnode_readOneByteBlocking(uint8_t address){
     ptr_xmem_offset = (uint8_t*) (XMEM_OFFSET + address);
-    uint8_t byte = *ptr_xmem_offset;
 
-    return byte;
+    return *ptr_xmem_offset;
 }
 
+//umbennen fromFpga
 void elasticnode_readDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_return){
     ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET + address);
     for(uint8_t i = 0; i < size; i++) {
@@ -120,24 +119,9 @@ void elasticnode_readDataBlocking(uint8_t address, uint8_t size, uint8_t* ptr_re
     }
 }
 
-/*
-void elasticnode_writeDataNonBlocking(uint8_t* address, uint8_t data){
-}
-
-uint8_t elasticnode_readDataNonBlocking(uint8_t* address){
-}
-*/
-
-
+//neu raus
 void elasticnode_initReset_FPGA() {
     reset_fpga = (uint8_t*) (XMEM_OFFSET + 0x04);
-}
-void elasticnode_setFpgaSoftReset(void){
-    *reset_fpga = 0x1;
-}
-
-void elasticnode_clearFpgaSoftReset() {
-    *reset_fpga = 0x0;
 }
 
 void elasticnode_fpgaSoftReset() {

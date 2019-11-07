@@ -11,6 +11,8 @@ void elasticnode_fpgaPowerOn_internal();
 void elasticnode_setFpgaSoftReset_internal();
 void elasticnode_clearFpgaSoftReset_internal();
 
+volatile uint8_t *reset_fpga;
+
 #ifdef TEST
 void _delay_ms(uint8_t delay);
 

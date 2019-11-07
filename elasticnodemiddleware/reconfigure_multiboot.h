@@ -16,12 +16,8 @@ volatile uint8_t fpgaDoneResponse;
 volatile uint8_t* multiboot;
 
 void reconfigure_initMultiboot();
-void reconfigure_fpgaMultiboot(uint32_t address);
-void reconfigure_fpgaMultibootClearComplete();
+//void reconfigure_fpgaMultiboot(uint32_t address);
 uint8_t reconfigure_fpgaMultibootComplete(void);
-void reconfigure_fpgaSetDoneReponse(uint8_t response);
 void reconfigure_interruptSR();
-
-void reconfigure_initPtrMultiboot();
 
 #endif //ELASTICNODEMIDDLEWARE_RECONFIGURE_MULTIBOOT_H

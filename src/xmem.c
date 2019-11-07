@@ -13,6 +13,7 @@ void initXmem(void) {
     /*XMCRA = (1 << SRW11 ) | (1 << SRW10);
     XMCRB = (1 << XMBK) | (1 << XMM1);*/
     //SRW10 in MCUCR
+
     abstraction_setRegisterBitsHigh(XMCRA, ((1 << SRW11) | (1 << SRW10)));
     abstraction_setRegisterBitsHigh(XMCRB, ((1 << XMBK) | (1 << XMM1)));
 

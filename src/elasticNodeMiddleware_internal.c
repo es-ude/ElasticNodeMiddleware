@@ -3,11 +3,13 @@
 //
 
 #include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
-#include "elasticnodemiddleware/elasticNodeMiddleware.h"
+//#include "elasticnodemiddleware/xmem.h"
 #include "elasticnodemiddleware/fpgaPins.h"
 #include "elasticnodemiddleware/fpgaRegisters.h"
 #include "elasticnodemiddleware/registerAbstraction.h"
 
+
+//volatile uint8_t *reset_fpga = (uint8_t*) (XMEM_OFFSET + 0x04);
 
 void elasticnode_fpgaPowerOn_internal(){
 
@@ -33,9 +35,9 @@ void elasticnode_fpgaPowerOn_internal(){
 
 void elasticnode_setFpgaSoftReset_internal(void)
 {
-    *reset_fpga = 0x1;
+    //*reset_fpga = 0x1;
 }
 
 void elasticnode_clearFpgaSoftReset_internal() {
-    *reset_fpga = 0x0;
+    //*reset_fpga = 0x0;
 }

@@ -17,6 +17,7 @@ extern uint8_t* XMEM_ENABLE_REG;
 
 //iom64: SRE = 7
 #define XMEM_ENABLE_P 7
+
 extern const uint8_t* externalMockMemory;
 #define XMEM_OFFSET externalMockMemory
 

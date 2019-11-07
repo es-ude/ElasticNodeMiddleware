@@ -49,29 +49,6 @@ mock(
     deps = ["//elasticnodemiddleware:XMemLibHdr"],
 )
 
-mock(
-    name = "mock_Leds_Internal",
-    srcs = ["//elasticnodemiddleware:leds_internal.h"],
-    deps = ["//elasticnodemiddleware:LedsLibHdr"],
-)
-
-mock(
-    name = "mock_Leds",
-    srcs = ["//elasticnodemiddleware:leds.h"],
-    deps = ["//elasticnodemiddleware:LedsLibHdr"],
-)
-
-mock(
-    name = "mock_Lufa",
-    srcs = ["//elasticnodemiddleware:lufa.h"],
-    deps = ["//elasticnodemiddleware:LufaLibHdr"],
-)
-
-mock(
-    name = "mock_Configuration_Flash_internal",
-    srcs = ["//elasticnodemiddleware:configuration_flash_internal.h"],
-    deps = ["//elasticnodemiddleware:ConfigurationFlashLibHdr"]
-)
 unity_test(
     copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
@@ -79,6 +56,15 @@ unity_test(
         "mock_ElasticNodeMiddleware_Internal",
         "mock_RegisterAbstraction",
         "mock_Reconfigure_Multiboot",
+        "//:ElasticNodeMiddlewareLibTest",
+    ],
+)
+
+unity_test(
+    copts = ["-DTEST"],
+    file_name = "elasticNodeMiddleware_internal_Test.c",
+    deps = [
+        "mock_RegisterAbstraction",
         "//:ElasticNodeMiddlewareLibTest",
     ],
 )
@@ -102,6 +88,7 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "reconfigure_multiboot_Test.c",
     deps = [
+        "mock_ElasticNodeMiddleware_Internal",
         "mock_ElasticNodemiddleware",
         "mock_Reconfigure_Multiboot_Internal",
         "mock_RegisterAbstraction",
@@ -114,23 +101,10 @@ unity_test(
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
-    file_name = "configuration_flash_Test.c",
+    file_name = "reconfigure_multiboot_internal_Test.c",
     deps = [
-        "mock_ElasticNodemiddleware",
-        "//:ConfigurationLibTest",
-        "mock_Leds",
-        "mock_Lufa",
-        "mock_Configuration_Flash_internal"
-    ]
-)
-
-unity_test(
-    cexception = False,
-    copts = ["-DTEST"],
-    file_name = "leds_Test.c",
-    deps = [
-        "//:LedsLibTest",
-        "mock_Leds_Internal",
-        "mock_RegisterAbstraction"
+        "mock_ElasticNodeMiddleware_Internal",
+        "mock_Xmem",
+        "//:Reconfigure_multibootLibTest"
     ]
 )

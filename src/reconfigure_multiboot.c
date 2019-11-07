@@ -8,7 +8,11 @@
 #include "elasticnodemiddleware/fpgaRegisters.h"
 #include "elasticnodemiddleware/registerAbstraction.h"
 #include "elasticnodemiddleware/elasticNodeMiddleware.h"
+#include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
 #include "elasticnodemiddleware/xmem.h"
+
+//c datei avr nennen
+//abstraction aus embedded utilities
 
 void reconfigure_initMultiboot() {
 
@@ -16,49 +20,38 @@ void reconfigure_initMultiboot() {
     abstraction_setRegisterBitsHigh(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
     abstraction_setRegisterBitsHigh(FPGA_DONE_INT_CONTROL_REG, (1 << FPGA_DONE_INT_CONTROL));
 
-    fpgaMultibootClearComplete_internal();
+    reconfigure_fpgaMultibootClearComplete_internal();
     fpgaDoneResponse = FPGA_DONE_NOTHING;
 
-    //for testing
+    //for testing, with suffix, raus, variable im test direkt lesen
     ptr_fpgaDoneResponse = &fpgaDoneResponse;
 }
-
-void reconfigure_initPtrMultiboot() {
-    multiboot = (uint8_t*) (XMEM_OFFSET + 0x05);
-}
-
+/*
 void reconfigure_fpgaMultiboot(uint32_t address) {
 
-    elasticnode_fpgaPowerOn();
+    elasticnode_fpgaPowerOn_internal();
 
     enableXmem();
 
-    fpgaSetDoneReponse_internal(FPGA_DONE_PRINT);
-    fpgaMultibootClearComplete_internal();
+    reconfigure_fpgaSetDoneReponse_internal(FPGA_DONE_PRINT);
+    reconfigure_fpgaMultibootClearComplete_internal();
 
-    initPtrMultiboot_internal();
+    //multiboot lokale Variable, anderer Name, volatile
+    reconfigure_initPtrMultiboot_internal();
     for (uint8_t i = 0; i < 3; i++)
     {
         *(multiboot + i) = (uint8_t) (0xff & (address >> (i * 8)));
     }
 
     disableXmem();
+
+    //platform unabhängig, enable beabsichtigt?
     sei();
 }
-
-void reconfigure_fpgaMultibootClearComplete() {
-    fpgaMultibootCompleteFlag = 0;
-
-    //for testing
-    ptr_fpgaMultibootCompleteFlag = &fpgaMultibootCompleteFlag;
-}
-
+*/
+//wofür? ohne flag, state/response
 uint8_t reconfigure_fpgaMultibootComplete(void) {
     return fpgaMultibootCompleteFlag;
-}
-
-void reconfigure_fpgaSetDoneReponse(uint8_t response) {
-    fpgaMultibootCompleteFlag = response;
 }
 
 void reconfigure_interruptSR() {
@@ -79,7 +72,7 @@ void reconfigure_interruptSR() {
             case FPGA_DONE_MULTIBOOT:
 
                 elasticnode_fpgaSoftReset();
-                fpgaMultiboot_internal(0);
+                reconfigure_fpgaMultiboot_internal(0);
                 break;
             case 0:
             default:
