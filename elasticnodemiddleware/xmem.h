@@ -19,7 +19,7 @@ extern uint8_t* XMEM_ENABLE_REG;
 #define XMEM_ENABLE_P 7
 
 extern const uint8_t* externalMockMemory;
-#define XMEM_OFFSET externalMockMemory
+#define XMEM_OFFSET &externalMockMemory
 
 
 #else
@@ -42,8 +42,6 @@ extern const uint8_t* externalMockMemory;
     #define XMEM_ENABLE_P SRE
     #define XMEM_OFFSET 0x2000
 #endif
-
-#define USERLOGIC_OFFSET (XMEM_OFFSET + 0x100)
 
 #endif
 

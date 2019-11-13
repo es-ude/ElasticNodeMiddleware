@@ -45,16 +45,16 @@ cc_library(
 
 cc_library(
     name = "Reconfigure_multibootLib",
-    srcs = ["src/reconfigure_multiboot.c",
-            "src/reconfigure_multiboot_internal.c"],
+    srcs = ["src/reconfigure_multiboot_avr.c",
+            "src/reconfigure_multiboot_internal_avr.c"],
     visibility = ["//visibility:public"],
     deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
 )
 
 cc_library(
     name = "Reconfigure_multibootLibTest",
-    srcs = ["src/reconfigure_multiboot.c",
-            "src/reconfigure_multiboot_internal.c"],
+    srcs = ["src/reconfigure_multiboot_avr.c",
+            "src/reconfigure_multiboot_internal_avr.c"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],

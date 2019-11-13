@@ -3,8 +3,8 @@
 //
 
 #include "unity.h"
-#include "elasticnodemiddleware/MockregisterAbstraction.h"
 #include "elasticnodemiddleware/xmem.h"
+#include "elasticnodemiddleware/MockregisterAbstraction.h"
 #include "elasticnodemiddleware/fpgaPins.h"
 
 uint8_t xmem_enable_reg;

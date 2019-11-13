@@ -9,7 +9,6 @@ load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for
 #    ],
 #)
 
-
 mock(
     name = "mock_RegisterAbstraction",
     srcs = ["//elasticnodemiddleware:registerAbstraction.h"],
@@ -19,20 +18,8 @@ mock(
 mock(
     name = "mock_ElasticNodeMiddleware_Internal",
     srcs = ["//elasticnodemiddleware:elasticNodeMiddleware_internal.h"],
-    deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
-)
-
-mock(
-    name = "mock_Reconfigure_Multiboot_Internal",
-    srcs = ["//elasticnodemiddleware:reconfigure_multiboot_internal.h"],
-    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
-)
-
-mock(
-    name = "mock_Reconfigure_Multiboot",
-    srcs = ["//elasticnodemiddleware:reconfigure_multiboot.h"],
-    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
     copts = ["-DTEST"],
+    deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
@@ -40,6 +27,19 @@ mock(
     srcs = ["//elasticnodemiddleware:elasticNodeMiddleware.h"],
     copts = ["-DTEST"],
     deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
+)
+
+mock(
+    name = "mock_Reconfigure_Multiboot_Internal",
+    srcs = ["//elasticnodemiddleware:reconfigure_multiboot_internal_avr.h"],
+    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
+)
+
+mock(
+    name = "mock_Reconfigure_Multiboot",
+    srcs = ["//elasticnodemiddleware:reconfigure_multiboot_avr.h"],
+    copts = ["-DTEST"],
+    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
@@ -54,8 +54,9 @@ unity_test(
     file_name = "elasticNodeMiddleware_Test.c",
     deps = [
         "mock_ElasticNodeMiddleware_Internal",
-        "mock_RegisterAbstraction",
         "mock_Reconfigure_Multiboot",
+        "mock_Reconfigure_Multiboot_Internal",
+        "mock_RegisterAbstraction",
         "//:ElasticNodeMiddlewareLibTest",
     ],
 )
@@ -86,14 +87,12 @@ unity_test(
 
 unity_test(
     copts = ["-DTEST"],
-    file_name = "reconfigure_multiboot_Test.c",
+    file_name = "reconfigure_multiboot_avr_Test.c",
     deps = [
-        "mock_ElasticNodeMiddleware_Internal",
         "mock_ElasticNodemiddleware",
         "mock_Reconfigure_Multiboot_Internal",
         "mock_RegisterAbstraction",
         "mock_Xmem",
-
         "//:Reconfigure_multibootLibTest",
     ],
 )
@@ -101,10 +100,8 @@ unity_test(
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
-    file_name = "reconfigure_multiboot_internal_Test.c",
+    file_name = "reconfigure_multiboot_internal_avr_Test.c",
     deps = [
-        "mock_ElasticNodeMiddleware_Internal",
-        "mock_Xmem",
-        "//:Reconfigure_multibootLibTest"
-    ]
+        "//:Reconfigure_multibootLibTest",
+    ],
 )

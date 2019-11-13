@@ -6,7 +6,7 @@
 #include "elasticnodemiddleware/MockregisterAbstraction.h"
 #include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
 #include "elasticnodemiddleware/fpgaPins.h"
-//#include "elasticnodemiddleware/xmem.h"
+#include "elasticnodemiddleware/xmem.h"
 
 uint8_t port_fpga_program_b;
 uint8_t ddr_fpga_program_b;
@@ -41,6 +41,9 @@ uint8_t* DDR_FPGA_POWER_INT = &ddr_fpga_power_int;
 uint8_t* PORT_FPGA_POWER_INT = &port_fpga_power_int;
 
 uint8_t* DDR_FPGA_CCLK = &ddr_fpga_cclk;
+
+uint8_t memoryarea[2000];
+const uint8_t* externalMockMemory = &memoryarea;
 
 void initialise_mockRegister(void) {
     DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
@@ -84,15 +87,37 @@ void test_elasticnode_fpgaPowerOn_internal(void) {
     elasticnode_fpgaPowerOn_internal();
 }
 
+void test_elasticnode_fpgaPowerOff_internal(void) {
+    initialise_mockRegister();
+
+    abstraction_setRegisterBitsLow_Expect(&port_fpga_program_b, ( 1 << P_FPGA_PROGRAM_B));
+
+    //enable interface
+    abstraction_setRegisterBitsHigh_Expect(&ddr_fpga_cclk, (1 << P_FPGA_CCLK));
+
+    abstraction_setRegisterBitsHigh_Expect(&ddr_fpga_power_sram, ( 1 << P_FPGA_POWER_SRAM));
+    abstraction_setRegisterBitsHigh_Expect(&port_fpga_power_sram, ( 1 << P_FPGA_POWER_SRAM));
+    abstraction_setRegisterBitsHigh_Expect(&ddr_fpga_power_aux, ( 1 << P_FPGA_POWER_AUX));
+    abstraction_setRegisterBitsHigh_Expect(&port_fpga_power_aux, ( 1 << P_FPGA_POWER_AUX));
+    abstraction_setRegisterBitsHigh_Expect(&ddr_fpga_power_io, ( 1 << P_FPGA_POWER_IO));
+    abstraction_setRegisterBitsHigh_Expect(&port_fpga_power_io, ( 1 << P_FPGA_POWER_IO));
+    abstraction_setRegisterBitsHigh_Expect(&ddr_fpga_power_int, ( 1 << P_FPGA_POWER_INT));
+    abstraction_setRegisterBitsHigh_Expect(&port_fpga_power_int, ( 1 << P_FPGA_POWER_INT));
+
+    abstraction_setRegisterBitsHigh_Expect(&port_fpga_program_b, ( 1 << P_FPGA_PROGRAM_B));
+    abstraction_setRegisterBitsLow_Expect(&ddr_fpga_program_b, (1 << P_FPGA_PROGRAM_B));
+
+    elasticnode_fpgaPowerOff_internal();
+}
 
 void test_elasticnode_setFpgaSoftReset_internal(void) {
     initialise_mockRegister();
     elasticnode_setFpgaSoftReset_internal();
-    //TEST_ASSERT_EQUAL_UINT8((*reset_fpga), 0x1);
+    TEST_ASSERT_EQUAL_UINT8((*reset_fpga), 0x1);
 }
 
 void test_elasticnode_clearFpgaSoftReset_internal(void) {
     initialise_mockRegister();
     elasticnode_clearFpgaSoftReset_internal();
-    //TEST_ASSERT_EQUAL_UINT8((*reset_fpga), 0x0);
+    TEST_ASSERT_EQUAL_UINT8((*reset_fpga), 0x0);
 }

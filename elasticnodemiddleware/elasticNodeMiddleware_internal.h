@@ -8,13 +8,18 @@
 #include <stdint.h>
 
 void elasticnode_fpgaPowerOn_internal();
+void elasticnode_fpgaPowerOff_internal();
 void elasticnode_setFpgaSoftReset_internal();
 void elasticnode_clearFpgaSoftReset_internal();
 
-volatile uint8_t *reset_fpga;
-
 #ifdef TEST
+
+extern volatile uint8_t *reset_fpga;
 void _delay_ms(uint8_t delay);
+
+#else
+
+#include <avr/interrupt.h>
 
 #endif
 

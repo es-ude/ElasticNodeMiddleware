@@ -2,17 +2,17 @@
 // Created by annika on 10.10.19.
 //
 
-#include "elasticnodemiddleware/reconfigure_multiboot.h"
-#include "elasticnodemiddleware/reconfigure_multiboot_internal.h"
+#include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
+#include "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"
 #include "elasticnodemiddleware/fpgaPins.h"
 #include "elasticnodemiddleware/fpgaRegisters.h"
 #include "elasticnodemiddleware/registerAbstraction.h"
 #include "elasticnodemiddleware/elasticNodeMiddleware.h"
-#include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
 #include "elasticnodemiddleware/xmem.h"
 
-//c datei avr nennen
 //abstraction aus embedded utilities
+volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
+volatile uint8_t *multiboot = (uint8_t *) (XMEM_OFFSET + 0x05);
 
 void reconfigure_initMultiboot() {
 
@@ -23,13 +23,11 @@ void reconfigure_initMultiboot() {
     reconfigure_fpgaMultibootClearComplete_internal();
     fpgaDoneResponse = FPGA_DONE_NOTHING;
 
-    //for testing, with suffix, raus, variable im test direkt lesen
-    ptr_fpgaDoneResponse = &fpgaDoneResponse;
 }
-/*
+
 void reconfigure_fpgaMultiboot(uint32_t address) {
 
-    elasticnode_fpgaPowerOn_internal();
+    elasticnode_fpgaPowerOn();
 
     enableXmem();
 
@@ -37,7 +35,7 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
     reconfigure_fpgaMultibootClearComplete_internal();
 
     //multiboot lokale Variable, anderer Name, volatile
-    reconfigure_initPtrMultiboot_internal();
+
     for (uint8_t i = 0; i < 3; i++)
     {
         *(multiboot + i) = (uint8_t) (0xff & (address >> (i * 8)));
@@ -48,17 +46,19 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
     //platform unabhängig, enable beabsichtigt?
     sei();
 }
-*/
-//wofür? ohne flag, state/response
-uint8_t reconfigure_fpgaMultibootComplete(void) {
-    return fpgaMultibootCompleteFlag;
+uint32_t reconfigure_getMultibootAddress() {
+    uint32_t address = 0;
+    for (uint8_t i = 0; i < 3; i++)
+    {
+        address = address + *(multiboot+i);
+    }
+    return address;
 }
-
 void reconfigure_interruptSR() {
 
     if (abstraction_getBit(PIN_FPGA_DONE, P_FPGA_DONE)){
         //float duration;
-        fpgaMultibootCompleteFlag = 1;
+        reconfigure_fpgaSetDoneReponse_internal(1);
         switch (fpgaDoneResponse) {
             case FPGA_DONE_PRINT:
                 //duration = -1;
@@ -72,7 +72,7 @@ void reconfigure_interruptSR() {
             case FPGA_DONE_MULTIBOOT:
 
                 elasticnode_fpgaSoftReset();
-                reconfigure_fpgaMultiboot_internal(0);
+                reconfigure_fpgaMultiboot(0);
                 break;
             case 0:
             default:

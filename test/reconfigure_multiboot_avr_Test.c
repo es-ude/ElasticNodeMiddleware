@@ -2,14 +2,14 @@
 // Created by annika on 10.10.19.
 //
 #include "unity.h"
+#include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
+#include "elasticnodemiddleware/fpgaPins.h"
 #include "elasticnodemiddleware/MockregisterAbstraction.h"
-#include "elasticnodemiddleware/Mockreconfigure_multiboot_internal.h"
+#include "elasticnodemiddleware/Mockreconfigure_multiboot_internal_avr.h"
 #include "elasticnodemiddleware/MockelasticNodeMiddleware.h"
 #include "elasticnodemiddleware/Mockxmem.h"
-#include "elasticnodemiddleware/fpgaPins.h"
-#include "elasticnodemiddleware/reconfigure_multiboot.h"
-#include "elasticnodemiddleware/elasticNodeMiddleware.h"
-#include "elasticnodemiddleware/MockelasticNodeMiddleware_internal.h"
+
+
 
 uint8_t fpga_done_int_reg;
 uint8_t fpga_done_int_control_reg;
@@ -19,13 +19,23 @@ uint8_t* FPGA_DONE_INT_REG = &fpga_done_int_reg;
 uint8_t* FPGA_DONE_INT_CONTROL_REG = &fpga_done_int_control_reg;
 uint8_t* PIN_FPGA_DONE = &pin_fpga_done;
 
-uint8_t memoryarea; //[2000]; why array?
+uint8_t memoryarea[2000];
 const uint8_t* externalMockMemory = &memoryarea;
 
 void initalise_reconfigure_multiboot_mockRegister(void) {
     FPGA_DONE_INT_REG = &fpga_done_int_reg;
     FPGA_DONE_INT_CONTROL_REG = &fpga_done_int_control_reg;
     PIN_FPGA_DONE = &pin_fpga_done;
+}
+
+void writeMultiboot(uint32_t address) {
+
+    //32 address
+    TEST_ASSERT_EQUAL_UINT8(*(multiboot+0), (uint8_t) (0xff & (address >> (0 * 8))));
+
+    TEST_ASSERT_EQUAL_UINT8(*(multiboot+0), (uint8_t) (0xff & (address >> (1 * 8))));
+
+    TEST_ASSERT_EQUAL_UINT8(*(multiboot+0), (uint8_t) (0xff & (address >> (2 * 8))));
 }
 
 void test_initMultiboot(void) {
@@ -38,24 +48,43 @@ void test_initMultiboot(void) {
     reconfigure_fpgaMultibootClearComplete_internal_Expect();
     reconfigure_initMultiboot();
 
-    TEST_ASSERT_EQUAL_UINT8((*ptr_fpgaDoneResponse), fpgaDoneResponse);
+    TEST_ASSERT_EQUAL_UINT8(FPGA_DONE_NOTHING, fpgaDoneResponse);
 }
 
-//test besser benennen, ohne pointer, 2 tests
-void test_fpgaMultibootComplete(void) {
-    initalise_reconfigure_multiboot_mockRegister();
+void test_reconfigure_fpgaMultiboot(void) {
+    uint32_t address = 0;
 
-    //uint8_t expected = *ptr_fpgaMultibootCompleteFlag;
-    //uint8_t flag = reconfigure_fpgaMultibootComplete();
+    elasticnode_fpgaPowerOn_Expect();
 
-    //TEST_ASSERT_EQUAL_UINT8(expected, flag);
+    //xmem mock with test flag!
+    enableXmem_Expect();
+
+    reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
+    reconfigure_fpgaMultibootClearComplete_internal_Expect();
+
+    disableXmem_Expect();
+
+    sei_Expect();
+
+    reconfigure_fpgaMultiboot(address);
+
+    //test for-loop in new function
+    writeMultiboot(address);
+}
+void test_getMultibootAddress(void){
+    uint32_t address = 0;
+    for (uint8_t i = 0; i < 3; i++)
+    {
+        address = address + *(multiboot+i);
+    }
+    TEST_ASSERT_EQUAL_UINT32(address, reconfigure_getMultibootAddress());
 }
 
 void test_interruptSR(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
     abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE, 1);
-
+    reconfigure_fpgaSetDoneReponse_internal_Expect(1);
         switch (fpgaDoneResponse) {
             case FPGA_DONE_PRINT:
 
@@ -72,7 +101,7 @@ void test_interruptSR(void) {
             case FPGA_DONE_MULTIBOOT:
 
                 elasticnode_fpgaSoftReset_Expect();
-                reconfigure_fpgaMultiboot_internal_Expect(0);
+                reconfigure_fpgaMultiboot(0);
                 break;
             case 0:
             default:
@@ -81,5 +110,4 @@ void test_interruptSR(void) {
         sei_Expect();
 
     reconfigure_interruptSR();
-    //TEST_ASSERT_EQUAL_UINT8((*ptr_fpgaMultibootCompleteFlag), 1);
 }
