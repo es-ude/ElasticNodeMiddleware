@@ -45,6 +45,8 @@ uint8_t* DDR_FPGA_CCLK = &ddr_fpga_cclk;
 uint8_t memoryarea[2000];
 const uint8_t* externalMockMemory = &memoryarea;
 
+extern volatile uint8_t *reset_fpga;
+
 void initialise_mockRegister(void) {
     DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
     PORT_FPGA_PROGRAM_B = &port_fpga_program_b;

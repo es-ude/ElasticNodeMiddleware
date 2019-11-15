@@ -22,6 +22,9 @@ uint8_t* PIN_FPGA_DONE = &pin_fpga_done;
 uint8_t memoryarea[2000];
 const uint8_t* externalMockMemory = &memoryarea;
 
+extern volatile uint8_t fpgaDoneResponse;
+extern volatile uint8_t *multiboot;
+
 void initalise_reconfigure_multiboot_mockRegister(void) {
     FPGA_DONE_INT_REG = &fpga_done_int_reg;
     FPGA_DONE_INT_CONTROL_REG = &fpga_done_int_control_reg;
@@ -72,12 +75,15 @@ void test_reconfigure_fpgaMultiboot(void) {
     writeMultiboot(address);
 }
 void test_getMultibootAddress(void){
-    uint32_t address = 0;
-    for (uint8_t i = 0; i < 3; i++)
-    {
-        address = address + *(multiboot+i);
-    }
+
+    uint32_t address = (uint32_t) (*(multiboot) + *(multiboot+1) + *(multiboot+2));
     TEST_ASSERT_EQUAL_UINT32(address, reconfigure_getMultibootAddress());
+}
+
+void test_reconfigure_fpgaMultibootComplete() {
+    //beliebige Zahl?
+    reconfigure_fpgaMultibootComplete_internal_ExpectAndReturn(0);
+    reconfigure_fpgaMultibootComplete();
 }
 
 void test_interruptSR(void) {
@@ -101,7 +107,7 @@ void test_interruptSR(void) {
             case FPGA_DONE_MULTIBOOT:
 
                 elasticnode_fpgaSoftReset_Expect();
-                reconfigure_fpgaMultiboot(0);
+                //reconfigure_fpgaMultiboot(0);
                 break;
             case 0:
             default:

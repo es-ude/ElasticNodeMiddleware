@@ -16,8 +16,4 @@ void reconfigure_fpgaSetDoneReponse_internal(uint8_t response);
 uint8_t reconfigure_fpgaMultibootComplete_internal();
 
 
-#ifdef TEST
-volatile uint8_t fpgaMultibootCompleteState;
-#endif
-
 #endif //ELASTICNODEMIDDLEWARE_RECONFIGURE_MULTIBOOT_INTERNAL_AVR_H

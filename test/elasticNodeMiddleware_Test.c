@@ -8,7 +8,6 @@
 #include "elasticnodemiddleware/MockelasticNodeMiddleware_internal.h"
 #include "elasticnodemiddleware/xmem.h"
 #include "elasticnodemiddleware/Mockreconfigure_multiboot_avr.h"
-#include "elasticnodemiddleware/Mockreconfigure_multiboot_internal_avr.h"
 
 uint8_t port_fpga_program_b;
 uint8_t ddr_fpga_program_b;
@@ -50,8 +49,10 @@ uint8_t* PORT_FPGA_INIT_B=&port_fpga_init_b;
 uint8_t* DDR_FPGA_DONE = &ddr_fpga_done;
 uint8_t* PORT_FPGA_DONE = &port_fpga_done;
 
-uint8_t memoryarea; //[2000]; ??? why array?
+uint8_t memoryarea[2000];
 const uint8_t* externalMockMemory = &memoryarea;
+
+volatile uint8_t* ptr_xmem_offset;
 
 void initialise_mockRegister(void) {
     DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
@@ -117,16 +118,16 @@ void test_elasticnode_configureFrom() {
     uint32_t address = 0x23409;
 
     reconfigure_fpgaMultiboot_Expect(address);
-    reconfigure_fpgaMultibootComplete_internal_ExpectAndReturn(1);
+    reconfigure_fpgaMultibootComplete_ExpectAndReturn(1);
     elasticnode_configureFrom(address);
 }
 
 void test_elasticnode_getConfiguration() {
     initialise_mockRegister();
 
-    //uint32_t expectedAddress = (uint32_t) (*multiboot)+(*multiboot+1)+(*multiboot+2);
-    uint32_t address = elasticnode_getLoadedConfiguration();
-    //TEST_ASSERT_EQUAL_UINT32(expectedAddress, address);
+    //beliebige Zahl?
+    reconfigure_getMultibootAddress_ExpectAndReturn(0);
+    elasticnode_getLoadedConfiguration();
 }
 
 //block until it has written all of the data to the file

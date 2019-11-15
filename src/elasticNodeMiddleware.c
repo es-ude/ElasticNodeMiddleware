@@ -9,9 +9,8 @@
 #include "elasticnodemiddleware/registerAbstraction.h"
 #include "elasticnodemiddleware/xmem.h"
 #include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
-#include "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"
 
-volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
+extern volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
 
 void elasticnode_initialise(){
     //initalise fpga
@@ -50,12 +49,12 @@ void elasticnode_fpgaSleep(uint8_t sleepmode){
 
 void elasticnode_configureFrom(uint32_t address){
     reconfigure_fpgaMultiboot(address);
-    while(!reconfigure_fpgaMultibootComplete_internal());
+    while(!reconfigure_fpgaMultibootComplete());
 }
 
 uint32_t elasticnode_getLoadedConfiguration(){
     //letzte adresse zurückgeben
-    //return (uint32_t) (*multiboot)+(*multiboot+1)+(*multiboot+2);
+    return reconfigure_getMultibootAddress();
 }
 
 //lokale vaiable volatile die drauf zeigt

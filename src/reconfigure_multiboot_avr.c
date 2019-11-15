@@ -10,7 +10,6 @@
 #include "elasticnodemiddleware/elasticNodeMiddleware.h"
 #include "elasticnodemiddleware/xmem.h"
 
-//abstraction aus embedded utilities
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
 volatile uint8_t *multiboot = (uint8_t *) (XMEM_OFFSET + 0x05);
 
@@ -34,7 +33,7 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
     reconfigure_fpgaSetDoneReponse_internal(FPGA_DONE_PRINT);
     reconfigure_fpgaMultibootClearComplete_internal();
 
-    //multiboot lokale Variable, anderer Name, volatile
+    //anderer Name
 
     for (uint8_t i = 0; i < 3; i++)
     {
@@ -46,14 +45,17 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
     //platform unabhängig, enable beabsichtigt?
     sei();
 }
+
+//new
 uint32_t reconfigure_getMultibootAddress() {
-    uint32_t address = 0;
-    for (uint8_t i = 0; i < 3; i++)
-    {
-        address = address + *(multiboot+i);
-    }
-    return address;
+    return (uint32_t ) (*(multiboot) + *(multiboot+1) + *(multiboot +2));
 }
+
+//new
+uint8_t reconfigure_fpgaMultibootComplete() {
+    return reconfigure_fpgaMultibootComplete_internal();
+}
+
 void reconfigure_interruptSR() {
 
     if (abstraction_getBit(PIN_FPGA_DONE, P_FPGA_DONE)){

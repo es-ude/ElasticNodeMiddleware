@@ -42,16 +42,6 @@ extern uint8_t* XMCRB;
 extern uint8_t* FPGA_DONE_INT_REG;
 extern uint8_t* FPGA_DONE_INT_CONTROL_REG;
 
-extern uint8_t* DDR_LED_0;
-extern uint8_t* DDR_LED_1;
-extern uint8_t* DDR_LED_2;
-extern uint8_t* DDR_LED_3;
-
-extern uint8_t* PORT_LED_0;
-extern uint8_t* PORT_LED_1;
-extern uint8_t* PORT_LED_2;
-extern uint8_t* PORT_LED_3;
-
 #else
 #include <avr/io.h>
 
@@ -85,16 +75,6 @@ extern uint8_t* PORT_LED_3;
 
 #define FPGA_DONE_INT_REG PCMSK0
 #define FPGA_DONE_INT_CONTROL_REG PCICR
-
-#define DDR_LED_0 &DDRD
-#define DDR_LED_1 &DDRD
-#define DDR_LED_2 &DDRD
-#define DDR_LED_3 &DDRD
-
-#define PORT_LED_0 &PORTD
-#define PORT_LED_1 &PORTD
-#define PORT_LED_2 &PORTD
-#define PORT_LED_3 &PORTD
 
 #endif
 

@@ -48,7 +48,6 @@ void elasticnode_fpgaSoftReset();
 
 void cli();
 void sei();
-volatile uint8_t* ptr_xmem_offset;
 
 #else
 

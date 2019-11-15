@@ -11,10 +11,6 @@ void reconfigure_initMultiboot();
 void reconfigure_fpgaMultiboot(uint32_t address);
 void reconfigure_interruptSR();
 uint32_t reconfigure_getMultibootAddress();
-
-#ifdef TEST
-volatile uint8_t fpgaDoneResponse;
-volatile uint8_t *multiboot;
-#endif
+uint8_t reconfigure_fpgaMultibootComplete();
 
 #endif //ELASTICNODEMIDDLEWARE_RECONFIGURE_MULTIBOOT_AVR_H

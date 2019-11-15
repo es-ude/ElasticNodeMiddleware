@@ -12,7 +12,6 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
-#bazel documentation dependency diagram
 cc_library(
     name = "RegisterAbstractionLibHdr",
     hdrs = ["registerAbstraction.h"],
@@ -52,7 +51,6 @@ cc_library(
         "fpgaPins.h",
         "fpgaRegisters.h",
         "reconfigure_multiboot_avr.h",
-        "reconfigure_multiboot_internal_avr.h",
         "registerAbstraction.h",
         "xmem.h",
     ],

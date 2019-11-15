@@ -14,7 +14,6 @@ void elasticnode_clearFpgaSoftReset_internal();
 
 #ifdef TEST
 
-extern volatile uint8_t *reset_fpga;
 void _delay_ms(uint8_t delay);
 
 #else

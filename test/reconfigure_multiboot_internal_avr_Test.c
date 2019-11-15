@@ -5,6 +5,8 @@
 #include "unity.h"
 #include "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"
 
+extern volatile uint8_t fpgaMultibootCompleteState;
+
 void test_reconfigure_fpgaMultibootClearComplete_internal(void) {
 
     reconfigure_fpgaMultibootClearComplete_internal();

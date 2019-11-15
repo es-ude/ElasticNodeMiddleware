@@ -55,7 +55,6 @@ unity_test(
     deps = [
         "mock_ElasticNodeMiddleware_Internal",
         "mock_Reconfigure_Multiboot",
-        "mock_Reconfigure_Multiboot_Internal",
         "mock_RegisterAbstraction",
         "//:ElasticNodeMiddlewareLibTest",
     ],
