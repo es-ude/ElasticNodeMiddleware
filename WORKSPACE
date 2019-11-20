@@ -1,5 +1,5 @@
 workspace(
-    name = "elasticnodemiddleware"
+    name = "elasticnodemiddleware",
 )
 
 load("//:github.bzl", "es_github_archive")
@@ -8,7 +8,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 es_github_archive(
     name = "EmbeddedSystemsBuildScripts",
     version = "0.5.5",
-   # sha256 = "<checksum>"
+    # sha256 = "<checksum>"
 )
 
 load("@EmbeddedSystemsBuildScripts//AvrToolchain:avr.bzl", "avr_toolchain")
@@ -41,4 +41,9 @@ http_archive(
     build_file = "@EmbeddedSystemsBuildScripts//:BUILD.LUFA",
     strip_prefix = "lufa-LUFA-170418",
     urls = ["http://fourwalledcubicle.com/files/LUFA/LUFA-170418.zip"],
+)
+
+es_github_archive(
+    name = "EmbeddedUtilities",
+    version = "0.3",
 )

@@ -22,13 +22,9 @@ void test_reconfigure_fpgaSetDoneReponse_internal(void) {
     TEST_ASSERT_EQUAL_UINT8(response, fpgaMultibootCompleteState);
 }
 
-
-//test besser benennen, 2 tests
-void test_fpgaMultibootCompleteState(void) {
+void test_fpgaMultibootCompleteState_Return(void) {
 
     fpgaMultibootCompleteState = FPGA_DONE_NOTHING;
-    uint8_t state = reconfigure_fpgaMultibootComplete_internal();
-
-    TEST_ASSERT_EQUAL_UINT8(FPGA_DONE_NOTHING, state);
+    TEST_ASSERT_EQUAL_UINT8(FPGA_DONE_NOTHING, reconfigure_fpgaMultibootComplete_internal());
 }
 

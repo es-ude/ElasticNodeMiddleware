@@ -5,57 +5,65 @@ load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for
 #    file_list = glob(["*_Test.c"]),
 #    deps = [
 #        "//:Library",
-#        "//elasticnodemiddleware:HdrOnlyLib",
+#        "//:HdrOnlyLib",
 #    ],
 #)
 
-mock(
-    name = "mock_RegisterAbstraction",
-    srcs = ["//elasticnodemiddleware:registerAbstraction.h"],
-    deps = ["//elasticnodemiddleware:RegisterAbstractionLibHdr"],
+cc_library(
+    name = "BitManipulationHdrForTesting",
+    hdrs = ["header_replacements/EmbeddedUtilities/BitManipulation.h"],
+    strip_include_prefix = "header_replacements",
+    visibility = ["//:__pkg__"],
 )
 
 mock(
     name = "mock_ElasticNodeMiddleware_Internal",
-    srcs = ["//elasticnodemiddleware:elasticNodeMiddleware_internal.h"],
+    srcs = ["//:elasticnodemiddleware/elasticNodeMiddleware_internal.h"],
     copts = ["-DTEST"],
-    deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
+    deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_ElasticNodemiddleware",
-    srcs = ["//elasticnodemiddleware:elasticNodeMiddleware.h"],
+    srcs = ["//:elasticnodemiddleware/elasticNodeMiddleware.h"],
     copts = ["-DTEST"],
-    deps = ["//elasticnodemiddleware:ElasticNodeMiddlewareLibHdr"],
+    deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot_Internal",
-    srcs = ["//elasticnodemiddleware:reconfigure_multiboot_internal_avr.h"],
-    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
+    srcs = ["//:elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"],
+    deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot",
-    srcs = ["//elasticnodemiddleware:reconfigure_multiboot_avr.h"],
+    srcs = ["//:elasticnodemiddleware/reconfigure_multiboot_avr.h"],
     copts = ["-DTEST"],
-    deps = ["//elasticnodemiddleware:Reconfigure_MultibootLibHdr"],
+    deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
     name = "mock_Xmem",
-    srcs = ["//elasticnodemiddleware:xmem.h"],
+    srcs = ["//:elasticnodemiddleware/xmem.h"],
     copts = ["-DTEST"],
-    deps = ["//elasticnodemiddleware:XMemLibHdr"],
+    deps = ["//:XMemLibHdr"],
+)
+
+mock(
+    name = "mock_Bitmanipulation",
+    srcs = ["//test:header_replacements/EmbeddedUtilities/BitManipulation.h"],
+    copts = ["-DTEST"],
+    deps = [":BitManipulationHdrForTesting"],
 )
 
 unity_test(
     copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
     deps = [
+        "mock_Bitmanipulation",
         "mock_ElasticNodeMiddleware_Internal",
         "mock_Reconfigure_Multiboot",
-        "mock_RegisterAbstraction",
         "//:ElasticNodeMiddlewareLibTest",
     ],
 )
@@ -64,7 +72,7 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_internal_Test.c",
     deps = [
-        "mock_RegisterAbstraction",
+        "mock_Bitmanipulation",
         "//:ElasticNodeMiddlewareLibTest",
     ],
 )
@@ -79,7 +87,7 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "xmem_Test.c",
     deps = [
-        "mock_RegisterAbstraction",
+        "mock_Bitmanipulation",
         "//:XMemLibTest",
     ],
 )
@@ -88,9 +96,9 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "reconfigure_multiboot_avr_Test.c",
     deps = [
+        "mock_Bitmanipulation",
         "mock_ElasticNodemiddleware",
         "mock_Reconfigure_Multiboot_Internal",
-        "mock_RegisterAbstraction",
         "mock_Xmem",
         "//:Reconfigure_multibootLibTest",
     ],
@@ -102,5 +110,14 @@ unity_test(
     file_name = "reconfigure_multiboot_internal_avr_Test.c",
     deps = [
         "//:Reconfigure_multibootLibTest",
+    ],
+)
+
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "interrupt_manager_avr_Test.c",
+    deps = [
+        "//:Interrupt_ManagerLibTest",
     ],
 )

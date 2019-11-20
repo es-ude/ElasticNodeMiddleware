@@ -2,12 +2,12 @@
 // Created by annika on 17.09.19.
 //
 #include "unity.h"
-#include "elasticnodemiddleware/MockregisterAbstraction.h"
 #include "elasticnodemiddleware/elasticNodeMiddleware.h"
 #include "elasticnodemiddleware/fpgaPins.h"
 #include "elasticnodemiddleware/MockelasticNodeMiddleware_internal.h"
 #include "elasticnodemiddleware/xmem.h"
 #include "elasticnodemiddleware/Mockreconfigure_multiboot_avr.h"
+#include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 uint8_t port_fpga_program_b;
 uint8_t ddr_fpga_program_b;
@@ -86,24 +86,24 @@ void test_elasticnode_initialise(void) {
     //single control --> register do not exist
 
     //enable interface
-    abstraction_setRegisterBitsHigh_Expect(&ddr_fpga_cclk, (1 << P_FPGA_CCLK));
+    BitManipulation_setBit_Expect(&ddr_fpga_cclk, P_FPGA_CCLK);
 
     // inputs that only get setup once
-    abstraction_setRegisterBitsHigh_Expect(&port_fpga_init_b, ( 1 << P_FPGA_INIT_B));
-    abstraction_setRegisterBitsLow_Expect(&ddr_fpga_init_b, (1 << P_FPGA_INIT_B));
-    abstraction_setRegisterBitsHigh_Expect(&port_fpga_init_b, ( 1 << P_FPGA_INIT_B));
+    BitManipulation_setBit_Expect(&port_fpga_init_b, P_FPGA_INIT_B);
+    BitManipulation_clearBit_Expect(&ddr_fpga_init_b, P_FPGA_INIT_B);
+    BitManipulation_setBit_Expect(&port_fpga_init_b, P_FPGA_INIT_B);
 
-    abstraction_setRegisterBitsLow_Expect(&ddr_fpga_done, (1<<P_FPGA_DONE));
-    abstraction_setRegisterBitsHigh_Expect(&port_fpga_done, (1<<P_FPGA_DONE));
+    BitManipulation_clearBit_Expect(&ddr_fpga_done, P_FPGA_DONE);
+    BitManipulation_setBit_Expect(&port_fpga_done, P_FPGA_DONE);
 
-    abstraction_setRegisterBitsHigh_Expect(&port_fpga_program_b, (1<<P_FPGA_PROGRAM_B));
-    abstraction_setRegisterBitsLow_Expect(&ddr_fpga_program_b, (1<<P_FPGA_PROGRAM_B));
-    abstraction_setRegisterBitsHigh_Expect(&port_fpga_program_b, (1<<P_FPGA_PROGRAM_B));
+    BitManipulation_setBit_Expect(&port_fpga_program_b, P_FPGA_PROGRAM_B);
+    BitManipulation_clearBit_Expect(&ddr_fpga_program_b, P_FPGA_PROGRAM_B);
+    BitManipulation_setBit_Expect(&port_fpga_program_b, P_FPGA_PROGRAM_B);
 
     elasticnode_initialise();
 }
 
-void test_elasticnode_FPGAPowerOn(){
+void test_elasticnodemiddlewareticnode_FPGAPowerOn(){
     elasticnode_fpgaPowerOn_internal_Expect();
     elasticnode_fpgaPowerOn();
 }

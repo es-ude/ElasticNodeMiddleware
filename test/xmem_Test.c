@@ -4,8 +4,8 @@
 
 #include "unity.h"
 #include "elasticnodemiddleware/xmem.h"
-#include "elasticnodemiddleware/MockregisterAbstraction.h"
 #include "elasticnodemiddleware/fpgaPins.h"
+#include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 uint8_t xmem_enable_reg;
 uint8_t ddr_xmem_a;
@@ -32,10 +32,6 @@ uint8_t* XMCRB = &xmcrb;
 uint8_t memoryarea[2000];
 const uint8_t* externalMockMemory = &memoryarea;
 
-void prepare_externalMockMemory() {
-
-}
-
 void initialise_xmem_mockRegister(void) {
     XMEM_ENABLE_REG = &xmem_enable_reg;
     DDR_XMEM_A = &ddr_xmem_a;
@@ -52,8 +48,8 @@ void test_initXmem(void) {
 
     initialise_xmem_mockRegister();
 
-    abstraction_setRegisterBitsHigh_Expect(XMCRA, ((1 << SRW11) | (1 << SRW10)));
-    abstraction_setRegisterBitsHigh_Expect(XMCRB, ((1 << XMBK) | (1 << XMM1)));
+    BitManipulation_setBit_Expect(XMCRA, ((1 << SRW11) | (1 << SRW10)));
+    BitManipulation_setBit_Expect(XMCRB, ((1 << XMBK) | (1 << XMM1)));
 
     initXmem();
 }
@@ -63,16 +59,16 @@ void test_enableXmem(void){
     initialise_xmem_mockRegister();
 
     //spi disable
-    abstraction_setRegisterBitsHigh_Expect(SPCR, (1 << SPE));
+    BitManipulation_setBit_Expect(SPCR, (1 << SPE));
 
     *DDR_XMEM_A = XMEM_A_MASK;
     *DDR_XMEM_ALE = XMEM_AD_MASK;
 
-    abstraction_setRegisterBitsHigh_Expect(DDR_XMEM_WR, (1 << P_XMEM_WR));
-    abstraction_setRegisterBitsHigh_Expect(DDR_XMEM_RD, (1 << P_XMEM_RD));
-    abstraction_setRegisterBitsHigh_Expect(DDR_XMEM_ALE, (1 << P_XMEM_ALE));
+    BitManipulation_setBit_Expect(DDR_XMEM_WR, (1 << P_XMEM_WR));
+    BitManipulation_setBit_Expect(DDR_XMEM_RD, (1 << P_XMEM_RD));
+    BitManipulation_setBit_Expect(DDR_XMEM_ALE, (1 << P_XMEM_ALE));
 
-    abstraction_setRegisterBitsHigh_Expect(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
+    BitManipulation_setBit_Expect(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
 
     enableXmem();
 
@@ -82,14 +78,14 @@ void test_disableXmem(void) {
 
     initialise_xmem_mockRegister();
 
-    abstraction_setRegisterBitsLow_Expect(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
+    BitManipulation_clearBit_Expect(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
 
     *DDR_XMEM_A = 0x00;
     *DDR_XMEM_ALE = 0x00;
 
-    abstraction_setRegisterBitsLow_Expect(DDR_XMEM_WR, (1 << P_XMEM_WR));
-    abstraction_setRegisterBitsHigh_Expect(PORT_XMEM_RD, (1 << P_XMEM_RD));
-    abstraction_setRegisterBitsLow_Expect(DDR_XMEM_ALE, (1 << P_XMEM_ALE));
+    BitManipulation_clearBit_Expect(DDR_XMEM_WR, (1 << P_XMEM_WR));
+    BitManipulation_setBit_Expect(PORT_XMEM_RD, (1 << P_XMEM_RD));
+    BitManipulation_clearBit_Expect(DDR_XMEM_ALE, (1 << P_XMEM_ALE));
 
     disableXmem();
 }

@@ -4,11 +4,10 @@
 #include "unity.h"
 #include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
 #include "elasticnodemiddleware/fpgaPins.h"
-#include "elasticnodemiddleware/MockregisterAbstraction.h"
 #include "elasticnodemiddleware/Mockreconfigure_multiboot_internal_avr.h"
 #include "elasticnodemiddleware/MockelasticNodeMiddleware.h"
 #include "elasticnodemiddleware/Mockxmem.h"
-
+#include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 
 uint8_t fpga_done_int_reg;
@@ -23,7 +22,7 @@ uint8_t memoryarea[2000];
 const uint8_t* externalMockMemory = &memoryarea;
 
 extern volatile uint8_t fpgaDoneResponse;
-extern volatile uint8_t *multiboot;
+extern volatile uint8_t *AddressMultiboot;
 
 void initalise_reconfigure_multiboot_mockRegister(void) {
     FPGA_DONE_INT_REG = &fpga_done_int_reg;
@@ -34,19 +33,19 @@ void initalise_reconfigure_multiboot_mockRegister(void) {
 void writeMultiboot(uint32_t address) {
 
     //32 address
-    TEST_ASSERT_EQUAL_UINT8(*(multiboot+0), (uint8_t) (0xff & (address >> (0 * 8))));
+    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (0 * 8))));
 
-    TEST_ASSERT_EQUAL_UINT8(*(multiboot+0), (uint8_t) (0xff & (address >> (1 * 8))));
+    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (1 * 8))));
 
-    TEST_ASSERT_EQUAL_UINT8(*(multiboot+0), (uint8_t) (0xff & (address >> (2 * 8))));
+    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (2 * 8))));
 }
 
 void test_initMultiboot(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    abstraction_setRegisterBitsLow_Expect(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
-    abstraction_setRegisterBitsHigh_Expect(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
-    abstraction_setRegisterBitsHigh_Expect(FPGA_DONE_INT_CONTROL_REG, (1 << FPGA_DONE_INT_CONTROL));
+    BitManipulation_clearBit_Expect(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
+    BitManipulation_setBit_Expect(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
+    BitManipulation_setBit_Expect(FPGA_DONE_INT_CONTROL_REG, (1 << FPGA_DONE_INT_CONTROL));
 
     reconfigure_fpgaMultibootClearComplete_internal_Expect();
     reconfigure_initMultiboot();
@@ -76,7 +75,7 @@ void test_reconfigure_fpgaMultiboot(void) {
 }
 void test_getMultibootAddress(void){
 
-    uint32_t address = (uint32_t) (*(multiboot) + *(multiboot+1) + *(multiboot+2));
+    uint32_t address = (uint32_t) (*(AddressMultiboot) + *(AddressMultiboot+1) + *(AddressMultiboot+2));
     TEST_ASSERT_EQUAL_UINT32(address, reconfigure_getMultibootAddress());
 }
 
@@ -86,34 +85,61 @@ void test_reconfigure_fpgaMultibootComplete() {
     reconfigure_fpgaMultibootComplete();
 }
 
-void test_interruptSR(void) {
+void test_interruptSR_case1(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE, 1);
+    //BitManipulation_setBit_Expect(PIN_FPGA_DONE, P_FPGA_DONE);
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
-        switch (fpgaDoneResponse) {
-            case FPGA_DONE_PRINT:
 
-                cli_Expect();
+    //BEFORE: fpgaDoneResponse = FPGA_DONE_NOTHING
+    fpgaDoneResponse = FPGA_DONE_PRINT;
+    cli_Expect();
+    sei_Expect();
 
-                //TODO: implement for debugging
+    reconfigure_interruptSR();
+}
 
-                //debugWriteLine("FPGA Done INT");
-                //debugWriteFloatFull(duration);
-                //debugNewLine();
-                //debugDone();
+void test_interruptSR_case2(void) {
+    initalise_reconfigure_multiboot_mockRegister();
 
-                break;
-            case FPGA_DONE_MULTIBOOT:
+    //BitManipulation_setBit_Expect(PIN_FPGA_DONE, P_FPGA_DONE);
+    reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
-                elasticnode_fpgaSoftReset_Expect();
-                //reconfigure_fpgaMultiboot(0);
-                break;
-            case 0:
-            default:
-                break;
-        }
-        sei_Expect();
+    fpgaDoneResponse = FPGA_DONE_MULTIBOOT;
+    elasticnode_fpgaSoftReset_Expect();
+
+    //here:reconfigure_fpgaMultiboot(0);
+    uint32_t address = 0;
+
+    elasticnode_fpgaPowerOn_Expect();
+
+    //xmem mock with test flag!
+    enableXmem_Expect();
+
+    reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
+    reconfigure_fpgaMultibootClearComplete_internal_Expect();
+
+    disableXmem_Expect();
+
+    sei_Expect();
+
+    //till here
+
+    sei_Expect();
+
+    reconfigure_interruptSR();
+
+    //test for-loop in new function
+    writeMultiboot(address);
+}
+void test_interruptSR_case3(void) {
+    initalise_reconfigure_multiboot_mockRegister();
+
+    //BitManipulation_setBit_Expect(PIN_FPGA_DONE, P_FPGA_DONE);
+    reconfigure_fpgaSetDoneReponse_internal_Expect(1);
+
+    fpgaDoneResponse = FPGA_DONE_NOTHING;
+    sei_Expect();
 
     reconfigure_interruptSR();
 }

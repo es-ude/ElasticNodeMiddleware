@@ -6,9 +6,9 @@
 #include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
 #include "elasticnodemiddleware/fpgaPins.h"
 #include "elasticnodemiddleware/fpgaRegisters.h"
-#include "elasticnodemiddleware/registerAbstraction.h"
 #include "elasticnodemiddleware/xmem.h"
 #include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
+#include "EmbeddedUtilities/BitManipulation.h"
 
 extern volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
 
@@ -18,19 +18,19 @@ void elasticnode_initialise(){
     elasticnode_fpgaPowerOn_internal();
 
     //enable interface
-    abstraction_setRegisterBitsHigh(DDR_FPGA_CCLK, (1 << P_FPGA_CCLK));
+    BitManipulation_setBit(DDR_FPGA_CCLK, P_FPGA_CCLK);
 
     // inputs that only get setup once
-    abstraction_setRegisterBitsHigh(PORT_FPGA_INIT_B, ( 1 << P_FPGA_INIT_B));
-    abstraction_setRegisterBitsLow(DDR_FPGA_INIT_B, (1 << P_FPGA_INIT_B));
-    abstraction_setRegisterBitsHigh(PORT_FPGA_INIT_B, ( 1 << P_FPGA_INIT_B));
+    BitManipulation_setBit(PORT_FPGA_INIT_B, P_FPGA_INIT_B);
+    BitManipulation_clearBit(DDR_FPGA_INIT_B, P_FPGA_INIT_B);
+    BitManipulation_setBit(PORT_FPGA_INIT_B, P_FPGA_INIT_B);
 
-    abstraction_setRegisterBitsLow(DDR_FPGA_DONE, (1<<P_FPGA_DONE));
-    abstraction_setRegisterBitsHigh(PORT_FPGA_DONE, (1<<P_FPGA_DONE));
+    BitManipulation_clearBit(DDR_FPGA_DONE, P_FPGA_DONE);
+    BitManipulation_setBit(PORT_FPGA_DONE, P_FPGA_DONE);
 
-    abstraction_setRegisterBitsHigh(PORT_FPGA_PROGRAM_B, (1<<P_FPGA_PROGRAM_B));
-    abstraction_setRegisterBitsLow(DDR_FPGA_PROGRAM_B, (1<<P_FPGA_PROGRAM_B));
-    abstraction_setRegisterBitsHigh(PORT_FPGA_PROGRAM_B, (1<<P_FPGA_PROGRAM_B));
+    BitManipulation_setBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+    BitManipulation_clearBit(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+    BitManipulation_setBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
 
 }
 
@@ -42,22 +42,15 @@ void elasticnode_fpgaPowerOff() {
     elasticnode_fpgaPowerOff_internal();
 }
 
-
-/* TODO: implement
-void elasticnode_fpgaSleep(uint8_t sleepmode){
-}*/
-
 void elasticnode_configureFrom(uint32_t address){
     reconfigure_fpgaMultiboot(address);
     while(!reconfigure_fpgaMultibootComplete());
 }
 
 uint32_t elasticnode_getLoadedConfiguration(){
-    //letzte adresse zurückgeben
     return reconfigure_getMultibootAddress();
 }
 
-//lokale vaiable volatile die drauf zeigt
 void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data){
     *(ptr_xmem_offset + address) = data;
 }

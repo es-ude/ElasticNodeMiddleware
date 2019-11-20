@@ -45,12 +45,15 @@
 #define P_FPGA_POWER_SRAM PE5
 #define P_FPGA_POWER_AUX PE4
 #define P_FPGA_POWER_IO PE7
+//SPI Slave Select input
 #define P_FPGA_POWER_INT PB0
 
+//SPI Bus Serial Clock
 #define P_FPGA_CCLK PB1
 
 #define P_FPGA_INIT_B PF3
 
+//Output Compare and PWM Output B for Timer/Counter1
 #define P_FPGA_DONE PB6
 
 #define P_XMEM_WR PE0
@@ -60,7 +63,10 @@
 #define XMEM_A_MASK 0xff
 #define XMEM_AD_MASK 0xff
 
+//Erkennung von Pegelwechseln frei (wenn Eins) oder sperrt diese (wenn Null).
+//Ein erkannter Pegelwechsel führt zum Setzen der Interruptanforderung PCIE0 in PCICR und schließlich zum Interrupt, wenn freigegeben.
 #define FPGA_DONE_INT_CONTROL PCIE0
+//pin 6 external interrupt source
 #define FPGA_DONE_INT PCINT6
 
 #endif

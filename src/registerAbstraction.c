@@ -2,7 +2,7 @@
 // Created by annika on 17.09.19.
 //
 
-#include "elasticnodemiddleware/registerAbstraction.h"
+#include "elas/registerAbstraction.h"
 
 #include <stdio.h>
 
@@ -10,11 +10,11 @@ void abstraction_setRegisterToValue(volatile uint8_t* targetRegister, uint8_t va
     (*targetRegister) = valueToSet;
 }
 
-void abstraction_setRegisterBitsHigh(volatile uint8_t* targetRegister, uint8_t bitmask) {
+void BitManipulation_setBit(volatile uint8_t *targetRegister, uint8_t bitmask) {
     *targetRegister |= bitmask;
 }
 
-void abstraction_setRegisterBitsLow(volatile uint8_t* targetRegister, uint8_t bitmask) {
+void BitManipulation_clearBit(volatile uint8_t *targetRegister, uint8_t bitmask) {
     *targetRegister &= ~bitmask;
 }
 
