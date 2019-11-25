@@ -46,9 +46,6 @@ void elasticnode_fpgaSoftReset();
 
 #ifdef TEST
 
-void cli();
-void sei();
-
 #else
 
 #include <avr/interrupt.h>

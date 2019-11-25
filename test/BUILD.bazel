@@ -57,67 +57,24 @@ mock(
     deps = [":BitManipulationHdrForTesting"],
 )
 
+mock(
+    name = "mock_RegisterAbstraction",
+    srcs = ["//:elasticnodemiddleware/registerAbstraction.h"],
+    deps = ["//:RegisterAbstractionLibHdr"],
+)
+
+mock(
+    name = "mock_InterruptManager",
+    srcs = ["//:elasticnodemiddleware/interruptManager.h"],
+    deps = ["//:InterruptManagerLibHdr"]
+)
+
 unity_test(
-    copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
     deps = [
         "mock_Bitmanipulation",
         "mock_ElasticNodeMiddleware_Internal",
         "mock_Reconfigure_Multiboot",
         "//:ElasticNodeMiddlewareLibTest",
-    ],
-)
-
-unity_test(
-    copts = ["-DTEST"],
-    file_name = "elasticNodeMiddleware_internal_Test.c",
-    deps = [
-        "mock_Bitmanipulation",
-        "//:ElasticNodeMiddlewareLibTest",
-    ],
-)
-
-unity_test(
-    cexception = False,
-    file_name = "registerAbstraction_Test.c",
-    deps = ["//:RegisterAbstractionLib"],
-)
-
-unity_test(
-    copts = ["-DTEST"],
-    file_name = "xmem_Test.c",
-    deps = [
-        "mock_Bitmanipulation",
-        "//:XMemLibTest",
-    ],
-)
-
-unity_test(
-    copts = ["-DTEST"],
-    file_name = "reconfigure_multiboot_avr_Test.c",
-    deps = [
-        "mock_Bitmanipulation",
-        "mock_ElasticNodemiddleware",
-        "mock_Reconfigure_Multiboot_Internal",
-        "mock_Xmem",
-        "//:Reconfigure_multibootLibTest",
-    ],
-)
-
-unity_test(
-    cexception = False,
-    copts = ["-DTEST"],
-    file_name = "reconfigure_multiboot_internal_avr_Test.c",
-    deps = [
-        "//:Reconfigure_multibootLibTest",
-    ],
-)
-
-unity_test(
-    cexception = False,
-    copts = ["-DTEST"],
-    file_name = "interrupt_manager_avr_Test.c",
-    deps = [
-        "//:Interrupt_ManagerLibTest",
     ],
 )

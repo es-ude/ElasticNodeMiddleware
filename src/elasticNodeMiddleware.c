@@ -10,7 +10,7 @@
 #include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
-extern volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
+volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
 
 void elasticnode_initialise(){
     //initalise fpga

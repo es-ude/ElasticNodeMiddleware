@@ -3,13 +3,15 @@
 //
 
 #include "unity.h"
-#include "elas/interrupt_manager.h"
+#include "elasticnodemiddleware/interruptManager.h"
 
 
 void test_clearInterrupt() {
-    //clearInterrupt();
+    //cli_Expect();
+    //interruptManager_clearInterrupt();
 }
 
 void test_setInterrupt() {
-    //setInterrupt();
+    //sei_Expect();
+    //interruptManager_setInterrupt();
 }

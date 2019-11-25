@@ -3,14 +3,15 @@
 //
 
 #include "unity.h"
-#include "elas/registerAbstraction.h"
+#include "elasticnodemiddleware/registerAbstraction.h"
 
+/*
 void test_abstraction_setRegisterBitsHigh(void)
 {
     //Hexzahl 0x00 bekommt an fünfter Stelle 1 --> 16
     uint8_t myRegister = 0x00;
     uint8_t bitPosition = (1 << 4);
-    BitManipulation_setBit(&myRegister, bitPosition);
+    abstraction_setRegisterBitsHigh(&myRegister, bitPosition);
     TEST_ASSERT_EQUAL_UINT8(16, myRegister);
 }
 
@@ -20,7 +21,7 @@ void test_abstraction_setRegisterBitsHighDoesNotAffectOtherBits(void)
     uint8_t bitPosition = 1;
     //check function
     uint8_t expectedRegisterValue =  myRegister | (1 << bitPosition);
-    BitManipulation_setBit(&myRegister, (1 << bitPosition));
+    abstraction_setRegisterBitsHigh(&myRegister, (1 << bitPosition));
     TEST_ASSERT_EQUAL_UINT8(expectedRegisterValue, myRegister);
 }
 
@@ -35,7 +36,7 @@ void test_abstraction_setRegisterBitsHighDoesNotAffectMemory(void) {
     // 2. Byte von hinten +1 rechnen
     uint32_t expectedMemory = 0x3212ff44;
     // s.o. 2 Byte von hinten +1 rechnen
-    BitManipulation_setBit(theActualRegister, (1 << bitPosition));
+    abstraction_setRegisterBitsHigh(theActualRegister, (1 << bitPosition));
     TEST_ASSERT_EQUAL_UINT32(expectedMemory, myRegsiterAndSurroudingArea);
 }
 
@@ -43,7 +44,7 @@ void test_abstraction_setRegisterBitsHighDoesNotAffectMemory(void) {
 void test_abstraction_setRegisterBitsLow(void) {
     uint8_t myRegister = 0xff; //255
     uint8_t bitPosition = (1 << 0);
-    BitManipulation_clearBit(&myRegister, bitPosition);
+    abstraction_setRegisterBitsLow(&myRegister, bitPosition);
     TEST_ASSERT_EQUAL_UINT8(myRegister, 0xFE);
 }
 
@@ -51,7 +52,7 @@ void test_abstraction_setRegisterBitsLowDoesNotAffectOtherBits(void) {
     uint8_t myRegister = 0x1F;
     uint8_t bitPosition = 2;
     uint8_t expectedRegisterValue = myRegister & ~(1 << bitPosition);
-    BitManipulation_clearBit(&myRegister, (1 << bitPosition));
+    abstraction_setRegisterBitsLow(&myRegister, (1 << bitPosition));
     TEST_ASSERT_EQUAL_UINT8(expectedRegisterValue, myRegister);
 }
 
@@ -60,10 +61,10 @@ void test_abstraction_setRegisterBitsLowDoesNotAffectMemory(void) {
     uint8_t* theActualRegister = ((uint8_t*) (&myRegsiterAndSurroudingArea) +1);
     uint8_t bitPosition = 1;
     uint32_t expectedMemory = 0x3212fc33;
-    BitManipulation_clearBit(theActualRegister, (1 << bitPosition));
+    abstraction_setRegisterBitsLow(theActualRegister, (1 << bitPosition));
     TEST_ASSERT_EQUAL_UINT32(expectedMemory, myRegsiterAndSurroudingArea);
 }
-
+*/
 void test_abstraction_setRegisterToValue(void) {
     uint8_t myRegister = 0xff; //255
     uint8_t valueToSet = 4;

@@ -5,9 +5,9 @@
 #ifndef ELASTICNODEMIDDLEWARE_XMEM_H
 #define ELASTICNODEMIDDLEWARE_XMEM_H
 
-void initXmem(void);
-void enableXmem(void);
-void disableXmem(void);
+void xmem_initXmem(void);
+void xmem_enableXmem(void);
+void xmem_disableXmem(void);
 
 #include <stdint.h>
 

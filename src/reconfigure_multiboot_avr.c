@@ -8,6 +8,8 @@
 #include "elasticnodemiddleware/fpgaRegisters.h"
 #include "elasticnodemiddleware/elasticNodeMiddleware.h"
 #include "elasticnodemiddleware/xmem.h"
+#include "elasticnodemiddleware/registerAbstraction.h"
+#include "elasticnodemiddleware/interruptManager.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
@@ -28,7 +30,7 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
 
     elasticnode_fpgaPowerOn();
 
-    enableXmem();
+    xmem_enableXmem();
 
     reconfigure_fpgaSetDoneReponse_internal(FPGA_DONE_PRINT);
     reconfigure_fpgaMultibootClearComplete_internal();
@@ -38,10 +40,10 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
         *(AddressMultiboot + i) = (uint8_t) (0xff & (address >> (i * 8)));
     }
 
-    disableXmem();
+    xmem_disableXmem();
 
     //platform unabhängig, enable beabsichtigt?
-    sei();
+    interruptManager_setInterrupt();
 }
 
 //new
@@ -56,13 +58,13 @@ uint8_t reconfigure_fpgaMultibootComplete() {
 
 void reconfigure_interruptSR() {
 
-    //if ((BitManipulation_setBit(PIN_FPGA_DONE, P_FPGA_DONE)) != 0){
+    if ((abstraction_getBit(PIN_FPGA_DONE, P_FPGA_DONE)) != 0) {
         //float duration;
         reconfigure_fpgaSetDoneReponse_internal(1);
         switch (fpgaDoneResponse) {
             case FPGA_DONE_PRINT:
                 //duration = -1;
-                cli();
+                interruptManager_clearInterrupt();
 
                 //debugWriteLine("FPGA Done INT");
                 //debugWriteFloatFull(duration);
@@ -78,8 +80,8 @@ void reconfigure_interruptSR() {
             default:
                 break;
         }
-        sei();
-   // }
+        interruptManager_setInterrupt();
+    }
 }
 
 ISR(FPGA_DONE_INT_VECTOR)

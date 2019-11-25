@@ -7,7 +7,7 @@
 #include "elasticnodemiddleware/fpgaPins.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
-void initXmem(void) {
+void xmem_initXmem(void) {
 
     /*XMCRA = (1 << SRW11 ) | (1 << SRW10);
     XMCRB = (1 << XMBK) | (1 << XMM1);*/
@@ -18,7 +18,7 @@ void initXmem(void) {
 
 }
 
-void enableXmem(void){
+void xmem_enableXmem(void){
 
     //spi disable
     BitManipulation_setBit(SPCR, (1 << SPE));
@@ -33,7 +33,7 @@ void enableXmem(void){
     BitManipulation_setBit(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
 }
 
-void disableXmem(void){
+void xmem_disableXmem(void){
 
     BitManipulation_clearBit(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
 

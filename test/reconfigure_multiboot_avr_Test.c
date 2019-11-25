@@ -7,6 +7,8 @@
 #include "elasticnodemiddleware/Mockreconfigure_multiboot_internal_avr.h"
 #include "elasticnodemiddleware/MockelasticNodeMiddleware.h"
 #include "elasticnodemiddleware/Mockxmem.h"
+#include "elasticnodemiddleware/MockregisterAbstraction.h"
+#include "elasticnodemiddleware/MockinterruptManager.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 
@@ -59,14 +61,14 @@ void test_reconfigure_fpgaMultiboot(void) {
     elasticnode_fpgaPowerOn_Expect();
 
     //xmem mock with test flag!
-    enableXmem_Expect();
+    xmem_enableXmem_Expect();
 
     reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
     reconfigure_fpgaMultibootClearComplete_internal_Expect();
 
-    disableXmem_Expect();
+    xmem_disableXmem_Expect();
 
-    sei_Expect();
+    interruptManager_setInterrupt_Expect();
 
     reconfigure_fpgaMultiboot(address);
 
@@ -88,13 +90,13 @@ void test_reconfigure_fpgaMultibootComplete() {
 void test_interruptSR_case1(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    //BitManipulation_setBit_Expect(PIN_FPGA_DONE, P_FPGA_DONE);
+    abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE, 1);
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     //BEFORE: fpgaDoneResponse = FPGA_DONE_NOTHING
     fpgaDoneResponse = FPGA_DONE_PRINT;
-    cli_Expect();
-    sei_Expect();
+    interruptManager_clearInterrupt_Expect();
+    interruptManager_setInterrupt_Expect();
 
     reconfigure_interruptSR();
 }
@@ -102,7 +104,7 @@ void test_interruptSR_case1(void) {
 void test_interruptSR_case2(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    //BitManipulation_setBit_Expect(PIN_FPGA_DONE, P_FPGA_DONE);
+    abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE,1);
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_MULTIBOOT;
@@ -114,18 +116,18 @@ void test_interruptSR_case2(void) {
     elasticnode_fpgaPowerOn_Expect();
 
     //xmem mock with test flag!
-    enableXmem_Expect();
+    xmem_enableXmem_Expect();
 
     reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
     reconfigure_fpgaMultibootClearComplete_internal_Expect();
 
-    disableXmem_Expect();
+    xmem_disableXmem_Expect();
 
-    sei_Expect();
+    interruptManager_setInterrupt_Expect();
 
     //till here
 
-    sei_Expect();
+    interruptManager_setInterrupt_Expect();
 
     reconfigure_interruptSR();
 
@@ -135,11 +137,11 @@ void test_interruptSR_case2(void) {
 void test_interruptSR_case3(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    //BitManipulation_setBit_Expect(PIN_FPGA_DONE, P_FPGA_DONE);
+    abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE,1);
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_NOTHING;
-    sei_Expect();
+    interruptManager_setInterrupt_Expect();
 
     reconfigure_interruptSR();
 }

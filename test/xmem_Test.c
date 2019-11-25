@@ -51,7 +51,7 @@ void test_initXmem(void) {
     BitManipulation_setBit_Expect(XMCRA, ((1 << SRW11) | (1 << SRW10)));
     BitManipulation_setBit_Expect(XMCRB, ((1 << XMBK) | (1 << XMM1)));
 
-    initXmem();
+    xmem_initXmem();
 }
 
 void test_enableXmem(void){
@@ -70,7 +70,7 @@ void test_enableXmem(void){
 
     BitManipulation_setBit_Expect(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
 
-    enableXmem();
+    xmem_enableXmem();
 
 }
 
@@ -87,5 +87,5 @@ void test_disableXmem(void) {
     BitManipulation_setBit_Expect(PORT_XMEM_RD, (1 << P_XMEM_RD));
     BitManipulation_clearBit_Expect(DDR_XMEM_ALE, (1 << P_XMEM_ALE));
 
-    disableXmem();
+    xmem_disableXmem();
 }

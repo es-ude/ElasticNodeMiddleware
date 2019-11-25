@@ -1,11 +1,5 @@
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
-cc_library(
-    name = "RegisterAbstractionLib",
-    srcs = ["src/registerAbstraction.c"],
-    visibility = ["//visibility:public"],
-    deps = ["//:RegisterAbstractionLibHdr"],
-)
 
 cc_library(
     name = "ElasticNodeMiddlewareLib",
@@ -23,41 +17,17 @@ cc_library(
 cc_library(
     name = "ElasticNodeMiddlewareLibTest",
     srcs = [
-        "elasticnodemiddleware/elasticNodeMiddleware_internal.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
-        "elasticnodemiddleware/xmem.h",
         "src/elasticNodeMiddleware.c",
         "src/elasticNodeMiddleware_internal.c",
     ],
-    hdrs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-    ],
-    copts = ["-DTEST"],
-    visibility = ["//visibility:public"],
-    deps = ["//test:BitManipulationHdrForTesting"],
-)
-
-cc_library(
-    name = "XMemLib",
-    srcs = ["src/xmem.c"],
-    hdrs = [
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/xmem.h",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "XMemLibTest",
-    srcs = ["src/xmem.c"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:XMemLibHdr",
         "//test:BitManipulationHdrForTesting",
+        #"//:ElasticNodeMiddlewareLibHdrTest",
+        "//:ElasticNodeMiddlewareHdr",
+        "//:ElasticNodeMiddlewareInternalHdr",
+        "//:Reconfigure_MultibootHdr"
     ],
 )
 
@@ -66,9 +36,6 @@ cc_library(
     srcs = [
         "src/reconfigure_multiboot_avr.c",
         "src/reconfigure_multiboot_internal_avr.c",
-    ],
-    hdrs = [
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -80,15 +47,9 @@ cc_library(
 cc_library(
     name = "Reconfigure_multibootLibTest",
     srcs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
-        "elasticnodemiddleware/xmem.h",
         "src/reconfigure_multiboot_avr.c",
         "src/reconfigure_multiboot_internal_avr.c",
     ],
-    hdrs = ["elasticnodemiddleware/reconfigure_multiboot_avr.h"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
@@ -98,18 +59,42 @@ cc_library(
 )
 
 cc_library(
-    name = "Interrupt_ManagerLib",
-    srcs = ["src/interrupt_manager_avr.c"],
+    name = "XMemLib",
+    srcs = ["src/xmem.c"],
     visibility = ["//visibility:public"],
-    deps = ["//:Interrupt_ManagerLibHdr"],
+    deps = [
+        "//:XMemLibHdr",
+        "@EmbeddedUtilities//:BitManipulation"
+    ]
 )
 
 cc_library(
-    name = "Interrupt_ManagerLibTest",
-    srcs = ["src/interrupt_manager_avr.c"],
+    name = "XMemLibTest",
+    srcs = ["src/xmem.c"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
-    deps = ["//:Interrupt_ManagerLibHdr"],
+    deps = [
+        "//:XMemLibHdrTest",
+        "//:RegisterDefinitionHdr",
+        "//test:BitManipulationHdrForTesting",
+    ],
+)
+
+
+
+cc_library(
+    name = "InterruptManagerLib",
+    srcs = ["src/interruptManager_avr.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:InterruptManagerLibHdr"],
+)
+
+cc_library(
+    name = "InterruptManagerLibTest",
+    srcs = ["src/interruptManager_avr.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//:InterruptManagerLibHdr"],
 )
 
 cc_library(
@@ -118,6 +103,21 @@ cc_library(
     deps = [
         "@EmbeddedUtilities//:BitManipulation",
     ],
+)
+
+cc_library(
+    name = "RegisterAbstractionLib",
+    srcs = ["src/registerAbstraction.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:RegisterAbstractionLibHdr"],
+)
+
+cc_library(
+    name = "RegisterAbstractionLibTest",
+    srcs = ["src/registerAbstraction.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//:RegisterAbstractionLibHdr"],
 )
 
 exports_files(
@@ -130,35 +130,7 @@ exports_files(
         "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
         "elasticnodemiddleware/registerAbstraction.h",
         "elasticnodemiddleware/xmem.h",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "RegisterAbstractionLibHdr",
-    hdrs = ["elasticnodemiddleware/registerAbstraction.h"],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "XMemLibHdr",
-    hdrs = [
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/xmem.h",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "Reconfigure_MultibootLibHdr",
-    hdrs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
-        "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
-        "elasticnodemiddleware/xmem.h",
+        "elasticnodemiddleware/interruptManager.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -168,16 +140,110 @@ cc_library(
     hdrs = [
         "elasticnodemiddleware/elasticNodeMiddleware.h",
         "elasticnodemiddleware/elasticNodeMiddleware_internal.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
         "elasticnodemiddleware/reconfigure_multiboot_avr.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:XMemLibTest",
+        "//:RegisterDefinitionHdr"
+    ]
+)
+
+cc_library(
+    name = "ElasticNodeMiddlewareLibHdrTest",
+    copts = ["-DTEST"],
+    hdrs = [
+        #"elasticnodemiddleware/elasticNodeMiddleware.h",
+        #"elasticnodemiddleware/elasticNodeMiddleware_internal.h",
+        #"elasticnodemiddleware/reconfigure_multiboot_avr.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:XMemLibTest",
+        "//:RegisterDefinitionHdr"
+    ]
+)
+
+cc_library(
+    name = "ElasticNodeMiddlewareHdr",
+    hdrs = ["elasticnodemiddleware/elasticNodeMiddleware.h"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//:XMemLibTest"],
+)
+
+cc_library(
+    name = "ElasticNodeMiddlewareInternalHdr",
+    hdrs = ["elasticnodemiddleware/elasticNodeMiddleware_internal.h"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//:XMemLibTest"]
+)
+
+cc_library(
+    name = "Reconfigure_MultibootHdr",
+    hdrs = [ "elasticnodemiddleware/reconfigure_multiboot_avr.h"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//:XMemLibTest"],
+)
+
+cc_library(
+    name = "Reconfigure_MultibootLibHdr",
+    hdrs = [
+        "elasticnodemiddleware/elasticNodeMiddleware.h",
+        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
+        "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:XMemLibTest",
+        "//:RegisterAbstractionLibTest",
+        "//:InterruptManagerLibTest",
+        "//:RegisterDefinitionHdr"
+    ]
+)
+
+cc_library(
+    name = "XMemLibHdr",
+    hdrs = [
         "elasticnodemiddleware/xmem.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = ["//:RegisterDefinitionHdr"]
+)
+cc_library(
+    name = "XMemLibHdrTest",
+    copts = ["-DTEST"],
+    hdrs = [
+        "elasticnodemiddleware/xmem.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = ["//:RegisterDefinitionHdr"]
+)
+
+cc_library(
+    name = "InterruptManagerLibHdr",
+    hdrs = [
+        "elasticnodemiddleware/interruptManager.h"
     ],
     visibility = ["//visibility:public"],
 )
 
 cc_library(
-    name = "Interrupt_ManagerLibHdr",
-    hdrs = ["elasticnodemiddleware/interrupt_manager.h"],
+    name = "RegisterAbstractionLibHdr",
+    hdrs = [
+        "elasticnodemiddleware/registerAbstraction.h"
+    ],
     visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "RegisterDefinitionHdr",
+    hdrs = [
+        "elasticnodemiddleware/fpgaPins.h",
+        "elasticnodemiddleware/fpgaRegisters.h"
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"]
 )
