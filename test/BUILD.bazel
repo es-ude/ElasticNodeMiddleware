@@ -17,13 +17,6 @@ cc_library(
 )
 
 mock(
-    name = "mock_ElasticNodeMiddleware_Internal",
-    srcs = ["//:elasticnodemiddleware/elasticNodeMiddleware_internal.h"],
-    copts = ["-DTEST"],
-    deps = ["//:ElasticNodeMiddlewareLibHdr"],
-)
-
-mock(
     name = "mock_ElasticNodemiddleware",
     srcs = ["//:elasticnodemiddleware/elasticNodeMiddleware.h"],
     copts = ["-DTEST"],
@@ -31,15 +24,22 @@ mock(
 )
 
 mock(
-    name = "mock_Reconfigure_Multiboot_Internal",
-    srcs = ["//:elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"],
-    deps = ["//:Reconfigure_MultibootLibHdr"],
+    name = "mock_ElasticNodeMiddleware_Internal",
+    srcs = ["//:elasticnodemiddleware/elasticNodeMiddleware_internal.h"],
+    copts = ["-DTEST"],
+    deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot",
     srcs = ["//:elasticnodemiddleware/reconfigure_multiboot_avr.h"],
     copts = ["-DTEST"],
+    deps = ["//:Reconfigure_MultibootLibHdr"],
+)
+
+mock(
+    name = "mock_Reconfigure_Multiboot_Internal",
+    srcs = ["//:elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"],
     deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
@@ -68,6 +68,7 @@ mock(
     srcs = ["//:elasticnodemiddleware/registerAbstraction.h"],
     deps = ["//:RegisterAbstractionLibHdr"]
 )
+
 unity_test(
     copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
@@ -85,21 +86,6 @@ unity_test(
     deps = [
         "mock_Bitmanipulation",
         "//:ElasticNodeMiddlewareLibTest",
-    ],
-)
-
-unity_test(
-    cexception = False,
-    file_name = "registerAbstraction_Test.c",
-    deps = ["//:RegisterAbstractionLib"],
-)
-
-unity_test(
-    copts = ["-DTEST"],
-    file_name = "xmem_Test.c",
-    deps = [
-        "mock_Bitmanipulation",
-        "//:XMemLibTest",
     ],
 )
 
@@ -127,10 +113,25 @@ unity_test(
 )
 
 unity_test(
+    copts = ["-DTEST"],
+    file_name = "xmem_Test.c",
+    deps = [
+        "mock_Bitmanipulation",
+        "//:XMemLibTest",
+    ],
+)
+
+unity_test(
     cexception = False,
     copts = ["-DTEST"],
     file_name = "interrupt_manager_avr_Test.c",
     deps = [
         "//:Interrupt_ManagerLibTest",
     ],
+)
+
+unity_test(
+    cexception = False,
+    file_name = "registerAbstraction_Test.c",
+    deps = ["//:RegisterAbstractionLib"],
 )

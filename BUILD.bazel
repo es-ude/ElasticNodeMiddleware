@@ -1,13 +1,6 @@
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
 cc_library(
-    name = "RegisterAbstractionLib",
-    srcs = ["src/registerAbstraction.c"],
-    visibility = ["//visibility:public"],
-    deps = ["//:RegisterAbstractionLibHdr"],
-)
-
-cc_library(
     name = "ElasticNodeMiddlewareLib",
     srcs = [
         "src/elasticNodeMiddleware.c",
@@ -23,41 +16,14 @@ cc_library(
 cc_library(
     name = "ElasticNodeMiddlewareLibTest",
     srcs = [
-        "elasticnodemiddleware/elasticNodeMiddleware_internal.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
-        "elasticnodemiddleware/xmem.h",
         "src/elasticNodeMiddleware.c",
         "src/elasticNodeMiddleware_internal.c",
     ],
-    hdrs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-    ],
-    copts = ["-DTEST"],
-    visibility = ["//visibility:public"],
-    deps = ["//test:BitManipulationHdrForTesting"],
-)
-
-cc_library(
-    name = "XMemLib",
-    srcs = ["src/xmem.c"],
-    hdrs = [
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/xmem.h",
-    ],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "XMemLibTest",
-    srcs = ["src/xmem.c"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:XMemLibHdr",
         "//test:BitManipulationHdrForTesting",
+        "//:ElasticNodeMiddlewareLibHdr",
     ],
 )
 
@@ -66,9 +32,6 @@ cc_library(
     srcs = [
         "src/reconfigure_multiboot_avr.c",
         "src/reconfigure_multiboot_internal_avr.c",
-    ],
-    hdrs = [
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -80,21 +43,40 @@ cc_library(
 cc_library(
     name = "Reconfigure_multibootLibTest",
     srcs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
-        "elasticnodemiddleware/xmem.h",
-        "elasticnodemiddleware/interruptManager.h",
         "src/reconfigure_multiboot_avr.c",
         "src/reconfigure_multiboot_internal_avr.c",
     ],
-    hdrs = ["elasticnodemiddleware/reconfigure_multiboot_avr.h"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
         "//:Reconfigure_MultibootLibHdr",
         "//test:BitManipulationHdrForTesting",
+    ],
+)
+
+cc_library(
+    name = "XMemLib",
+    srcs = ["src/xmem.c"],
+    hdrs = [
+        "elasticnodemiddleware/xmem.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:RegisterDefinitionLibHdrs",
+        "//:XMemLibHdr",
+        "@EmbeddedUtilities//:BitManipulation",
+    ]
+)
+
+cc_library(
+    name = "XMemLibTest",
+    srcs = ["src/xmem.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:XMemLibHdr",
+        "//test:BitManipulationHdrForTesting",
+        "//:RegisterDefinitionLibHdrs"
     ],
 )
 
@@ -121,6 +103,13 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "RegisterAbstractionLib",
+    srcs = ["src/registerAbstraction.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:RegisterAbstractionLibHdr"],
+)
+
 exports_files(
     srcs = [
         "elasticnodemiddleware/elasticNodeMiddleware.h",
@@ -137,51 +126,64 @@ exports_files(
 )
 
 cc_library(
-    name = "RegisterAbstractionLibHdr",
-    hdrs = ["elasticnodemiddleware/registerAbstraction.h"],
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "XMemLibHdr",
+    name = "ElasticNodeMiddlewareLibHdr",
     hdrs = [
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/xmem.h",
+        "elasticnodemiddleware/elasticNodeMiddleware.h",
+        "elasticnodemiddleware/elasticNodeMiddleware_internal.h",
+        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
     ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//:RegisterDefinitionLibHdrs",
+        "//:XMemLibHdr"
+    ]
 )
 
 cc_library(
     name = "Reconfigure_MultibootLibHdr",
     hdrs = [
         "elasticnodemiddleware/elasticNodeMiddleware.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
         "elasticnodemiddleware/reconfigure_multiboot_avr.h",
         "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
-        "elasticnodemiddleware/xmem.h",
-        "elasticnodemiddleware/interruptManager.h",
-        "elasticnodemiddleware/registerAbstraction.h"
     ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//:RegisterDefinitionLibHdrs",
+        "//:XMemLibHdr",
+        "//:Interrupt_ManagerLibHdr",
+        "//:RegisterAbstractionLibHdr"
+    ]
 )
 
 cc_library(
-    name = "ElasticNodeMiddlewareLibHdr",
+    name = "XMemLibHdr",
     hdrs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-        "elasticnodemiddleware/elasticNodeMiddleware_internal.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
         "elasticnodemiddleware/xmem.h",
     ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//:RegisterDefinitionLibHdrs"
+    ]
 )
+
 
 cc_library(
     name = "Interrupt_ManagerLibHdr",
     hdrs = ["elasticnodemiddleware/interruptManager.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "RegisterAbstractionLibHdr",
+    hdrs = ["elasticnodemiddleware/registerAbstraction.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "RegisterDefinitionLibHdrs",
+    hdrs= [
+        "elasticnodemiddleware/fpgaRegisters.h",
+        "elasticnodemiddleware/fpgaPins.h"
+    ],
     visibility = ["//visibility:public"],
 )
