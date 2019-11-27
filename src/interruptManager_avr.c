@@ -3,12 +3,12 @@
 //
 
 #include "elasticnodemiddleware/interruptManager.h"
-//#include <avr/interrupt.h>
+#include "elasticnodemiddleware/interruptManager_avr_Mock.h"
 
 void interruptManager_clearInterrupt() {
-    //cli();
+    cli();
 }
 
 void interruptManager_setInterrupt() {
-    //sei();
+    sei();
 }

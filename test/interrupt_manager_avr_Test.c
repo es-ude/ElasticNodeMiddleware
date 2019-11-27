@@ -4,14 +4,14 @@
 
 #include "unity.h"
 #include "elasticnodemiddleware/interruptManager.h"
-
+#include "elasticnodemiddleware/MockinterruptManager_avr_Mock.h"
 
 void test_clearInterrupt() {
-    //cli_Expect();
-    //interruptManager_clearInterrupt();
+    cli_Expect();
+    interruptManager_clearInterrupt();
 }
 
 void test_setInterrupt() {
-    //sei_Expect();
-    //interruptManager_setInterrupt();
+    sei_Expect();
+    interruptManager_setInterrupt();
 }

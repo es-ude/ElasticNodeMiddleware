@@ -58,7 +58,7 @@ uint8_t reconfigure_fpgaMultibootComplete() {
 
 void reconfigure_interruptSR() {
 
-    if ((abstraction_getBit(PIN_FPGA_DONE, P_FPGA_DONE)) != 0) {
+    if ((abstraction_getBit(PIN_FPGA_DONE, P_FPGA_DONE))) {
         //float duration;
         reconfigure_fpgaSetDoneReponse_internal(1);
         switch (fpgaDoneResponse) {

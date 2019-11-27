@@ -120,7 +120,8 @@ exports_files(
         "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
         "elasticnodemiddleware/registerAbstraction.h",
         "elasticnodemiddleware/xmem.h",
-        "elasticnodemiddleware/interruptManager.h"
+        "elasticnodemiddleware/interruptManager.h",
+        "elasticnodemiddleware/interruptManager_avr_Mock.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -135,7 +136,8 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:RegisterDefinitionLibHdrs",
-        "//:XMemLibHdr"
+        "//:XMemLibHdr",
+        #"//:Reconfigure_MultibootLibHdr"
     ]
 )
 
@@ -151,15 +153,14 @@ cc_library(
         "//:RegisterDefinitionLibHdrs",
         "//:XMemLibHdr",
         "//:Interrupt_ManagerLibHdr",
-        "//:RegisterAbstractionLibHdr"
+        "//:RegisterAbstractionLibHdr",
+        #"//:ElasticNodeMiddlewareLibHdr"
     ]
 )
 
 cc_library(
     name = "XMemLibHdr",
-    hdrs = [
-        "elasticnodemiddleware/xmem.h",
-    ],
+    hdrs = ["elasticnodemiddleware/xmem.h" ],
     visibility = ["//visibility:public"],
     deps = [
         "//:RegisterDefinitionLibHdrs"
@@ -169,7 +170,8 @@ cc_library(
 
 cc_library(
     name = "Interrupt_ManagerLibHdr",
-    hdrs = ["elasticnodemiddleware/interruptManager.h"],
+    hdrs = ["elasticnodemiddleware/interruptManager.h",
+            "elasticnodemiddleware/interruptManager_avr_Mock.h"],
     visibility = ["//visibility:public"],
 )
 

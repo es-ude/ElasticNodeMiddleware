@@ -64,6 +64,13 @@ mock(
 )
 
 mock(
+    name= "mock_InterruptManager_avr_Mock",
+    srcs = ["//:elasticnodemiddleware/interruptManager_avr_Mock.h"],
+    copts = ["-DTEST"],
+    deps = ["//:Interrupt_ManagerLibHdr"]
+)
+
+mock(
     name = "mock_RegisterAbstraction",
     srcs = ["//:elasticnodemiddleware/registerAbstraction.h"],
     deps = ["//:RegisterAbstractionLibHdr"]
@@ -127,6 +134,7 @@ unity_test(
     file_name = "interrupt_manager_avr_Test.c",
     deps = [
         "//:Interrupt_ManagerLibTest",
+        "mock_InterruptManager_avr_Mock"
     ],
 )
 
