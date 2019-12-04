@@ -26,14 +26,14 @@
 
 #define RESET_DELAY 10
 
-void elasticnode_initialise();
-void elasticnode_fpgaPowerOn();
-void elasticnode_fpgaPowerOff();
+void elasticnode_initialise(void);
+void elasticnode_fpgaPowerOn(void);
+void elasticnode_fpgaPowerOff(void);
 
 // TODO: implement void elasticnode_fpgaSleep(uint8_t sleepmode);
 
 void elasticnode_configureFrom(uint32_t address);
-uint32_t elasticnode_getLoadedConfiguration();
+uint32_t elasticnode_getLoadedConfiguration(void);
 
 void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data);
 void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data);
@@ -42,7 +42,7 @@ void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t
 
 //TODO: read + write non-blocking might be implemented
 
-void elasticnode_fpgaSoftReset();
+void elasticnode_fpgaSoftReset(void);
 
 #ifdef TEST
 

@@ -1,10 +1,21 @@
-load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries")
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binary", "default_embedded_binaries")
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
-default_embedded_binaries(
+#default_embedded_binaries(
+#    copts = cpu_frequency_flag(),
+#    main_files = glob(["*.c"]),
+#    deps = [
+#    "//app/setup:Setup",
+#   ],
+#)
+
+default_embedded_binary(
+    name = "main",
+    srcs = ["main.c"],
     copts = cpu_frequency_flag(),
-    main_files = glob(["*.c"]),
-    deps = [
-        "//app/setup:Setup",
-    ],
+    deps = ["//app/setup:Setup",
+            "//:XMemLib",
+            "//:ElasticNodeMiddlewareLib",
+            "//:Reconfigure_multibootLib",
+            ]
 )

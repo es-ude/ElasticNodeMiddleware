@@ -48,8 +48,8 @@ void test_initXmem(void) {
 
     initialise_xmem_mockRegister();
 
-    BitManipulation_setBit_Expect(XMCRA, ((1 << SRW11) | (1 << SRW10)));
-    BitManipulation_setBit_Expect(XMCRB, ((1 << XMBK) | (1 << XMM1)));
+    BitManipulation_setBit_Expect(XMCRA, (SRW11 | SRW10));
+    BitManipulation_setBit_Expect(XMCRB, (XMBK | XMM1));
 
     xmem_initXmem();
 }
@@ -59,16 +59,16 @@ void test_enableXmem(void){
     initialise_xmem_mockRegister();
 
     //spi disable
-    BitManipulation_setBit_Expect(SPCR, (1 << SPE));
+    BitManipulation_setBit_Expect(SPCR, SPE);
 
     *DDR_XMEM_A = XMEM_A_MASK;
     *DDR_XMEM_ALE = XMEM_AD_MASK;
 
-    BitManipulation_setBit_Expect(DDR_XMEM_WR, (1 << P_XMEM_WR));
-    BitManipulation_setBit_Expect(DDR_XMEM_RD, (1 << P_XMEM_RD));
-    BitManipulation_setBit_Expect(DDR_XMEM_ALE, (1 << P_XMEM_ALE));
+    BitManipulation_setBit_Expect(DDR_XMEM_WR, P_XMEM_WR);
+    BitManipulation_setBit_Expect(DDR_XMEM_RD, P_XMEM_RD);
+    BitManipulation_setBit_Expect(DDR_XMEM_ALE, P_XMEM_ALE);
 
-    BitManipulation_setBit_Expect(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
+    BitManipulation_setBit_Expect(XMEM_ENABLE_REG, XMEM_ENABLE_P);
 
     xmem_enableXmem();
 
@@ -78,14 +78,14 @@ void test_disableXmem(void) {
 
     initialise_xmem_mockRegister();
 
-    BitManipulation_clearBit_Expect(XMEM_ENABLE_REG, (1 << XMEM_ENABLE_P));
+    BitManipulation_clearBit_Expect(XMEM_ENABLE_REG, XMEM_ENABLE_P);
 
     *DDR_XMEM_A = 0x00;
     *DDR_XMEM_ALE = 0x00;
 
-    BitManipulation_clearBit_Expect(DDR_XMEM_WR, (1 << P_XMEM_WR));
-    BitManipulation_setBit_Expect(PORT_XMEM_RD, (1 << P_XMEM_RD));
-    BitManipulation_clearBit_Expect(DDR_XMEM_ALE, (1 << P_XMEM_ALE));
+    BitManipulation_clearBit_Expect(DDR_XMEM_WR, P_XMEM_WR);
+    BitManipulation_setBit_Expect(PORT_XMEM_RD, P_XMEM_RD);
+    BitManipulation_clearBit_Expect(DDR_XMEM_ALE, P_XMEM_ALE);
 
     xmem_disableXmem();
 }

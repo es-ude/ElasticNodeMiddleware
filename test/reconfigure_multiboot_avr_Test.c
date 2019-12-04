@@ -44,9 +44,9 @@ void writeMultiboot(uint32_t address) {
 void test_initMultiboot(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    BitManipulation_clearBit_Expect(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
-    BitManipulation_setBit_Expect(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
-    BitManipulation_setBit_Expect(FPGA_DONE_INT_CONTROL_REG, (1 << FPGA_DONE_INT_CONTROL));
+    BitManipulation_clearBit_Expect(FPGA_DONE_INT_REG, FPGA_DONE_INT);
+    BitManipulation_setBit_Expect(FPGA_DONE_INT_REG, FPGA_DONE_INT);
+    BitManipulation_setBit_Expect(FPGA_DONE_INT_CONTROL_REG, FPGA_DONE_INT_CONTROL);
 
     reconfigure_fpgaMultibootClearComplete_internal_Expect();
     reconfigure_initMultiboot();
@@ -80,7 +80,7 @@ void test_getMultibootAddress(void){
     TEST_ASSERT_EQUAL_UINT32(address, reconfigure_getMultibootAddress());
 }
 
-void test_reconfigure_fpgaMultibootComplete() {
+void test_reconfigure_fpgaMultibootComplete(void) {
     //beliebige Zahl?
     reconfigure_fpgaMultibootComplete_internal_ExpectAndReturn(0);
     reconfigure_fpgaMultibootComplete();

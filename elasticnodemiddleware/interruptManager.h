@@ -7,8 +7,8 @@
 
 
 //Alternative: Macro
-void interruptManager_clearInterrupt();
-void interruptManager_setInterrupt();
+void interruptManager_clearInterrupt(void);
+void interruptManager_setInterrupt(void);
 
 
 #endif //ELASTICNODEMIDDLEWARE_INTERRUPTMANAGER_H

@@ -103,17 +103,17 @@ void test_elasticnode_initialise(void) {
     elasticnode_initialise();
 }
 
-void test_elasticnodemiddlewareticnode_FPGAPowerOn(){
+void test_elasticnodemiddlewareticnode_FPGAPowerOn(void){
     elasticnode_fpgaPowerOn_internal_Expect();
     elasticnode_fpgaPowerOn();
 }
 
-void test_elasticnode_FPGAPowerOff(){
+void test_elasticnode_FPGAPowerOff(void){
     elasticnode_fpgaPowerOff_internal_Expect();
     elasticnode_fpgaPowerOff();
 }
 
-void test_elasticnode_configureFrom() {
+void test_elasticnode_configureFrom(void) {
     initialise_mockRegister();
     uint32_t address = 0x23409;
 
@@ -122,7 +122,7 @@ void test_elasticnode_configureFrom() {
     elasticnode_configureFrom(address);
 }
 
-void test_elasticnode_getConfiguration() {
+void test_elasticnode_getConfiguration(void) {
     initialise_mockRegister();
 
     //beliebige Zahl?

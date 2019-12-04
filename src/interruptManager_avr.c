@@ -5,10 +5,10 @@
 #include "elasticnodemiddleware/interruptManager.h"
 #include "elasticnodemiddleware/interruptManager_avr_Mock.h"
 
-void interruptManager_clearInterrupt() {
+void interruptManager_clearInterrupt(void) {
     cli();
 }
 
-void interruptManager_setInterrupt() {
+void interruptManager_setInterrupt(void) {
     sei();
 }

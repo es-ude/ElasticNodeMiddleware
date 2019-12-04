@@ -12,7 +12,7 @@
 
 volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
 
-void elasticnode_initialise(){
+void elasticnode_initialise(void){
     //initalise fpga
 
     elasticnode_fpgaPowerOn_internal();
@@ -34,11 +34,11 @@ void elasticnode_initialise(){
 
 }
 
-void elasticnode_fpgaPowerOn() {
+void elasticnode_fpgaPowerOn(void) {
     elasticnode_fpgaPowerOn_internal();
 }
 
-void elasticnode_fpgaPowerOff() {
+void elasticnode_fpgaPowerOff(void) {
     elasticnode_fpgaPowerOff_internal();
 }
 
@@ -47,7 +47,7 @@ void elasticnode_configureFrom(uint32_t address){
     while(!reconfigure_fpgaMultibootComplete());
 }
 
-uint32_t elasticnode_getLoadedConfiguration(){
+uint32_t elasticnode_getLoadedConfiguration(void){
     return reconfigure_getMultibootAddress();
 }
 
@@ -73,7 +73,7 @@ void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t
     }
 }
 
-void elasticnode_fpgaSoftReset() {
+void elasticnode_fpgaSoftReset(void) {
     elasticnode_setFpgaSoftReset_internal();
     _delay_ms(RESET_DELAY);
     elasticnode_clearFpgaSoftReset_internal();

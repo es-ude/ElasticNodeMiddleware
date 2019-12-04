@@ -14,11 +14,11 @@
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
 volatile uint8_t *AddressMultiboot = (uint8_t *) (XMEM_OFFSET + 0x05);
 
-void reconfigure_initMultiboot() {
+void reconfigure_initMultiboot(void) {
 
-    BitManipulation_clearBit(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
-    BitManipulation_setBit(FPGA_DONE_INT_REG, (1 << FPGA_DONE_INT));
-    BitManipulation_setBit(FPGA_DONE_INT_CONTROL_REG, (1 << FPGA_DONE_INT_CONTROL));
+    BitManipulation_clearBit(FPGA_DONE_INT_REG, FPGA_DONE_INT);
+    BitManipulation_setBit(FPGA_DONE_INT_REG, FPGA_DONE_INT);
+    BitManipulation_setBit(FPGA_DONE_INT_CONTROL_REG, FPGA_DONE_INT_CONTROL);
 
     reconfigure_fpgaMultibootClearComplete_internal();
     fpgaDoneResponse = FPGA_DONE_NOTHING;
@@ -46,16 +46,16 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
 }
 
 //new
-uint32_t reconfigure_getMultibootAddress() {
+uint32_t reconfigure_getMultibootAddress(void) {
     return (uint32_t ) (*(AddressMultiboot) + *(AddressMultiboot+1) + *(AddressMultiboot +2));
 }
 
 //new
-uint8_t reconfigure_fpgaMultibootComplete() {
+uint8_t reconfigure_fpgaMultibootComplete(void) {
     return reconfigure_fpgaMultibootComplete_internal();
 }
 
-void reconfigure_interruptSR() {
+void reconfigure_interruptSR(void) {
 
     if ((BitManipulation_bitIsSetOnArray(PIN_FPGA_DONE, P_FPGA_DONE))) {
         //float duration;

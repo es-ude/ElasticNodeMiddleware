@@ -67,24 +67,24 @@ void test_elasticnode_fpgaPowerOn_internal(void) {
     initialise_mockRegister();
 
     //set pin high of program B
-    BitManipulation_setBit_Expect(&port_fpga_program_b, (1 << P_FPGA_PROGRAM_B));
-    BitManipulation_setBit_Expect(&ddr_fpga_program_b, (1 << P_FPGA_PROGRAM_B));
+    BitManipulation_setBit_Expect(&port_fpga_program_b, P_FPGA_PROGRAM_B);
+    BitManipulation_setBit_Expect(&ddr_fpga_program_b, P_FPGA_PROGRAM_B);
 
-    BitManipulation_setBit_Expect(&ddr_fpga_power_sram, (1 << P_FPGA_POWER_SRAM));
-    BitManipulation_clearBit_Expect(&port_fpga_power_sram, (1 << P_FPGA_POWER_SRAM));
-    BitManipulation_setBit_Expect(&ddr_fpga_power_aux, (1 << P_FPGA_POWER_AUX));
-    BitManipulation_clearBit_Expect(&port_fpga_power_aux, (1 << P_FPGA_POWER_AUX));
-    BitManipulation_setBit_Expect(&ddr_fpga_power_io, (1 << P_FPGA_POWER_IO));
-    BitManipulation_clearBit_Expect(&port_fpga_power_io, (1 << P_FPGA_POWER_IO));
-    BitManipulation_setBit_Expect(&ddr_fpga_power_int, (1 << P_FPGA_POWER_INT));
-    BitManipulation_clearBit_Expect(&port_fpga_power_int, (1 << P_FPGA_POWER_INT));
+    BitManipulation_setBit_Expect(&ddr_fpga_power_sram, P_FPGA_POWER_SRAM);
+    BitManipulation_clearBit_Expect(&port_fpga_power_sram, P_FPGA_POWER_SRAM);
+    BitManipulation_setBit_Expect(&ddr_fpga_power_aux, P_FPGA_POWER_AUX);
+    BitManipulation_clearBit_Expect(&port_fpga_power_aux, P_FPGA_POWER_AUX);
+    BitManipulation_setBit_Expect(&ddr_fpga_power_io, P_FPGA_POWER_IO);
+    BitManipulation_clearBit_Expect(&port_fpga_power_io, P_FPGA_POWER_IO);
+    BitManipulation_setBit_Expect(&ddr_fpga_power_int, P_FPGA_POWER_INT);
+    BitManipulation_clearBit_Expect(&port_fpga_power_int, P_FPGA_POWER_INT);
 
     //single control --> register do not exist
 
     //disable interface
-    BitManipulation_clearBit_Expect(&ddr_fpga_cclk, (1 << P_FPGA_CCLK));
+    BitManipulation_clearBit_Expect(&ddr_fpga_cclk, P_FPGA_CCLK);
 
-    BitManipulation_setBit_Expect(&port_fpga_program_b, (1 << P_FPGA_PROGRAM_B));
+    BitManipulation_setBit_Expect(&port_fpga_program_b, P_FPGA_PROGRAM_B);
 
     elasticnode_fpgaPowerOn_internal();
 }
@@ -92,22 +92,22 @@ void test_elasticnode_fpgaPowerOn_internal(void) {
 void test_elasticnode_fpgaPowerOff_internal(void) {
     initialise_mockRegister();
 
-    BitManipulation_clearBit_Expect(&port_fpga_program_b, ( 1 << P_FPGA_PROGRAM_B));
+    BitManipulation_clearBit_Expect(&port_fpga_program_b, P_FPGA_PROGRAM_B);
 
     //enable interface
-    BitManipulation_setBit_Expect(&ddr_fpga_cclk, (1 << P_FPGA_CCLK));
+    BitManipulation_setBit_Expect(&ddr_fpga_cclk, P_FPGA_CCLK);
 
-    BitManipulation_setBit_Expect(&ddr_fpga_power_sram, ( 1 << P_FPGA_POWER_SRAM));
-    BitManipulation_setBit_Expect(&port_fpga_power_sram, ( 1 << P_FPGA_POWER_SRAM));
-    BitManipulation_setBit_Expect(&ddr_fpga_power_aux, ( 1 << P_FPGA_POWER_AUX));
-    BitManipulation_setBit_Expect(&port_fpga_power_aux, ( 1 << P_FPGA_POWER_AUX));
-    BitManipulation_setBit_Expect(&ddr_fpga_power_io, ( 1 << P_FPGA_POWER_IO));
-    BitManipulation_setBit_Expect(&port_fpga_power_io, ( 1 << P_FPGA_POWER_IO));
-    BitManipulation_setBit_Expect(&ddr_fpga_power_int, ( 1 << P_FPGA_POWER_INT));
-    BitManipulation_setBit_Expect(&port_fpga_power_int, ( 1 << P_FPGA_POWER_INT));
+    BitManipulation_setBit_Expect(&ddr_fpga_power_sram, P_FPGA_POWER_SRAM);
+    BitManipulation_setBit_Expect(&port_fpga_power_sram, P_FPGA_POWER_SRAM);
+    BitManipulation_setBit_Expect(&ddr_fpga_power_aux, P_FPGA_POWER_AUX);
+    BitManipulation_setBit_Expect(&port_fpga_power_aux, P_FPGA_POWER_AUX);
+    BitManipulation_setBit_Expect(&ddr_fpga_power_io, P_FPGA_POWER_IO);
+    BitManipulation_setBit_Expect(&port_fpga_power_io, P_FPGA_POWER_IO);
+    BitManipulation_setBit_Expect(&ddr_fpga_power_int, P_FPGA_POWER_INT);
+    BitManipulation_setBit_Expect(&port_fpga_power_int, P_FPGA_POWER_INT);
 
-    BitManipulation_setBit_Expect(&port_fpga_program_b, ( 1 << P_FPGA_PROGRAM_B));
-    BitManipulation_clearBit_Expect(&ddr_fpga_program_b, (1 << P_FPGA_PROGRAM_B));
+    BitManipulation_setBit_Expect(&port_fpga_program_b, P_FPGA_PROGRAM_B);
+    BitManipulation_clearBit_Expect(&ddr_fpga_program_b, P_FPGA_PROGRAM_B);
 
     elasticnode_fpgaPowerOff_internal();
 }

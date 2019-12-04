@@ -6,7 +6,7 @@
 
 volatile uint8_t fpgaMultibootCompleteState = 0;
 
-void reconfigure_fpgaMultibootClearComplete_internal() {
+void reconfigure_fpgaMultibootClearComplete_internal(void) {
     fpgaMultibootCompleteState = 0;
 }
 
@@ -15,6 +15,6 @@ void reconfigure_fpgaSetDoneReponse_internal(uint8_t response) {
 }
 
 //wofür?
-uint8_t reconfigure_fpgaMultibootComplete_internal() {
+uint8_t reconfigure_fpgaMultibootComplete_internal(void) {
     return fpgaMultibootCompleteState;
 }

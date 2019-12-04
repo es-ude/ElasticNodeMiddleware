@@ -7,10 +7,10 @@
 
 #include <stdint.h>
 
-void elasticnode_fpgaPowerOn_internal();
-void elasticnode_fpgaPowerOff_internal();
-void elasticnode_setFpgaSoftReset_internal();
-void elasticnode_clearFpgaSoftReset_internal();
+void elasticnode_fpgaPowerOn_internal(void);
+void elasticnode_fpgaPowerOff_internal(void);
+void elasticnode_setFpgaSoftReset_internal(void);
+void elasticnode_clearFpgaSoftReset_internal(void);
 
 #ifdef TEST
 
