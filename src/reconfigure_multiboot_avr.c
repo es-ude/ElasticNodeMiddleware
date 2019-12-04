@@ -42,7 +42,7 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
 
     xmem_disableXmem();
 
-    //platform unabhängig, enable beabsichtigt?
+    //enable beabsichtigt?
     interruptManager_setInterrupt();
 }
 
@@ -58,7 +58,7 @@ uint8_t reconfigure_fpgaMultibootComplete() {
 
 void reconfigure_interruptSR() {
 
-    if ((abstraction_getBit(PIN_FPGA_DONE, P_FPGA_DONE))) {
+    if ((BitManipulation_bitIsSetOnArray(PIN_FPGA_DONE, P_FPGA_DONE))) {
         //float duration;
         reconfigure_fpgaSetDoneReponse_internal(1);
         switch (fpgaDoneResponse) {

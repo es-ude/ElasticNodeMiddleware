@@ -90,7 +90,7 @@ void test_reconfigure_fpgaMultibootComplete() {
 void test_interruptSR_case1(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE, 1);
+    BitManipulation_bitIsSetOnArray_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE, 1);
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     //BEFORE: fpgaDoneResponse = FPGA_DONE_NOTHING
@@ -104,7 +104,7 @@ void test_interruptSR_case1(void) {
 void test_interruptSR_case2(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE,1);
+    BitManipulation_bitIsSetOnArray_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE,1);
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_MULTIBOOT;
@@ -137,7 +137,7 @@ void test_interruptSR_case2(void) {
 void test_interruptSR_case3(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    abstraction_getBit_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE,1);
+    BitManipulation_bitIsSetOnArray_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE,1);
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_NOTHING;

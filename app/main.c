@@ -5,7 +5,7 @@
 int
 main(void)
 {
-  DDRD = _BV(5);
+  DDRB = _BV(5);
   while (true)
   {
     _delay_ms(500);

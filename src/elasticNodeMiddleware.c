@@ -9,7 +9,6 @@
 #include "elasticnodemiddleware/xmem.h"
 #include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-//#include "bazel-elasticnodemiddleware/external/EmbeddedUtilities/Util/BitManipulation.h"
 
 volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
 
