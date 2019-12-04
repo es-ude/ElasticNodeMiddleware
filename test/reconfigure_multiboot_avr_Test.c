@@ -7,7 +7,6 @@
 #include "elasticnodemiddleware/Mockreconfigure_multiboot_internal_avr.h"
 #include "elasticnodemiddleware/MockelasticNodeMiddleware.h"
 #include "elasticnodemiddleware/Mockxmem.h"
-#include "elasticnodemiddleware/MockregisterAbstraction.h"
 #include "elasticnodemiddleware/MockinterruptManager.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 

@@ -70,12 +70,6 @@ mock(
     deps = ["//:Interrupt_ManagerLibHdr"]
 )
 
-mock(
-    name = "mock_RegisterAbstraction",
-    srcs = ["//:elasticnodemiddleware/registerAbstraction.h"],
-    deps = ["//:RegisterAbstractionLibHdr"]
-)
-
 unity_test(
     copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
@@ -105,7 +99,6 @@ unity_test(
         "mock_Reconfigure_Multiboot_Internal",
         "mock_Xmem",
         "mock_InterruptManager",
-        "mock_RegisterAbstraction",
         "//:Reconfigure_multibootLibTest",
     ],
 )
@@ -136,10 +129,4 @@ unity_test(
         "//:Interrupt_ManagerLibTest",
         "mock_InterruptManager_avr_Mock"
     ],
-)
-
-unity_test(
-    cexception = False,
-    file_name = "registerAbstraction_Test.c",
-    deps = ["//:RegisterAbstractionLib"],
 )

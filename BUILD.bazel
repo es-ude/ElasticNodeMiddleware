@@ -103,13 +103,6 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "RegisterAbstractionLib",
-    srcs = ["src/registerAbstraction.c"],
-    visibility = ["//visibility:public"],
-    deps = ["//:RegisterAbstractionLibHdr"],
-)
-
 exports_files(
     srcs = [
         "elasticnodemiddleware/elasticNodeMiddleware.h",
@@ -118,7 +111,6 @@ exports_files(
         "elasticnodemiddleware/fpgaRegisters.h",
         "elasticnodemiddleware/reconfigure_multiboot_avr.h",
         "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
-        "elasticnodemiddleware/registerAbstraction.h",
         "elasticnodemiddleware/xmem.h",
         "elasticnodemiddleware/interruptManager.h",
         "elasticnodemiddleware/interruptManager_avr_Mock.h"
@@ -153,7 +145,6 @@ cc_library(
         "//:RegisterDefinitionLibHdrs",
         "//:XMemLibHdr",
         "//:Interrupt_ManagerLibHdr",
-        "//:RegisterAbstractionLibHdr",
         #"//:ElasticNodeMiddlewareLibHdr"
     ]
 )
@@ -175,11 +166,6 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
-cc_library(
-    name = "RegisterAbstractionLibHdr",
-    hdrs = ["elasticnodemiddleware/registerAbstraction.h"],
-    visibility = ["//visibility:public"],
-)
 
 cc_library(
     name = "RegisterDefinitionLibHdrs",

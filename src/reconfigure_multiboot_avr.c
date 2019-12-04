@@ -8,7 +8,6 @@
 #include "elasticnodemiddleware/fpgaRegisters.h"
 #include "elasticnodemiddleware/elasticNodeMiddleware.h"
 #include "elasticnodemiddleware/xmem.h"
-#include "elasticnodemiddleware/registerAbstraction.h"
 #include "elasticnodemiddleware/interruptManager.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
