@@ -3,8 +3,8 @@
 //
 
 #include "unity.h"
-#include "elasticnodemiddleware/xmem.h"
-#include "elasticnodemiddleware/fpgaPins.h"
+#include "lib/xmem/xmem.h"
+#include "lib/pinDefinition/fpgaPins.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 uint8_t xmem_enable_reg;

@@ -2,12 +2,12 @@
 // Created by annika on 17.09.19.
 //
 
-#include "elasticnodemiddleware/elasticNodeMiddleware.h"
-#include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
-#include "elasticnodemiddleware/fpgaPins.h"
-#include "elasticnodemiddleware/fpgaRegisters.h"
-#include "elasticnodemiddleware/xmem.h"
-#include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
+#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+#include "lib/pinDefinition/fpgaPins.h"
+#include "lib/pinDefinition/fpgaRegisters.h"
+#include "lib/xmem/xmem.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);

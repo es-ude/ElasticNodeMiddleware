@@ -3,8 +3,8 @@ load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_
 cc_library(
     name = "ElasticNodeMiddlewareLib",
     srcs = [
-        "src/elasticNodeMiddleware.c",
-        "src/elasticNodeMiddleware_internal.c",
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware.c",
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -18,8 +18,8 @@ cc_library(
 cc_library(
     name = "ElasticNodeMiddlewareLibTest",
     srcs = [
-        "src/elasticNodeMiddleware.c",
-        "src/elasticNodeMiddleware_internal.c",
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware.c",
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -32,8 +32,8 @@ cc_library(
 cc_library(
     name = "Reconfigure_multibootLib",
     srcs = [
-        "src/reconfigure_multiboot_avr.c",
-        "src/reconfigure_multiboot_internal_avr.c",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.c",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -48,8 +48,8 @@ cc_library(
 cc_library(
     name = "Reconfigure_multibootLibTest",
     srcs = [
-        "src/reconfigure_multiboot_avr.c",
-        "src/reconfigure_multiboot_internal_avr.c",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.c",
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -61,9 +61,9 @@ cc_library(
 
 cc_library(
     name = "XMemLib",
-    srcs = ["src/xmem.c"],
+    srcs = ["lib/xmem/xmem.c"],
     hdrs = [
-        "elasticnodemiddleware/xmem.h",
+        "lib/xmem/xmem.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -75,7 +75,7 @@ cc_library(
 
 cc_library(
     name = "XMemLibTest",
-    srcs = ["src/xmem.c"],
+    srcs = ["lib/xmem/xmem.c"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
@@ -87,14 +87,14 @@ cc_library(
 
 cc_library(
     name = "Interrupt_ManagerLib",
-    srcs = ["src/interruptManager_avr.c"],
+    srcs = ["lib/interruptManager/interruptManager_avr.c"],
     visibility = ["//visibility:public"],
     deps = ["//:Interrupt_ManagerLibHdr"],
 )
 
 cc_library(
     name = "Interrupt_ManagerLibTest",
-    srcs = ["src/interruptManager_avr.c"],
+    srcs = ["lib/interruptManager/interruptManager_avr.c"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = ["//:Interrupt_ManagerLibHdr"],
@@ -110,15 +110,15 @@ cc_library(
 
 exports_files(
     srcs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-        "elasticnodemiddleware/elasticNodeMiddleware_internal.h",
-        "elasticnodemiddleware/fpgaPins.h",
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
-        "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
-        "elasticnodemiddleware/xmem.h",
-        "elasticnodemiddleware/interruptManager.h",
-        "elasticnodemiddleware/interruptManager_avr_Mock.h"
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "lib/pinDefinition/fpgaPins.h",
+        "lib/pinDefinition/fpgaRegisters.h",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
+        "lib/xmem/xmem.h",
+        "lib/interruptManager/interruptManager.h",
+        "lib/interruptManager/interruptManager_avr_Mock.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -126,9 +126,9 @@ exports_files(
 cc_library(
     name = "ElasticNodeMiddlewareLibHdr",
     hdrs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-        "elasticnodemiddleware/elasticNodeMiddleware_internal.h",
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -141,9 +141,9 @@ cc_library(
 cc_library(
     name = "Reconfigure_MultibootLibHdr",
     hdrs = [
-        "elasticnodemiddleware/elasticNodeMiddleware.h",
-        "elasticnodemiddleware/reconfigure_multiboot_avr.h",
-        "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h",
+        "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -156,7 +156,7 @@ cc_library(
 
 cc_library(
     name = "XMemLibHdr",
-    hdrs = ["elasticnodemiddleware/xmem.h" ],
+    hdrs = ["lib/xmem/xmem.h" ],
     visibility = ["//visibility:public"],
     deps = [
         "//:RegisterDefinitionLibHdrs"
@@ -166,8 +166,8 @@ cc_library(
 
 cc_library(
     name = "Interrupt_ManagerLibHdr",
-    hdrs = ["elasticnodemiddleware/interruptManager.h",
-            "elasticnodemiddleware/interruptManager_avr_Mock.h"],
+    hdrs = ["lib/interruptManager/interruptManager.h",
+            "lib/interruptManager/interruptManager_avr_Mock.h"],
     visibility = ["//visibility:public"],
 )
 
@@ -175,8 +175,8 @@ cc_library(
 cc_library(
     name = "RegisterDefinitionLibHdrs",
     hdrs= [
-        "elasticnodemiddleware/fpgaRegisters.h",
-        "elasticnodemiddleware/fpgaPins.h"
+        "lib/pinDefinition/fpgaRegisters.h",
+        "lib/pinDefinition/fpgaPins.h"
     ],
     visibility = ["//visibility:public"],
 )

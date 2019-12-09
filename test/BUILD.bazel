@@ -18,34 +18,34 @@ cc_library(
 
 mock(
     name = "mock_ElasticNodemiddleware",
-    srcs = ["//:elasticnodemiddleware/elasticNodeMiddleware.h"],
+    srcs = ["//:lib/elasticNodeMiddleware/elasticNodeMiddleware.h"],
     copts = ["-DTEST"],
     deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_ElasticNodeMiddleware_Internal",
-    srcs = ["//:elasticnodemiddleware/elasticNodeMiddleware_internal.h"],
+    srcs = ["//:lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"],
     copts = ["-DTEST"],
     deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot",
-    srcs = ["//:elasticnodemiddleware/reconfigure_multiboot_avr.h"],
+    srcs = ["//:lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"],
     copts = ["-DTEST"],
     deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot_Internal",
-    srcs = ["//:elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"],
+    srcs = ["//:lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"],
     deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
     name = "mock_Xmem",
-    srcs = ["//:elasticnodemiddleware/xmem.h"],
+    srcs = ["//:lib/xmem/xmem.h"],
     copts = ["-DTEST"],
     deps = ["//:XMemLibHdr"],
 )
@@ -59,13 +59,13 @@ mock(
 
 mock(
     name = "mock_InterruptManager",
-    srcs = ["//:elasticnodemiddleware/interruptManager.h"],
+    srcs = ["//:lib/interruptManager/interruptManager.h"],
     deps = ["//:Interrupt_ManagerLibHdr"]
 )
 
 mock(
     name= "mock_InterruptManager_avr_Mock",
-    srcs = ["//:elasticnodemiddleware/interruptManager_avr_Mock.h"],
+    srcs = ["//:lib/interruptManager/interruptManager_avr_Mock.h"],
     copts = ["-DTEST"],
     deps = ["//:Interrupt_ManagerLibHdr"]
 )

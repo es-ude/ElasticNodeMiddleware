@@ -2,7 +2,7 @@
 // Created by annika on 10.10.19.
 //
 
-#include "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 
 volatile uint8_t fpgaMultibootCompleteState = 0;
 

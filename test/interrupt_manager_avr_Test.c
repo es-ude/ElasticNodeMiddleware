@@ -3,8 +3,8 @@
 //
 
 #include "unity.h"
-#include "elasticnodemiddleware/interruptManager.h"
-#include "elasticnodemiddleware/MockinterruptManager_avr_Mock.h"
+#include "lib/interruptManager/interruptManager.h"
+#include "lib/interruptManager/MockinterruptManager_avr_Mock.h"
 
 void test_clearInterrupt(void) {
     cli_Expect();

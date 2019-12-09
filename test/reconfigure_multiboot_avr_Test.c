@@ -2,12 +2,12 @@
 // Created by annika on 10.10.19.
 //
 #include "unity.h"
-#include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
-#include "elasticnodemiddleware/fpgaPins.h"
-#include "elasticnodemiddleware/Mockreconfigure_multiboot_internal_avr.h"
-#include "elasticnodemiddleware/MockelasticNodeMiddleware.h"
-#include "elasticnodemiddleware/Mockxmem.h"
-#include "elasticnodemiddleware/MockinterruptManager.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include "lib/pinDefinition/fpgaPins.h"
+#include "lib/reconfigure_multiboot_avr/Mockreconfigure_multiboot_internal_avr.h"
+#include "lib/elasticNodeMiddleware/MockelasticNodeMiddleware.h"
+#include "lib/xmem/Mockxmem.h"
+#include "lib/interruptManager/MockinterruptManager.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 

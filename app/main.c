@@ -20,7 +20,7 @@ main(void)
 
 //#include "lib/io/pinio.h"
 //#include "lib/spiArbitration/spiArbitration.h"
-#include "elasticnodemiddleware/elasticNodeMiddleware.h"
+#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 //#include "lib/leds/leds.h"
 //#include "lib/debug/debug.h"
 //#include "lib/jtag/jtag.h"
@@ -28,7 +28,7 @@ main(void)
 //#include "lib/flash/flash.h"
 //#include "lib/fpgaFlash/fpgaFlash.h"
 //#include "lib/selectmap/selectmap.h"
-#include "elasticnodemiddleware/xmem.h"
+#include "lib/xmem/xmem.h"
 //#include "lib/currentMeasurement/current_sense.h"
 //#include "lib/xor/xor.h"
 //#include "lib/timer/timer.h"
@@ -42,7 +42,7 @@ main(void)
 #include <avr/interrupt.h>
 #include <stddef.h>
 
-#include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 
 //#include "lib/spi/spi.h"
 //#include "lib/lufa/lufa.h"

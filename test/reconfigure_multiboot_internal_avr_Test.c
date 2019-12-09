@@ -3,7 +3,7 @@
 //
 
 #include "unity.h"
-#include "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 
 extern volatile uint8_t fpgaMultibootCompleteState;
 

@@ -2,9 +2,9 @@
 // Created by annika on 01.10.19.
 //
 
-#include "elasticnodemiddleware/xmem.h"
-#include "elasticnodemiddleware/fpgaRegisters.h"
-#include "elasticnodemiddleware/fpgaPins.h"
+#include "lib/xmem/xmem.h"
+#include "lib/pinDefinition/fpgaRegisters.h"
+#include "lib/pinDefinition/fpgaPins.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 void xmem_initXmem(void) {

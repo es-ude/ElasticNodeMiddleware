@@ -2,10 +2,10 @@
 // Created by annika on 26.09.19.
 //
 
-#include "elasticnodemiddleware/elasticNodeMiddleware_internal.h"
-#include "elasticnodemiddleware/xmem.h"
-#include "elasticnodemiddleware/fpgaPins.h"
-#include "elasticnodemiddleware/fpgaRegisters.h"
+#include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+#include "lib/xmem/xmem.h"
+#include "lib/pinDefinition/fpgaPins.h"
+#include "lib/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 

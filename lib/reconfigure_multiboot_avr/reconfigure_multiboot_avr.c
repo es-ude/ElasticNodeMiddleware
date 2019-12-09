@@ -2,13 +2,13 @@
 // Created by annika on 10.10.19.
 //
 
-#include "elasticnodemiddleware/reconfigure_multiboot_avr.h"
-#include "elasticnodemiddleware/reconfigure_multiboot_internal_avr.h"
-#include "elasticnodemiddleware/fpgaPins.h"
-#include "elasticnodemiddleware/fpgaRegisters.h"
-#include "elasticnodemiddleware/elasticNodeMiddleware.h"
-#include "elasticnodemiddleware/xmem.h"
-#include "elasticnodemiddleware/interruptManager.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
+#include "lib/pinDefinition/fpgaPins.h"
+#include "lib/pinDefinition/fpgaRegisters.h"
+#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "lib/xmem/xmem.h"
+#include "lib/interruptManager/interruptManager.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;

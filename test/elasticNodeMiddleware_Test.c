@@ -2,11 +2,11 @@
 // Created by annika on 17.09.19.
 //
 #include "unity.h"
-#include "elasticnodemiddleware/elasticNodeMiddleware.h"
-#include "elasticnodemiddleware/fpgaPins.h"
-#include "elasticnodemiddleware/MockelasticNodeMiddleware_internal.h"
-#include "elasticnodemiddleware/xmem.h"
-#include "elasticnodemiddleware/Mockreconfigure_multiboot_avr.h"
+#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "lib/pinDefinition/fpgaPins.h"
+#include "lib/elasticNodeMiddleware/MockelasticNodeMiddleware_internal.h"
+#include "lib/xmem/xmem.h"
+#include "lib/reconfigure_multiboot_avr/Mockreconfigure_multiboot_avr.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 uint8_t port_fpga_program_b;
