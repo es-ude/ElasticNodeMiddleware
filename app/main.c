@@ -1,52 +1,31 @@
-/*#include <avr/io.h>
+#include <avr/io.h>
 #include <util/delay.h>
 #include <stdbool.h>
+#include "EmbeddedUtilities/BitManipulation.h"
 
-int
-main(void)
-{
-  DDRB = _BV(5);
-  while (true)
-  {
-    _delay_ms(500);
-    PORTB ^= _BV(5);
-  }
-}*/
-
-//#include "elasticnodemiddleware/fpgaRegisters.h"
-//#include "elasticnodemiddleware/fpgaPins.h"
-//#include <fpgaPins.h>
-//#include <peripherals.h>
-
-//#include "lib/io/pinio.h"
-//#include "lib/spiArbitration/spiArbitration.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-//#include "lib/leds/leds.h"
-//#include "lib/debug/debug.h"
-//#include "lib/jtag/jtag.h"
-//#include "lib/io/gpio.h"
-//#include "lib/flash/flash.h"
-//#include "lib/fpgaFlash/fpgaFlash.h"
-//#include "lib/selectmap/selectmap.h"
 #include "lib/xmem/xmem.h"
-//#include "lib/currentMeasurement/current_sense.h"
-//#include "lib/xor/xor.h"
-//#include "lib/timer/timer.h"
-
-//#include "lib/control/uartManager.h"
-
-#include <stdio.h>
-#include <util/delay.h>
-#include <avr/sleep.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stddef.h>
-
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 
-//#include "lib/spi/spi.h"
-//#include "lib/lufa/lufa.h"
 
+int main(void)
+{
+ DDRD = 0xff;
+  while (true)
+  {
+      BitManipulation_setBit(&PORTD, PD4);
+      BitManipulation_setBit(&PORTD, PD5);
+      BitManipulation_setBit(&PORTD, PD6);
+      BitManipulation_setBit(&PORTD, PD7);
+      _delay_ms(1000);
+      BitManipulation_clearBit(&PORTD, PD4);
+      BitManipulation_clearBit(&PORTD, PD5);
+      BitManipulation_clearBit(&PORTD, PD6);
+      BitManipulation_clearBit(&PORTD, PD7);
+      _delay_ms(1000);
+  }
+}
+/*
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 
@@ -93,4 +72,4 @@ int main()
 
 
 
-#pragma clang diagnostic pop
+#pragma clang diagnostic pop*/
