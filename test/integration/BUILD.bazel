@@ -1,0 +1,50 @@
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binary", "default_embedded_binaries")
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+default_embedded_binary(
+    name = "test_xmem",
+    srcs = ["integrationTest_xmem.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = ["//app/setup:Setup",
+            "//:XMemLib",
+            ]
+)
+
+default_embedded_binary(
+    name = "test_elasticNodeMiddleware_internal",
+    srcs = ["integrationTest_elasticNodeMiddleware_internal.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = ["//app/setup:Setup",
+            "//:ElasticNodeMiddlewareLib",
+            ]
+)
+
+default_embedded_binary(
+    name = "test_elasticNodeMiddleware",
+    srcs = ["integrationTest_elasticNodeMiddleware.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = ["//app/setup:Setup",
+            "//:ElasticNodeMiddlewareLib",
+            "//:Reconfigure_multibootLib"
+            ]
+)
+
+default_embedded_binary(
+    name = "test_reconfigure_multiboot_avr",
+    srcs = ["integrationTest_reconfigure_multiboot_avr.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = ["//app/setup:Setup",
+            "//:Reconfigure_multibootLib",
+            "//:ElasticNodeMiddlewareLib"
+            ]
+)
+
+genrule(
+    name = "Avr_dude_upload_script",
+    outs = ["upload.sh"],
+    cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
+)

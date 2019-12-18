@@ -13,9 +13,16 @@ default_embedded_binary(
     name = "main",
     srcs = ["main.c"],
     copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
             "//:XMemLib",
             "//:ElasticNodeMiddlewareLib",
             "//:Reconfigure_multibootLib",
             ]
+)
+
+genrule(
+    name = "Avr_dude_upload_script",
+    outs = ["upload.sh"],
+    cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
 )
