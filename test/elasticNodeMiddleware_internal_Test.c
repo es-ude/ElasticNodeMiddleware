@@ -123,3 +123,19 @@ void test_elasticnode_clearFpgaSoftReset_internal(void) {
     elasticnode_clearFpgaSoftReset_internal();
     TEST_ASSERT_EQUAL_UINT8((*reset_fpga), 0x0);
 }
+
+void test_elasticnode_setFpgaHardReset_internal(void) {
+    initialise_mockRegister();
+    BitManipulation_setBit_Expect(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+    BitManipulation_clearBit_Expect(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+
+    elasticnode_setFpgaHardReset_internal();
+}
+
+void test_elasticnode_clearFpgaHardReset_internal(void) {
+    initialise_mockRegister();
+    BitManipulation_setBit_Expect(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+    BitManipulation_clearBit_Expect(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+
+    elasticnode_clearFpgaHardReset_internal();
+}

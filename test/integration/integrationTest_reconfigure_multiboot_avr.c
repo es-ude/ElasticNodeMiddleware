@@ -1,13 +1,14 @@
 //
 // Created by annika on 18.12.19.
 //
+
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include <util/delay.h>
 
-
-//4th LED on
+//4th LED on + 5th LED blink
 int main() {
 
     DDRD = 0xff;
@@ -20,5 +21,13 @@ int main() {
 
         BitManipulation_setBit(&PORTD, PD4);
     }
+
+    //testing multiboot --> case 'X'
+    BitManipulation_setBit(&PORTD, PD5);
+
+    reconfigure_fpgaMultiboot(0);
+
+    _delay_ms(500);
+    BitManipulation_clearBit(&PORTD, PD5);
 
 }

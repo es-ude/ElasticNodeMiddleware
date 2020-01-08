@@ -78,3 +78,11 @@ void elasticnode_fpgaSoftReset(void) {
     _delay_ms(RESET_DELAY);
     elasticnode_clearFpgaSoftReset_internal();
 }
+
+void elasticnode_fpgaHardReset(void) {
+    xmem_disableXmem();
+
+    elasticnode_setFpgaHardReset_internal();
+    _delay_ms(RESET_DELAY);
+    elasticnode_clearFpgaHardReset_internal();
+}

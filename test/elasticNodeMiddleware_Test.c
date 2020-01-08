@@ -5,7 +5,7 @@
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/elasticNodeMiddleware/MockelasticNodeMiddleware_internal.h"
-#include "lib/xmem/xmem.h"
+#include "lib/xmem/Mockxmem.h"
 #include "lib/reconfigure_multiboot_avr/Mockreconfigure_multiboot_avr.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
@@ -195,4 +195,15 @@ void test_fpgaSoftReset(void) {
     elasticnode_clearFpgaSoftReset_internal_Expect();
 
     elasticnode_fpgaSoftReset();
+}
+
+void test_fpgaHardReset(void) {
+    initialise_mockRegister();
+    xmem_disableXmem_Expect();
+
+    elasticnode_setFpgaHardReset_internal_Expect();
+    _delay_ms_Expect(RESET_DELAY);
+    elasticnode_clearFpgaHardReset_internal_Expect();
+
+    elasticnode_fpgaHardReset();
 }

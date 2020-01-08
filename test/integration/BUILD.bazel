@@ -43,6 +43,28 @@ default_embedded_binary(
             ]
 )
 
+default_embedded_binary(
+    name = "test_coldBoot",
+    srcs = ["integrationTest_coldBoot.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = ["//app/setup:Setup",
+            "//:ElasticNodeMiddlewareLib",
+            "//:Reconfigure_multibootLib"
+            ]
+)
+
+default_embedded_binary(
+    name = "test_fpgaPowerTest",
+    srcs = ["integrationTest_fpgaPowerTest.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = ["//app/setup:Setup",
+            "//:ElasticNodeMiddlewareLib",
+            "//:Reconfigure_multibootLib"
+            ]
+)
+
 genrule(
     name = "Avr_dude_upload_script",
     outs = ["upload.sh"],

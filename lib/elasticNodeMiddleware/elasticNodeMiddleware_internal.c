@@ -60,3 +60,14 @@ void elasticnode_setFpgaSoftReset_internal(void)
 void elasticnode_clearFpgaSoftReset_internal(void) {
     *reset_fpga = 0x0;
 }
+
+void elasticnode_setFpgaHardReset_internal(void)
+{
+    BitManipulation_setBit(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+    BitManipulation_clearBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+}
+
+void elasticnode_clearFpgaHardReset_internal(void) {
+    BitManipulation_setBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+    BitManipulation_clearBit(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+}

@@ -43,6 +43,11 @@ void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t
 //TODO: read + write non-blocking might be implemented
 
 void elasticnode_fpgaSoftReset(void);
+void elasticnode_fpgaHardReset(void);
+
+//for integration testing
+#define FPGA_DONE_MULTIBOOT 2
+
 
 #ifdef TEST
 
