@@ -42,6 +42,8 @@ extern uint8_t* XMCRB;
 extern uint8_t* FPGA_DONE_INT_REG;
 extern uint8_t* FPGA_DONE_INT_CONTROL_REG;
 
+extern uint8_t* SREG;
+
 #else
 #include <avr/io.h>
 

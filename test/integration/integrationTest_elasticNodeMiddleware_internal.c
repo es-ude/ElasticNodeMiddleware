@@ -7,6 +7,7 @@
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
+//test if Bits are set
 //4th and 5th LED on
 int main() {
     DDRD = 0xff;

@@ -101,6 +101,46 @@ cc_library(
 )
 
 cc_library(
+    name = "UartLib",
+    srcs = ["lib/uart/uart.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:UartLibHdr"],
+)
+
+cc_library(
+    name = "UartLibTest",
+    srcs = ["lib/uart/uart.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = ["//:UartLibHdr"],
+)
+
+cc_library(
+    name = "CircularBufferLib",
+    srcs = ["lib/uart/circularBuffer/circularBuffer.c"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:CircularBufferLibHdr",
+        "@EmbeddedUtilities//:BitManipulation",
+        "//:Interrupt_ManagerLibHdr",
+        "//:RegisterDefinitionLibHdrs",
+        ],
+)
+
+cc_library(
+    name = "CircularBufferLibTest",
+    srcs = ["lib/uart/circularBuffer/circularBuffer.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:CircularBufferLibHdr",
+        "//test:BitManipulationHdrForTesting",
+        "//:Interrupt_ManagerLibHdr",
+        "//:RegisterDefinitionLibHdrs",
+        ],
+)
+
+cc_library(
     name = "BitmanipulationLib",
     visibility = ["//visibility:public"],
     deps = [
@@ -118,7 +158,9 @@ exports_files(
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "lib/xmem/xmem.h",
         "lib/interruptManager/interruptManager.h",
-        "lib/interruptManager/interruptManager_avr_Mock.h"
+        "lib/interruptManager/interruptManager_avr_Mock.h",
+        "lib/uart/uart.h",
+        "lib/uart/circularBuffer/circularBuffer.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -171,6 +213,20 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
+cc_library(
+    name = "UartLibHdr",
+    hdrs = ["lib/uart/uart.h",],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "CircularBufferLibHdr",
+    hdrs = ["lib/uart/circularBuffer/circularBuffer.h",],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:Interrupt_ManagerLibHdr",
+    ]
+)
 
 cc_library(
     name = "RegisterDefinitionLibHdrs",

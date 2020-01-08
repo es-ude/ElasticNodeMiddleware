@@ -1,0 +1,8 @@
+//
+// Created by annika on 08.01.20.
+//
+
+#ifndef ELASTICNODEMIDDLEWARE_UART_H
+#define ELASTICNODEMIDDLEWARE_UART_H
+
+#endif //ELASTICNODEMIDDLEWARE_UART_H

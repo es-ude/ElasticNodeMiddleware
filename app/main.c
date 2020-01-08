@@ -1,11 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
-#include <stdbool.h>
 #include "EmbeddedUtilities/BitManipulation.h"
 
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "lib/xmem/xmem.h"
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 
 
 int main(void)

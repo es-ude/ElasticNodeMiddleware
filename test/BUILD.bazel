@@ -60,6 +60,7 @@ mock(
 mock(
     name = "mock_InterruptManager",
     srcs = ["//:lib/interruptManager/interruptManager.h"],
+    copts = ["-DTEST"],
     deps = ["//:Interrupt_ManagerLibHdr"]
 )
 
@@ -129,5 +130,25 @@ unity_test(
     deps = [
         "//:Interrupt_ManagerLibTest",
         "mock_InterruptManager_avr_Mock"
+    ],
+)
+
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "circularBuffer_Test.c",
+    deps = [
+        "//:CircularBufferLibTest",
+        "mock_InterruptManager",
+        "mock_Bitmanipulation",
+    ],
+)
+
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "uart_Test.c",
+    deps = [
+        "//:UartLibTest"
     ],
 )

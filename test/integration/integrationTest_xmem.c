@@ -6,7 +6,7 @@
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
-
+//test if Bits are set
 //4th, 5th and 6th LED on
 int main()
 {

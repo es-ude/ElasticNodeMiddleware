@@ -8,7 +8,7 @@
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
-
+//test if Bits are set
 //4th LED on
 int main() {
     DDRD = 0xff;

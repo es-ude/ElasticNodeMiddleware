@@ -8,6 +8,7 @@
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include <util/delay.h>
 
+//test if Bits are set + testing multiboot
 //4th LED on + 5th LED blink
 int main() {
 
