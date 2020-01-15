@@ -35,8 +35,7 @@ void uart_NewLine(void);
 void uart_WriteLine(char *s);
 void uart_WriteString(char *s);
 void uart_WriteStringBlock(char *s);
-
-uint8_t uart_Queue(uint8_t c);
+void uart_WriteNext(void);
 
 
 void uart_WriteStringLength(char *s, uint16_t length);
@@ -44,7 +43,6 @@ void uart_WriteStringLengthBlock(char *s, uint16_t length);
 uint8_t uart_ReceiveCharBlocking(void);
 void uart_ReceiveUint32Blocking(uint32_t *output);
 void uart_WriteChar(uint8_t c);
-void uart_WriteCharBlock(uint8_t c);
 void uart_WriteHex8(uint8_t num);
 void uart_WriteDec8(uint8_t num);
 void uart_WriteBin8(uint8_t num);

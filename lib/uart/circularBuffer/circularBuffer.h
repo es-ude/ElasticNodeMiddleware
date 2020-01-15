@@ -8,6 +8,16 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#ifdef TEST
+
+void _delay_ms(uint8_t delay);
+
+#else
+
+#include <util/delay.h>
+
+#endif
+
 typedef struct {
     uint8_t *buffer;
     uint8_t *head;

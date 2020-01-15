@@ -8,6 +8,7 @@
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
+#include "lib/interruptManager/MockinterruptManager.h"
 
 circularBuffer sendingBuf;
 void (*uartReceiveHandler)(uint8_t);
@@ -53,4 +54,28 @@ void test_uart_WriteNext_internal(void) {
     TEST_ASSERT_EQUAL(UDR1, sendingData);
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x1);
 
+}
+
+void test_uart_Queue_internal(void) {
+    initalise_uart_internal_MockRegister();
+    uint8_t c = 5;
+
+    circularBuffer_Push_ExpectAndReturn(&sendingBuf, c, 0);
+    _delay_ms_Expect(1);
+    circularBuffer_Push_ExpectAndReturn(&sendingBuf, c, 1);
+
+    TEST_ASSERT_EQUAL_UINT8(uart_Queue_internal(c), 1);
+}
+
+void test_uartWriteCharBlock_internal(void) {
+    initalise_uart_internal_MockRegister();
+    uint8_t c = 2;
+
+    interruptManager_clearInterrupt_Expect();
+    BitManipulation_bitIsSetOnArray_ExpectAndReturn(UCSR1A, UDRE1, 0);
+    BitManipulation_bitIsSetOnArray_ExpectAndReturn(UCSR1A, UDRE1, 1);
+    interruptManager_setInterrupt_Expect();
+    uart_WriteCharBlock_internal(c);
+
+    TEST_ASSERT_EQUAL_UINT8(UDR1, c);
 }

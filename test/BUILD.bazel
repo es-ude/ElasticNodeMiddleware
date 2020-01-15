@@ -85,6 +85,7 @@ mock(
     deps = ["//:UartLibHdr"],
 )
 
+
 unity_test(
     copts = ["-DTEST"],
     file_name = "elasticNodeMiddleware_Test.c",
@@ -182,6 +183,7 @@ unity_test(
     deps = [
         "mock_circularBuffer",
         "mock_Bitmanipulation",
+        "mock_InterruptManager",
         "//:UartLibTest",
     ],
 )

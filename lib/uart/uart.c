@@ -46,23 +46,24 @@ uint8_t uart_Sending(void){
 }
 
 void uart_NewLine(void){
-    /*uartWriteChar('\r');
-	uartWriteChar('\n');*/
+    uart_WriteChar('\r');
+	uart_WriteChar('\n');
 }
 
 void uart_WriteLine(char *s){
-
+    uart_WriteString(s);
+    uart_NewLine();
 }
 
 void uart_WriteString(char *s){
-
+    while (*s != 0)
+    {
+        uart_Queue_internal(*(s++));
+    }
+    uart_WriteNext_internal();
 }
 
 void uart_WriteStringBlock(char *s){
-
-}
-
-uint8_t uart_Queue(uint8_t c){
 
 }
 
@@ -83,11 +84,14 @@ void uart_ReceiveUint32Blocking(uint32_t *output){
 }
 
 void uart_WriteChar(uint8_t c){
+    if (circularBuffer_Push(&sendingBuf, c)) {
+        // check if sending already
+        if (!sendingFlag)
+            // start process
+            uart_WriteNext_internal();
 
-}
-
-void uart_WriteCharBlock(uint8_t c){
-
+        sendingFlag = 0x1;
+    }
 }
 
 void uart_WriteHex8(uint8_t num){

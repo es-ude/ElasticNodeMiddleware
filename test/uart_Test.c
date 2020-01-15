@@ -83,3 +83,34 @@ void test_uart_Sending(void) {
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, uart_Sending());
 }
 
+void test_uart_WriteChar(void) {
+    initalise_uart_mockRegister();
+   uint8_t c = 5;
+   //Push successful
+   circularBuffer_Push_ExpectAndReturn(&sendingBuf, c, 1);
+   uart_WriteNext_internal_Expect();
+   uart_WriteChar(c);
+
+   TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x1);
+}
+
+void test_uart_WriteString_EmptyString(void) {
+    initalise_uart_mockRegister();
+    char *s = "";
+    uart_WriteNext_internal_Expect();
+    uart_WriteString(s);
+}
+
+void test_uart_WriteString(void) {
+    initalise_uart_mockRegister();
+    char *s = "ai";
+    char *dummy = s;
+    uart_Queue_internal_ExpectAndReturn(*(dummy++), 1);
+    uart_Queue_internal_ExpectAndReturn(*(dummy++), 1);
+    uart_WriteNext_internal_Expect();
+    uart_WriteString(s);
+}
+
+//NOT TESTET:
+//uart_NewLine
+//uart_WriteLine
