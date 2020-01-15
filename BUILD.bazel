@@ -8,9 +8,9 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
+        "//:ElasticNodeMiddlewareLibHdr",
         "//:RegisterDefinitionLibHdrs",
         "//:XMemLib",
-        "//:ElasticNodeMiddlewareLibHdr",
         "@EmbeddedUtilities//:BitManipulation",
     ],
 )
@@ -24,8 +24,8 @@ cc_library(
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
-        "//test:BitManipulationHdrForTesting",
         "//:ElasticNodeMiddlewareLibHdr",
+        "//test:BitManipulationHdrForTesting",
     ],
 )
 
@@ -37,10 +37,10 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//:RegisterDefinitionLibHdrs",
-        "//:XMemLib",
         "//:Interrupt_ManagerLib",
         "//:Reconfigure_MultibootLibHdr",
+        "//:RegisterDefinitionLibHdrs",
+        "//:XMemLib",
         "@EmbeddedUtilities//:BitManipulation",
     ],
 )
@@ -70,7 +70,7 @@ cc_library(
         "//:RegisterDefinitionLibHdrs",
         "//:XMemLibHdr",
         "@EmbeddedUtilities//:BitManipulation",
-    ]
+    ],
 )
 
 cc_library(
@@ -79,9 +79,9 @@ cc_library(
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
+        "//:RegisterDefinitionLibHdrs",
         "//:XMemLibHdr",
         "//test:BitManipulationHdrForTesting",
-        "//:RegisterDefinitionLibHdrs"
     ],
 )
 
@@ -102,17 +102,40 @@ cc_library(
 
 cc_library(
     name = "UartLib",
-    srcs = ["lib/uart/uart.c"],
+    srcs = [
+        "lib/uart/uart.c",
+        "lib/uart/uart_internal.c",
+    ],
+    copts = [
+        "-DF_CPU=12000000UL",
+        "-DBAUD=115200UL",
+    ],
     visibility = ["//visibility:public"],
-    deps = ["//:UartLibHdr"],
+    deps = [
+        "//:CircularBufferLibHdr",
+        "//:Interrupt_ManagerLibHdr",
+        "//:RegisterDefinitionLibHdrs",
+        "//:UartLibHdr",
+        "@EmbeddedUtilities//:BitManipulation",
+    ],
 )
 
 cc_library(
     name = "UartLibTest",
-    srcs = ["lib/uart/uart.c"],
-    copts = ["-DTEST"],
+    srcs = [
+        "lib/uart/uart.c",
+        "lib/uart/uart_internal.c",
+    ],
+    copts = [
+        "-DTEST",
+        "-DF_CPU=12000000UL",
+        "-DBAUD=115200UL",
+    ],
     visibility = ["//visibility:public"],
-    deps = ["//:UartLibHdr"],
+    deps = [
+        "//:UartLibHdr",
+        "//test:BitManipulationHdrForTesting",
+    ],
 )
 
 cc_library(
@@ -121,10 +144,10 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:CircularBufferLibHdr",
-        "@EmbeddedUtilities//:BitManipulation",
         "//:Interrupt_ManagerLibHdr",
         "//:RegisterDefinitionLibHdrs",
-        ],
+        "@EmbeddedUtilities//:BitManipulation",
+    ],
 )
 
 cc_library(
@@ -134,10 +157,10 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:CircularBufferLibHdr",
-        "//test:BitManipulationHdrForTesting",
         "//:Interrupt_ManagerLibHdr",
         "//:RegisterDefinitionLibHdrs",
-        ],
+        "//test:BitManipulationHdrForTesting",
+    ],
 )
 
 cc_library(
@@ -152,15 +175,16 @@ exports_files(
     srcs = [
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
         "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "lib/interruptManager/interruptManager.h",
+        "lib/interruptManager/interruptManager_avr_Mock.h",
         "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
-        "lib/xmem/xmem.h",
-        "lib/interruptManager/interruptManager.h",
-        "lib/interruptManager/interruptManager_avr_Mock.h",
+        "lib/uart/circularBuffer/circularBuffer.h",
         "lib/uart/uart.h",
-        "lib/uart/circularBuffer/circularBuffer.h"
+        "lib/uart/uart_internal.h",
+        "lib/xmem/xmem.h",
     ],
     visibility = ["//visibility:public"],
 )
@@ -177,7 +201,7 @@ cc_library(
         "//:RegisterDefinitionLibHdrs",
         "//:XMemLibHdr",
         #"//:Reconfigure_MultibootLibHdr"
-    ]
+    ],
 )
 
 cc_library(
@@ -193,46 +217,55 @@ cc_library(
         "//:XMemLibHdr",
         "//:Interrupt_ManagerLibHdr",
         #"//:ElasticNodeMiddlewareLibHdr"
-    ]
+    ],
 )
 
 cc_library(
     name = "XMemLibHdr",
-    hdrs = ["lib/xmem/xmem.h" ],
+    hdrs = ["lib/xmem/xmem.h"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:RegisterDefinitionLibHdrs"
-    ]
+        "//:RegisterDefinitionLibHdrs",
+    ],
 )
-
 
 cc_library(
     name = "Interrupt_ManagerLibHdr",
-    hdrs = ["lib/interruptManager/interruptManager.h",
-            "lib/interruptManager/interruptManager_avr_Mock.h"],
+    hdrs = [
+        "lib/interruptManager/interruptManager.h",
+        "lib/interruptManager/interruptManager_avr_Mock.h",
+    ],
     visibility = ["//visibility:public"],
 )
 
 cc_library(
     name = "UartLibHdr",
-    hdrs = ["lib/uart/uart.h",],
+    hdrs = [
+        "lib/uart/uart.h",
+        "lib/uart/uart_internal.h",
+    ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//:CircularBufferLibHdr",
+        "//:Interrupt_ManagerLibHdr",
+        "//:RegisterDefinitionLibHdrs",
+    ],
 )
 
 cc_library(
     name = "CircularBufferLibHdr",
-    hdrs = ["lib/uart/circularBuffer/circularBuffer.h",],
+    hdrs = ["lib/uart/circularBuffer/circularBuffer.h"],
     visibility = ["//visibility:public"],
     deps = [
         "//:Interrupt_ManagerLibHdr",
-    ]
+    ],
 )
 
 cc_library(
     name = "RegisterDefinitionLibHdrs",
-    hdrs= [
+    hdrs = [
+        "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
-        "lib/pinDefinition/fpgaPins.h"
     ],
     visibility = ["//visibility:public"],
 )

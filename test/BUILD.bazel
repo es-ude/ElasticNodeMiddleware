@@ -61,14 +61,28 @@ mock(
     name = "mock_InterruptManager",
     srcs = ["//:lib/interruptManager/interruptManager.h"],
     copts = ["-DTEST"],
-    deps = ["//:Interrupt_ManagerLibHdr"]
+    deps = ["//:Interrupt_ManagerLibHdr"],
 )
 
 mock(
-    name= "mock_InterruptManager_avr_Mock",
+    name = "mock_InterruptManager_avr_Mock",
     srcs = ["//:lib/interruptManager/interruptManager_avr_Mock.h"],
     copts = ["-DTEST"],
-    deps = ["//:Interrupt_ManagerLibHdr"]
+    deps = ["//:Interrupt_ManagerLibHdr"],
+)
+
+mock(
+    name = "mock_circularBuffer",
+    srcs = ["//:lib/uart/circularBuffer/circularBuffer.h"],
+    copts = ["-DTEST"],
+    deps = ["//:CircularBufferLibHdr"],
+)
+
+mock(
+    name = "mock_Uart_internal",
+    srcs = ["//:lib/uart/uart_internal.h"],
+    copts = ["-DTEST"],
+    deps = ["//:UartLibHdr"],
 )
 
 unity_test(
@@ -98,9 +112,9 @@ unity_test(
     deps = [
         "mock_Bitmanipulation",
         "mock_ElasticNodemiddleware",
+        "mock_InterruptManager",
         "mock_Reconfigure_Multiboot_Internal",
         "mock_Xmem",
-        "mock_InterruptManager",
         "//:Reconfigure_multibootLibTest",
     ],
 )
@@ -128,8 +142,8 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "interrupt_manager_avr_Test.c",
     deps = [
+        "mock_InterruptManager_avr_Mock",
         "//:Interrupt_ManagerLibTest",
-        "mock_InterruptManager_avr_Mock"
     ],
 )
 
@@ -138,17 +152,36 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "circularBuffer_Test.c",
     deps = [
-        "//:CircularBufferLibTest",
-        "mock_InterruptManager",
         "mock_Bitmanipulation",
+        "mock_InterruptManager",
+        "//:CircularBufferLibTest",
+    ],
+)
+
+unity_test(
+    cexception = False,
+    copts = [
+        "-DTEST",
+        "-DF_CPU=12000000UL",
+        "-DBAUD=115200UL",
+    ],
+    file_name = "uart_Test.c",
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_InterruptManager",
+        "mock_Uart_internal",
+        "mock_circularBuffer",
+        "//:UartLibTest",
     ],
 )
 
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
-    file_name = "uart_Test.c",
+    file_name = "uart_internal_Test.c",
     deps = [
-        "//:UartLibTest"
+        "mock_circularBuffer",
+        "mock_Bitmanipulation",
+        "//:UartLibTest",
     ],
 )

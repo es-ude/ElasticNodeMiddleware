@@ -94,9 +94,8 @@ uint8_t circularBuffer_Pop(circularBuffer *c, uint8_t *data){
     // data exists
     c->currentLen--;
 
-    //ERROR!
     // fetch data
-    //*data = *c->tail;
+    *data = *c->tail;
 
     // next data
     c->tail++;

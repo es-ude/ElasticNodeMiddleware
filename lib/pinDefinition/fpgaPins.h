@@ -36,6 +36,15 @@
 #define FPGA_DONE_INT_CONTROL 0
 #define FPGA_DONE_INT 6
 
+#define U2X1 1
+#define RXEN1 4
+#define TXEN1 3
+#define RXCIE1 7
+#define TXCIE1 6
+#define USBS1 3
+#define UCSZ10 1
+#define UDRE1 5
+
 #else
 #include <avr/io.h>
 

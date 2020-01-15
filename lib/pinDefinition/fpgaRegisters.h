@@ -44,6 +44,14 @@ extern uint8_t* FPGA_DONE_INT_CONTROL_REG;
 
 extern uint8_t* SREG;
 
+extern uint8_t* UBRR1H;
+extern uint8_t* UBRR1L;
+extern uint8_t* UCSR1A;
+extern uint8_t* UCSR1B;
+extern uint8_t* UCSR1C;
+
+extern uint8_t* UDR1;
+
 #else
 #include <avr/io.h>
 

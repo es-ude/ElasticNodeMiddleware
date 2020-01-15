@@ -96,7 +96,8 @@ void test_circularBuffer_pop(void) {
 
     circularBuffer sendingBuf;
     circularBuffer *c = &sendingBuf;
-    uint8_t data = 33;
+    uint8_t dataVar;
+    uint8_t* data = &dataVar;
 
     uint16_t checkVarLen = c->currentLen;
     uint8_t* checkVarTail = c->tail;
@@ -107,6 +108,7 @@ void test_circularBuffer_pop(void) {
     interruptManager_setInterrupt_Expect();
     circularBuffer_Pop(c, data);
 
+    TEST_ASSERT_EQUAL(*data, *checkVarTail);
     TEST_ASSERT_EQUAL_UINT16(checkVarLen-1, c->currentLen);
     if(c->tail > c->last) {
         TEST_ASSERT_EQUAL(c->tail, c->buffer);

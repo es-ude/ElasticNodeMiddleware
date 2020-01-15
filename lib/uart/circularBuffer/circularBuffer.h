@@ -5,12 +5,6 @@
 #ifndef ELASTICNODEMIDDLEWARE_CIRCULARBUFFER_H
 #define ELASTICNODEMIDDLEWARE_CIRCULARBUFFER_H
 
-
-
-//#include <inttypes.h>
-//#include <stdio.h>
-//#include <avr/interrupt.h>
-
 #include <stdlib.h>
 #include <stdint.h>
 
