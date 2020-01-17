@@ -111,6 +111,55 @@ void test_uart_WriteString(void) {
     uart_WriteString(s);
 }
 
+void test_uartWriteStringBlock(void) {
+    initalise_uart_mockRegister();
+    char *s = "ai";
+    char *dummy = s;
+    uart_WriteCharBlock_internal_Expect(*(dummy++));
+    uart_WriteCharBlock_internal_Expect(*(dummy++));
+    uart_WriteStringBlock(s);
+}
+
+void test_uart_WriteStringLength(void) {
+    initalise_uart_mockRegister();
+    char *s = "ai";
+    char *dummy = s;
+    uint16_t length = 2;
+    uart_Queue_internal_ExpectAndReturn(*(dummy++), 1);
+    uart_Queue_internal_ExpectAndReturn(*(dummy++), 1);
+    uart_WriteNext_internal_Expect();
+    uart_WriteStringLength(s, length);
+}
+
+void test_uart_WriteStringLengthBlock(void) {
+    initalise_uart_mockRegister();
+    char *s = "ai";
+    char *dummy = s;
+    uint16_t length = 2;
+    uart_WriteCharBlock_internal_Expect(*(dummy++));
+    uart_WriteCharBlock_internal_Expect(*(dummy++));
+    uart_WriteStringLengthBlock(s, length);
+}
+
+void test_uart_ReceiveUint32Blocking(void) {
+    initalise_uart_mockRegister();
+    uint32_t output_var;
+    uint32_t *output = &output_var;
+    /*	cli();
+uint8_t *outputPtr = (uint8_t *) output;
+
+*outputPtr++ = uartReceiveCharBlocking();
+*outputPtr++ = uartReceiveCharBlocking();
+*outputPtr++ = uartReceiveCharBlocking();
+*outputPtr++ = uartReceiveCharBlocking();
+
+sei();
+// return output;*/
+    interruptManager_clearInterrupt_Expect();
+    uint8_t *outputPtr = (uint8_t * )output;
+    interruptManager_setInterrupt_Expect();
+    uart_ReceiveUint32Blocking(output);
+}
 //NOT TESTET:
 //uart_NewLine
 //uart_WriteLine

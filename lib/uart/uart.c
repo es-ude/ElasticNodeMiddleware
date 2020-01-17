@@ -64,23 +64,38 @@ void uart_WriteString(char *s){
 }
 
 void uart_WriteStringBlock(char *s){
-
+    while (*s != 0)
+    {
+        uart_WriteCharBlock_internal(*(s++));
+    }
 }
 
 void uart_WriteStringLength(char *s, uint16_t length){
-
+	char *ptr = s;
+	for (uint16_t i = 0; i < length; i++)
+		uart_Queue_internal(*(ptr++));
+	uart_WriteNext_internal();
 }
 
 void uart_WriteStringLengthBlock(char *s, uint16_t length){
-
-}
-
-uint8_t uart_ReceiveCharBlocking(void){
-
+	char *ptr = s;
+	for (uint16_t i = 0; i < length; i++) {
+		uart_WriteCharBlock_internal(*(ptr++));
+     }
 }
 
 void uart_ReceiveUint32Blocking(uint32_t *output){
+    /*
+	uint8_t *outputPtr = (uint8_t *) output;
 
+	*outputPtr++ = uartReceiveCharBlocking();
+	*outputPtr++ = uartReceiveCharBlocking();
+	*outputPtr++ = uartReceiveCharBlocking();
+	*outputPtr++ = uartReceiveCharBlocking();
+
+	// return output;*/
+    interruptManager_clearInterrupt();
+    interruptManager_setInterrupt();
 }
 
 void uart_WriteChar(uint8_t c){

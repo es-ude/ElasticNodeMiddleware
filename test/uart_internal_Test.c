@@ -79,3 +79,12 @@ void test_uartWriteCharBlock_internal(void) {
 
     TEST_ASSERT_EQUAL_UINT8(UDR1, c);
 }
+
+void test_uart_ReceiveCharBlocking_internal(void) {
+    initalise_uart_internal_MockRegister();
+    interruptManager_clearInterrupt_Expect();
+    BitManipulation_bitIsSetOnArray_ExpectAndReturn(UCSR1A, RXC1, 0);
+    BitManipulation_bitIsSetOnArray_ExpectAndReturn(UCSR1A, RXC1, 1);
+    interruptManager_setInterrupt_Expect();
+    uint8_t udr1_dummy = uart_ReceiveCharBlocking_internal();
+}

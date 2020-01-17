@@ -21,5 +21,6 @@ void uart_setUartReceiveHandler_internal(void (*receiveHandler)(uint8_t));
 void uart_WriteNext_internal(void);
 uint8_t uart_Queue_internal(uint8_t c);
 void uart_WriteCharBlock_internal(uint8_t c);
+uint8_t uart_ReceiveCharBlocking_internal(void);
 
 #endif //ELASTICNODEMIDDLEWARE_UART_INTERNAL_H

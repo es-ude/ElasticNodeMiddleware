@@ -44,6 +44,7 @@
 #define USBS1 3
 #define UCSZ10 1
 #define UDRE1 5
+#define RXC1 7
 
 #else
 #include <avr/io.h>

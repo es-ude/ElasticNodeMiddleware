@@ -65,3 +65,11 @@ void uart_WriteCharBlock_internal(uint8_t c) {
     UDR1 = c;
     interruptManager_setInterrupt();
 }
+
+uint8_t uart_ReceiveCharBlocking_internal(void){
+    interruptManager_clearInterrupt();
+    // Wait for finished receive
+    while(!( BitManipulation_bitIsSetOnArray(UCSR1A, RXC1))) {}
+    interruptManager_setInterrupt();
+    return UDR1;
+}
