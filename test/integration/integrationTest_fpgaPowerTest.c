@@ -9,6 +9,7 @@
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
+//4th LED should blink 10 times
 int main() {
     DDRD = 0xff;
 

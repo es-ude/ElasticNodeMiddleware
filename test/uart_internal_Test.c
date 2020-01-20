@@ -24,14 +24,15 @@ void initalise_uart_internal_MockRegister(void) {
     UDR1 = &udr1;
     UCSR1A = &ucsr1a;
 }
+
+void dummyFunction(uint8_t dummy){}
+
 void test_uart_BufferCount(void) {
     initalise_uart_internal_MockRegister();
 
     circularBuffer_Count_ExpectAndReturn(&sendingBuf, 23);
     uart_BufferCount_internal();
 }
-
-void dummyFunction(uint8_t dummy){}
 
 void test_uart_setUartReceiveHandler_internal(void) {
     initalise_uart_internal_MockRegister();
@@ -87,4 +88,7 @@ void test_uart_ReceiveCharBlocking_internal(void) {
     BitManipulation_bitIsSetOnArray_ExpectAndReturn(UCSR1A, RXC1, 1);
     interruptManager_setInterrupt_Expect();
     uint8_t udr1_dummy = uart_ReceiveCharBlocking_internal();
+
+    //why?
+    //TEST_ASSERT_EQUAL_UINT8(udr1_dummy, 99);
 }

@@ -1,11 +1,33 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "EmbeddedUtilities/BitManipulation.h"
+#include <stdio.h>
+#include "lib/uart/uart.h"
+/*
+ * //have to be implemented by programmer
+ * in uart
+ *
+ ISR(USART1_RX_vect) {
+    uart_ISR_Receive();
+}
 
-
+ISR(USART1_TX_vect) {
+    uart_ISR_Transmit();
+}
+ * in reconfigure
+ *
+ ISR(FPGA_DONE_INT_VECTOR)
+{
+    reconfigure_interruptSR();
+}
+ */
 
 int main(void)
 {
+    static FILE uart_str = FDEV_SETUP_STREAM(uart_WriteChar, uart_WriteChar, _FDEV_SETUP_RW);
+    stdout = stdin = &uart_str;
+    uart_Init(NULL);
+    printf("Hello");
  DDRD = 0xff;
   while (true)
   {
@@ -21,51 +43,3 @@ int main(void)
       _delay_ms(1000);
   }
 }
-/*
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
-
-void testXor(void);
-
-uint8_t sleepFlag = 0x00;
-
-
-int main()
-{
-    xmem_initXmem();
-    xmem_enableXmem();
-    //initLeds();
-    //ledsFlash(1);
-    //ledsSetMode(ledsDebug);
-
-    //debugInit(NULL);
-
-    //initFlash();
-    //fpgaFlashInit();
-
-    //initGpio();
-
-    elasticnode_initialise();
-    reconfigure_initMultiboot();
-
-////	fpgaEnableFlashInterface();
-
-    while (1)
-    {
-        //if(debugReadCharAvailable())
-        //{
-          //  uint8_t data = debugGetChar();
-          //  uartProcessInput(data);
-////            if (sleepFlag) // do not sleep if uart is active
-////            {
-////            }
-        //}
-        //debugTask();
-
-    }
-    return 0;
-}
-
-
-
-#pragma clang diagnostic pop*/

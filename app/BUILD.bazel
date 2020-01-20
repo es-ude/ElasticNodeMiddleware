@@ -15,7 +15,8 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
-            "//:BitmanipulationLib"
+            "//:BitmanipulationLib",
+            "//:UartLib"
             ]
 )
 

@@ -14,7 +14,8 @@
 circularBuffer sendingBuf;
 void (*uartReceiveHandler)(uint8_t);
 uint8_t sendingFlag;
-
+volatile uint8_t receivedData;
+uint8_t sendingData;
 
 uint8_t ubrr1h;
 uint8_t* UBRR1H = &ubrr1h;
@@ -26,7 +27,8 @@ uint8_t ucsr1b;
 uint8_t* UCSR1B = &ucsr1b;
 uint8_t ucsr1c;
 uint8_t* UCSR1C = &ucsr1c;
-
+uint8_t udr1;
+uint8_t* UDR1 = &udr1;
 
 void initalise_uart_mockRegister(void) {
     UBRR1H = &ubrr1h;
@@ -34,7 +36,11 @@ void initalise_uart_mockRegister(void) {
     UCSR1A = &ucsr1a;
     UCSR1B = &ucsr1b;
     UCSR1C = &ucsr1c;
+    UDR1 = &udr1;
 }
+
+void dummyFunction(uint8_t dummy){}
+
 
 void test_uart_WaitUntilDone(void) {
     initalise_uart_mockRegister();
@@ -46,14 +52,6 @@ void test_uart_WaitUntilDone(void) {
     uart_WaitUntilDone();
 }
 
-void test_uart_getUartReceiveHandler(void) {
-    initalise_uart_mockRegister();
-
-    void* ptr = uart_getUartReceiveHandler();
-    TEST_ASSERT_EQUAL(ptr, uartReceiveHandler);
-}
-
-void dummyFunction(uint8_t dummy){}
 
 void test_uart_init(void) {
     initalise_uart_mockRegister();
@@ -77,21 +75,17 @@ void test_uart_init(void) {
 
 }
 
+void test_uart_getUartReceiveHandler(void) {
+    initalise_uart_mockRegister();
+
+    void* ptr = uart_getUartReceiveHandler();
+    TEST_ASSERT_EQUAL(ptr, uartReceiveHandler);
+}
+
 void test_uart_Sending(void) {
     initalise_uart_mockRegister();
 
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, uart_Sending());
-}
-
-void test_uart_WriteChar(void) {
-    initalise_uart_mockRegister();
-   uint8_t c = 5;
-   //Push successful
-   circularBuffer_Push_ExpectAndReturn(&sendingBuf, c, 1);
-   uart_WriteNext_internal_Expect();
-   uart_WriteChar(c);
-
-   TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x1);
 }
 
 void test_uart_WriteString_EmptyString(void) {
@@ -145,21 +139,69 @@ void test_uart_ReceiveUint32Blocking(void) {
     initalise_uart_mockRegister();
     uint32_t output_var;
     uint32_t *output = &output_var;
-    /*	cli();
-uint8_t *outputPtr = (uint8_t *) output;
-
-*outputPtr++ = uartReceiveCharBlocking();
-*outputPtr++ = uartReceiveCharBlocking();
-*outputPtr++ = uartReceiveCharBlocking();
-*outputPtr++ = uartReceiveCharBlocking();
-
-sei();
-// return output;*/
     interruptManager_clearInterrupt_Expect();
-    uint8_t *outputPtr = (uint8_t * )output;
+    uart_ReceiveCharBlocking_internal_ExpectAndReturn(1);
+    uart_ReceiveCharBlocking_internal_ExpectAndReturn(1);
+    uart_ReceiveCharBlocking_internal_ExpectAndReturn(1);
+    uart_ReceiveCharBlocking_internal_ExpectAndReturn(1);
     interruptManager_setInterrupt_Expect();
     uart_ReceiveUint32Blocking(output);
 }
+
+void test_uart_WriteChar(void) {
+    initalise_uart_mockRegister();
+   uint8_t c = 5;
+   //Push successful
+   circularBuffer_Push_ExpectAndReturn(&sendingBuf, c, 1);
+   uart_WriteNext_internal_Expect();
+   uart_WriteChar(c);
+
+   TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x1);
+}
+
+void test_uart_ISR_Receive() {
+    initalise_uart_mockRegister();
+    interruptManager_clearInterrupt_Expect();
+    interruptManager_setInterrupt_Expect();
+    uart_ISR_Receive();
+
+    //here uartReceiveHandler == NULL
+    TEST_ASSERT_EQUAL(uart_getUartReceiveHandler(), 0);
+}
+
+void test_uart_ISR_Transmit_True() {
+    initalise_uart_mockRegister();
+    interruptManager_clearInterrupt_Expect();
+    circularBuffer_Pop_ExpectAndReturn(&sendingBuf, &sendingData, 1);
+    interruptManager_setInterrupt_Expect();
+    uart_ISR_Transmit();
+
+    TEST_ASSERT_EQUAL_UINT8(UDR1, sendingData);
+}
+
+void test_uart_ISR_Transmit_False() {
+    initalise_uart_mockRegister();
+    interruptManager_clearInterrupt_Expect();
+    circularBuffer_Pop_ExpectAndReturn(&sendingBuf, &sendingData, 0);
+    interruptManager_setInterrupt_Expect();
+    uart_ISR_Transmit();
+
+    TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
+}
 //NOT TESTET:
+//uart_WriteBin!
+
 //uart_NewLine
-//uart_WriteLine
+//uart_WriteBin4
+//uart_WriteBin8
+//uart_WriteBin32
+//uart_WriteDec8
+//uart_WriteDec16
+//uart_WriteDec32
+//uart_WriteDec32S
+//uart_WriteHex8
+//uart_WriteHex16
+//uart_WriteHex32
+//uart_WriteFloat
+//uart_Ack
+

@@ -5,11 +5,14 @@
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-
+#include "lib/uart/uart.h"
 //test if Bits are set
 //4th, 5th and 6th LED on
 int main()
 {
+    uart_Init(NULL);
+	uart_WriteLine("Starting...");
+
     DDRD = 0xff;
     xmem_initXmem();
     if(BitManipulation_bitIsSetOnArray(XMCRA, (SRW11 | SRW10)) && BitManipulation_bitIsSetOnArray(XMCRB, (XMBK | XMM1))) {

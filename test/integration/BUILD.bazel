@@ -8,6 +8,7 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
             "//:XMemLib",
+            "//:UartLib"
             ]
 )
 

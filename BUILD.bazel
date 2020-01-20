@@ -112,8 +112,8 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//:CircularBufferLibHdr",
-        "//:Interrupt_ManagerLibHdr",
+        "//:CircularBufferLib",
+        "//:Interrupt_ManagerLib",
         "//:RegisterDefinitionLibHdrs",
         "//:UartLibHdr",
         "@EmbeddedUtilities//:BitManipulation",
@@ -144,7 +144,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:CircularBufferLibHdr",
-        "//:Interrupt_ManagerLibHdr",
+        "//:Interrupt_ManagerLib",
         "//:RegisterDefinitionLibHdrs",
         "@EmbeddedUtilities//:BitManipulation",
     ],
@@ -157,8 +157,6 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:CircularBufferLibHdr",
-        "//:Interrupt_ManagerLibHdr",
-        "//:RegisterDefinitionLibHdrs",
         "//test:BitManipulationHdrForTesting",
     ],
 )
@@ -258,6 +256,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:Interrupt_ManagerLibHdr",
+        "//:RegisterDefinitionLibHdrs"
     ],
 )
 

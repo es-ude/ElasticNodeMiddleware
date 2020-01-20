@@ -82,8 +82,3 @@ void reconfigure_interruptSR(void) {
         interruptManager_setInterrupt();
     }
 }
-
-ISR(FPGA_DONE_INT_VECTOR)
-{
-    reconfigure_interruptSR();
-}

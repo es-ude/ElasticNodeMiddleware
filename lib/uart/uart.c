@@ -13,6 +13,8 @@
 circularBuffer sendingBuf;
 void (*uartReceiveHandler)(uint8_t);
 uint8_t sendingFlag;
+uint8_t sendingData;
+volatile uint8_t receivedData;
 
 void uart_WaitUntilDone(void){
     while (uart_BufferCount_internal() > 0)
@@ -22,6 +24,7 @@ void uart_WaitUntilDone(void){
 }
 
 void uart_Init(void (*receiveHandler)(uint8_t)){
+//void uart_Init(){
     UBRR1H = (uint8_t) (my_bdr >> 8);
     UBRR1L = (uint8_t) (my_bdr);
 
@@ -85,16 +88,15 @@ void uart_WriteStringLengthBlock(char *s, uint16_t length){
 }
 
 void uart_ReceiveUint32Blocking(uint32_t *output){
-    /*
+    interruptManager_clearInterrupt();
 	uint8_t *outputPtr = (uint8_t *) output;
 
-	*outputPtr++ = uartReceiveCharBlocking();
-	*outputPtr++ = uartReceiveCharBlocking();
-	*outputPtr++ = uartReceiveCharBlocking();
-	*outputPtr++ = uartReceiveCharBlocking();
+	*outputPtr++ = uart_ReceiveCharBlocking_internal();
+	*outputPtr++ = uart_ReceiveCharBlocking_internal();
+	*outputPtr++ = uart_ReceiveCharBlocking_internal();
+	*outputPtr++ = uart_ReceiveCharBlocking_internal();
 
-	// return output;*/
-    interruptManager_clearInterrupt();
+	// return output;
     interruptManager_setInterrupt();
 }
 
@@ -109,50 +111,103 @@ void uart_WriteChar(uint8_t c){
     }
 }
 
-void uart_WriteHex8(uint8_t num){
-
-}
-
-void uart_WriteDec8(uint8_t num){
-
-}
-
-void uart_WriteBin8(uint8_t num){
-
-}
-
-void uart_WriteDec16(uint16_t num){
-
-}
-
-void uart_WriteHex16(uint16_t num){
-
-}
-
-void uart_WriteHex32(uint32_t num){
-
-}
-
-void uart_WriteBin32(uint32_t num){
-
-}
-
-void uart_WriteDec32(uint32_t num){
-
-}
-
-void uart_WriteDec32S(int32_t num){
-
+void uart_WriteBin(uint32_t num, uint8_t length)
+{
+    uart_WriteString("0b");
+    uint32_t number = num;
+    for (uint8_t i = length - 1; i >= 0; i--) {
+        if (BitManipulation_bitIsSetOnArray(number, i)) {
+            uart_WriteChar('1');
+        } else {
+            uart_WriteChar('0');
+            // number >>= 1;
+        }
+    }
 }
 
 void uart_WriteBin4(uint8_t num){
+    uart_WriteBin(num, 4);
+}
 
+void uart_WriteBin8(uint8_t num){
+    uart_WriteBin(num, 8);
+}
+
+void uart_WriteBin32(uint32_t num){
+    uart_WriteBin(num, 32);
+}
+
+void uart_WriteDec8(uint8_t num){
+    char buf[4];
+    sprintf(buf, "%d", num);
+    uart_WriteString(buf);
+}
+
+void uart_WriteDec16(uint16_t num){
+    char buf[20];
+    sprintf(buf, "%u", num);
+    uart_WriteString(buf);
+}
+
+void uart_WriteDec32(uint32_t num){
+    char buf[20];
+    sprintf(buf, "%lu", num);
+    uart_WriteString(buf);
+}
+
+void uart_WriteDec32S(int32_t num){
+    char *buf = (char *) malloc(10);
+    sprintf(buf, "%ld", num);
+    uart_WriteString(buf);
+    free(buf);
+}
+
+void uart_WriteHex8(uint8_t num){
+    char buf[3];
+    sprintf(buf, "%02X", num);
+    uart_WriteString(buf);
+}
+
+void uart_WriteHex16(uint16_t num){
+    char buf[10];
+    sprintf(buf, "%04X", num);
+    uart_WriteString(buf);
+}
+
+void uart_WriteHex32(uint32_t num){
+    char buf[10];
+    sprintf(buf, "%08lX", num);
+    uart_WriteString(buf);
 }
 
 void uart_WriteFloat(float num){
-
+    char buf[10];
+    sprintf(buf, "%.2f", num);
+    uart_WriteString(buf);
 }
 
 void uart_Ack(uint8_t c){
+    uart_WriteChar(c);
+}
 
+void uart_ISR_Receive() {
+    interruptManager_clearInterrupt();
+    receivedData = UDR1;
+    if (uartReceiveHandler != NULL) {
+        uartReceiveHandler(receivedData);
+    }
+    interruptManager_setInterrupt();
+}
+
+void uart_ISR_Transmit() {
+    interruptManager_clearInterrupt();
+	// check if more data to send
+	if (circularBuffer_Pop(&sendingBuf, &sendingData)) {
+        // if avail, send it
+        UDR1 = sendingData;
+    } else
+	{
+		sendingFlag = 0x0;
+	}
+    interruptManager_setInterrupt();
 }
