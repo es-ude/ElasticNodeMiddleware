@@ -27,7 +27,7 @@ void uart_setUartReceiveHandler_internal(void (*receiveHandler)(uint8_t)){
 void uart_WriteNext_internal(void){
     if(!sendingFlag) {
         /* Wait for empty transmit buffer */
-        while(!( BitManipulation_bitIsSetOnArray(UCSR1A, UDRE1))) {}
+        while(!(UCSR1A & ( 1 << UDRE1))) {}
         circularBuffer_Pop(&sendingBuf, &sendingData);
         UDR1 = sendingData;
         sendingFlag = 0x1;
@@ -60,7 +60,8 @@ uint8_t uart_Queue_internal(uint8_t c){
 
 void uart_WriteCharBlock_internal(uint8_t c) {
     interruptManager_clearInterrupt();
-    while(!( BitManipulation_bitIsSetOnArray(UCSR1A, UDRE1))) {}
+    while(!( UCSR1A & ( 1 << UDRE1))) {}
+
     // Put data into buffer, sends the data
     UDR1 = c;
     interruptManager_setInterrupt();
@@ -69,7 +70,7 @@ void uart_WriteCharBlock_internal(uint8_t c) {
 uint8_t uart_ReceiveCharBlocking_internal(void){
     interruptManager_clearInterrupt();
     // Wait for finished receive
-    while(!( BitManipulation_bitIsSetOnArray(UCSR1A, RXC1))) {}
+    while(!( UCSR1A & ( 1 << RXC1))) {}
     interruptManager_setInterrupt();
     return UDR1;
 }

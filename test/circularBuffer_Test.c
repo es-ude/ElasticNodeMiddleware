@@ -64,7 +64,7 @@ void test_circularBuffer_push(void) {
     initalise_circularBuffer_mockRegister();
 
     circularBuffer sendingBuf;
-    circularBuffer *c = &sendingBuf;
+    circularBuffer* c = &sendingBuf;
     uint8_t data = 33;
 
     uint8_t* checkVarHead = c->head;
@@ -79,9 +79,10 @@ void test_circularBuffer_push(void) {
     }
     interruptManager_setInterrupt_Expect();
 
+    uint8_t tmp = *c->head;
+    *c->head = 3;
     circularBuffer_Push(c, data);
 
-    TEST_ASSERT_EQUAL(c->tail, checkVarHead);
     if(checkVarHead > c->last) {
         TEST_ASSERT_EQUAL(c->head ,c->buffer);
     } else {

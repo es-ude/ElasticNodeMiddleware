@@ -16,6 +16,7 @@
 
 #define MAX_QUEUE_RETRIES 10
 
+#include "lib/uart/circularBuffer/circularBuffer.h"
 uint16_t uart_BufferCount_internal(void);
 void uart_setUartReceiveHandler_internal(void (*receiveHandler)(uint8_t));
 void uart_WriteNext_internal(void);

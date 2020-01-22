@@ -107,8 +107,8 @@ cc_library(
         "lib/uart/uart_internal.c",
     ],
     copts = [
-        "-DF_CPU=12000000UL",
-        "-DBAUD=115200UL",
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -128,8 +128,8 @@ cc_library(
     ],
     copts = [
         "-DTEST",
-        "-DF_CPU=12000000UL",
-        "-DBAUD=115200UL",
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
     ],
     visibility = ["//visibility:public"],
     deps = [

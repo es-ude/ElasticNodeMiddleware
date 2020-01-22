@@ -11,9 +11,12 @@
 #include "EmbeddedUtilities/BitManipulation.h"
 
 circularBuffer sendingBuf;
+circularBuffer* ptr_sendingBuf = &sendingBuf;
 void (*uartReceiveHandler)(uint8_t);
 uint8_t sendingFlag;
+uint8_t* ptr_sendingFlag = &sendingFlag;
 uint8_t sendingData;
+uint8_t* ptr_sendingData = &sendingData;
 volatile uint8_t receivedData;
 
 void uart_WaitUntilDone(void){
@@ -27,13 +30,20 @@ void uart_Init(void (*receiveHandler)(uint8_t)){
 //void uart_Init(){
     UBRR1H = (uint8_t) (my_bdr >> 8);
     UBRR1L = (uint8_t) (my_bdr);
-
+/*
 #if UART_2X
     BitManipulation_setBit(UCSR1A, U2X1);
 #endif
 
     BitManipulation_setBit(UCSR1B, (RXEN1 | TXEN1 | RXCIE1 | TXCIE1));
     BitManipulation_setBit(UCSR1C, (USBS1 | ( 3 << UCSZ10)));
+    */
+#if UART_2X
+    UCSR1A |= _BV(U2X1);
+#endif
+    UCSR1B = _BV(RXEN1) | _BV(TXEN1) | _BV(RXCIE1) | _BV(TXCIE1);
+    UCSR1C = _BV(USBS1) | (3 << UCSZ10);
+
     uart_setUartReceiveHandler_internal(receiveHandler);
     sendingFlag = 0x0;
     circularBuffer_Init(&sendingBuf, UART_SENDING_BUFFER);
@@ -103,10 +113,10 @@ void uart_ReceiveUint32Blocking(uint32_t *output){
 void uart_WriteChar(uint8_t c){
     if (circularBuffer_Push(&sendingBuf, c)) {
         // check if sending already
-        if (!sendingFlag)
+        if (!sendingFlag) {
             // start process
             uart_WriteNext_internal();
-
+        }
         sendingFlag = 0x1;
     }
 }

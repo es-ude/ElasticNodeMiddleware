@@ -53,7 +53,6 @@ void elasticnode_fpgaHardReset(void);
 
 #else
 
-#include <avr/interrupt.h>
 #include <util/delay.h>
 
 #endif

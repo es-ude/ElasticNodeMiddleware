@@ -3,6 +3,7 @@
 #include "EmbeddedUtilities/BitManipulation.h"
 #include <stdio.h>
 #include "lib/uart/uart.h"
+#include <avr/interrupt.h>
 /*
  * //have to be implemented by programmer
  * in uart
@@ -24,13 +25,15 @@ ISR(USART1_TX_vect) {
 
 int main(void)
 {
-    static FILE uart_str = FDEV_SETUP_STREAM(uart_WriteChar, uart_WriteChar, _FDEV_SETUP_RW);
-    stdout = stdin = &uart_str;
-    uart_Init(NULL);
-    printf("Hello");
- DDRD = 0xff;
+
+   uart_Init(NULL);
+
+   DDRD = 0xff;
   while (true)
   {
+      uart_WriteChar('1');
+      uart_WriteChar('c');
+      uart_WriteChar('3');
       BitManipulation_setBit(&PORTD, PD4);
       BitManipulation_setBit(&PORTD, PD5);
       BitManipulation_setBit(&PORTD, PD6);
@@ -42,4 +45,12 @@ int main(void)
       BitManipulation_clearBit(&PORTD, PD7);
       _delay_ms(1000);
   }
+}
+
+ISR(USART1_RX_vect) {
+    uart_ISR_Receive();
+}
+
+ISR(USART1_TX_vect) {
+    uart_ISR_Transmit();
 }

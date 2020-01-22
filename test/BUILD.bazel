@@ -163,8 +163,8 @@ unity_test(
     cexception = False,
     copts = [
         "-DTEST",
-        "-DF_CPU=12000000UL",
-        "-DBAUD=115200UL",
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
     ],
     file_name = "uart_Test.c",
     deps = [

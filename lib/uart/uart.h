@@ -12,7 +12,6 @@
 #else
 
 #include <util/delay.h>
-#include <avr/interrupt.h>
 
 #endif
 

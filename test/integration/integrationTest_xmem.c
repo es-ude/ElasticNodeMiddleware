@@ -11,7 +11,6 @@
 int main()
 {
     uart_Init(NULL);
-	uart_WriteLine("Starting...");
 
     DDRD = 0xff;
     xmem_initXmem();
@@ -31,6 +30,10 @@ int main()
        BitManipulation_bitIsSetOnArray(DDR_XMEM_RD, P_XMEM_RD) && !(BitManipulation_bitIsSetOnArray(DDR_XMEM_ALE, P_XMEM_ALE)) &&
         (*DDR_XMEM_A == 0x00) && (*DDR_XMEM_AD == 0x00)) {
         BitManipulation_setBit(&PORTD, PD6);
+    }
+
+    while(true) {
+        uart_WriteChar('x');
     }
 
 }
