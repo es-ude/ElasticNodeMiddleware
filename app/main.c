@@ -27,12 +27,13 @@ int main(void)
 {
     uart_Init(NULL);
     DDRD = 0xff;
-    uart_WriteChar('2');
+    uart_WriteLine("starting");
     while (true) {
 
       uart_WriteChar('1');
+      uart_NewLine();
       _delay_ms(500);
-      uart_WriteChar('c');
+      uart_WriteString("testing uart");
       BitManipulation_setBit(&PORTD, PD4);
       BitManipulation_setBit(&PORTD, PD5);
       BitManipulation_setBit(&PORTD, PD6);

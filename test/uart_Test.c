@@ -21,8 +21,8 @@ uint8_t ubrr1h;
 uint8_t* UBRR1H = &ubrr1h;
 uint8_t ubrr1l;
 uint8_t* UBRR1L = &ubrr1l;
-uint8_t ucsr1a;
-uint8_t* UCSR1A = &ucsr1a;
+//for not going into endless while loop
+uint8_t UCSR1A = 0xEF;
 uint8_t ucsr1b;
 uint8_t* UCSR1B = &ucsr1b;
 uint8_t ucsr1c;
@@ -33,7 +33,6 @@ uint8_t* UDR1 = &udr1;
 void initalise_uart_mockRegister(void) {
     UBRR1H = &ubrr1h;
     UBRR1L = &ubrr1l;
-    UCSR1A = &ucsr1a;
     UCSR1B = &ucsr1b;
     UCSR1C = &ucsr1c;
     UDR1 = &udr1;
@@ -59,9 +58,9 @@ void test_uart_init(void) {
     void (*receiveHandler)(uint8_t) = &dummyFunction;
 
     //UART_2X is 1
-    BitManipulation_setBit_Expect(UCSR1A, U2X1);
-    BitManipulation_setBit_Expect(UCSR1B, (RXEN1 | TXEN1 | RXCIE1 | TXCIE1));
-    BitManipulation_setBit_Expect(UCSR1C, (USBS1 | ( 3 << UCSZ10)));
+    uint8_t dummy_UCSR1A = UCSR1A | (1 << U2X1);
+    uint8_t* dummy_UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << TXCIE1);
+    uint8_t* dummy_UCSR1C = (1 << USBS1) | (3 << UCSZ10);
 
     uart_setUartReceiveHandler_internal_Expect(receiveHandler);
     circularBuffer_Init_Expect(&sendingBuf, UART_SENDING_BUFFER);
@@ -69,6 +68,9 @@ void test_uart_init(void) {
 
     uart_Init(receiveHandler);
 
+    TEST_ASSERT_EQUAL_UINT8(dummy_UCSR1A, UCSR1A);
+    TEST_ASSERT_EQUAL(dummy_UCSR1B, UCSR1B);
+    TEST_ASSERT_EQUAL(dummy_UCSR1C, UCSR1C);
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
     TEST_ASSERT_EQUAL(UBRR1H, (uint8_t) (my_bdr >> 8));
     TEST_ASSERT_EQUAL(UBRR1L, (uint8_t) (my_bdr));

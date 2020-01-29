@@ -182,7 +182,6 @@ unity_test(
     file_name = "uart_internal_Test.c",
     deps = [
         "mock_circularBuffer",
-        "mock_Bitmanipulation",
         "mock_InterruptManager",
         "//:UartLibTest",
     ],

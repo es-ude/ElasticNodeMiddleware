@@ -42,11 +42,11 @@ extern uint8_t* XMCRB;
 extern uint8_t* FPGA_DONE_INT_REG;
 extern uint8_t* FPGA_DONE_INT_CONTROL_REG;
 
-extern uint8_t* SREG;
+extern uint8_t SREG;
 
 extern uint8_t* UBRR1H;
 extern uint8_t* UBRR1L;
-extern uint8_t* UCSR1A;
+extern uint8_t UCSR1A;
 extern uint8_t* UCSR1B;
 extern uint8_t* UCSR1C;
 

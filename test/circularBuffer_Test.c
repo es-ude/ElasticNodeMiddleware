@@ -5,18 +5,11 @@
 #include "unity.h"
 #include "lib/uart/circularBuffer/circularBuffer.h"
 #include "lib/interruptManager/MockinterruptManager.h"
-#include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
-uint8_t sreg;
 
-uint8_t* SREG = &sreg;
-
-void initalise_circularBuffer_mockRegister(void) {
-    SREG = &sreg;
-}
+uint8_t SREG = 0xBF;
 
 void test_circularBuffer_Init(void) {
-    initalise_circularBuffer_mockRegister();
 
     circularBuffer sendingBuf;
     circularBuffer *c = &sendingBuf;
@@ -33,7 +26,6 @@ void test_circularBuffer_Init(void) {
 }
 
 void test_circularBuffer_Space(void) {
-    initalise_circularBuffer_mockRegister();
 
     circularBuffer sendingBuf;
     circularBuffer *c = &sendingBuf;
@@ -42,7 +34,6 @@ void test_circularBuffer_Space(void) {
 }
 
 void test_circularBuffer_Count(void) {
-    initalise_circularBuffer_mockRegister();
 
     circularBuffer sendingBuf;
     circularBuffer *c = &sendingBuf;
@@ -51,7 +42,6 @@ void test_circularBuffer_Count(void) {
 }
 
 void test_circularBuffer_CountObjects(void) {
-    initalise_circularBuffer_mockRegister();
 
     circularBuffer sendingBuf;
     circularBuffer *c = &sendingBuf;
@@ -61,7 +51,6 @@ void test_circularBuffer_CountObjects(void) {
 }
 
 void test_circularBuffer_push(void) {
-    initalise_circularBuffer_mockRegister();
 
     circularBuffer sendingBuf;
     circularBuffer* c = &sendingBuf;
@@ -70,8 +59,7 @@ void test_circularBuffer_push(void) {
     uint8_t* checkVarHead = c->head;
     uint16_t checkVarLen = c->currentLen;
 
-    //assumption: bit is set
-    BitManipulation_bitIsSetOnArray_ExpectAndReturn(SREG, 7, 1);
+    //assumption: SREG & (1<<7) == 1
     interruptManager_clearInterrupt_Expect();
     if (c->currentLen == c->maxLen)
     {
@@ -79,8 +67,6 @@ void test_circularBuffer_push(void) {
     }
     interruptManager_setInterrupt_Expect();
 
-    uint8_t tmp = *c->head;
-    *c->head = 3;
     circularBuffer_Push(c, data);
 
     if(checkVarHead > c->last) {
@@ -93,7 +79,6 @@ void test_circularBuffer_push(void) {
 }
 
 void test_circularBuffer_pop(void) {
-    initalise_circularBuffer_mockRegister();
 
     circularBuffer sendingBuf;
     circularBuffer *c = &sendingBuf;
@@ -103,8 +88,7 @@ void test_circularBuffer_pop(void) {
     uint16_t checkVarLen = c->currentLen;
     uint8_t* checkVarTail = c->tail;
 
-    //assumption: bit is set
-    BitManipulation_bitIsSetOnArray_ExpectAndReturn(SREG, 7, 1);
+    //assumption: SREG & (1<<7) == 1
     interruptManager_clearInterrupt_Expect();
     interruptManager_setInterrupt_Expect();
     circularBuffer_Pop(c, data);

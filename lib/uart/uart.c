@@ -33,8 +33,8 @@ void uart_Init(void (*receiveHandler)(uint8_t)){
 #if UART_2X
     UCSR1A |= (1 << U2X1);
 #endif
-    UCSR1B = _BV(RXEN1) | _BV(TXEN1) | _BV(RXCIE1) | _BV(TXCIE1);
-    UCSR1C = _BV(USBS1) | (3 << UCSZ10);
+    UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << TXCIE1);
+    UCSR1C = (1 << USBS1) | (3 << UCSZ10);
 
     uart_setUartReceiveHandler_internal(receiveHandler);
     sendingFlag = 0x0;
@@ -108,19 +108,9 @@ void uart_WriteChar(uint8_t c){
         // check if sending already
         if (!sendingFlag) {
             // start process
-            uart_WriteNext();
+            uart_WriteNext_internal();
 
         }
-        sendingFlag = 0x1;
-    }
-}
-
-void uart_WriteNext(void) {
-    if(!sendingFlag) {
-        // Wait for empty transmit buffer
-        while(!(UCSR1A & ( 1 << UDRE1))) {}
-        circularBuffer_Pop(&sendingBuf, &sendingData);
-        UDR1 = sendingData;
         sendingFlag = 0x1;
     }
 }

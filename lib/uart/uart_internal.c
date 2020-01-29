@@ -6,7 +6,6 @@
 #include "lib/uart/circularBuffer/circularBuffer.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"
-#include "EmbeddedUtilities/BitManipulation.h"
 #include "lib/interruptManager/interruptManager.h"
 
 circularBuffer sendingBuf;
@@ -52,8 +51,9 @@ uint8_t uart_Queue_internal(uint8_t c){
     if (retries >= MAX_QUEUE_RETRIES)
     {
         uint8_t dummy = 0;
-        while(circularBuffer_Pop(&sendingBuf, &dummy))
+        while(circularBuffer_Pop(&sendingBuf, &dummy)) {
             continue;
+        }
     }
     return success;
 }

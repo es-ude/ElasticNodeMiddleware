@@ -4,7 +4,6 @@
 
 #include "lib/uart/circularBuffer/circularBuffer.h"
 #include "lib/interruptManager/interruptManager.h"
-#include "EmbeddedUtilities/BitManipulation.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 
 void circularBuffer_Init(circularBuffer *c, uint16_t size){
@@ -41,7 +40,7 @@ uint16_t circularBuffer_CountObjects(circularBuffer *c, uint16_t size){
 uint8_t circularBuffer_Push(circularBuffer *c, uint8_t data){
 
     //uint8_t gi = interruptStatus();
-    uint8_t gi = BitManipulation_bitIsSetOnArray(SREG, 7);
+    uint8_t gi = SREG & (1<<7);
 
    //if (gi) = if(SREG & (1<<7)) =
    if(gi) {
@@ -86,7 +85,7 @@ uint8_t circularBuffer_Pop(circularBuffer *c, uint8_t *data){
         return 0;
 
     //uint8_t gi = interruptStatus();
-    uint8_t gi = BitManipulation_bitIsSetOnArray(SREG, 7);
+    uint8_t gi = SREG & (1<<7);
 
     if (gi) {
         interruptManager_clearInterrupt();
