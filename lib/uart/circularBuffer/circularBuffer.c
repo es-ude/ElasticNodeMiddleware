@@ -75,6 +75,7 @@ uint8_t circularBuffer_Push(circularBuffer *c, uint8_t data){
        interruptManager_setInterrupt();
    }
    return 1;
+
     // return success to indicate successful push.
 }
 

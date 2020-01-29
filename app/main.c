@@ -25,26 +25,24 @@ ISR(USART1_TX_vect) {
 
 int main(void)
 {
+    uart_Init(NULL);
+    DDRD = 0xff;
+    uart_WriteChar('2');
+    while (true) {
 
-   uart_Init(NULL);
-
-   DDRD = 0xff;
-  while (true)
-  {
       uart_WriteChar('1');
+      _delay_ms(500);
       uart_WriteChar('c');
-      uart_WriteChar('3');
       BitManipulation_setBit(&PORTD, PD4);
       BitManipulation_setBit(&PORTD, PD5);
       BitManipulation_setBit(&PORTD, PD6);
       BitManipulation_setBit(&PORTD, PD7);
-      _delay_ms(1000);
+      _delay_ms(500);
       BitManipulation_clearBit(&PORTD, PD4);
       BitManipulation_clearBit(&PORTD, PD5);
       BitManipulation_clearBit(&PORTD, PD6);
       BitManipulation_clearBit(&PORTD, PD7);
-      _delay_ms(1000);
-  }
+    }
 }
 
 ISR(USART1_RX_vect) {

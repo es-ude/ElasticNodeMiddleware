@@ -30,7 +30,7 @@ void xmem_enableXmem(void){
     BitManipulation_setBit(DDR_XMEM_RD, P_XMEM_RD);
     BitManipulation_setBit(DDR_XMEM_ALE, P_XMEM_ALE);
 
-    BitManipulation_setBit(XMEM_ENABLE_REG, XMEM_ENABLE_P);
+    XMEM_ENABLE_REG |= (1 << XMEM_ENABLE_P);
 }
 
 void xmem_disableXmem(void){

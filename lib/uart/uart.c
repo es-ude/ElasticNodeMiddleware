@@ -27,19 +27,11 @@ void uart_WaitUntilDone(void){
 }
 
 void uart_Init(void (*receiveHandler)(uint8_t)){
-//void uart_Init(){
     UBRR1H = (uint8_t) (my_bdr >> 8);
     UBRR1L = (uint8_t) (my_bdr);
-/*
-#if UART_2X
-    BitManipulation_setBit(UCSR1A, U2X1);
-#endif
 
-    BitManipulation_setBit(UCSR1B, (RXEN1 | TXEN1 | RXCIE1 | TXCIE1));
-    BitManipulation_setBit(UCSR1C, (USBS1 | ( 3 << UCSZ10)));
-    */
 #if UART_2X
-    UCSR1A |= _BV(U2X1);
+    UCSR1A |= (1 << U2X1);
 #endif
     UCSR1B = _BV(RXEN1) | _BV(TXEN1) | _BV(RXCIE1) | _BV(TXCIE1);
     UCSR1C = _BV(USBS1) | (3 << UCSZ10);
@@ -110,13 +102,25 @@ void uart_ReceiveUint32Blocking(uint32_t *output){
     interruptManager_setInterrupt();
 }
 
+
 void uart_WriteChar(uint8_t c){
-    if (circularBuffer_Push(&sendingBuf, c)) {
+    if(circularBuffer_Push(&sendingBuf, c)) {
         // check if sending already
         if (!sendingFlag) {
             // start process
-            uart_WriteNext_internal();
+            uart_WriteNext();
+
         }
+        sendingFlag = 0x1;
+    }
+}
+
+void uart_WriteNext(void) {
+    if(!sendingFlag) {
+        // Wait for empty transmit buffer
+        while(!(UCSR1A & ( 1 << UDRE1))) {}
+        circularBuffer_Pop(&sendingBuf, &sendingData);
+        UDR1 = sendingData;
         sendingFlag = 0x1;
     }
 }

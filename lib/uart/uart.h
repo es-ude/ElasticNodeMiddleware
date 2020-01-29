@@ -29,7 +29,6 @@
 void uart_WaitUntilDone(void);
 
 void uart_Init(void (*receiveHandler)(uint8_t));
-//void uart_Init(void);
 void* uart_getUartReceiveHandler(void);
 uint8_t uart_Sending(void);
 void uart_NewLine(void);
@@ -60,5 +59,8 @@ void uart_Ack(uint8_t c);
 
 void uart_ISR_Receive();
 void uart_ISR_Transmit();
+
+
+void uart_WriteNext(void);
 
 #endif //ELASTICNODEMIDDLEWARE_UART_H
