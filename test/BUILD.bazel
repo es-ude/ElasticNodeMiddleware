@@ -168,7 +168,6 @@ unity_test(
     ],
     file_name = "uart_Test.c",
     deps = [
-        "mock_Bitmanipulation",
         "mock_InterruptManager",
         "mock_Uart_internal",
         "mock_circularBuffer",

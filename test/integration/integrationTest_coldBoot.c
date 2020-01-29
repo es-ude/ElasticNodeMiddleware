@@ -6,18 +6,25 @@
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 #include "EmbeddedUtilities/BitManipulation.h"
+#include "lib/uart/uart.h"
+#include <avr/interrupt.h>
 
 //4th LED blinks 2x
 int main() {
-
+    uart_Init(NULL);
     DDRD = 0xff;
+    uart_WriteLine("integration test cold boot");
+    uart_WaitUntilDone();
 
     // cold boot experiment --> case 'c'
-    //debug print in alwyns code
 
     BitManipulation_setBit(&PORTD, PD4);
 
+    uart_WriteLine("FPGA off");
+    uart_WaitUntilDone();
     elasticnode_fpgaPowerOff();
+    _delay_ms(100);
+    uart_WriteLine("1");
 
     _delay_ms(500);
     BitManipulation_clearBit(&PORTD, PD4);
@@ -36,4 +43,13 @@ int main() {
     _delay_ms(500);
     BitManipulation_clearBit(&PORTD, PD4);
     // response in fpga done isr --> missing, not implemented
+}
+
+
+ISR(USART1_RX_vect) {
+        uart_ISR_Receive();
+}
+
+ISR(USART1_TX_vect) {
+        uart_ISR_Transmit();
 }

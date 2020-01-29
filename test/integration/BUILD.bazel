@@ -19,6 +19,7 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
             "//:ElasticNodeMiddlewareLib",
+            "//:UartLib",
             ]
 )
 
@@ -29,7 +30,8 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
             "//:ElasticNodeMiddlewareLib",
-            "//:Reconfigure_multibootLib"
+            "//:Reconfigure_multibootLib",
+            "//:UartLib"
             ]
 )
 
@@ -40,7 +42,8 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
             "//:Reconfigure_multibootLib",
-            "//:ElasticNodeMiddlewareLib"
+            "//:ElasticNodeMiddlewareLib",
+            "//:UartLib"
             ]
 )
 
@@ -51,7 +54,8 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
             "//:ElasticNodeMiddlewareLib",
-            "//:Reconfigure_multibootLib"
+            "//:Reconfigure_multibootLib",
+            "//:UartLib"
             ]
 )
 
@@ -62,7 +66,8 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
             "//:ElasticNodeMiddlewareLib",
-            "//:Reconfigure_multibootLib"
+            "//:Reconfigure_multibootLib",
+            "//:UartLib"
             ]
 )
 

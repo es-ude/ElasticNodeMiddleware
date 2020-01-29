@@ -8,7 +8,6 @@
 #include "lib/interruptManager/interruptManager.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"
-#include "EmbeddedUtilities/BitManipulation.h"
 
 circularBuffer sendingBuf;
 circularBuffer* ptr_sendingBuf = &sendingBuf;
@@ -120,7 +119,7 @@ void uart_WriteBin(uint32_t num, uint8_t length)
     uart_WriteString("0b");
     uint32_t number = num;
     for (uint8_t i = length - 1; i >= 0; i--) {
-        if (BitManipulation_bitIsSetOnArray(number, i)) {
+        if (number & (1 << i)) {
             uart_WriteChar('1');
         } else {
             uart_WriteChar('0');

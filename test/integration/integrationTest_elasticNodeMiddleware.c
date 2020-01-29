@@ -7,11 +7,15 @@
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-
+#include "lib/uart/uart.h"
+#include <avr/interrupt.h>
 //test if Bits are set
 //4th LED on
 int main() {
+    uart_Init(NULL);
     DDRD = 0xff;
+    uart_WriteLine("integration test elasticnodemiddleware");
+    uart_WaitUntilDone();
 
     elasticnode_initialise();
 
@@ -24,8 +28,17 @@ int main() {
     !BitManipulation_bitIsSetOnArray(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B)) {
 
         BitManipulation_setBit(&PORTD, PD4);
+        uart_WriteLine("elasticnode_initialise() successful");
+        uart_WaitUntilDone();
     }
 
+}
 
 
+ISR(USART1_RX_vect) {
+        uart_ISR_Receive();
+}
+
+ISR(USART1_TX_vect) {
+        uart_ISR_Transmit();
 }

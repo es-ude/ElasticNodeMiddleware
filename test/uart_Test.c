@@ -9,7 +9,6 @@
 #include "lib/interruptManager/MockinterruptManager.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"
-#include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 circularBuffer sendingBuf;
 void (*uartReceiveHandler)(uint8_t);
