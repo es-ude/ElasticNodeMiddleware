@@ -48,7 +48,8 @@ ISR(USART1_RX_vect) {
 ISR(USART1_TX_vect) {
     uart_ISR_Transmit();
 }
-/* ISR(FPGA_DONE_INT_VECTOR)
+ISR(FPGA_DONE_INT_VECTOR)
 {
     reconfigure_interruptSR();
-}*/
+    uart_WriteLine("interrupt service routine successful");
+}
