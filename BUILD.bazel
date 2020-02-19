@@ -167,6 +167,59 @@ cc_library(
     ],
 )
 
+##### DYNAMIC MEMORY MANAGEMENT #####
+
+cc_library(
+    name = "Malloc_mwLib",
+    srcs = ["lib/DynamicMemoryManagement/malloc_mw.c"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:Malloc_mwLibHdr"
+    ],
+)
+
+cc_library(
+    name = "HeapsLib",
+    srcs = ["lib/DynamicMemoryManagement/heaps.c"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:HeapsLibHdr",
+             "//:Malloc_mwLibHdr",
+             "//:XMemLibHdr"],
+)
+
+cc_library(
+    name = "Stack_depthLib",
+    srcs = ["lib/DynamicMemoryManagement/stack_depth.c"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:Stack_depthLibHdr",
+             "//:UartLibHdr"],
+)
+
+cc_library(
+    name = "InputManagementLib",
+    srcs = ["lib/DynamicMemoryManagement/InputManagement.c"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:Stack_depthLibHdr",
+             "//:InputManagementLibHdr"],
+)
+
+cc_library(
+    name = "TaskLib",
+    srcs = ["lib/DynamicMemoryManagement/Task.c"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:TaskLibHdr",
+             "//:InputManagementLibHdr",
+             "//:Stack_depthLibHdr",
+             "//:MemoryManagementLibHdr"],
+)
+
+cc_library(
+    name = "MemoryManagementLib",
+    srcs = ["lib/DynamicMemoryManagement/MemoryManagement.c"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:MemoryManagementLibHdr",
+             "//:TaskLibHdr",
+             "//:Stack_depthLibHdr"],
+)
 exports_files(
     srcs = [
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
@@ -181,6 +234,14 @@ exports_files(
         "lib/uart/uart.h",
         "lib/uart/uart_internal.h",
         "lib/xmem/xmem.h",
+        #dynamic MM
+        "lib/DynamicMemoryManagement/TaskGraphConfig.h",
+        "lib/DynamicMemoryManagement/malloc_mw.h",
+        "lib/DynamicMemoryManagement/heaps.h",
+        "lib/DynamicMemoryManagement/stack_depth.h",
+        "lib/DynamicMemoryManagement/InputManagement.h",
+        "lib/DynamicMemoryManagement/Task.h",
+        "lib/DynamicMemoryManagement/MemoryManagement.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -265,4 +326,65 @@ cc_library(
         "lib/pinDefinition/fpgaRegisters.h",
     ],
     visibility = ["//visibility:public"],
+)
+
+##### Dynamic Memory Management #####
+
+cc_library(
+    name = "TaskGraphConfigLibHdr",
+    hdrs = ["lib/DynamicMemoryManagement/TaskGraphConfig.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "Malloc_mwLibHdr",
+    hdrs = ["lib/DynamicMemoryManagement/malloc_mw.h"],
+    visibility = ["//visibility:public"],
+    deps = [],
+)
+
+
+cc_library(
+    name = "HeapsLibHdr",
+    hdrs = ["lib/DynamicMemoryManagement/heaps.h"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:Malloc_mwLibHdr",
+             "//:XMemLibHdr"],
+)
+
+
+cc_library(
+    name = "Stack_depthLibHdr",
+    hdrs = ["lib/DynamicMemoryManagement/stack_depth.h"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:UartLibHdr"],
+)
+
+cc_library(
+    name = "InputManagementLibHdr",
+    hdrs = ["lib/DynamicMemoryManagement/InputManagement.h"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:Stack_depthLibHdr"],
+)
+
+cc_library(
+    name = "TaskLibHdr",
+    hdrs = ["lib/DynamicMemoryManagement/Task.h",
+            "lib/DynamicMemoryManagement/MemoryManagement.h"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:InputManagementLib",
+             "//:Stack_depthLibHdr",
+             #"//:MemoryManagementLibHdr"
+             ],
+)
+
+cc_library(
+    name = "MemoryManagementLibHdr",
+    hdrs = ["lib/DynamicMemoryManagement/MemoryManagement.h",
+            "lib/DynamicMemoryManagement/Task.h"],
+    visibility = ["//visibility:public"],
+    deps = [ #"//:TaskLibHdr",
+             "//:Stack_depthLibHdr"],
 )

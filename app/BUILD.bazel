@@ -20,6 +20,24 @@ default_embedded_binary(
             ]
 )
 
+default_embedded_binary(
+    name = "main_dynamicMM",
+    srcs = ["main_dynamicMM.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = ["//app/setup:Setup",
+            "//:TaskGraphConfigLibHdr",
+            "//:Malloc_mwLib",
+            "//:HeapsLib",
+            "//:Stack_depthLib",
+            "//:UartLib",
+            "//:XMemLib",
+            "//:InputManagementLib",
+            "//:TaskLib",
+            "//:MemoryManagementLib"
+            ]
+)
+
 genrule(
     name = "Avr_dude_upload_script",
     outs = ["upload.sh"],
