@@ -10,12 +10,9 @@
 #include "lib/pinDefinition/fpgaPins.h"
 
 circularBuffer sendingBuf;
-circularBuffer* ptr_sendingBuf = &sendingBuf;
 void (*uartReceiveHandler)(uint8_t);
 uint8_t sendingFlag;
-uint8_t* ptr_sendingFlag = &sendingFlag;
 uint8_t sendingData;
-uint8_t* ptr_sendingData = &sendingData;
 volatile uint8_t receivedData;
 
 void uart_WaitUntilDone(void){

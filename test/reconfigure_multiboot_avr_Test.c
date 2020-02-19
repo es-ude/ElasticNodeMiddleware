@@ -11,12 +11,10 @@
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 
-uint8_t fpga_done_int_reg;
-uint8_t fpga_done_int_control_reg;
 uint8_t pin_fpga_done;
 
-uint8_t* FPGA_DONE_INT_REG = &fpga_done_int_reg;
-uint8_t* FPGA_DONE_INT_CONTROL_REG = &fpga_done_int_control_reg;
+uint8_t FPGA_DONE_INT_REG = 0;
+uint8_t FPGA_DONE_INT_CONTROL_REG = 0;
 uint8_t* PIN_FPGA_DONE = &pin_fpga_done;
 
 uint8_t memoryarea[2000];
@@ -26,8 +24,6 @@ extern volatile uint8_t fpgaDoneResponse;
 extern volatile uint8_t *AddressMultiboot;
 
 void initalise_reconfigure_multiboot_mockRegister(void) {
-    FPGA_DONE_INT_REG = &fpga_done_int_reg;
-    FPGA_DONE_INT_CONTROL_REG = &fpga_done_int_control_reg;
     PIN_FPGA_DONE = &pin_fpga_done;
 }
 
@@ -44,9 +40,9 @@ void writeMultiboot(uint32_t address) {
 void test_initMultiboot(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    BitManipulation_clearBit_Expect(FPGA_DONE_INT_REG, FPGA_DONE_INT);
-    BitManipulation_setBit_Expect(FPGA_DONE_INT_REG, FPGA_DONE_INT);
-    BitManipulation_setBit_Expect(FPGA_DONE_INT_CONTROL_REG, FPGA_DONE_INT_CONTROL);
+    //BitManipulation_clearBit_Expect(FPGA_DONE_INT_REG, FPGA_DONE_INT);
+    //BitManipulation_setBit_Expect(FPGA_DONE_INT_REG, FPGA_DONE_INT);
+    //BitManipulation_setBit_Expect(FPGA_DONE_INT_CONTROL_REG, FPGA_DONE_INT_CONTROL);
 
     reconfigure_fpgaMultibootClearComplete_internal_Expect();
     reconfigure_initMultiboot();
@@ -89,7 +85,9 @@ void test_reconfigure_fpgaMultibootComplete(void) {
 void test_interruptSR_case1(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    BitManipulation_bitIsSetOnArray_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE, 1);
+    //make if condition successful
+    *(PIN_FPGA_DONE) |= (1 << P_FPGA_DONE);
+
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     //BEFORE: fpgaDoneResponse = FPGA_DONE_NOTHING
@@ -103,7 +101,9 @@ void test_interruptSR_case1(void) {
 void test_interruptSR_case2(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    BitManipulation_bitIsSetOnArray_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE,1);
+    //make if condition successful
+    *(PIN_FPGA_DONE) |= (1 << P_FPGA_DONE);
+
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_MULTIBOOT;
@@ -136,7 +136,9 @@ void test_interruptSR_case2(void) {
 void test_interruptSR_case3(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    BitManipulation_bitIsSetOnArray_ExpectAndReturn(PIN_FPGA_DONE, P_FPGA_DONE,1);
+    //make if condition successful
+    *(PIN_FPGA_DONE) |= (1 << P_FPGA_DONE);
+
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_NOTHING;

@@ -20,14 +20,6 @@ int main() {
     //variable initialisation tested in unit tests
     reconfigure_initMultiboot();
 
-    if( BitManipulation_bitIsSetOnArray(FPGA_DONE_INT_REG, FPGA_DONE_INT) &&
-    BitManipulation_bitIsSetOnArray(FPGA_DONE_INT_CONTROL_REG, FPGA_DONE_INT_CONTROL)) {
-
-        BitManipulation_setBit(&PORTD, PD4);
-        uart_WriteLine("reconfigure_initMultiboot() successful");
-        uart_WaitUntilDone();
-    }
-
     //testing multiboot --> case 'X'
     BitManipulation_setBit(&PORTD, PD5);
 
