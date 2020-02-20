@@ -11,7 +11,10 @@
 #ifdef TEST
 #else
 
+// ##### CHANGED #####
+#ifdef UART_DEBUG
 #include <util/delay.h>
+#endif
 
 #endif
 
