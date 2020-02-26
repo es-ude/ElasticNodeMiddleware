@@ -6,7 +6,6 @@
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/elasticNodeMiddleware/MockelasticNodeMiddleware_internal.h"
 #include "lib/xmem/Mockxmem.h"
-#include "lib/reconfigure_multiboot_avr/Mockreconfigure_multiboot_avr.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 uint8_t port_fpga_program_b;
@@ -111,23 +110,6 @@ void test_elasticnodemiddlewareticnode_FPGAPowerOn(void){
 void test_elasticnode_FPGAPowerOff(void){
     elasticnode_fpgaPowerOff_internal_Expect();
     elasticnode_fpgaPowerOff();
-}
-
-void test_elasticnode_configureFrom(void) {
-    initialise_mockRegister();
-    uint32_t address = 0x23409;
-
-    reconfigure_fpgaMultiboot_Expect(address);
-    reconfigure_fpgaMultibootComplete_ExpectAndReturn(1);
-    elasticnode_configureFrom(address);
-}
-
-void test_elasticnode_getConfiguration(void) {
-    initialise_mockRegister();
-
-    //beliebige Zahl?
-    reconfigure_getMultibootAddress_ExpectAndReturn(0);
-    elasticnode_getLoadedConfiguration();
 }
 
 //block until it has written all of the data to the file

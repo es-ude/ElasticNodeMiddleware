@@ -9,7 +9,6 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:ElasticNodeMiddlewareLibHdr",
-        "//:Reconfigure_multibootLib",
         "//:RegisterDefinitionLibHdr",
         "//:XMemLib",
         "@EmbeddedUtilities//:BitManipulation",
@@ -27,6 +26,30 @@ cc_library(
     deps = [
         "//:ElasticNodeMiddlewareLibHdr",
         "//test:BitManipulationHdrForTesting",
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddleware_ConfigureFPGALib",
+    srcs = [
+        "lib/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.c",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:ElasticNodeMiddleware_ConfigureFPGALibHdr",
+        "//:Reconfigure_multibootLib",
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddleware_ConfigureFPGALibTest",
+    srcs = [
+        "lib/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.c",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:ElasticNodeMiddleware_ConfigureFPGALibHdr",
     ],
 )
 
@@ -193,7 +216,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:Stack_depthLibHdr",
-        "//:UartLibHdr",
+        "//:UartLib",
     ],
 )
 
@@ -285,29 +308,37 @@ cc_library(
     hdrs = [
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
         "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
-        "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
         "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
-        #"//:Reconfigure_MultibootLibHdr"
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddleware_ConfigureFPGALibHdr",
+    hdrs = [
+        "lib/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:Reconfigure_MultibootLibHdr",
     ],
 )
 
 cc_library(
     name = "Reconfigure_MultibootLibHdr",
     hdrs = [
-        "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
+        "//:ElasticNodeMiddlewareLibHdr",
+        "//:Interrupt_ManagerLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
-        "//:Interrupt_ManagerLibHdr",
-        #"//:ElasticNodeMiddlewareLibHdr"
     ],
 )
 
@@ -405,14 +436,13 @@ cc_library(
 cc_library(
     name = "TaskLibHdr",
     hdrs = [
-        "lib/DynamicMemoryManagement/MemoryManagement.h",
         "lib/DynamicMemoryManagement/Task.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
         "//:InputManagementLib",
+        "//:MemoryManagementLibHdr",
         "//:Stack_depthLibHdr",
-        #"//:MemoryManagementLibHdr"
     ],
 )
 
@@ -420,13 +450,10 @@ cc_library(
     name = "MemoryManagementLibHdr",
     hdrs = [
         "lib/DynamicMemoryManagement/MemoryManagement.h",
-        "lib/DynamicMemoryManagement/Task.h",
     ],
     visibility = ["//visibility:public"],
     deps = [
-        #"//:TaskLibHdr",
         "//:Stack_depthLibHdr",
-        #InputManager in Task
-        "//:InputManagementLibHdr",
+        "//:TaskLibHdr",
     ],
 )

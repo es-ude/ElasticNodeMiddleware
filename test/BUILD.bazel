@@ -93,7 +93,6 @@ unity_test(
     deps = [
         "mock_Bitmanipulation",
         "mock_ElasticNodeMiddleware_Internal",
-        "mock_Reconfigure_Multiboot",
         "mock_Xmem",
         "//:ElasticNodeMiddlewareLibTest",
     ],
@@ -106,6 +105,16 @@ unity_test(
     deps = [
         "mock_Bitmanipulation",
         "//:ElasticNodeMiddlewareLibTest",
+    ],
+)
+
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "elasticNodeMiddleware_configureFPGA_Test.c",
+    deps = [
+        "mock_Reconfigure_Multiboot",
+        "//:ElasticNodeMiddleware_ConfigureFPGALibTest",
     ],
 )
 

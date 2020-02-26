@@ -7,7 +7,6 @@
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/xmem/xmem.h"
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
@@ -40,15 +39,6 @@ void elasticnode_fpgaPowerOn(void) {
 
 void elasticnode_fpgaPowerOff(void) {
     elasticnode_fpgaPowerOff_internal();
-}
-
-void elasticnode_configureFrom(uint32_t address){
-    reconfigure_fpgaMultiboot(address);
-    while(!reconfigure_fpgaMultibootComplete());
-}
-
-uint32_t elasticnode_getLoadedConfiguration(void){
-    return reconfigure_getMultibootAddress();
 }
 
 void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data){

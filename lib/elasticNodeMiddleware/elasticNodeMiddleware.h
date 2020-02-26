@@ -32,9 +32,6 @@ void elasticnode_fpgaPowerOff(void);
 
 // TODO: implement void elasticnode_fpgaSleep(uint8_t sleepmode);
 
-void elasticnode_configureFrom(uint32_t address);
-uint32_t elasticnode_getLoadedConfiguration(void);
-
 void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data);
 void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data);
 uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address);
