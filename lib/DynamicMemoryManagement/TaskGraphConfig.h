@@ -4,6 +4,7 @@
 #define AMOUNT_TASKS 22
 #define AMOUNT_DEPENDENCIES 28
 
+// ##### for testing the variable must be static #####
 uint8_t dependencies[2 * AMOUNT_DEPENDENCIES] = {
         0, 1,
         0, 2,
@@ -35,6 +36,7 @@ uint8_t dependencies[2 * AMOUNT_DEPENDENCIES] = {
         20, 21,
 };
 
+// ##### for testing the variable must be static #####
 uint8_t inputArray[AMOUNT_TASKS] = {
         0,
         1,
@@ -60,6 +62,7 @@ uint8_t inputArray[AMOUNT_TASKS] = {
         2,
 };
 
+// ##### for testing the variable must be static #####
 uint8_t outputArray[AMOUNT_TASKS] = {
         2,
         2,
@@ -84,6 +87,7 @@ uint8_t outputArray[AMOUNT_TASKS] = {
         1,
         0,
 };
+// ##### for testing the variable must be static #####
 uint16_t resultSize()
 {
     return 100*sizeof(uint8_t);

@@ -205,6 +205,7 @@ void test_markAndSweep(void)
     }
     garbageCollection();
 }
+// ##### this test doesn't work #####
 #ifdef RUNEXPENSIVESHIT
 void test_expensiveTest(void)
 {

@@ -10,7 +10,7 @@
 #include "lib/uart/uart.h"
 #include <avr/interrupt.h>
 //test if Bits are set + testing multiboot
-//4th LED on + 5th LED blink
+//5th LED blink
 int main() {
     uart_Init(NULL);
     DDRD = 0xff;

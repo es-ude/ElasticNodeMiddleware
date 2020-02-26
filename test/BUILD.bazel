@@ -202,16 +202,16 @@ unity_test(
     ]
 )
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "test_MemoryManagement.c",
-#    deps = [
-#        "//:MemoryManagementLibTest",
-#        #because of cycle dependency
-#        "//:TaskLibTest"
-#    ]
-#)
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "test_MemoryManagement.c",
+    deps = [
+        "//:MemoryManagementLibTest",
+        #because of cycle dependency
+        "//:TaskLibTest"
+    ]
+)
 
 unity_test(
     cexception = False,
@@ -232,16 +232,16 @@ unity_test(
              "//:MemoryManagementLibTest"]
 )
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "test_lazy.c",
-#    deps = [ "//:TaskLibTest",
-#             "//:InputManagementLibTest",
-#             "//:MemoryManagementLibTest",
-#             "//:TaskGraphConfigLibHdr"
-#             ]
-#)
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "test_lazy.c",
+    deps = [ "//:TaskLibTest",
+             "//:InputManagementLibTest",
+             "//:MemoryManagementLibTest",
+             "//:TaskGraphConfigLibHdr"
+             ]
+)
 
 unity_test(
     cexception = False,

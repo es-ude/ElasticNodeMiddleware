@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 #include "lib/uart/uart.h"
 #include <avr/interrupt.h>
@@ -52,4 +53,10 @@ ISR(USART1_RX_vect) {
 
 ISR(USART1_TX_vect) {
         uart_ISR_Transmit();
+}
+
+ISR(FPGA_DONE_INT_VECTOR)
+{
+    reconfigure_interruptSR();
+    uart_WriteLine("FPGA Done");
 }

@@ -43,7 +43,8 @@ default_embedded_binary(
     deps = ["//app/setup:Setup",
             "//:Reconfigure_multibootLib",
             "//:ElasticNodeMiddlewareLib",
-            "//:UartLib"
+            "//:UartLib",
+            #"//:XMemLib"
             ]
 )
 

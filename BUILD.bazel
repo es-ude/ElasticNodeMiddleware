@@ -9,8 +9,8 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:ElasticNodeMiddlewareLibHdr",
-        "//:RegisterDefinitionLibHdrs",
-        "//:XMemLib",
+        "//:RegisterDefinitionLibHdr",
+        "//:XMemLibHdr",
         "@EmbeddedUtilities//:BitManipulation",
     ],
 )
@@ -37,9 +37,9 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//:Interrupt_ManagerLib",
+        "//:Interrupt_ManagerLibHdr",
         "//:Reconfigure_MultibootLibHdr",
-        "//:RegisterDefinitionLibHdrs",
+        "//:RegisterDefinitionLibHdr",
         "//:XMemLib",
         "@EmbeddedUtilities//:BitManipulation",
     ],
@@ -64,7 +64,7 @@ cc_library(
     srcs = ["lib/xmem/xmem.c"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:RegisterDefinitionLibHdrs",
+        "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
         "@EmbeddedUtilities//:BitManipulation",
     ],
@@ -109,8 +109,8 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:CircularBufferLib",
-        "//:Interrupt_ManagerLib",
-        "//:RegisterDefinitionLibHdrs",
+        "//:Interrupt_ManagerLibHdr",
+        "//:RegisterDefinitionLibHdr",
         "//:UartLibHdr",
         "@EmbeddedUtilities//:BitManipulation",
     ],
@@ -140,7 +140,7 @@ cc_library(
     deps = [
         "//:CircularBufferLibHdr",
         "//:Interrupt_ManagerLib",
-        "//:RegisterDefinitionLibHdrs",
+        "//:RegisterDefinitionLibHdr",
     ],
 )
 
@@ -276,7 +276,7 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//:RegisterDefinitionLibHdrs",
+        "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
         #"//:Reconfigure_MultibootLibHdr"
     ],
@@ -291,7 +291,7 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//:RegisterDefinitionLibHdrs",
+        "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
         "//:Interrupt_ManagerLibHdr",
         #"//:ElasticNodeMiddlewareLibHdr"
@@ -303,7 +303,7 @@ cc_library(
     hdrs = ["lib/xmem/xmem.h"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:RegisterDefinitionLibHdrs",
+        "//:RegisterDefinitionLibHdr",
     ],
 )
 
@@ -326,7 +326,7 @@ cc_library(
     deps = [
         "//:CircularBufferLibHdr",
         "//:Interrupt_ManagerLibHdr",
-        "//:RegisterDefinitionLibHdrs",
+        "//:RegisterDefinitionLibHdr",
     ],
 )
 
@@ -336,12 +336,12 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:Interrupt_ManagerLibHdr",
-        "//:RegisterDefinitionLibHdrs"
+        "//:RegisterDefinitionLibHdr"
     ],
 )
 
 cc_library(
-    name = "RegisterDefinitionLibHdrs",
+    name = "RegisterDefinitionLibHdr",
     hdrs = [
         "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
