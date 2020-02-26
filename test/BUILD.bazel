@@ -86,7 +86,6 @@ mock(
     deps = ["//:UartLibHdr"],
 )
 
-
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
@@ -153,16 +152,16 @@ unity_test(
     ],
 )
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "circularBuffer_Test.c",
-#    deps = [
-#        "mock_Bitmanipulation",
-#        "mock_InterruptManager",
-#        "//:CircularBufferLibTest",
-#    ],
-#)
+unity_test(
+    cexception = False,
+    copts = ["-DTEST"],
+    file_name = "circularBuffer_Test.c",
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_InterruptManager",
+        "//:CircularBufferLibTest",
+    ],
+)
 
 unity_test(
     cexception = False,
@@ -185,8 +184,8 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "uart_internal_Test.c",
     deps = [
-        "mock_circularBuffer",
         "mock_InterruptManager",
+        "mock_circularBuffer",
         "//:UartLibTest",
     ],
 )
@@ -198,56 +197,61 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "test_InputManagement.c",
     deps = [
-        "//:InputManagementLibTest"
-    ]
+        "//:InputManagementLibTest",
+    ],
 )
 
-unity_test(
-    cexception = False,
-    copts = ["-DTEST"],
-    file_name = "test_MemoryManagement.c",
-    deps = [
-        "//:MemoryManagementLibTest",
-        #because of cycle dependency
-        "//:TaskLibTest"
-    ]
-)
+#unity_test(
+#    cexception = False,
+#    copts = ["-DTEST"],
+#    file_name = "test_MemoryManagement.c",
+#    deps = [
+#        "//:MemoryManagementLibTest",
+#        #because of cycle dependency
+#        "//:TaskLibTest"
+#    ]
+#)
 
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
     file_name = "test_Task.c",
-    deps = [ "//:TaskLibTest",
-             #because of cycle dependency
-             "//:MemoryManagementLibTest"]
+    deps = [
+        "//:TaskLibTest",
+        #because of cycle dependency
+        "//:MemoryManagementLibTest",
+    ],
 )
-
 
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
     file_name = "test_Integration.c",
-    deps = [ "//:TaskLibTest",
-             "//:InputManagementLibTest",
-             "//:MemoryManagementLibTest"]
+    deps = [
+        "//:InputManagementLibTest",
+        "//:MemoryManagementLibTest",
+        "//:TaskLibTest",
+    ],
 )
 
-unity_test(
-    cexception = False,
-    copts = ["-DTEST"],
-    file_name = "test_lazy.c",
-    deps = [ "//:TaskLibTest",
-             "//:InputManagementLibTest",
-             "//:MemoryManagementLibTest",
-             "//:TaskGraphConfigLibHdr"
-             ]
-)
+#unity_test(
+#    cexception = False,
+#    copts = ["-DTEST"],
+#    file_name = "test_lazy.c",
+#    deps = [ "//:TaskLibTest",
+#             "//:InputManagementLibTest",
+#             "//:MemoryManagementLibTest",
+#             "//:TaskGraphConfigLibHdr"
+#             ]
+#)
 
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
     file_name = "test_MatrixMultiplication.c",
-    deps = [ "//:TaskLibTest",
-             "//:InputManagementLibTest",
-             "//:MemoryManagementLibTest"]
+    deps = [
+        "//:InputManagementLibTest",
+        "//:MemoryManagementLibTest",
+        "//:TaskLibTest",
+    ],
 )

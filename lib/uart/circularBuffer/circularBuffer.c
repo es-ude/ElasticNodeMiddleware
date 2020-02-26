@@ -57,8 +57,6 @@ uint8_t circularBuffer_Push(circularBuffer *c, uint8_t data){
    }
 
    // store new data
-
-   //ERROR!
    *c->head = data;
 
    // find pointer for next data

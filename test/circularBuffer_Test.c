@@ -9,6 +9,10 @@
 
 uint8_t SREG = 0xBF;
 
+void init_circularBufferHead(circularBuffer *c) {
+    c->head = c->buffer;
+}
+
 void test_circularBuffer_Init(void) {
 
     circularBuffer sendingBuf;
@@ -55,6 +59,9 @@ void test_circularBuffer_push(void) {
     circularBuffer sendingBuf;
     circularBuffer* c = &sendingBuf;
     uint8_t data = 33;
+
+    //for dereference *c->head
+    init_circularBufferHead(c);
 
     uint8_t* checkVarHead = c->head;
     uint16_t checkVarLen = c->currentLen;

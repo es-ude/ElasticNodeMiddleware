@@ -40,10 +40,6 @@ void writeMultiboot(uint32_t address) {
 void test_initMultiboot(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
-    //BitManipulation_clearBit_Expect(FPGA_DONE_INT_REG, FPGA_DONE_INT);
-    //BitManipulation_setBit_Expect(FPGA_DONE_INT_REG, FPGA_DONE_INT);
-    //BitManipulation_setBit_Expect(FPGA_DONE_INT_CONTROL_REG, FPGA_DONE_INT_CONTROL);
-
     reconfigure_fpgaMultibootClearComplete_internal_Expect();
     reconfigure_initMultiboot();
 
