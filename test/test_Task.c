@@ -6,6 +6,8 @@
 #include "lib/DynamicMemoryManagement/Task.h"
 #include "lib/DynamicMemoryManagement/InputManagement.h"
 #include "lib/DynamicMemoryManagement/MemoryManagement.h"
+#include "lib/DynamicMemoryManagement/Task_Freed.h"
+#include "lib/DynamicMemoryManagement/TaskDefinitions.h"
 
 #include <stdlib.h>
 
@@ -76,18 +78,22 @@ void test_currentTaskZero(void){
 }
 
 void test_taskInput(){
-    TEST_ASSERT_EQUAL_UINT8(0, Task_getTask(graph,0)->inputCount);
-    TEST_ASSERT_EQUAL_UINT8(1, Task_getTask(graph,1)->inputCount);
-    TEST_ASSERT_EQUAL_UINT8(1, Task_getTask(graph,2)->inputCount);
-    TEST_ASSERT_EQUAL_UINT8(2, Task_getTask(graph,3)->inputCount);
+    TEST_ASSERT_EQUAL_UINT8(0, TaskDefinition_getTask(graph, 0)->inputCount);
+    TEST_ASSERT_EQUAL_UINT8(1, TaskDefinition_getTask(graph, 1)->inputCount);
+    TEST_ASSERT_EQUAL_UINT8(1, TaskDefinition_getTask(graph, 2)->inputCount);
+    TEST_ASSERT_EQUAL_UINT8(2, TaskDefinition_getTask(graph, 3)->inputCount);
 }
 
 void test_dependencies(){
 
-    TEST_ASSERT_EQUAL_PTR(Task_getTask(graph,0), Task_getTask(graph,Task_getTask(graph,1)->inputNodes[0]));
-    TEST_ASSERT_EQUAL_PTR(Task_getTask(graph,0), Task_getTask(graph,Task_getTask(graph,2)->inputNodes[0]));
-    TEST_ASSERT_EQUAL_PTR(Task_getTask(graph,1), Task_getTask(graph,Task_getTask(graph,3)->inputNodes[0]));
-    TEST_ASSERT_EQUAL_PTR(Task_getTask(graph,2), Task_getTask(graph,Task_getTask(graph,3)->inputNodes[1]));
+    TEST_ASSERT_EQUAL_PTR(TaskDefinition_getTask(graph, 0),
+                          TaskDefinition_getTask(graph, TaskDefinition_getTask(graph, 1)->inputNodes[0]));
+    TEST_ASSERT_EQUAL_PTR(TaskDefinition_getTask(graph, 0),
+                          TaskDefinition_getTask(graph, TaskDefinition_getTask(graph, 2)->inputNodes[0]));
+    TEST_ASSERT_EQUAL_PTR(TaskDefinition_getTask(graph, 1),
+                          TaskDefinition_getTask(graph, TaskDefinition_getTask(graph, 3)->inputNodes[0]));
+    TEST_ASSERT_EQUAL_PTR(TaskDefinition_getTask(graph, 2),
+                          TaskDefinition_getTask(graph, TaskDefinition_getTask(graph, 3)->inputNodes[1]));
 }
 
 

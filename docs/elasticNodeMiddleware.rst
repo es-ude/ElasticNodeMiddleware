@@ -8,6 +8,6 @@
 
 -write and read
 
--configure fpga and get last configuration
-
 -soft and hard reset
+
+-->configure fpga and get last configuration

@@ -46,14 +46,6 @@ static void cleanUpTask(Task *task, void (*deallocation)(void *ptr))
     }
 }
 
-uint8_t MM_taskIsFreed(TaskGraph *graph, uint8_t index)
-{
-#ifdef UART_DEBUG
-    printStackPointer(__FUNCTION_NAME__, SP);
-#endif
-    return isFreed(Task_getTask(graph, index));
-}
-
 #if GARBAGE_COLLECTION_TYPE == TRACING
 /**
  * We check whether our task is marked and if it is not yet marked, we mark it to indicate
@@ -151,7 +143,7 @@ void MM_referenceCountingGarbageCollectorRun(TaskGraph *graph, void (*deallocati
     uint8_t taskWasCleanedUp = 0;
     for (uint8_t index = graph->freedTasks; index < graph->amountTasks - 1; index++)
     {
-        Task *task = Task_getTask(graph, index);
+        Task *task = TaskDefinition_getTask(graph, index);
         if (task->counter == 0)
         {
             cleanUpTask(task, deallocation);
@@ -165,6 +157,12 @@ void MM_referenceCountingGarbageCollectorRun(TaskGraph *graph, void (*deallocati
 }
 #endif
 
+/* #####
+ * iterate over all task and check if indicies array contains current task for any task
+ * indicies array = stores for each task the last task, which results are needed, after that it can be freed
+ * if yes --> clean up task, mark it in counter as freed, set taskWasCleanedUp to a non-zero value
+ * At the end of loop: if taskWasCleanedUp != 0 --> at least one task was freed --> might shrink array
+ */
 #if GARBAGE_COLLECTION_TYPE == HARDCODED
 void MM_hardcodedGarbageCollectorRun(TaskGraph *graph, uint8_t *indices, void (*deallocation)(void *ptr))
 {

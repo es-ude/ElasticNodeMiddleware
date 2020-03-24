@@ -216,8 +216,6 @@ unity_test(
 #    file_name = "test_MemoryManagement.c",
 #    deps = [
 #        "//:MemoryManagementLibTest",
-#        #because of cycle dependency
-#        "//:TaskLibTest"
 #    ]
 #)
 
@@ -227,8 +225,10 @@ unity_test(
     file_name = "test_Task.c",
     deps = [
         "//:TaskLibTest",
-        #because of cycle dependency
+        "//:InputManagementLibTest",
         "//:MemoryManagementLibTest",
+        "//:TaskDefinitionsLibTest",
+        "//:Task_FreedLibTest"
     ],
 )
 
@@ -240,6 +240,9 @@ unity_test(
         "//:InputManagementLibTest",
         "//:MemoryManagementLibTest",
         "//:TaskLibTest",
+        "//:MemoryManagementDefinitionsLibTest",
+        "//:TaskDefinitionsLibTest",
+        "//:Task_FreedLibTest"
     ],
 )
 
@@ -262,5 +265,7 @@ unity_test(
         "//:InputManagementLibTest",
         "//:MemoryManagementLibTest",
         "//:TaskLibTest",
+        "//:TaskDefinitionsLibTest",
+        "//:Task_FreedLibTest"
     ],
 )

@@ -6,6 +6,8 @@
 #include "lib/DynamicMemoryManagement/Task.h"
 #include "lib/DynamicMemoryManagement/InputManagement.h"
 #include "lib/DynamicMemoryManagement/MemoryManagement.h"
+#include "lib/DynamicMemoryManagement/TaskDefinitions.h"
+#include "lib/DynamicMemoryManagement/Task_Freed.h"
 
 static uint16_t allocationCount = 0;
 void *safe_allocation(size_t size)
@@ -236,7 +238,7 @@ void test_TaskA(void)
         Task_prepareTask(graph, resultSizeFunctions[task]);
         tasks[task]();
     }
-    uint8_t *iptr = (uint8_t *)Task_getTask(graph, A)->result;
+    uint8_t *iptr = (uint8_t *) TaskDefinition_getTask(graph, A)->result;
     TEST_ASSERT_EQUAL_UINT8(2, iptr[0]);
     TEST_ASSERT_EQUAL_UINT8(3, iptr[1]);
     TEST_ASSERT_EQUAL_UINT8(2, iptr[2]);
@@ -256,7 +258,7 @@ void test_taskB()
         Task_prepareTask(graph, resultSizeFunctions[task]);
         tasks[task]();
     }
-    uint8_t *iptr = (uint8_t *)Task_getTask(graph, B)->result;
+    uint8_t *iptr = (uint8_t *) TaskDefinition_getTask(graph, B)->result;
     TEST_ASSERT_EQUAL_UINT8(2, iptr[0]);
     TEST_ASSERT_EQUAL_UINT8(3, iptr[1]);
     for (int i = 0; i < 6; i++)
@@ -279,7 +281,7 @@ void test_taskC()
         Task_prepareTask(graph,  resultSizeFunctions[task]);
         tasks[task]();
     }
-    uint8_t *iptr = (uint8_t *)Task_getTask(graph, C)->result;
+    uint8_t *iptr = (uint8_t *) TaskDefinition_getTask(graph, C)->result;
     TEST_ASSERT_EQUAL_UINT8(3, iptr[0]);
     TEST_ASSERT_EQUAL_UINT8(2, iptr[1]);
     for (int i = 0; i < 6; i++)
@@ -302,7 +304,7 @@ void test_taskD()
         Task_prepareTask(graph, resultSizeFunctions[task]);
         tasks[task]();
     }
-    uint8_t *iptr = (uint8_t *)Task_getTask(graph, D)->result;
+    uint8_t *iptr = (uint8_t *) TaskDefinition_getTask(graph, D)->result;
     TEST_ASSERT_EQUAL_UINT8(2, iptr[0]);
     TEST_ASSERT_EQUAL_UINT8(2, iptr[1]);
     TEST_ASSERT_EQUAL_UINT8(58, iptr[2]);

@@ -4,6 +4,9 @@
 #define AMOUNT_TASKS 22
 #define AMOUNT_DEPENDENCIES 28
 
+/* ##### TaskGraph Definitions
+    dependency array: ordering important
+    even index = origin, odd index = destination */
 // ##### for testing the variable must be static #####
 uint8_t dependencies[2 * AMOUNT_DEPENDENCIES] = {
         0, 1,
@@ -35,7 +38,8 @@ uint8_t dependencies[2 * AMOUNT_DEPENDENCIES] = {
         19, 21,
         20, 21,
 };
-
+/* ##### number = how many input task this task has
+    --> allocate for each task an array that is big enough to store indicies of its input tasks */
 // ##### for testing the variable must be static #####
 uint8_t inputArray[AMOUNT_TASKS] = {
         0,
@@ -62,6 +66,8 @@ uint8_t inputArray[AMOUNT_TASKS] = {
         2,
 };
 
+/* ##### number = how many output task this task has
+    --> initalize reference counter for garbage collection (some algorithms) */
 // ##### for testing the variable must be static #####
 uint8_t outputArray[AMOUNT_TASKS] = {
         2,

@@ -1,6 +1,8 @@
 #include "Task.h"
 #include "InputManagement.h"
-#include "MemoryManagement.h"
+
+// ##### CHANGED #####
+#include "lib/DynamicMemoryManagement/Task_Freed.h"
 
 void (*deallocator)(void *ptr);
 void *(*allocator)(size_t size);
@@ -59,10 +61,12 @@ TaskGraph *Task_createTaskGraph(TaskConfig *config)
         }
     } // we need to allocate all buffers first
 
+    // ##### filling inputNodes array (array with indicies of all input nodes of a task)
     for (uint8_t task = 0; task < config->amountTasks; ++task)
     {
         uint8_t index = config->amountTasks - task - 1; //reverse array
         uint8_t inputIndex = 0;
+        // ##### loop over all dependencies and check if destination (odd index) == task --> origin (index before this destination) is input Node
         for (uint16_t i = 0; i < config->dependenciesLength; ++i)
         {
 
@@ -122,12 +126,6 @@ void Task_freeTaskGraph(TaskGraph *graph)
     graph = NULL;
 }
 
-//reverse array for letting it shrink easily in Task_realloc
-Task *Task_getTask(TaskGraph *graph, uint8_t index)
-{
-    return &graph->tasks[graph->amountTasks - index - 1];
-}
-
 /**
  * We start with Task 0 and look how many consecutive tasks starting with Task 0 can be freed
  * We realloc to a smaller buffer and count how many consecutive tasks we found, to not visit them 
@@ -138,7 +136,9 @@ void Task_realloc(TaskGraph *graph)
 #ifdef UART_DEBUG
     printStackPointer(__FUNCTION_NAME__, SP);
 #endif
-    while (MM_taskIsFreed(graph, graph->freedTasks))
+    // ##### CHANGED #####
+    //while (MM_taskIsFreed(graph, graph->freedTasks))
+    while (Task_Freed_taskIsFreed(graph, graph->freedTasks))
     {
         if (graph->freedTasks == graph->amountTasks)
         {
@@ -166,7 +166,7 @@ static void Task_prepareInput(Task *newTask, TaskGraph *graph, uint16_t *offset)
     uint8_t inputCount = newTask->inputCount;
     for (uint8_t i = 0; i < inputCount; ++i)
     {
-        Task *inputNode = Task_getTask(graph, newTask->inputNodes[i]);
+        Task *inputNode = TaskDefinition_getTask(graph, newTask->inputNodes[i]);
 #if GARBAGE_COLLECTION_TYPE == REFERENCE_COUNTING
         inputNode->counter--;
 #endif
@@ -178,6 +178,8 @@ static void Task_prepareInput(Task *newTask, TaskGraph *graph, uint16_t *offset)
 
 }
 
+/* ##### allocate buffer of calculated result size on shared memory & save returned address in task
+ *  write address of result into IMA*/
 static void Task_prepareOutput(Task *newTask, uint16_t offset, uint16_t (*calculateResultSize)(void))
 {
     uint16_t resultSize = calculateResultSize();
@@ -194,9 +196,11 @@ static void Task_prepareOutput(Task *newTask, uint16_t offset, uint16_t (*calcul
 
 }
 
+// ##### offset = where to write several inputs, after that, following free space for calculate result size
+// ##### result size possible dependent on input
 void Task_prepareTask(TaskGraph *graph, uint16_t (*calculateResultSize)(void))
 {
-    Task *newTask = Task_getTask(graph, graph->currentTask);
+    Task *newTask = TaskDefinition_getTask(graph, graph->currentTask);
     uint16_t offset = 0; //Where to store following result
 
     Task_prepareInput(newTask, graph, &offset);

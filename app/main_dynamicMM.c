@@ -33,7 +33,11 @@ uint8_t indices[AMOUNT_TASKS];
 
  // Thanks to our dependencies structure we can say that after the last output Node was executed,
  // we can free the task in the next index.
-
+/*
+ * ##### when origin changes in dependencies array --> previous tuple contain last task
+ * add one to it because the latest destination still needs the result of the origin at the beginning
+ * and then add it to indicies array
+ */
 void findGoodCollectionIndices(uint8_t *indices)
 {
     int currentTask = 0;
@@ -50,6 +54,8 @@ void findGoodCollectionIndices(uint8_t *indices)
 #endif
 TaskGraph *graph;
 
+/* ##### 4 different garbage collection algorithms --> define in GARBAGE_COLLECTION_TYPE which one you want to use
+ * naive garbage collection no classic garbage collection algorithm */
 static inline void garbageCollection()
 {
 #if GARBAGE_COLLECTION_TYPE == TRACING

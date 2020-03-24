@@ -10,6 +10,9 @@
  * which never gave its structs typedefs.
  */
 
+/*
+ * ##### modify malloc_heap_start on shared memory to start at bigger value --> free space for IMA
+ */
 struct heaplist {
     struct __freelist *flp;
     char *malloc_heap_start;

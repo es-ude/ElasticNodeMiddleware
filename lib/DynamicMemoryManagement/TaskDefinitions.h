@@ -1,15 +1,12 @@
-#ifndef _TASK_H
-#define _TASK_H
-#include "InputManagement.h"
+//
+// Created by annika on 28.02.20.
+//
+
+#ifndef ELASTICNODEMIDDLEWARE_TASKDEFINITIONS_H
+#define ELASTICNODEMIDDLEWARE_TASKDEFINITIONS_H
+
 #include <stdlib.h>
 #include <stdint.h>
-#include "stack_depth.h"
-extern void* IMA;
-
-// ##### CHANGED #####
-#include "lib/DynamicMemoryManagement/TaskDefinitions.h"
-#define DEBUG_REALLOC
-
 /*
     For each Task we need to know all input nodes
     A: {}
@@ -26,13 +23,14 @@ extern void* IMA;
     Each task has a pointer to its result
     Each task knows how many input nodes it has
     Each task knows how many output nodes it has
-
+*/
 
 
 
 
 typedef struct Task  Task;
 
+//##### inputNodes = inputTasks, result = address where to store result, inputCount = number of input tasks, counter = for garbage collection
 struct Task{
     uint8_t *inputNodes;
     void* result;
@@ -53,21 +51,16 @@ typedef struct TaskConfig{
 } TaskConfig;
 
 typedef struct TaskGraph TaskGraph;
-
+//##### id, tasks = set of tasks, amountTasks = how many tasks, freedTasks = number of freed tasks, currentTask = which task is next
 struct TaskGraph{
     uint8_t id;
     Task* tasks;
     uint8_t amountTasks;
     uint8_t freedTasks;
     uint8_t currentTask;
-};*/
+};
 
-TaskGraph* Task_createTaskGraph(TaskConfig* config);
-void Task_freeTaskGraph(TaskGraph* graph);
-void Task_freeTasks(TaskGraph* graph);
-void Task_realloc(TaskGraph* graphPtr);
+// ##### CHANGED (name) #####
+Task* TaskDefinition_getTask(TaskGraph *graph, uint8_t index);
 
-void Task_prepareTask(TaskGraph* graph, uint16_t (*calculateResultSize)(void));
-
-
-#endif // _TASK_H
+#endif //ELASTICNODEMIDDLEWARE_TASKDEFINITIONS_H
