@@ -9,20 +9,17 @@
 
 void xmem_initXmem(void) {
 
-    /*XMCRA = (1 << SRW11 ) | (1 << SRW10);
-    XMCRB = (1 << XMBK) | (1 << XMM1);*/
     //SRW10 in MCUCR
 
-    BitManipulation_setBit(XMCRA, (SRW11 | SRW10));
-    BitManipulation_setBit(XMCRB, (XMBK | XMM1));
+    XMCRA = (1 << SRW11 ) | (1 << SRW10);
+    XMCRB = (1 << XMBK) | (1 << XMM1);
 
 }
 
 void xmem_enableXmem(void){
 
     //spi disable
-    //SPCR &= ~_BV(SPE);
-    BitManipulation_clearBit(SPCR, SPE);
+    SPCR &= ~(1 << SPE);
 
     *DDR_XMEM_A = XMEM_A_MASK;
     *DDR_XMEM_ALE = XMEM_AD_MASK;

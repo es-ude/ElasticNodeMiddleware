@@ -70,7 +70,10 @@ static inline void garbageCollection()
 int main()
 {
     DDRB |= (1 << PB7) | (1 << PB6) | (1 << PB5) | (1 << PB4);
-    DDRH |= (1 << PH6);
+    // ##### PH6 = OC2B, Output Compare Match B output --> for elastic node: OC2B = PD1
+    // ##### CHANGED #####
+    //DDRH |= (1 << PH6);
+    DDRD |= (1 << PD1);
     DDRE |= (1 << PE1);
 
     uint16_t IMA_size = 256;
@@ -122,9 +125,13 @@ int main()
         PORTB |= (1 << PB4);
         garbageCollection();
         PORTB &= ~(1 << PB4);
-        PORTH |= (1 << PH6);
+        // ##### PH6 = OC2B, Output Compare Match B output --> for elastic node: OC2B = PD1
+        // ##### CHANGED #####
+        //PORTH |= (1 << PH6);
+        PORTD |= (1 << PD1);
         Task_prepareTask(graph, &resultSize);
-        PORTH &= ~(1 << PH6);
+        //PORTH &= ~(1 << PH6);
+        PORTD &= ~(1 << PD1);
 
     }
     PORTB |= (1 << PB4);

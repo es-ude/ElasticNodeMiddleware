@@ -34,7 +34,7 @@ extern uint8_t* PORT_XMEM_RD;
 extern uint8_t* DDR_XMEM_ALE;
 
 extern uint8_t* DDR_XMEM_RD;
-extern uint8_t* SPCR;
+extern uint8_t SPCR;
 
 extern uint8_t* XMCRA;
 extern uint8_t* XMCRB;

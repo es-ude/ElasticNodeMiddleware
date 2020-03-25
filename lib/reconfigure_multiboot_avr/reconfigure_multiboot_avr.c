@@ -16,7 +16,6 @@ volatile uint8_t *AddressMultiboot = (uint8_t *) (XMEM_OFFSET + 0x05);
 
 void reconfigure_initMultiboot(void) {
 
-    //BitManipulation_clearBit(FPGA_DONE_INT_REG, FPGA_DONE_INT);
     FPGA_DONE_INT_REG &= ~FPGA_DONE_INT;
     FPGA_DONE_INT_REG |= (1<<FPGA_DONE_INT);
     FPGA_DONE_INT_CONTROL_REG |= (1<<FPGA_DONE_INT_CONTROL);
