@@ -206,7 +206,7 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "test_InputManagement.c",
     deps = [
-        "//:InputManagementLibTest",
+        "//lib/DynamicMemoryManagement:InputManagementLibTest",
     ],
 )
 
@@ -215,7 +215,7 @@ unity_test(
 #    copts = ["-DTEST"],
 #    file_name = "test_MemoryManagement.c",
 #    deps = [
-#        "//:MemoryManagementLibTest",
+#        "//lib/DynamicMemoryManagement:MemoryManagementLibTest",
 #    ]
 #)
 
@@ -224,11 +224,11 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "test_Task.c",
     deps = [
-        "//:TaskLibTest",
-        "//:InputManagementLibTest",
-        "//:MemoryManagementLibTest",
-        "//:TaskDefinitionsLibTest",
-        "//:Task_FreedLibTest"
+        "//lib/DynamicMemoryManagement:TaskLibTest",
+        "//lib/DynamicMemoryManagement:InputManagementLibTest",
+        "//lib/DynamicMemoryManagement:MemoryManagementLibTest",
+        "//lib/DynamicMemoryManagement:TaskDefinitionsLibTest",
+        "//lib/DynamicMemoryManagement:Task_FreedLibTest"
     ],
 )
 
@@ -237,12 +237,12 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "test_Integration.c",
     deps = [
-        "//:InputManagementLibTest",
-        "//:MemoryManagementLibTest",
-        "//:TaskLibTest",
-        "//:MemoryManagementDefinitionsLibTest",
-        "//:TaskDefinitionsLibTest",
-        "//:Task_FreedLibTest"
+        "//lib/DynamicMemoryManagement:InputManagementLibTest",
+        "//lib/DynamicMemoryManagement:MemoryManagementLibTest",
+        "//lib/DynamicMemoryManagement:TaskLibTest",
+        "//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibTest",
+        "//lib/DynamicMemoryManagement:TaskDefinitionsLibTest",
+        "//lib/DynamicMemoryManagement:Task_FreedLibTest"
     ],
 )
 
@@ -250,10 +250,10 @@ unity_test(
 #    cexception = False,
 #    copts = ["-DTEST"],
 #    file_name = "test_lazy.c",
-#    deps = [ "//:TaskLibTest",
-#             "//:InputManagementLibTest",
-#             "//:MemoryManagementLibTest",
-#             "//:TaskGraphConfigLibHdr"
+#    deps = [ "//lib/DynamicMemoryManagement:TaskLibTest",
+#             "//lib/DynamicMemoryManagement:InputManagementLibTest",
+#             "//lib/DynamicMemoryManagement:MemoryManagementLibTest",
+#             "//lib/DynamicMemoryManagement:TaskGraphConfigLibHdr"
 #             ]
 #)
 
@@ -262,10 +262,10 @@ unity_test(
     copts = ["-DTEST"],
     file_name = "test_MatrixMultiplication.c",
     deps = [
-        "//:InputManagementLibTest",
-        "//:MemoryManagementLibTest",
-        "//:TaskLibTest",
-        "//:TaskDefinitionsLibTest",
-        "//:Task_FreedLibTest"
+        "//lib/DynamicMemoryManagement:InputManagementLibTest",
+        "//lib/DynamicMemoryManagement:MemoryManagementLibTest",
+        "//lib/DynamicMemoryManagement:TaskLibTest",
+        "//lib/DynamicMemoryManagement:TaskDefinitionsLibTest",
+        "//lib/DynamicMemoryManagement:Task_FreedLibTest"
     ],
 )

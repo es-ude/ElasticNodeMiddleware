@@ -26,15 +26,15 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
-            "//:TaskGraphConfigLibHdr",
-            "//:Malloc_mwLib",
-            "//:HeapsLib",
-            "//:Stack_depthLib",
+            "//lib/DynamicMemoryManagement:TaskGraphConfigLibHdr",
+            "//lib/DynamicMemoryManagement:Malloc_mwLib",
+            "//lib/DynamicMemoryManagement:HeapsLib",
+            "//lib/DynamicMemoryManagement:Stack_depthLib",
             "//:UartLib",
             "//:XMemLib",
-            "//:InputManagementLib",
-            "//:TaskLib",
-            "//:MemoryManagementLib"
+            "//lib/DynamicMemoryManagement:InputManagementLib",
+            "//lib/DynamicMemoryManagement:TaskLib",
+            "//lib/DynamicMemoryManagement:MemoryManagementLib"
             ]
 )
 
