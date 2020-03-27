@@ -4,6 +4,7 @@
 
 #include "lib/DynamicMemoryManagement/Task_Freed.h"
 #include "lib/DynamicMemoryManagement/MemoryManagementDefintions.h"
+#include "lib/DynamicMemoryManagement/stack_depth.h"
 
 /*
  * ##### how to decide if a task has been freed in the last garbage collection

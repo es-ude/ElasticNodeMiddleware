@@ -3,6 +3,8 @@
 
 // ##### CHANGED #####
 #include "lib/DynamicMemoryManagement/Task_Freed.h"
+// ##### CHANGED ##### from .h in .c file
+#include "lib/DynamicMemoryManagement/stack_depth.h"
 
 void (*deallocator)(void *ptr);
 void *(*allocator)(size_t size);
@@ -190,7 +192,7 @@ static void Task_prepareOutput(Task *newTask, uint16_t offset, uint16_t (*calcul
     snprintf(buffer, 20, "Buffer: %p\r\n", newTask->result);
     // ##### CHANGED #####
     // uart_printstring(buffer);
-    uart_WriteString(buffer)
+    uart_WriteString(buffer);
     printStackPointer(__FUNCTION_NAME__, SP);
 #endif
 

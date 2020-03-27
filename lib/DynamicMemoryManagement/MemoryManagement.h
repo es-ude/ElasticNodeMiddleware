@@ -1,7 +1,7 @@
 #ifndef _MEMORYMANAGEMENT_H
 #define _MEMORYMANAGEMENT_H
 #include "Task.h"
-#include "stack_depth.h"
+//#include "stack_depth.h" --> in .c
 
 // ##### CHANGED #####
 #include "lib/DynamicMemoryManagement/TaskDefinitions.h"

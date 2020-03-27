@@ -1,5 +1,8 @@
 #include "lib/DynamicMemoryManagement/InputManagement.h"
 
+// ##### CHANGED ##### from .h in .c
+#include "lib/DynamicMemoryManagement/stack_depth.h"
+
 /* ##### wirte address into IMA (number of address = number of input tasks)
     deep copy of address from source to destination (destination = IMA) --> deep copy, therefore using void pointer
     If the system is 16-bit/32-bit/64-bit, size of void pointer is 2/4/8 bytes.*/

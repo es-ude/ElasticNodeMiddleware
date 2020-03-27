@@ -3,7 +3,7 @@
 #include "InputManagement.h"
 #include <stdlib.h>
 #include <stdint.h>
-#include "stack_depth.h"
+//#include "stack_depth.h" --> in .c
 extern void* IMA;
 
 // ##### CHANGED #####

@@ -2,7 +2,7 @@ load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_
 
 cc_library(
     name = "Malloc_mwLib",
-    srcs = ["malloc_mw.c" ],
+    srcs = ["malloc_mw.c"],
     visibility = ["//visibility:public"],
     deps = [
         "//lib/DynamicMemoryManagement:Malloc_mwLibHdr",
@@ -14,9 +14,9 @@ cc_library(
     srcs = ["heaps.c"],
     visibility = ["//visibility:public"],
     deps = [
+        "//:XMemLib",
         "//lib/DynamicMemoryManagement:HeapsLibHdr",
         "//lib/DynamicMemoryManagement:Malloc_mwLib",
-        "//:XMemLib",
     ],
 )
 
@@ -25,8 +25,8 @@ cc_library(
     srcs = ["stack_depth.c"],
     visibility = ["//visibility:public"],
     deps = [
-        "//lib/DynamicMemoryManagement:Stack_depthLibHdr",
         "//:UartLib",
+        "//lib/DynamicMemoryManagement:Stack_depthLibHdr",
     ],
 )
 
@@ -55,9 +55,9 @@ cc_library(
     deps = [
         "//lib/DynamicMemoryManagement:InputManagementLib",
         "//lib/DynamicMemoryManagement:Stack_depthLib",
+        "//lib/DynamicMemoryManagement:TaskDefinitionsLibHdr",
         "//lib/DynamicMemoryManagement:TaskLibHdr",
         "//lib/DynamicMemoryManagement:Task_FreedLib",
-        "//lib/DynamicMemoryManagement:TaskDefinitionsLibHdr"
     ],
 )
 
@@ -66,10 +66,12 @@ cc_library(
     srcs = ["Task.c"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
-    deps = ["//lib/DynamicMemoryManagement:TaskLibHdr",
-            "//lib/DynamicMemoryManagement:InputManagementLibTest",
-            "//lib/DynamicMemoryManagement:TaskDefinitionsLibTest",
-            "//lib/DynamicMemoryManagement:Task_FreedLibTest"],
+    deps = [
+        "//lib/DynamicMemoryManagement:InputManagementLibTest",
+        "//lib/DynamicMemoryManagement:TaskDefinitionsLibTest",
+        "//lib/DynamicMemoryManagement:TaskLibHdr",
+        "//lib/DynamicMemoryManagement:Task_FreedLibTest",
+    ],
 )
 
 cc_library(
@@ -92,11 +94,11 @@ cc_library(
     srcs = ["MemoryManagement.c"],
     visibility = ["//visibility:public"],
     deps = [
+        "//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibHdr",
         "//lib/DynamicMemoryManagement:MemoryManagementLibHdr",
         "//lib/DynamicMemoryManagement:Stack_depthLib",
-        "//lib/DynamicMemoryManagement:TaskLib",
         "//lib/DynamicMemoryManagement:TaskDefinitionsLib",
-        "//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibHdr"
+        "//lib/DynamicMemoryManagement:TaskLib",
     ],
 )
 
@@ -105,8 +107,10 @@ cc_library(
     srcs = ["MemoryManagement.c"],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
-    deps = ["//lib/DynamicMemoryManagement:MemoryManagementLibHdr",
-            "//lib/DynamicMemoryManagement:TaskLibTest"],
+    deps = [
+        "//lib/DynamicMemoryManagement:MemoryManagementLibHdr",
+        "//lib/DynamicMemoryManagement:TaskLibTest",
+    ],
 )
 
 cc_library(
@@ -121,31 +125,34 @@ cc_library(
     name = "Task_FreedLib",
     srcs = ["Task_Freed.c"],
     visibility = ["//visibility:public"],
-    deps = ["//lib/DynamicMemoryManagement:Task_FreedLibHdr",
-            "//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibHdr",
-            "//lib/DynamicMemoryManagement:TaskDefinitionsLib"],
+    deps = [
+        "//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibHdr",
+        "//lib/DynamicMemoryManagement:Stack_depthLibHdr",
+        "//lib/DynamicMemoryManagement:TaskDefinitionsLib",
+        "//lib/DynamicMemoryManagement:Task_FreedLibHdr",
+    ],
 )
 
 cc_library(
     name = "Task_FreedLibTest",
     srcs = ["Task_Freed.c"],
-    visibility = ["//visibility:public"],
     copts = ["-DTEST"],
-    deps = ["//lib/DynamicMemoryManagement:Task_FreedLibHdr"]
+    visibility = ["//visibility:public"],
+    deps = ["//lib/DynamicMemoryManagement:Task_FreedLibHdr"],
 )
 
 exports_files(
     srcs = [
-        "TaskGraphConfig.h",
-        "malloc_mw.h",
-        "heaps.h",
-        "stack_depth.h",
         "InputManagement.h",
-        "Task.h",
         "MemoryManagement.h",
-        "Task_Freed.h",
+        "MemoryManagementDefintions.h",
+        "Task.h",
         "TaskDefinitions.h",
-        "MemoryManagementDefintions.h"
+        "TaskGraphConfig.h",
+        "Task_Freed.h",
+        "heaps.h",
+        "malloc_mw.h",
+        "stack_depth.h",
     ],
     visibility = ["//visibility:public"],
 )
@@ -169,12 +176,10 @@ cc_library(
     hdrs = ["heaps.h"],
     visibility = ["//visibility:public"],
     deps = [
-        "//lib/DynamicMemoryManagement:Malloc_mwLibHdr",
         "//:XMemLibHdr",
+        "//lib/DynamicMemoryManagement:Malloc_mwLibHdr",
     ],
 )
-
-
 
 cc_library(
     name = "Stack_depthLibHdr",
@@ -198,9 +203,9 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//lib/DynamicMemoryManagement:InputManagementLibHdr",
-        "//lib/DynamicMemoryManagement:Task_FreedLibHdr",
         "//lib/DynamicMemoryManagement:Stack_depthLibHdr",
-        "//lib/DynamicMemoryManagement:TaskDefinitionsLibHdr"
+        "//lib/DynamicMemoryManagement:TaskDefinitionsLibHdr",
+        "//lib/DynamicMemoryManagement:Task_FreedLibHdr",
     ],
 )
 
@@ -211,10 +216,10 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
+        "//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibHdr",
         "//lib/DynamicMemoryManagement:Stack_depthLibHdr",
-        "//lib/DynamicMemoryManagement:TaskLibHdr",
         "//lib/DynamicMemoryManagement:TaskDefinitionsLibHdr",
-        "//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibHdr"
+        "//lib/DynamicMemoryManagement:TaskLibHdr",
     ],
 )
 
@@ -222,8 +227,11 @@ cc_library(
     name = "Task_FreedLibHdr",
     hdrs = ["Task_Freed.h"],
     visibility = ["//visibility:public"],
-    deps = ["//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibHdr",
-            "//lib/DynamicMemoryManagement:TaskDefinitionsLibHdr"],
+    deps = [
+        "//lib/DynamicMemoryManagement:MemoryManagementDefinitionsLibHdr",
+        "//lib/DynamicMemoryManagement:Stack_depthLibHdr",
+        "//lib/DynamicMemoryManagement:TaskDefinitionsLibHdr",
+    ],
 )
 
 cc_library(

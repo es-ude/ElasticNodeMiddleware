@@ -8,7 +8,7 @@
  * //have to be implemented by programmer
  * in uart
  *
- ISR(USART1_RX_vect) {
+ISR(USART1_RX_vect) {
     uart_ISR_Receive();
 }
 

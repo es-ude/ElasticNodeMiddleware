@@ -1,25 +1,24 @@
 load("@AvrToolchain//:helpers.bzl", "default_embedded_binary", "default_embedded_binaries")
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
-#default_embedded_binaries(
-#    copts = cpu_frequency_flag(),
-#    main_files = glob(["*.c"]),
-#    deps = [
-#    "//app/setup:Setup",
-#   ],
-#)
 
 default_embedded_binary(
-    name = "main",
-    srcs = ["main.c"],
+    name = "main_dynamicMM",
+    srcs = ["main_dynamicMM.c"],
     copts = cpu_frequency_flag(),
     uploader = "Avr_dude_upload_script",
     deps = ["//app/setup:Setup",
-            "//:BitmanipulationLib",
+            "//lib/DynamicMemoryManagement:TaskGraphConfigLibHdr",
+            "//lib/DynamicMemoryManagement:Malloc_mwLib",
+            "//lib/DynamicMemoryManagement:HeapsLib",
+            "//lib/DynamicMemoryManagement:Stack_depthLib",
             "//:UartLib",
+            "//:XMemLib",
+            "//lib/DynamicMemoryManagement:InputManagementLib",
+            "//lib/DynamicMemoryManagement:TaskLib",
+            "//lib/DynamicMemoryManagement:MemoryManagementLib"
             ]
 )
-
 
 genrule(
     name = "Avr_dude_upload_script",

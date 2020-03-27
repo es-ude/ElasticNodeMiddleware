@@ -86,7 +86,9 @@ int main()
     xmem_enableXmem();
 
 #ifdef UART_DEBUG
-    uart_init();
+// ##### CHANGED #####
+    //uart_init();
+    uart_Init(NULL);
 #endif
 
     switch_heap(EXTERNAL_HEAP_INDEX);

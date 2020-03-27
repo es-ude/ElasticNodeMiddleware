@@ -1,5 +1,8 @@
 #include "MemoryManagement.h"
 
+// ##### CHANGED ##### from .h in .c
+#include "lib/DynamicMemoryManagement/stack_depth.h"
+
 static uint8_t isMarked(Task *task)
 {
     return task->counter & (1 << MM_MARK);
