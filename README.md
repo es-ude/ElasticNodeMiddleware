@@ -12,21 +12,21 @@ The used hardware is listed in the [Elastic Node Hardware repository](https://gi
 ## Libraries
 
 The elastic node middleware code includes several libraries:
-- elastic node middleware\
-- reconfigure multiboot avr\
-- xmem\
-- pin definition\
-- interrupt Manager\
-- uart\
+- elastic node middleware
+- reconfigure multiboot avr
+- xmem
+- pin definition
+- interrupt Manager
+- uart
 
 They are described in the following
 
-# Elastic Node Middleware Lib
-# reconfigure multiboot avr
-# xmem
-# pin definition
-# interrupt Manager
-# uart
+### Elastic Node Middleware Lib
+### reconfigure multiboot avr
+### xmem
+### pin definition
+### interrupt Manager
+### uart
 
 ## Additional information
 
