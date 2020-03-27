@@ -22,6 +22,26 @@ The elastic node middleware code includes several libraries:
 They are described in the following
 
 ### Elastic Node Middleware Lib
+
+The elastic node middleware lib consists of the elastic node middleware interface as well as the elastic node middleware configure FPGA interface and the internal interface.
+Application user should only use the elastic node middleware interface and the elastic node middleware configure FPGA interface of the whole code. (?)
+The outsourcing in internal interfaces are only for testing purposes.
+The elastic node middleware lib contains the following functions:
+
+- for initialsing the elastic node middleware --> elasticnode_initialise
+- for turning the FPGA on --> elasticnode_fpgaPowerOn
+- for turning the FPGA off --> elasticnode_fpgaPowerOff
+- to read and write one Byte or a data stream from the FPGA:
+--> elasticnode_writeOneByteBlockingFromFpga
+--> elasticnode_writeDataBlockingFromFpga
+--> elasticnode_readOneByteBlockingFromFpga
+--> elasticnode_readDataBlockingFromFpga
+- to reset the FPGA:
+--> elasticnode_fpgaSoftReset
+--> elasticnode_fpgaHardReset
+
+(difference soft and hard reset -> explain)
+
 ### reconfigure multiboot avr
 ### xmem
 ### pin definition
