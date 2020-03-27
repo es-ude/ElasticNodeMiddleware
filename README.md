@@ -43,6 +43,3 @@ The Elastic Node is descriped in detail in the following [paper](https://ieeexpl
 	auch beinhalten: Wie stecke ich es an, was muss ich tun
 	Wie kommt man an eine Bitfile: gibts existierende, wie sind die aufgebaut
     Documentation
-
-
-    hallo
