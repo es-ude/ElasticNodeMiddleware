@@ -45,7 +45,23 @@ The elastic node middleware lib contains the following functions:
 
 (difference soft and hard reset -> explain)
 
+The elastic node middleware configure FPGA lib contains the following functions:
+
+- reconfigure FPGA to specific state:\
+→ elasticnode_configureFPGA_configureFrom
+- get current loaded configuration:\
+→ elasticnode_configureFPGA_getLoadedConfiguration
+
+We split these application functions into two interfaces.
+Unfortunately, this is necessary to avoid cycle dependencies between the elasticnode middleware lib and the reconfiguration lib.
+
 ### reconfigure multiboot avr
+
+The reconfigure multiboot avr lib handles the reconfiguration for the FPGA.
+The library is specialised for avr, because we use an avr-microcontroller in the elastic node.
+Multiboot is here the type of reconfiguration.
+Using multi-boot means that we select one configuration and provide the address of the next configuration to the internal configuration access port (ICAP) interface of the FPGA.
+
 ### xmem
 ### pin definition
 ### interrupt Manager
