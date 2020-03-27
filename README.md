@@ -29,9 +29,11 @@ The outsourcing in internal interfaces are only for testing purposes.
 The elastic node middleware lib contains the following functions:
 
 - for initialsing the elastic node middleware\
---> elasticnode_initialise
-- for turning the FPGA on --> elasticnode_fpgaPowerOn
-- for turning the FPGA off --> elasticnode_fpgaPowerOff
+→ elasticnode_initialise
+- for turning the FPGA on\
+--> elasticnode_fpgaPowerOn
+- for turning the FPGA off\
+--> elasticnode_fpgaPowerOff
 - to read and write one Byte or a data stream from the FPGA:
 --> elasticnode_writeOneByteBlockingFromFpga
 --> elasticnode_writeDataBlockingFromFpga
