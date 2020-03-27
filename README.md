@@ -4,7 +4,35 @@
 
 The [docs](docs/) folder contains a [getting started guide](docs/ElasticNodeGettingStartedGuide.md).
 
-[a link](https://github.com/es-ude/ElasticNodeHardware)
+## Hardware
+
+The used hardware is listed in the [Elastic Node Hardware repository](https://github.com/es-ude/ElasticNodeHardware) on github.
+-----> v4 gibt es da nicht?! Error!
+
+## Libraries
+
+The elastic node middleware code includes several libraries:
+- elastic node middleware\
+- reconfigure multiboot avr\
+- xmem\
+- pin definition\
+- interrupt Manager\
+- uart\
+
+They are described in the following
+
+# Elastic Node Middleware Lib
+# reconfigure multiboot avr
+# xmem
+# pin definition
+# interrupt Manager
+# uart
+
+## Additional information
+
+The Elastic Node is descriped in detail in the following [paper](https://ieeexplore.ieee.org/document/8831207).
+
+--> was kann der Code? Was fehlt?
 
 
 	Auf Elastic Node v4 Hardware verweisen (Github repo?)
