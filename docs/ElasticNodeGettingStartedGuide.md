@@ -1,8 +1,9 @@
 # Getting Started Guide
 
-how to use the elastic node middleware
+In the following we explain how to use the elastic node middleware.
+Therefore, we show how to connect the hardware and how to run a minimal example.
 
-# How to connect the Hardware
+## How to connect the Hardware
 
 To use the Elastic Node Middleware Code, you have to connect your computer with the hardware.
 For using the elastic node middleware code you need the elastic node and a programmer.
@@ -15,3 +16,19 @@ The following photo shows the construction.
 
 ... foto?
 
+## How to use the Code
+
+In the [main.c](../app/main.c) we show a minimal working example of how to use the elastic node middleware. 
+We initialise the middleware and ...
+
+## Build and Upload Command
+
+For building the minimal example in the [main.c](../app/main.c) you have to run the following command: 
+
+    $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    
+The upload script is specialized in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
+For running the upload script you have to run: 
+
+	$ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    
