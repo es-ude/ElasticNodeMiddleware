@@ -14,12 +14,19 @@ In doing so you should use the MicroUSB port for the MCU and not for Monitoring 
 Then you connect the ... cable with the MCU program pins for the MCU, whereby on the other side you connect the programmer with it.
 The following photo shows the construction.
 
+unclear
+
 ... foto?
 
 ## How to use the Code
 
 In the [main.c](../app/main.c) we show a minimal working example of how to use the elastic node middleware. 
-We initialise the middleware and ...
+
+Missing!
+
+## Including the Bitfile
+
+Missing!
 
 ## Build and Upload Command
 

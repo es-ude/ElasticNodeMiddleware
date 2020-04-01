@@ -29,7 +29,7 @@ They are described in the following.
 The elastic node middleware library consists of the elastic node middleware interface as well as the elastic node middleware configure FPGA interface and the internal interface.
 The outsourcing in internal interfaces are only for testing purposes.
 You, as an application user, do not use the internal interface and should only use the public functions in the elasticNodeMiddleware and elasticNodeMiddleware_configureFPGA interface in this library. 
-The elastic node middleware library contains the following functions:
+The elastic node middleware interface contains the following functions:
 
 - for initialising the elastic node middleware:\
 → elasticnode_initialise
@@ -48,7 +48,7 @@ The elastic node middleware library contains the following functions:
 
 A soft reset refreshs the address of the external memory offset, whereby a hard reset refreshs the program pins. 
 
-The elastic node middleware configure FPGA library contains the following functions:
+The elastic node middleware configure FPGA interface contains the following functions:
 
 - reconfigure FPGA to specific state:\
 → elasticnode_configureFPGA_configureFrom
@@ -114,7 +114,7 @@ It is only used for testing purposes.
 
 ## Elastic Node Platform
 
-The required hardware from the elastic node, which is used in our code, is the MCU and the FPGA.
+The required hardware at the elastic node, which is used in our code, is the MCU and the FPGA.
 For interconnection of the MCU and the FPGA we use the MCU's external memory interface (xmem).
 
 ### Memory-mapped Interface (Xmem)
@@ -135,7 +135,7 @@ In the following we list which features of the description in the paper we imple
 
 With our implemented code you can initialize the FPGA, turn it on and off and reset it as well as read and write data from it.
 In addition, you can use the external memory interface as the interconnection between the MCU and the FPGA.
-Moreover, it is possible to reconfigure the FPGA. (?)
+Moreover, it is possible to reconfigure the FPGA.
 
 ### Missing Modules
 
@@ -144,7 +144,7 @@ By comparing our implemented features with the features of the paper, we notice 
 The monitoring includes measuring the energy/power consumption. 
 - Flash: We do not have the code for using the flash memory of the MCU.
 The flash memory is for additional data storage. 
-- Stub/Skelton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as FPGA (Skelton).
+- Stub/Skelton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as on the FPGA (Skelton).
 
 ## Bitfile
 
@@ -155,4 +155,4 @@ Therefore, when we using a bifile, the FPGA can be reconfigured to instantiate a
 As we want to reconfigure the FPGA at the Elastic Node, we need bitfiles. 
 An example bitfile is given in the project: [dummy.bit](dummy.bit).
 
-Bitfile --> How used?
+The using of a bitfile is again shown in the [getting started guide](docs/ElasticNodeGettingStartedGuide.md).
