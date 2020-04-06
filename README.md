@@ -1,8 +1,12 @@
 # Elastic Node Middleware
 
+## Installation Guide
+
+[installation guide](docs/InstallationGuide.md)
+
 ## Getting Started
 
-The [docs](docs) folder contains a [getting started guide](docs/ElasticNodeGettingStartedGuide.md) with a minimal working example.
+The [docs](docs) folder contains a [getting started guide](docs/ElasticNodeGettingStartedGuide.md) with a mini example.
 
 ## Hardware
 
@@ -137,14 +141,15 @@ With our implemented code you can initialize the FPGA, turn it on and off and re
 In addition, you can use the external memory interface as the interconnection between the MCU and the FPGA.
 Moreover, it is possible to reconfigure the FPGA.
 
-### Missing Modules
+### Future Work
 
-By comparing our implemented features with the features of the paper, we notice that some features are still missing.
+By comparing our implemented features with the features of the paper, we detect some features that are not integrated in our basic version yet.
+We list them in the following: 
 - Monitoring: We do not have implemented the monitoring of the current usage yet. 
 The monitoring includes measuring the energy/power consumption. 
 - Flash: We do not have the code for using the flash memory of the MCU.
 The flash memory is for additional data storage. 
-- Stub/Skelton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as on the FPGA (Skelton).
+- Stub/Skeleton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as on the FPGA (Skeleton).
 
 ## Bitfile
 
