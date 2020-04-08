@@ -1,4 +1,4 @@
-load("@AvrToolchain//:helpers.bzl", "default_embedded_binary", "default_embedded_binaries")
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries", "default_embedded_binary")
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
 #default_embedded_binaries(
@@ -14,12 +14,15 @@ default_embedded_binary(
     srcs = ["main.c"],
     copts = cpu_frequency_flag(),
     uploader = "Avr_dude_upload_script",
-    deps = ["//app/setup:Setup",
-            "//:BitmanipulationLib",
-            "//:UartLib",
-            ]
+    deps = [
+        "//:BitmanipulationLib",
+        "//:ElasticNodeMiddlewareLib",
+        "//:Reconfigure_multibootLib",
+        "//:UartLib",
+        "//:XMemLib",
+        "//app/setup:Setup",
+    ],
 )
-
 
 genrule(
     name = "Avr_dude_upload_script",
