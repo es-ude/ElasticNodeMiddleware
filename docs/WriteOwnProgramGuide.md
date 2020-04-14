@@ -1,7 +1,10 @@
 # Write your own Program
 
-For example your implementation is in the folder "myFolder" in the file "myImplementation".
+This guide shows you how to write your own program in the elastic node middleware code. 
+We assume that for example your implementation is in the folder "myFolder" in the files "myImplementation.h" and "myImplementation.c".
 Then you have to create a fitting BUILD.bazel file for building and uploading your implementation.
+
+Alternatively, you can use the example "main.c" file and modify this file for your purposes. 
 
 ## Your BUILD.bazel File
 
@@ -13,10 +16,10 @@ The file should begin with the following two lines:
     
 After that you create your own embedded binary.
 You should give it a name and define the sources of your implementation as well as the compiler options with the copts command.
-After that you define the uploader.
-In our example we use define the upload script below. 
+Then you define the uploader.
+This upload script is defined at the end of this BUILD.bazel file.  
 At least you should define your dependencies.
-This are the libraries which you are using in your implementation. 
+These are the libraries which you want to use in your implementation. 
 The libraries are named in the [README](../README.md).
 The "//app/setup:Setup" should always be a dependency.
 
@@ -40,10 +43,7 @@ In this example we include all possible libraries to show you the possibilities.
         ],
     ) 
     
-Notice that the BitmanipulationLib is an external library.
-Therefore, we do not name it in the list of libraries.
-The used functions of this library are explained in the [getting started guide](docs/GettingStartedGuide.md).
-
+    
 At the end you define the upload script as a genrule. 
 You choose a name for the script as well as the outs. 
 Notice that the name of the upload script is used in the above defined embedded binary.
@@ -55,8 +55,52 @@ Additionally, you specify your command for the terminal.
         cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
     )
     
-Please consider the BUILD.bazel file defined for the main.c in the app folder for creating your own BAZEL.build file.
+Please consider the BUILD.bazel file defined for the [main.c](../app/main.c) in the [app](../app) folder for creating your own BAZEL.build file.
 
 ## Your Implementation
 
+Now you can write your own implementation. 
+The code is written in C, therefore you should use the programming language C to use the code.
+You include the needed libraries in your header or source files with
 
+    #include "lib/neededLibrary/neededLibrary.h"
+    
+whereby the "neddedLibrary" is replaced with the actual library. 
+For example for including the xmem library your include statement looks as the following:
+  
+    #include "lib/xmem/xmem.h"
+    
+Notice, that the Bitmanipulation is an external library. 
+Therefore, you include this library as follows:
+
+    #include "EmbeddedUtilities/BitManipulation.h"
+    
+But normally you do not need this library for the functionalities of the elastic node middleware code.
+It could only be useful for setting the LEDs on and off for some checks. 
+
+
+If you want to use uart or reconfigure, you have to implement interrupt service routines. 
+Because of implementing a clean library, we do not implement interrupt service routines in the library itself, but the functions that are used in the ISR.
+In the following we show which ISR are needed for using the uart and reconfigure library. 
+
+    //the following ISR's have to be comment in by programmer
+    
+    /* for using uart
+     */
+    ISR(USART1_RX_vect) {
+        uart_ISR_Receive();
+    }
+    
+    ISR(USART1_TX_vect) {
+        uart_ISR_Transmit();
+    }
+    
+    /* for using reconfigure
+     */
+    ISR(FPGA_DONE_INT_VECTOR) {
+        reconfigure_interruptSR();
+    }
+
+You also can refer to the [main.c](../app/main.c). 
+
+In the end you can use the code and can write your own program.  

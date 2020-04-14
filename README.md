@@ -1,17 +1,18 @@
 # Elastic Node Middleware
 
-This repository includes the elastic node middleware as described in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207)
+This repository includes the elastic node middleware code  as described in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
+The included code is written in C. 
 
 ## Hardware
 
 The used hardware is listed in the [Elastic Node Hardware repository](https://github.com/es-ude/ElasticNodeHardware) on github.
------> v4 gibt es da nicht?! Error!
+-----> v4 nonexistent?! Error!
 
-We show the hardware in the [installation guide](docs/InstallationGuide.md) as well as the connection to each other in the [getting started guide](docs/GettingStartedGuide.md).
+In the [getting started guide](docs/GettingStartedGuide.md) is explained which hardware is needed as well as the connection to each other.
 
 ## Features
 
-The middleware includes the following functionalities:
+The middleware code includes the following functionalities:
 - initialize the FPGA
 - turn the FPGA on and off
 - enable and disable the external memory interface for the interconnection between the MCU and the FPGA
@@ -19,11 +20,12 @@ The middleware includes the following functionalities:
 
 ## Installation Guide
 
-For using the elastic node middleware code please follow the [installation guide](docs/InstallationGuide.md) in the [docs](docs) folder.
+For using the elastic node middleware code you need to install some tools.
+Therefore, please follow the [installation guide](docs/InstallationGuide.md) in the [docs](docs) folder.
 
 ## Getting Started
 
-The [docs](docs) folder contains a [getting started guide](docs/GettingStartedGuide.md) with a mini example.
+The [docs](docs) folder contains a [getting started guide](docs/GettingStartedGuide.md) with a mini example of how to use the code.
 
 ## Write your own program
 
@@ -46,7 +48,7 @@ For using it, you define a variable at a specific memory location and write the 
 The FPGA detects this and reacts accordingly.
 The interconnection between MCU and FPGA starts in our code at the internal memory address 0x2000 from the MCU.
 
-The using of the Xmem interface is shown in the [getting started guide](docs/GettingStartedGuide.md).
+The using of the Xmem interface is shown in example in the [getting started guide](docs/GettingStartedGuide.md).
 
 ## Bitfile
 
@@ -68,6 +70,7 @@ The elastic node middleware code includes several libraries:
 - pin definition
 - interrupt Manager
 - uart
+- Bitmanipulation
 
 In the files "graph_elasticNodeMiddlewareLib.png" and "graph_elasticNodeMiddleware_ConfigureFPGALib.png" you can see the dependencies between these libraries.
 They are described in the following.
@@ -76,7 +79,6 @@ They are described in the following.
 
 The elastic node middleware library consists of the elastic node middleware interface as well as the elastic node middleware configure FPGA interface and the internal interface.
 The outsourcing in internal interfaces are only for testing purposes.
-You, as an application user, do not use the internal interface and should only use the public functions in the elasticNodeMiddleware and elasticNodeMiddleware_configureFPGA interface in this library. 
 The elastic node middleware interface contains the following functions:
 
 - for initialising the elastic node middleware:\
@@ -94,7 +96,7 @@ The elastic node middleware interface contains the following functions:
 → elasticnode_fpgaSoftReset\
 → elasticnode_fpgaHardReset
 
-A soft reset refreshs the address of the external memory offset, whereby a hard reset refreshs the program pins. 
+A soft reset refreshes the address of the external memory offset, whereby a hard reset refreshs the program pins. 
 
 The elastic node middleware configure FPGA interface contains the following functions:
 
@@ -114,7 +116,6 @@ Multiboot is here the type of reconfiguration.
 Using multiboot means that we select one configuration and provide the address of the next configuration to the internal configuration access port (ICAP) interface of the FPGA.
 
 The reconfigure multiboot avr library again contains an reconfigure_multiboot_avr interface and for this an internal interface. 
-You again should only use the public functions in the "normal" interface.
 The functions are:
 
 - for initialising the reconfiguration:\
@@ -159,13 +160,18 @@ Our interrupts are again implemented for avr.
 The uart library is used for communication with the MCU. 
 It is only used for testing purposes. 
 
+### Bitmanipulation
+
+The bitmanipulation library is an external library and is internally used for setting and clearing bits.
+Again, this library is only used for testing purposes. 
+
 ## Future Work
 
 As mentioned above the Elastic Node is described in detail in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
 By comparing our implemented features with the features of the paper, we detect some features that are not integrated in our basic version yet.
 We list them in the following: 
-- Monitoring: We do not have implemented the monitoring of the current usage yet. 
+- Monitoring: We do not have include the monitoring of the current usage yet. 
 The monitoring includes measuring the energy/power consumption. 
-- Flash: We do not have the code for using the flash memory of the MCU.
+- Flash: We do not include the code for using the flash memory of the MCU.
 The flash memory is for additional data storage. 
-- Stub/Skeleton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as on the FPGA (Skeleton).
+- Stub/Skeleton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as on the FPGA (Skeleton) in this basic code.

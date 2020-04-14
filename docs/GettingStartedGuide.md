@@ -3,7 +3,17 @@
 In the following we explain how to use the elastic node middleware code.
 Therefore, we show how to connect the hardware and how to run a minimal example as well as the needed commands for building and uploading the target.
 
-## How to connect the Hardware
+## Hardware
+
+To work with the elastic node middleware code you need the right hardware. 
+You need the elastic node which is shown in the images below and a programmer.
+If you want to use UART for other communication, you need a UART device additionally.
+On top of this, you need a USB-to-MicroUSB (?) cable and ... (cable for programmer, GPIO cable?).
+
+The following photos show the elastic node. 
+The left yellow rectangle is the FPGA while the right yellow rectangle is the used MCU. 
+![](images/elasticNodeFrontEdit.jpg)
+![](images/elasticNodeBack.jpg)
 
 To use the Elastic Node Middleware Code, you have to connect your computer with the hardware.
 You first put the USB port in your USB port at your computer and the MicroUSB port in the port at the elastic node.
@@ -17,9 +27,9 @@ The following photo shows the construction after connect the whole hardware.
  
 ## How to use the Code
 
-In the [main.c](../app/main.c) we show a minimal working example of how to use the elastic node middleware. 
-The implementation uses Bitmanipulation functions. 
-These Bitmanipulation functions come from an external library.
+After cloning the [elasticnode middleware github repository](https://github.com/es-ude/ElasticNodeMiddleware) and installing [Bazel](https://www.bazel.build/), you can run a mini example. 
+In the [main.c](../app/main.c) we show a minimal working example of how to use the elastic node middleware code. 
+This implementation uses functions of the external Bitmanipulation library.
 The functions just set or clear a bit in the transferred byte_ptr at the transferred offset. 
 
 Missing!
@@ -34,7 +44,7 @@ For building the minimal example in the [main.c](../app/main.c) you have to run 
 
     $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
-Thereby is the second word the command (here: "build") and the third word is the path to the file (here: main), we want to build. 
+Thereby is the second word the command (here: "build") and the third word is the path to the file (here: //app:main), we want to build. 
 The leftover command are bazel flags for specializing the platform.  
     
 The upload script is specialized in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
@@ -44,6 +54,7 @@ For running the upload script you have to run:
     
 ## Tests
 
+We write some test for checking the functionalities of our code. 
 If you want to run a test of the code (here for example the xmem_Test), you have to run:
 
     $ bazel test test:xmem_Test
@@ -51,3 +62,14 @@ If you want to run a test of the code (here for example the xmem_Test), you have
 If you want to run all tests:
 
     $ bazel test test:all
+    
+If you want to run the integration test you have to use the build and uploads commands as written above.
+For example for building the integration test for xmem:
+
+    $ bazel build //test/integration:test_xmem --platforms=@AvrToolchain//platforms:ElasticNode_v4 
+
+and for uploading this integration test
+
+    $ bazel run //test/integration:_test_xmemUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+The structure of these commands is the same like explained above. 

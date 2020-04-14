@@ -1,16 +1,6 @@
 # Installation
 
-## Hardware
-
-To work with the elastic node middleware you need the right hardware. 
-You need the elastic node which is shown in the images below and a programmer.
-If you want to use UART for other communication, you need a UART device additionally.
-On top of this, you need a USB-to-MicroUSB (?) cable and ... (cable for programmer, GPIO cable?).
-
-The following photos show the elastic node. 
-The left yellow rectangle is the FPGA while the right yellow rectangle is the used MCU. 
-![](images/elasticNodeFrontEdit.jpg)
-![](images/elasticNodeBack.jpg)
+The following tools have to be installed for using the elastic node middleware code. 
 
 ## Bazel
 

@@ -22,8 +22,7 @@ ISR(USART1_TX_vect) {
 
 /* for using reconfigure
  */
- ISR(FPGA_DONE_INT_VECTOR)
-{
+ISR(FPGA_DONE_INT_VECTOR) {
     reconfigure_interruptSR();
 }
 

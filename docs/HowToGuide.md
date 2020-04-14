@@ -7,3 +7,5 @@ missing
 ## How to build a new bitfile for reconfiguring the FPGA
 
 missing
+
+## How to ....
