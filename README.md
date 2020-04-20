@@ -1,7 +1,7 @@
 # Elastic Node Middleware
 
 This repository includes the elastic node middleware code  as described in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
-The included code is written in C. 
+The included code is written in C. The code is tested under Ubuntu 18.04.4.
 
 ## Hardware
 
