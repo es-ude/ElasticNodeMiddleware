@@ -450,66 +450,6 @@ class SerialTest:
     # print("READY")
 
 
-    def sendzero(self, num):
-        # send zeros
-        ba = bytearray([0, num & 0xff, (num >> 8) & 0xff, (num >> 16) & 0xff, (num >> 24) & 0xff])
-        # ba = ba[::-1]
-        # print('sending', num, 'zeros'),
-        for i in range(len(ba)):
-            self.ser.write([ba[i]])
-
-        # print('confirming...', num)
-
-        self.confirmCommand(0x00)
-    # print('done')
-
-    def receiveData(self):
-        t0 = time.time()
-        try:
-            print('receiving for %d s' % TIME_TOTAL)
-            while (time.time() - t0 < TIME_TOTAL or self.remainingMonitor > 0):
-                if (self.ser.in_waiting > 0): #if incoming bytes are waiting to be read from the serial input buffer
-                    data_in = self.ser.read(self.ser.inWaiting())
-                    data_str = data_in.decode('ascii') #read the bytes and convert from binary array to ASCII
-                    sys.stdout.write(data_str), #print(the incoming string without putting a new-line ('\n') automatically after every print())
-                    sys.stdout.flush()
-
-                    # if data_str[:2] == "#M":
-                    # 	self.remainingMonitor -= 1
-                    # 	print('Remaining:', self.remainingMonitor)
-
-                    t0 = time.time()
-        #Put the rest of your code you want here
-        except UnicodeDecodeError:
-            print(data_in)
-        finally:
-
-            print('done')
-
-    def sendValue32(self, value, name="value"):
-        # sending address
-        ba = bytearray([value & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff])
-
-        for i in range(4):
-            self.ser.write([ba[i]])
-
-
-        print('done writing %s' % name)
-
-        print('%s of bitfile: ' % name),
-        # received = self.ser.readline()
-        received = self.readSerialLine()
-        print('received \'{}\''.format(received)),
-        try:
-            if value != int(received):
-                print('%s incorrect! aborting.' % name)
-                return False
-        except:
-            print('did not receive %s:' % name, received)
-            return False
-
-        return True
-
     # read configuration from flash memory
     def readConfig(self, config, selectmap=False, jtag=False):
         config.loadFile()
@@ -769,9 +709,6 @@ class SerialTest:
     # 	self.ser.close();
 
 
-    def findCurrentSensors(self):
-        self.writeCommand('s')
-
     def controlFpga(self, newvalue):
         if newvalue:
             self.writeCommand("C");
@@ -867,24 +804,6 @@ class SerialTest:
         self.writeCommand(b'l')
         self.waitSerialDone();
 
-    def wirelessBlock(self):
-        self.beginExperiment()
-
-
-        self.writeCommand(b'T')
-        self.writeCommand(b'w')
-
-        print('waiting...')
-
-        self.plotter.clearAverageCurrent()
-
-        self.latency(request=False, plot=True, offloading=True)
-
-        print('almost done')
-        self.endExperiment()
-        self.ser.readline()
-        print('done')
-
     def testFIR(self):
         self.writeCommand(b'T')
         self.writeCommand(b'f')
@@ -967,19 +886,11 @@ class SerialTest:
         bias = np.array(bias, dtype='float') / 1024.
         print(bias)
 
-    def printhwfid(self):
-        self.writeCommand(0x12)
-        self.waitSerialDone()
-
     def hwfid(self):
         self.writeCommand(0x15)
         hwfid = ord(self.ser.read(1))
         print(("HWF ID: {:X}".format(hwfid)))
         return hwfid
-
-    def mmMcu(self):
-        self.writeCommand(0x13)
-        return self.readMatrix(4,5)
 
     def mmFpga(self):
         self.writeCommand(0x14)
@@ -1061,9 +972,6 @@ class SerialTest:
             self.writeCommand(b'S')
         else:
             self.writeCommand(b's')
-
-    def writeSize(self):
-        self.writeValue(self.size, 'size')
 
     def writeValue(self, value, name, quiet=False):
         ba = bytearray([value & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff])

@@ -8,6 +8,8 @@
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 
+////#include "configuration.h"
+
 //the following ISR's have to be comment in by programmer
 
 /* for using uart
@@ -46,15 +48,19 @@ int main(void)
       uart_NewLine();
       _delay_ms(500);
       uart_WriteString("testing uart");
-      BitManipulation_setBit(&PORTD, PD4);
+     /* BitManipulation_setBit(&PORTD, PD4);
       BitManipulation_setBit(&PORTD, PD5);
       BitManipulation_setBit(&PORTD, PD6);
-      BitManipulation_setBit(&PORTD, PD7);
+      BitManipulation_setBit(&PORTD, PD7);*/
       _delay_ms(500);
-      BitManipulation_clearBit(&PORTD, PD4);
+    /*  BitManipulation_clearBit(&PORTD, PD4);
       BitManipulation_clearBit(&PORTD, PD5);
       BitManipulation_clearBit(&PORTD, PD6);
-      BitManipulation_clearBit(&PORTD, PD7);
+      BitManipulation_clearBit(&PORTD, PD7);*/
+
+      //char 'F' in uartmanager
+      ////configurationUartFlash();
+      //leds werden darin gesetzt und hier in der main! --> comment
     }
 
     return 0;

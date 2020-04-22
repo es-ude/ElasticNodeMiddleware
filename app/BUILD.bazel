@@ -21,7 +21,29 @@ default_embedded_binary(
         "//:UartLib",
         "//:XMemLib",
         "//app/setup:Setup",
+
+        "//app:ConfigurationLib"
     ],
+)
+
+cc_library(
+    name = "ConfigurationLib",
+    srcs = ["configuration.c"],
+    visibility = ["//visibility:public"],
+    deps = [ "ConfigurationLibHdr",
+             "//:BitmanipulationLib",
+             "//:UartLib",
+             "//:ElasticNodeMiddlewareLib"],
+)
+
+cc_library(
+    name = "ConfigurationLibHdr",
+    hdrs = [ "configuration.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:UartLibHdr",
+        "//:ElasticNodeMiddlewareLibHdr"
+    ]
 )
 
 genrule(
