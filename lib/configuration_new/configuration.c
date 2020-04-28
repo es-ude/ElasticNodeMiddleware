@@ -1,13 +1,10 @@
-//
-// Created by Alwyn Burger on 2019-06-26.
-//
-
 ////#include "lib/debug/debug.h"
 #include "lib/uart/uart_internal.h"
 #include "lib/uart/uart.h"
 
 //missing!
 //#include "lib/flash/flash.h"
+#include "lib/flash_new/flash.h"
 
 ////#include "lib/leds/leds.h"
 #include "EmbeddedUtilities/BitManipulation.h"

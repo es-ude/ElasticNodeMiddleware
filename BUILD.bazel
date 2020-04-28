@@ -188,6 +188,53 @@ cc_library(
     ],
 )
 
+## new
+
+
+cc_library(
+    name = "ConfigurationLib",
+    srcs = ["lib/configuration_new/configuration.c"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:ConfigurationLibHdr",
+             "//:BitmanipulationLib",
+             "//:UartLib",
+             "//:ElasticNodeMiddlewareLib",
+             "//:FlashLib"],
+)
+
+cc_library(
+    name = "FlashLib",
+    srcs = ["lib/flash_new/flash.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:FlashLibHdr",
+            "//:UartLib",
+            "//:RegisterDefinitionLibHdr",
+            "//:SpiLib",
+            "//:FpgaFlashLib"],
+)
+
+
+cc_library(
+    name = "FpgaFlashLib",
+    srcs = ["lib/fpgaFlash_new/fpgaFlashSpi.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:FpgaFlashLibHdr",
+            "//:SpiLib",
+            "//:XMemLib",
+            "//:RegisterDefinitionLibHdr"],
+)
+
+cc_library(
+    name = "SpiLib",
+    srcs = ["lib/spi_new/spi.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:SpiLibHdr",
+            "//:Interrupt_ManagerLib",
+            "//:RegisterDefinitionLibHdr",
+            "//:XMemLib",
+            "//:FpgaFlashLib"],
+)
+
 exports_files(
     srcs = [
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
@@ -202,6 +249,11 @@ exports_files(
         "lib/uart/uart.h",
         "lib/uart/uart_internal.h",
         "lib/xmem/xmem.h",
+
+        "lib/configuration_new/configuration.h",
+        "lib/flash_new/flash.h",
+        "lib/fpgaFlash_new/fpgaFlash.h",
+        "lib/spi_new/spi.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -294,4 +346,48 @@ cc_library(
         "lib/pinDefinition/fpgaRegisters.h",
     ],
     visibility = ["//visibility:public"],
+)
+
+## new
+
+
+cc_library(
+    name = "ConfigurationLibHdr",
+    hdrs = [ "lib/configuration_new/configuration.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:UartLibHdr",
+        "//:ElasticNodeMiddlewareLibHdr",
+        "//:FlashLibHdr"
+    ]
+)
+
+cc_library(
+    name = "FlashLibHdr",
+    hdrs = ["lib/flash_new/flash.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+            "//:UartLibHdr",
+            "//:RegisterDefinitionLibHdr",
+            "//:SpiLibHdr",
+            "//:FpgaFlashLibHdr"],
+)
+
+cc_library(
+    name = "FpgaFlashLibHdr",
+    hdrs = ["lib/fpgaFlash_new/fpgaFlash.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//:SpiLibHdr",
+            "//:XMemLibHdr",
+            "//:RegisterDefinitionLibHdr"],
+)
+
+cc_library(
+    name = "SpiLibHdr",
+    hdrs = ["lib/spi_new/spi.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//:Interrupt_ManagerLibHdr",
+            "//:RegisterDefinitionLibHdr",
+            "//:XMemLibHdr",
+            "//:FpgaFlashLibHdr"],
 )
