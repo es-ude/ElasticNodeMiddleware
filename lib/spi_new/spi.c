@@ -3,7 +3,7 @@
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/xmem/xmem.h"
-#include "lib/fpgaFlash_new/fpgaFlash.h"
+#include "lib/fpgaFlash_new/fpgaFlashSelect.h"
 
 // this function is called when a byte is read from flash
 // parameters are data and whether this is last byte
@@ -49,7 +49,7 @@ void spiPerformSimpleTaskBlocking(uint8_t command, uint32_t numRead, uint8_t *da
 
 void spiEnable(void)
 {
-
+/*
     // ensure master mode (_SS)
     DDRB |= _BV(PB0);
     PORTB |= _BV(PB0);
@@ -62,7 +62,8 @@ void spiEnable(void)
     while (SPSR & _BV(SPIF))
         SPDR;
 
-    SPDR;
+    SPDR;*/
+    spiEnable_internal();
 }
 
 uint8_t spiRead()

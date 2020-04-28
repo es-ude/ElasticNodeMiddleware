@@ -219,9 +219,17 @@ cc_library(
     srcs = ["lib/fpgaFlash_new/fpgaFlashSpi.c"],
     visibility = ["//visibility:public"],
     deps = ["//:FpgaFlashLibHdr",
-            "//:SpiLib",
+            "//:SpiLib"],
+)
+
+cc_library(
+    name = "FpgaFlashSelectLib",
+    srcs = ["lib/fpgaFlash_new/fpgaFlashSpiSelect.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:FpgaFlashSelectLibHdr",
             "//:XMemLib",
-            "//:RegisterDefinitionLibHdr"],
+            "//:RegisterDefinitionLibHdr",
+            "//:Interrupt_ManagerLib"],
 )
 
 cc_library(
@@ -232,7 +240,7 @@ cc_library(
             "//:Interrupt_ManagerLib",
             "//:RegisterDefinitionLibHdr",
             "//:XMemLib",
-            "//:FpgaFlashLib"],
+            "//:FpgaFlashSelectLib"],
 )
 
 exports_files(
@@ -377,11 +385,17 @@ cc_library(
     name = "FpgaFlashLibHdr",
     hdrs = ["lib/fpgaFlash_new/fpgaFlash.h"],
     visibility = ["//visibility:public"],
-    deps = ["//:SpiLibHdr",
-            "//:XMemLibHdr",
-            "//:RegisterDefinitionLibHdr"],
+    deps = ["//:SpiLibHdr"],
 )
 
+cc_library(
+    name = "FpgaFlashSelectLibHdr",
+    hdrs = ["lib/fpgaFlash_new/fpgaFlashSelect.h"],
+    visibility = ["//visibility:public"],
+    deps = [ "//:Interrupt_ManagerLibHdr",
+             "//:XMemLibHdr",
+             "//:RegisterDefinitionLibHdr"],
+)
 cc_library(
     name = "SpiLibHdr",
     hdrs = ["lib/spi_new/spi.h"],
@@ -389,5 +403,5 @@ cc_library(
     deps = ["//:Interrupt_ManagerLibHdr",
             "//:RegisterDefinitionLibHdr",
             "//:XMemLibHdr",
-            "//:FpgaFlashLibHdr"],
+            "//:FpgaFlashSelectLibHdr"],
 )
