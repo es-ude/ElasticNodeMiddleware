@@ -54,7 +54,8 @@ if 'posix' not in os.name:
     serial_default = "/dev/ttys4"
 else:
     serial_default = None
-program_template = "/dev/tty.usbmodem*1201"
+# program_template = "/dev/tty.usbmodem*1201"
+program_template = "/dev/ttyACM*"
 if 'posix' not in os.name:
     program_default = "/dev/ttys3" # "/dev/ttyS5" # "COM5"
 else:
@@ -105,7 +106,7 @@ class SerialTest:
             debugThread.start()
 
         # setup configurations
-        self.dummyConfig = Configuration("dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
+        self.dummyConfig = Configuration("../dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
         self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
         self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
         self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
@@ -208,8 +209,8 @@ class SerialTest:
                 # set up next request:
                 request = expectedResponse
                 if ord(request) > ord('9'): request = '0'
-            # self.ser.reset_input_buffer();
-            # self.ser.timeout = None
+            self.ser.reset_input_buffer();
+            self.ser.timeout = None
 
             print('Serial available')
         except KeyboardInterrupt:
@@ -245,7 +246,7 @@ class SerialTest:
     def fetchBit(self, configName):
         # warn("fetching disabled!")
         print("Fetching", configName)
-        cmd = "./scripts/fetch-bitfile.sh %d %s" % (self.elasticNodeVersion, configName)
+        cmd = "../scripts/fetch-bitfile.sh %d %s" % (self.elasticNodeVersion, configName)
         print("cmd", cmd)
         process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         (output, err) = process.communicate()
@@ -1011,6 +1012,7 @@ class SerialTest:
 
 
     def writeCommand(self, command):
+
         # backup current busy state
         bk = self.busy
         self.busy = True

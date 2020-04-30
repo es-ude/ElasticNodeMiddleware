@@ -8,7 +8,9 @@
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 
-////#include "lib/configuration_new/configuration.h"
+#include "lib/flash_new/flash.h"
+#include "lib/fpgaFlash_new/fpgaFlash.h"
+#include "lib/configuration_new/configuration.h"
 
 //the following ISR's have to be comment in by programmer
 
@@ -36,15 +38,23 @@ int main(void)
     xmem_enableXmem();
 
     uart_Init(NULL);
-    uart_WriteLine("starting");
+    //uart_WriteLine("starting");
+    _delay_ms(100);
+
+    initFlash();
+    fpgaFlashInit();
+    //uart_WriteLine("init Flash");
+    _delay_ms(100);
 
     elasticnode_initialise();
+    //uart_WriteLine("init Fpga");
+    _delay_ms(100);
 
     reconfigure_initMultiboot();
 
     while (true) {
 
-      uart_NewLine();
+     /* uart_NewLine();
       _delay_ms(500);
       uart_WriteString("testing uart");
       BitManipulation_setBit(&PORTD, PD4);
@@ -56,9 +66,9 @@ int main(void)
       BitManipulation_clearBit(&PORTD, PD5);
       BitManipulation_clearBit(&PORTD, PD6);
       BitManipulation_clearBit(&PORTD, PD7);
-
+*/
       //char 'F' in uartmanager
-      ////configurationUartFlash();
+      configurationUartFlash();
       //leds werden darin gesetzt und hier in der main! --> comment
     }
 
