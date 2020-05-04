@@ -16,14 +16,12 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = [
         "//:BitmanipulationLib",
+        "//:ConfigurationLib",
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
-        "//:UartLib",
+        "//:UartManagerLib",
         "//:XMemLib",
         "//app/setup:Setup",
-
-        "//:ConfigurationLib",
-        "//:UartManagerLib"
     ],
 )
 

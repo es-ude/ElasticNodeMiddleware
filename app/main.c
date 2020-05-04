@@ -39,18 +39,12 @@ int main(void)
     xmem_initXmem();
     xmem_enableXmem();
 
-    uart_Init(NULL);
-    //uart_WriteLine("starting");
-    _delay_ms(100);
+    debug_init(NULL);
 
     initFlash();
     fpgaFlashInit();
-    //uart_WriteLine("init Flash");
-    _delay_ms(100);
 
     elasticnode_initialise();
-    //uart_WriteLine("init Fpga");
-    _delay_ms(100);
 
     reconfigure_initMultiboot();
 
@@ -60,7 +54,7 @@ int main(void)
 
         uartProcessInput('F');
 
-     /* uart_NewLine();
+     /*
       _delay_ms(500);
       uart_WriteString("testing uart");
       BitManipulation_setBit(&PORTD, PD4);
