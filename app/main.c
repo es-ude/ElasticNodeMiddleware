@@ -12,6 +12,8 @@
 #include "lib/fpgaFlash_new/fpgaFlash.h"
 #include "lib/configuration_new/configuration.h"
 
+#include "lib/uartmanager/uartManager.h"
+
 //the following ISR's have to be comment in by programmer
 
 /* for using uart
@@ -52,7 +54,11 @@ int main(void)
 
     reconfigure_initMultiboot();
 
+    uartProcessInput('F');
+
     while (true) {
+
+        uartProcessInput('F');
 
      /* uart_NewLine();
       _delay_ms(500);
@@ -68,9 +74,10 @@ int main(void)
       BitManipulation_clearBit(&PORTD, PD7);
 */
       //char 'F' in uartmanager
-      configurationUartFlash();
+      //configurationUartFlash();
       //leds werden darin gesetzt und hier in der main! --> comment
     }
+
 
     return 0;
 }

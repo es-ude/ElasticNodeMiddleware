@@ -22,7 +22,8 @@ default_embedded_binary(
         "//:XMemLib",
         "//app/setup:Setup",
 
-        "//:ConfigurationLib"
+        "//:ConfigurationLib",
+        "//:UartManagerLib"
     ],
 )
 

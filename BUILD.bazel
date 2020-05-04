@@ -243,6 +243,15 @@ cc_library(
             "//:FpgaFlashSelectLib"],
 )
 
+cc_library(
+    name = "UartManagerLib",
+    srcs = ["lib/uartmanager/uartManager.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:UartManagerLibHdr",
+            "//:ConfigurationLib",
+            "//:UartLib"],
+)
+
 exports_files(
     srcs = [
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
@@ -261,7 +270,9 @@ exports_files(
         "lib/configuration_new/configuration.h",
         "lib/flash_new/flash.h",
         "lib/fpgaFlash_new/fpgaFlash.h",
-        "lib/spi_new/spi.h"
+        "lib/spi_new/spi.h",
+
+        "lib/uartmanager/uartManager.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -404,4 +415,12 @@ cc_library(
             "//:RegisterDefinitionLibHdr",
             "//:XMemLibHdr",
             "//:FpgaFlashSelectLibHdr"],
+)
+
+cc_library(
+    name = "UartManagerLibHdr",
+    hdrs = ["lib/uartmanager/uartManager.h"],
+    visibility = ["//visibility:public"],
+    deps = ["//:ConfigurationLibHdr",
+            "//:UartLibHdr"],
 )
