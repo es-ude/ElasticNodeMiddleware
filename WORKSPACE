@@ -48,7 +48,11 @@ es_github_archive(
     version = "0.3.1",
 )
 
-es_github_archive(
+#es_github_archive(
+#    name = "PeripheralInterface",
+#    version = "0.6"
+#)
+local_repository(
     name = "PeripheralInterface",
-    version = "0.6"
+    path = "../PeripheralInterface",
 )

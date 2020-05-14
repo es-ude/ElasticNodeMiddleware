@@ -6,12 +6,13 @@ int
 main(void)
 {
     setUpUsbSerial();
+    char text[] = "hello, world!\n";
     while (true)
     {
         _delay_ms(500);
-        lufaUsart_writeByte(1);
-        _delay_ms(500);
-        lufaUsart_writeByte('w');
-        lufaUsart_writeByte('\n');
+        for (int i=0; i<14; i++)
+        {
+            lufaUsart_writeByte(text+i);
+        }
     }
 }
