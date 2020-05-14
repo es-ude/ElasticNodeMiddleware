@@ -5,15 +5,22 @@ Therefore, we show how to connect the hardware and how to run a minimal example 
 
 ## Hardware
 
-To work with the elastic node middleware code you need the right hardware. 
-You need the elastic node which is shown in the images below and a programmer.
-If you want to use UART for other communication, you need a UART device additionally.
-On top of this, you need a USB-to-MicroUSB (?) cable and ... (cable for programmer, GPIO cable?).
-
 The following photos show the elastic node. 
 The left yellow rectangle is the FPGA while the right yellow rectangle is the used MCU. 
+The left red rectangle show the MCU LEDs. These LEDs should blink in the blink example. 
+The right red rectangle shows the connection to the MCU.
 ![](images/elasticNodeFrontEdit.jpg)
 ![](images/elasticNodeBack.jpg)
+
+To work with the elastic node middleware code you need the right hardware. 
+You need the elastic node which is shown in the images below and a programmer (two images below).
+![elasticnode](images/elasticNode.jpg)
+![programmer](images/programmerEdit.jpg)
+To connect these two devices you need 6 jumper wires female to female which are in the above pictures the grey cable.
+The programmer is connected with your computer with an USB-to-MiniUSB cable.
+
+For communication purposes you need a FTDI-adapter.
+On top of this, you need a USB-to-MiniUSB cable and ... (cable for programmer, GPIO cable?).
 
 To use the Elastic Node Middleware Code, you have to connect your computer with the hardware.
 You first put the USB port in your USB port at your computer and the MicroUSB port in the port at the elastic node.
