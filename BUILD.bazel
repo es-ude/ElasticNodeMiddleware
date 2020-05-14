@@ -189,10 +189,27 @@ cc_library(
 )
 
 cc_library(
+    name = "LufaUsartLib",
+    visibility = ["//visibility:public"],
+    copts = [
+        #"-DF_CPU=8000000UL",
+        #"-DBAUD=9600UL",
+             "-DF_CPU=8000000UL",
+             "-DF_USB=8000000UL",
+             "-DBAUD=115200",
+    ],
+    deps = [
+        "@PeripheralInterface//:LufaUsart",
+    ],
+)
+
+cc_library(
     name = "DebugLib",
     srcs = ["lib/debug/debug.c"],
     visibility = ["//visibility:public"],
-    deps = ["//:DebugLibHdr"],
+    deps = ["//:DebugLibHdr",
+            #"@PeripheralInterface//:LufaUsart",
+            ]
 )
 ## new
 

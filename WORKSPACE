@@ -40,10 +40,15 @@ http_archive(
     name = "LUFA",
     build_file = "@EmbeddedSystemsBuildScripts//:BUILD.LUFA",
     strip_prefix = "lufa-LUFA-170418",
-    urls = ["http://fourwalledcubicle.com/files/LUFA/LUFA-170418.zip"],
+    urls = ["https://fourwalledcubicle.com/files/LUFA/LUFA-170418.zip"],
 )
 
 es_github_archive(
     name = "EmbeddedUtilities",
     version = "0.3.1",
+)
+
+es_github_archive(
+    name = "PeripheralInterface",
+    version = "0.6"
 )

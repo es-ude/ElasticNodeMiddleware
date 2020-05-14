@@ -14,6 +14,8 @@
 
 #include "lib/uartmanager/uartManager.h"
 
+#include "PeripheralInterface/LufaUsartImpl.h"
+
 //the following ISR's have to be comment in by programmer
 
 /* for using uart
@@ -36,10 +38,11 @@ int main(void)
 {
     DDRD = 0xff;
 
-    xmem_initXmem();
+    //uart_Init(NULL);
+  /*  xmem_initXmem();
     xmem_enableXmem();
 
-    debug_init(NULL);
+    uart_Init(NULL);
 
     initFlash();
     fpgaFlashInit();
@@ -48,15 +51,19 @@ int main(void)
 
     reconfigure_initMultiboot();
 
-    uartProcessInput('F');
-
+*/
+    setUpUsbSerial();
     while (true) {
-
-        uartProcessInput('F');
+        _delay_ms(500);
+        //uart_WriteString("testing uart");
+        lufaUsart_writeByte(1);
+        _delay_ms(500);
+        lufaUsart_writeByte('w');
+        //uint8_t data = lufaUsart_readByteBlocking();
 
      /*
       _delay_ms(500);
-      uart_WriteString("testing uart");
+      //uart_WriteString("testing uart");
       BitManipulation_setBit(&PORTD, PD4);
       BitManipulation_setBit(&PORTD, PD5);
       BitManipulation_setBit(&PORTD, PD6);
@@ -67,6 +74,8 @@ int main(void)
       BitManipulation_clearBit(&PORTD, PD6);
       BitManipulation_clearBit(&PORTD, PD7);
 */
+
+        //uartProcessInput('F');
       //char 'F' in uartmanager
       //configurationUartFlash();
       //leds werden darin gesetzt und hier in der main! --> comment
