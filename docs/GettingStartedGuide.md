@@ -17,7 +17,9 @@ You need the elastic node which is shown in the images below and a programmer (t
 ![elasticnode](images/elasticNode.jpg)
 ![programmer](images/programmerEdit.jpg)
 To connect these two devices you need 6 jumper wires female to female which are in the above pictures the grey cable.
-The programmer is connected with your computer with an USB-to-MiniUSB cable.
+The programmer is connected with your computer with an USB-to-MiniUSB cable. 
+The MiniUSB is connect to the programmer
+![cable](images/cable2Edit.jpg)
 
 For communication purposes you need a FTDI-adapter.
 On top of this, you need a USB-to-MiniUSB cable and ... (cable for programmer, GPIO cable?).
