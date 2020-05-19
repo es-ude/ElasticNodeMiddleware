@@ -44,8 +44,9 @@ int main(void)
         //_delay_ms(500);
         //uart_WriteLine("testing uart");
         _delay_ms(500);
+        uart_WriteChar('1');
         uint8_t output = uart_ReceiveCharBlocking_internal;
-        uart_WriteChar((char)output);
+        uart_WriteChar(output);
 
 
      /*
