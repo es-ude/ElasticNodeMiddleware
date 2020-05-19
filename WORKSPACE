@@ -52,7 +52,7 @@ es_github_archive(
 #    name = "PeripheralInterface",
 #    version = "0.6"
 #)
-local_repository(
-    name = "PeripheralInterface",
-    path = "../PeripheralInterface",
-)
+#local_repository(
+#    name = "PeripheralInterface",
+#    path = "../PeripheralInterface",
+#)

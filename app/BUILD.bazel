@@ -22,21 +22,22 @@ default_embedded_binary(
         "//:UartManagerLib",
         "//:XMemLib",
         "//app/setup:Setup",
-        "@PeripheralInterface//:LufaUsart",
+        "//:UartLib"
+        #"@PeripheralInterface//:LufaUsart",
 #        "//:LufaUsartLib"
         #"@PeripheralInterface"
     ],
 )
 
-default_embedded_binary(
-    name = "LufaWriteIntegrationTest",
-    srcs = ["LufaWriteIntegrationTest.c"],
-    copts = cpu_frequency_flag(),
-    uploader = "Avr_dude_upload_script",
-    deps = [
-        "@PeripheralInterface//:LufaUsart",
-    ]
-)
+#default_embedded_binary(
+#    name = "LufaWriteIntegrationTest",
+#    srcs = ["LufaWriteIntegrationTest.c"],
+#    copts = cpu_frequency_flag(),
+#    uploader = "Avr_dude_upload_script",
+#    deps = [
+#        "@PeripheralInterface//:LufaUsart",
+#    ]
+#)
 
 genrule(
     name = "Avr_dude_upload_script",

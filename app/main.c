@@ -3,8 +3,9 @@
 #include <stdbool.h>
 //#include "EmbeddedUtilities/BitManipulation.h"
 //#include <stdio.h>
-//#include "lib/uart/uart.h"
-//#include <avr/interrupt.h>
+#include "lib/uart/uart.h"
+#include "lib/uart/uart_internal.h"
+#include <avr/interrupt.h>
 //#include "lib/xmem/xmem.h"
 //#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 //#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
@@ -15,20 +16,20 @@
 //
 //#include "lib/uartmanager/uartManager.h"
 
-#include "PeripheralInterface/LufaUsartImpl.h"
+//#include "PeripheralInterface/LufaUsartImpl.h"
 
 //the following ISR's have to be comment in by programmer
 
 /* for using uart
  */
-//ISR(USART1_RX_vect) {
-//    uart_ISR_Receive();
-//}
-//
-//ISR(USART1_TX_vect) {
-//    uart_ISR_Transmit();
-//}
-//
+ISR(USART1_RX_vect) {
+    uart_ISR_Receive();
+}
+
+ISR(USART1_TX_vect) {
+    uart_ISR_Transmit();
+}
+
 ///* for using reconfigure
 // */
 //ISR(FPGA_DONE_INT_VECTOR) {
@@ -38,14 +39,14 @@
 int main(void)
 {
 
-    setUpUsbSerial();
+    uart_Init(NULL);
     while (true) {
+        //_delay_ms(500);
+        //uart_WriteLine("testing uart");
         _delay_ms(500);
-        //uart_WriteString("testing uart");
-        lufaUsart_writeByte(1);
-        _delay_ms(500);
-        lufaUsart_writeByte('w');
-        //uint8_t data = lufaUsart_readByteBlocking();
+        uint8_t output = uart_ReceiveCharBlocking_internal;
+        uart_WriteChar((char)output);
+
 
      /*
       _delay_ms(500);
