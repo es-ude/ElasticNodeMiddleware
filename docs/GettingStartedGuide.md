@@ -12,27 +12,26 @@ The right red rectangle shows the connection to the MCU.
 ![](images/elasticNodeFrontEdit.jpg)
 ![](images/elasticNodeBack.jpg)
 
-To work with the elastic node middleware code you need the right hardware. 
-You need the elastic node which is shown in the images below and a programmer (two images below).
+The elastic node is connected to a programmer with 6 jumper wires female to female.
+In the following pictures this is the grey cable. 
+The connected elastic node and programmer are shown in the following image.
 ![elasticnode](images/elasticNode.jpg)
 ![programmer](images/programmerEdit.jpg)
-To connect these two devices you need 6 jumper wires female to female which are in the above pictures the grey cable.
+
 The programmer is connected with your computer with an USB-to-MiniUSB cable. 
-The MiniUSB is connect to the programmer
+The MiniUSB is connected to the programmer and the USB is connected to your computer.
 ![cable](images/cable2Edit.jpg)
 
 For communication purposes you need a FTDI-adapter.
-On top of this, you need a USB-to-MiniUSB cable and ... (cable for programmer, GPIO cable?).
+This adapter is connected with the elastic node with 3 jumper wires male to female.
+The receive (RXI, brown cable) and transmit (TXD, red cable) pins of the FTDI-adapter are connected with the uart pins.
+The ground (GND, black cable) pin of the FTDI-adapter is connected to the ground pin of the elastic node (see picture above).
+The FTDI-adapter has again a connection to the computer like the programmer with a USB-to-MiniUSB cable. 
+The MiniUSB is connected to the FTDI-adapter and the USB is connected to your computer.
+![ftdiAdapter](images/ftdiAdapter.jpg)
 
-To use the Elastic Node Middleware Code, you have to connect your computer with the hardware.
-You first put the USB port in your USB port at your computer and the MicroUSB port in the port at the elastic node.
-In doing so you should use the MicroUSB port for the MCU and not for Monitoring (MON).
-The circle in the photo above shows the right MicroUSB port. 
-Then you connect the ... cable with the MCU program pins for the MCU (seen in the above image in the bottom right corner), whereby on the other side you connect the programmer with it.
-
-The following photo shows the construction after connect the whole hardware.
- 
- --> missing 
+The following photo shows the construction after connecting the whole hardware.
+![construction](images/constructionEdit.jpg)
  
 ## How to use the Code
 
