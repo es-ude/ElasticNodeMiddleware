@@ -31,11 +31,13 @@ ISR(USART1_TX_vect) {
     uart_ISR_Transmit();
 }
 
+//// IMPORTANT: by comment in these code the main runs 3 times (?, only the last time till the end)?!
+//// Please check
 /* for using reconfigure
 */
-ISR(FPGA_DONE_INT_VECTOR) {
+/*ISR(FPGA_DONE_INT_VECTOR) {
     reconfigure_interruptSR();
-}
+}*/
 
 int main(void)
 {
@@ -52,41 +54,17 @@ int main(void)
     elasticnode_initialise();
     reconfigure_initMultiboot();
 
+    configurationUartFlash();
     while (true) {
 
-        if(debugReadCharAvailable()) {
+        /*if(debugReadCharAvailable()) {
             uint8_t data = debugGetChar();
             if(data == 'F') {
                 debugAck(data);
                 configurationUartFlash();
 
             }
-        }
-
-        /*_delay_ms(500);
-        if(debugReadCharAvailable()) {
-            BitManipulation_setBit(&PORTD, PD4);
-            _delay_ms(500);
-            uint8_t data = debugGetChar();
-
-            if(data == '1') {
-                debugWriteChar(data);
-                BitManipulation_setBit(&PORTD, PD5);
-                _delay_ms(500);
-            }
-            if(data != '1') {
-                debugWriteChar(data);
-                BitManipulation_setBit(&PORTD, PD6);
-                _delay_ms(500);
-            }
-
-
-        }
-        _delay_ms(500);
-        BitManipulation_clearBit(&PORTD, PD4);
-        BitManipulation_clearBit(&PORTD, PD5);
-        BitManipulation_clearBit(&PORTD, PD6);
-*/
+        }*/
 
     }
 

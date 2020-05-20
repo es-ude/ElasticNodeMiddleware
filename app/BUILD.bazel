@@ -30,6 +30,20 @@ default_embedded_binary(
     ],
 )
 
+default_embedded_binary(
+    name = "blinkUsartExample",
+    srcs = ["blinkUsartExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = [
+        "//:BitmanipulationLib",
+        "//:DebugLib",
+        "//app/setup:Setup",
+
+        "//:UartLib"
+    ]
+)
+
 #default_embedded_binary(
 #    name = "LufaWriteIntegrationTest",
 #    srcs = ["LufaWriteIntegrationTest.c"],

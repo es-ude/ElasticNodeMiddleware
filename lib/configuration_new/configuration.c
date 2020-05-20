@@ -24,13 +24,13 @@ void readData(uint8_t *buffer, uint16_t num);
 
 void readValue(uint32_t *destination)
 {
-    debugWriteLine("test1.1");
-    _delay_ms(100);
+   // debugWriteLine("test1.1");
+   // _delay_ms(100);
 
     readData((uint8_t *) destination, sizeof(uint32_t));
 
-    debugWriteLine("test1.2");
-    _delay_ms(100);
+   // debugWriteLine("test1.2");
+   // _delay_ms(100);
 
     debugWriteStringLength(destination, sizeof(uint32_t));
     //uart_WriteStringLengthBlock(destination, sizeof(uint32_t));
@@ -41,14 +41,14 @@ void readData(uint8_t *buffer, uint16_t num)
     uint8_t *ptr = buffer;
     for (uint16_t i = 0; i < num; i++) {
 
-        debugWriteLine("test1.1.2");
-        _delay_ms(100);
+      //  debugWriteLine("test1.1.2");
+      //  _delay_ms(100);
 
         *ptr++ = (uint8_t) debugReadCharBlock();
         //*ptr++ = (uint8_t) uart_ReceiveCharBlocking_internal();
 
-        debugWriteLine("test1.1.3");
-        _delay_ms(100);
+      //  debugWriteLine("test1.1.3");
+      //  _delay_ms(100);
     }
 
 }
@@ -58,11 +58,7 @@ void configurationUartFlash(void) {
     ////fpgaPower(0);
     elasticnode_fpgaPowerOff();
     ////setFpgaHardReset();
-    debugWriteLine("fpga hard reset...");
-    _delay_ms(100);
     elasticnode_fpgaHardReset();
-    debugWriteLine("... works");
-    _delay_ms(100);
     ////setLed(0, 1);
     BitManipulation_setBit(&PORTD, PD7);
 
@@ -156,7 +152,6 @@ void configurationUartFlash(void) {
 
         currentAddress += blockSize;
         configRemaining -= blockSize;
-
 
         debugDone();
         //uart_WriteStringBlock("\n$$");
