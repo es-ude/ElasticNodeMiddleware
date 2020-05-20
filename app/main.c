@@ -1,10 +1,11 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdbool.h>
-//#include "EmbeddedUtilities/BitManipulation.h"
+#include "EmbeddedUtilities/BitManipulation.h"
 //#include <stdio.h>
 #include "lib/uart/uart.h"
 #include "lib/uart/uart_internal.h"
+#include "lib/debug/debug.h"
 #include <avr/interrupt.h>
 //#include "lib/xmem/xmem.h"
 //#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
@@ -39,15 +40,36 @@ ISR(USART1_TX_vect) {
 int main(void)
 {
 
-    uart_Init(NULL);
+    //uart_Init(NULL);
+    DDRD = 0xff;
+    debugInit(NULL);
     while (true) {
-        //_delay_ms(500);
-        //uart_WriteLine("testing uart");
         _delay_ms(500);
-        uart_WriteChar('1');
-        uint8_t output = uart_ReceiveCharBlocking_internal;
-        uart_WriteChar(output);
+        //uart_WriteLine("testing uart");
+        if(debugReadCharAvailable()) {
+            BitManipulation_setBit(&PORTD, PD4);
+            _delay_ms(500);
+            uint8_t data = debugGetChar();
 
+            if(data == '1') {
+                debugWriteChar(data);
+                BitManipulation_setBit(&PORTD, PD5);
+                _delay_ms(500);
+            }
+            if(data != '1') {
+                debugWriteChar(data);
+                BitManipulation_setBit(&PORTD, PD6);
+                _delay_ms(500);
+            }
+
+
+        }
+        _delay_ms(500);
+        BitManipulation_clearBit(&PORTD, PD4);
+        BitManipulation_clearBit(&PORTD, PD5);
+        BitManipulation_clearBit(&PORTD, PD6);
+       // uint8_t output = uart_ReceiveCharBlocking_internal;
+       // uart_WriteChar(output);
 
      /*
       _delay_ms(500);

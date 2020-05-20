@@ -22,7 +22,8 @@ default_embedded_binary(
         "//:UartManagerLib",
         "//:XMemLib",
         "//app/setup:Setup",
-        "//:UartLib"
+        "//:UartLib",
+        "//:DebugLib"
         #"@PeripheralInterface//:LufaUsart",
 #        "//:LufaUsartLib"
         #"@PeripheralInterface"

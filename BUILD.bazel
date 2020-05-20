@@ -199,7 +199,7 @@ cc_library(
              "-DBAUD=115200",
     ],
     deps = [
-        "@PeripheralInterface//:LufaUsart",
+        #"@PeripheralInterface//:LufaUsart",
     ],
 )
 
@@ -209,6 +209,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = ["//:DebugLibHdr",
             #"@PeripheralInterface//:LufaUsart",
+            "//:UartLib"
             ]
 )
 ## new
@@ -304,6 +305,8 @@ exports_files(
         "lib/uart/uart_internal.h",
         "lib/uartmanager/uartManager.h",
         "lib/xmem/xmem.h",
+
+        "lib/debug/debug.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -402,7 +405,7 @@ cc_library(
     name = "DebugLibHdr",
     hdrs = ["lib/debug/debug.h"],
     visibility = ["//visibility:public"],
-    deps = [],
+    deps = ["//:UartLibHdr"],
 )
 ## new
 
