@@ -224,6 +224,8 @@ cc_library(
         "//:ElasticNodeMiddlewareLib",
         "//:FlashLib",
         "//:UartLib",
+        "//:DebugLib",
+        "//:Interrupt_ManagerLib"
     ],
 )
 
@@ -417,6 +419,8 @@ cc_library(
         "//:ElasticNodeMiddlewareLibHdr",
         "//:FlashLibHdr",
         "//:UartLibHdr",
+        "//:DebugLibHdr",
+        "//:Interrupt_ManagerLibHdr"
     ],
 )
 

@@ -51,7 +51,7 @@ void debugInit(void (*receiveHandler)(uint8_t))
     uartFlag = 0x0;
 
     uart_Init(&debugReceiveCharHandler);
-    debugWriteLine("\r\n\n\n\n\n\n\n\n\n\nStarting debug...");
+    debugWriteLine("\r\n\nStarting debug...");
 }
 
 void setDebugReceiveHandler(void (*receiveHandler)(uint8_t))
