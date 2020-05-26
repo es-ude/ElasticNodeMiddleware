@@ -4,6 +4,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef TEST
+
+#else
+
+#include <util/delay.h>
+
+#endif
+
 #define FLASH_SPEED_LOW 1
 #define SPI_BUFFER_SIZE 300 // page + command
 #define FLASH_BUFFER_SIZE 256

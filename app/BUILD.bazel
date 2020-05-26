@@ -19,7 +19,6 @@ default_embedded_binary(
         "//:ConfigurationLib",
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
-        "//:UartManagerLib",
         "//:XMemLib",
         "//app/setup:Setup",
         "//:UartLib",

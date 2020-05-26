@@ -1,9 +1,9 @@
 #include "lib/flash_new/flash.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"
-#include "lib/uart/uart.h"
 #include "lib/spi_new/spi.h"
 #include "lib/fpgaFlash_new/fpgaFlash.h"
+#include "lib/debug/debug.h"
 
 uint8_t spi_buffer[SPI_BUFFER_SIZE];
 volatile uint8_t *flashBufPtr;
@@ -72,8 +72,8 @@ void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mc
 {
     if (length + 4 > SPI_BUFFER_SIZE)
     {
-        //debugWriteLine("Cannot write data! Too large for buffer");
-        uart_WriteLine("Cannot write data! Too large for buffer");
+        debugWriteLine("Cannot write data! Too large for buffer");
+        //uart_WriteLine("Cannot write data! Too large for buffer");
     }
     else
     {

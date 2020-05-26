@@ -14,8 +14,6 @@
 #include "lib/flash_new/flash.h"
 #include "lib/fpgaFlash_new/fpgaFlash.h"
 #include "lib/configuration_new/configuration.h"
-//
-//#include "lib/uartmanager/uartManager.h"
 
 //#include "PeripheralInterface/LufaUsartImpl.h"
 
@@ -56,15 +54,6 @@ int main(void)
 
     configurationUartFlash();
     while (true) {
-
-        /*if(debugReadCharAvailable()) {
-            uint8_t data = debugGetChar();
-            if(data == 'F') {
-                debugAck(data);
-                configurationUartFlash();
-
-            }
-        }*/
 
     }
 

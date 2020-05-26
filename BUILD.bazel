@@ -238,7 +238,7 @@ cc_library(
         "//:FpgaFlashLib",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLib",
-        "//:UartLib",
+        "//:DebugLib"
     ],
 )
 
@@ -277,17 +277,6 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "UartManagerLib",
-    srcs = ["lib/uartmanager/uartManager.c"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//:ConfigurationLib",
-        "//:UartLib",
-        "//:UartManagerLibHdr",
-    ],
-)
-
 exports_files(
     srcs = [
         "lib/configuration_new/configuration.h",
@@ -305,7 +294,6 @@ exports_files(
         "lib/uart/circularBuffer/circularBuffer.h",
         "lib/uart/uart.h",
         "lib/uart/uart_internal.h",
-        "lib/uartmanager/uartManager.h",
         "lib/xmem/xmem.h",
 
         "lib/debug/debug.h"
@@ -432,7 +420,7 @@ cc_library(
         "//:FpgaFlashLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLibHdr",
-        "//:UartLibHdr",
+        "//:DebugLibHdr"
     ],
 )
 
@@ -466,12 +454,3 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "UartManagerLibHdr",
-    hdrs = ["lib/uartmanager/uartManager.h"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//:ConfigurationLibHdr",
-        "//:UartLibHdr",
-    ],
-)
