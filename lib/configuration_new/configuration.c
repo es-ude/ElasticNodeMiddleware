@@ -83,6 +83,10 @@ void configurationUartFlash(void) {
     free(buf);*/
 
     debugWriteString(" ");
+
+    debugWriteDec32(configAddress);
+
+    debugWriteString(" ");
     //uart_WriteStringBlock(" ");
 
     debugWriteDec32(configSize);

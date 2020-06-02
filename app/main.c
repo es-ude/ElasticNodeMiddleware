@@ -15,8 +15,6 @@
 #include "lib/fpgaFlash_new/fpgaFlash.h"
 #include "lib/configuration_new/configuration.h"
 
-//#include "PeripheralInterface/LufaUsartImpl.h"
-
 //the following ISR's have to be comment in by programmer
 
 /* for using uart
