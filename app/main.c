@@ -13,8 +13,9 @@
 
 #include "lib/flash_new/flash.h"
 #include "lib/fpgaFlash_new/fpgaFlash.h"
-#include "lib/configuration_new/configuration.h"
+//#include "lib/configuration_new/configuration.h"
 
+#include "lib/uartmanager/uartmanager.h"
 //the following ISR's have to be comment in by programmer
 
 /* for using uart
@@ -30,10 +31,11 @@ ISR(USART1_TX_vect) {
 //// IMPORTANT: by comment in these code the main runs 3 times (?, only the last time till the end)?!
 //// Please check
 /* for using reconfigure
-*/
+
 ISR(FPGA_DONE_INT_VECTOR) {
     reconfigure_interruptSR();
 }
+*/
 
 int main(void)
 {
@@ -58,7 +60,8 @@ int main(void)
             // acknowledge when ready to receive again
             debugAck(data);
 
-            configurationUartFlash();
+            //configurationUartFlash();
+            uartProcessInput(data);
         }
         debugTask();
     }

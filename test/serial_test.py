@@ -47,7 +47,8 @@ DUMMY_ADDRESS = 0x0
 SKIP = None # (538844 - 256) # 4096 * 5
 
 cpuName = "at90usb1287"
-en4_serial_template = "/dev/tty.usbmodem*6201"
+#en4_serial_template = "/dev/tty.usbmodem*6201"
+en4_serial_template = "/dev/ttyACM1"
 en3_serial_template = "/dev/tty.usbserial-EN*"
 # serial_template = "/dev/ttyS256*"
 if 'posix' not in os.name:
@@ -55,7 +56,7 @@ if 'posix' not in os.name:
 else:
     serial_default = None
 # program_template = "/dev/tty.usbmodem*1201"
-program_template = "/dev/ttyACM*"
+program_template = "/dev/ttyACM0"
 if 'posix' not in os.name:
     program_default = "/dev/ttys3" # "/dev/ttyS5" # "COM5"
 else:
@@ -170,6 +171,7 @@ class SerialTest:
                     time.sleep(0.5)
                     print("waiting for port...")
 
+            print("debugInfo: ","device found after reset")
             self.ser = serial.Serial(self.port, self.baud)
             self.remainingMonitor = 0;
 
@@ -178,6 +180,8 @@ class SerialTest:
             self.readSerial()
             # print("DONE")
             self.ser.reset_input_buffer();
+
+            print("debugInfo: ","device found after reading")
 
             response = '0'
             self.ser.timeout = 0.5#  * 10
@@ -192,6 +196,8 @@ class SerialTest:
             self.ser.timeout = 2.5#  * 10
 
             expectedResponse = 'x'
+
+            print("debugInfo: ","device found after timeout")
             while ord(response) != ord(expectedResponse):
                 self.ser.reset_input_buffer();
 
@@ -199,8 +205,11 @@ class SerialTest:
                 self.ser.write(request.encode())
                 response = self.ser.read(1)
 
+                #print("debugInfo: ","device found after write")
                 if len(response) > 0:
                     # print('request:', ord(request), 'response:', ord(response), 'expected:', ord(expectedResponse))
+                    print(response)
+                    print(expectedResponse)
                     continue
                 else:
                     print('nothing received')
@@ -209,6 +218,8 @@ class SerialTest:
                 # set up next request:
                 request = expectedResponse
                 if ord(request) > ord('9'): request = '0'
+
+            print("debugInfo: ","device found after while-loop")
             self.ser.reset_input_buffer();
             self.ser.timeout = None
 

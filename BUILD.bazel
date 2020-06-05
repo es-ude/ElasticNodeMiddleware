@@ -205,7 +205,24 @@ cc_library(
             "@PeripheralInterface//:LufaUsart"
             ],
 )
-## new
+
+cc_library(
+    name = "UartmanagerLib",
+    srcs = ["lib/uartmanager/uartmanager.c"],
+    visibility = ["//visibility:public"],
+    deps = ["//:UartmanagerLibHdr",
+            "//:RegisterDefinitionLibHdr",
+            "//:FpgaFlashSelectLib",
+            "//:FpgaFlashLib",
+            "//:FlashLib",
+            "//:XMemLib",
+            "//:ElasticNodeMiddlewareLib",
+            "//:ElasticNodeMiddleware_ConfigureFPGALib",
+            "//:Reconfigure_multibootLib",
+            "//:ConfigurationLib",
+            "//:DebugLufaLib"
+            ],
+)
 
 cc_library(
     name = "ConfigurationLib",
@@ -291,7 +308,8 @@ exports_files(
         "lib/uart/uart_internal.h",
         "lib/xmem/xmem.h",
 
-        "lib/debug/debug.h"
+        "lib/debug/debug.h",
+        "lib/uartmanager/uartmanager.h"
     ],
     visibility = ["//visibility:public"],
 )
@@ -455,6 +473,24 @@ cc_library(
         "//:Interrupt_ManagerLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
+    ],
+)
+
+cc_library(
+    name = "UartmanagerLibHdr",
+    hdrs = ["lib/uartmanager/uartmanager.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:RegisterDefinitionLibHdr",
+        "//:FpgaFlashSelectLibHdr",
+        "//:FpgaFlashLibHdr",
+        "//:FlashLibHdr",
+        "//:XMemLibHdr",
+        "//:ElasticNodeMiddlewareLibHdr",
+        "//:ElasticNodeMiddleware_ConfigureFPGALibHdr",
+        "//:Reconfigure_MultibootLibHdr",
+        "//:ConfigurationLibHdr",
+        "//:DebugLufaLibHdr"
     ],
 )
 

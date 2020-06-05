@@ -24,6 +24,7 @@ default_embedded_binary(
         #"//:UartLib",
         #"//:DebugUartLib",
         "//:DebugLufaLib",
+        "//:UartmanagerLib"
     ],
 )
 
