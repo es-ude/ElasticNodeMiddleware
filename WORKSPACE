@@ -5,6 +5,8 @@ workspace(
 load("//:github.bzl", "es_github_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
 es_github_archive(
     name = "EmbeddedSystemsBuildScripts",
     version = "0.6.1",
@@ -52,7 +54,9 @@ es_github_archive(
 #    name = "PeripheralInterface",
 #    version = "0.6"
 #)
-#local_repository(
-#    name = "PeripheralInterface",
-#    path = "../PeripheralInterface",
-#)
+
+git_repository(
+    name = "PeripheralInterface",
+    remote = "https://github.com/es-ude/PeripheralInterface.git",
+    branch = "master",
+)

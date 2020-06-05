@@ -8,8 +8,6 @@
 
 void debugTask(void);
 
-void debugEnable(void);
-void debugDisable(void);
 void debugInit(void (*receiveHandler)(uint8_t));
 uint16_t debugNumInputAvailable(void);
 void setDebugReceiveHandler(void (*receiveHandler)(uint8_t));

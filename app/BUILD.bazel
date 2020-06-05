@@ -21,8 +21,9 @@ default_embedded_binary(
         "//:Reconfigure_multibootLib",
         "//:XMemLib",
         "//app/setup:Setup",
-        "//:UartLib",
-        "//:DebugLib"
+        #"//:UartLib",
+        #"//:DebugUartLib",
+        "//:DebugLufaLib",
     ],
 )
 
@@ -33,7 +34,7 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = [
         "//:BitmanipulationLib",
-        "//:DebugLib",
+        "//:DebugUartLib",
         "//app/setup:Setup",
 
         "//:UartLib"
@@ -46,7 +47,7 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "Avr_dude_upload_script",
     deps = [
-        "@PeripheralInterface//:LufaUsart",
+        "//:DebugLufaLib",
         "//:BitmanipulationLib"
     ]
 )

@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include "EmbeddedUtilities/BitManipulation.h"
 //#include <stdio.h>
-#include "lib/uart/uart.h"
-#include "lib/uart/uart_internal.h"
+//#include "lib/uart/uart.h"
+//#include "lib/uart/uart_internal.h"
 #include "lib/debug/debug.h"
 #include <avr/interrupt.h>
 #include "lib/xmem/xmem.h"
@@ -18,7 +18,7 @@
 //the following ISR's have to be comment in by programmer
 
 /* for using uart
- */
+
 ISR(USART1_RX_vect) {
     uart_ISR_Receive();
 }
@@ -26,14 +26,14 @@ ISR(USART1_RX_vect) {
 ISR(USART1_TX_vect) {
     uart_ISR_Transmit();
 }
-
+*/
 //// IMPORTANT: by comment in these code the main runs 3 times (?, only the last time till the end)?!
 //// Please check
 /* for using reconfigure
 */
-/*ISR(FPGA_DONE_INT_VECTOR) {
+ISR(FPGA_DONE_INT_VECTOR) {
     reconfigure_interruptSR();
-}*/
+}
 
 int main(void)
 {
@@ -50,11 +50,17 @@ int main(void)
     elasticnode_initialise();
     reconfigure_initMultiboot();
 
-    configurationUartFlash();
     while (true) {
+        if(debugReadCharAvailable())
+        {
+            uint8_t data = debugGetChar();
 
+            // acknowledge when ready to receive again
+            debugAck(data);
+
+            configurationUartFlash();
+        }
+        debugTask();
     }
-
-
     return 0;
 }

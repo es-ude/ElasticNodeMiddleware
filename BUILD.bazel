@@ -189,28 +189,21 @@ cc_library(
 )
 
 cc_library(
-    name = "LufaUsartLib",
+    name = "DebugUartLib",
+    srcs = ["lib/debug/debug.c"],
     visibility = ["//visibility:public"],
-    copts = [
-        #"-DF_CPU=8000000UL",
-        #"-DBAUD=9600UL",
-             "-DF_CPU=8000000UL",
-             "-DF_USB=8000000UL",
-             "-DBAUD=115200",
-    ],
-    deps = [
-        #"@PeripheralInterface//:LufaUsart",
-    ],
+    deps = ["//:DebugUartLibHdr",
+            "//:UartLib"
+            ]
 )
 
 cc_library(
-    name = "DebugLib",
-    srcs = ["lib/debug/debug.c"],
+    name = "DebugLufaLib",
+    srcs = ["lib/debug/debugUsb.c"],
     visibility = ["//visibility:public"],
-    deps = ["//:DebugLibHdr",
-            #"@PeripheralInterface//:LufaUsart",
-            "//:UartLib"
-            ]
+    deps = ["//:DebugLufaLibHdr",
+            "@PeripheralInterface//:LufaUsart"
+            ],
 )
 ## new
 
@@ -224,7 +217,8 @@ cc_library(
         "//:ElasticNodeMiddlewareLib",
         "//:FlashLib",
         "//:UartLib",
-        "//:DebugLib",
+        #"//:DebugUartLib",
+        "//:DebugLufaLib",
         "//:Interrupt_ManagerLib"
     ],
 )
@@ -238,7 +232,8 @@ cc_library(
         "//:FpgaFlashLib",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLib",
-        "//:DebugLib"
+        #"//:DebugUartLib",
+        "//:DebugLufaLib",
     ],
 )
 
@@ -392,10 +387,17 @@ cc_library(
 )
 
 cc_library(
-    name = "DebugLibHdr",
+    name = "DebugUartLibHdr",
     hdrs = ["lib/debug/debug.h"],
     visibility = ["//visibility:public"],
     deps = ["//:UartLibHdr"],
+)
+
+cc_library(
+    name = "DebugLufaLibHdr",
+    hdrs = ["lib/debug/debug.h"],
+    visibility = ["//visibility:public"],
+    deps = []
 )
 ## new
 
@@ -407,7 +409,8 @@ cc_library(
         "//:ElasticNodeMiddlewareLibHdr",
         "//:FlashLibHdr",
         "//:UartLibHdr",
-        "//:DebugLibHdr",
+        #"//:DebugUartLibHdr",
+        "//:DebugLufaLibHdr",
         "//:Interrupt_ManagerLibHdr"
     ],
 )
@@ -420,7 +423,8 @@ cc_library(
         "//:FpgaFlashLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLibHdr",
-        "//:DebugLibHdr"
+        #"//:DebugUartLibHdr",
+        "//:DebugLufaLibHdr",
     ],
 )
 

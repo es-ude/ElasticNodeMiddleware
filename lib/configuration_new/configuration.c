@@ -35,14 +35,8 @@ void readData(uint8_t *buffer, uint16_t num)
     uint8_t *ptr = buffer;
     for (uint16_t i = 0; i < num; i++) {
 
-        debugWriteLine("test1.1.2");
-        _delay_ms(100);
-
         *ptr++ = (uint8_t) debugReadCharBlock();
         //*ptr++ = (uint8_t) uart_ReceiveCharBlocking_internal();
-
-        debugWriteLine("test1.1.3");
-        _delay_ms(100);
     }
 
 }
