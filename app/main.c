@@ -50,7 +50,7 @@ int main(void)
     fpgaFlashInit();
 
     elasticnode_initialise();
-    reconfigure_initMultiboot();
+//    reconfigure_initMultiboot();
 
     while (true) {
         if(debugReadCharAvailable())
@@ -58,7 +58,7 @@ int main(void)
             uint8_t data = debugGetChar();
 
             // acknowledge when ready to receive again
-            debugAck(data);
+//            debugAck(data);
 
             //configurationUartFlash();
             uartProcessInput(data);

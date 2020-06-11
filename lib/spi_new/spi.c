@@ -22,6 +22,29 @@ void spiInit(void)
     ////sei();
     interruptManager_setInterrupt();
 }
+void spiEnable(void)
+{
+/*
+    // ensure master mode (_SS)
+    DDRB |= _BV(PB0);
+    PORTB |= _BV(PB0);
+
+    ////cli();
+    interruptManager_clearInterrupt();
+    SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPR0);
+
+    // reset interrupts
+    while (SPSR & _BV(SPIF))
+        SPDR;
+
+    SPDR;*/
+    spiEnable_internal();
+}
+
+void spiDisable(void)
+{
+    SPCR &= ~_BV(SPE);
+}
 
 void flashResetCallbacks(void)
 {
@@ -47,24 +70,7 @@ void spiPerformSimpleTaskBlocking(uint8_t command, uint32_t numRead, uint8_t *da
 }
 
 
-void spiEnable(void)
-{
-/*
-    // ensure master mode (_SS)
-    DDRB |= _BV(PB0);
-    PORTB |= _BV(PB0);
 
-    ////cli();
-    interruptManager_clearInterrupt();
-    SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPR0);
-
-    // reset interrupts
-    while (SPSR & _BV(SPIF))
-        SPDR;
-
-    SPDR;*/
-    spiEnable_internal();
-}
 
 uint8_t spiRead()
 {
@@ -128,5 +134,40 @@ void deselectFlash(uint8_t mcuFlash)
     }
     else
         deselectFpgaFlash();
+
+}
+
+void fpgaFlashPerformTaskWithCallback(uint16_t numWrite, uint8_t *dataWrite, uint16_t numRead, void (*readingCallback)(uint8_t, uint8_t),  void (*finishedCallback)(void))
+{
+    spiPerformTaskBlockingWithCallback(numWrite, dataWrite, numRead, readingCallback, finishedCallback);
+}
+
+void spiPerformTaskBlockingWithCallback(uint32_t numWrite, uint8_t *dataWrite, uint32_t numRead,
+                                        void (*readingCallback)(uint8_t, uint8_t), void (*finishedCallback)(void))
+{
+    uint8_t *ptr;
+//	spiInit();
+//	spiSelect();
+
+//	debugWriteString("Performing task... ");
+//	debugWriteDec32(numWrite);
+//	debugWriteString(" ");
+//	debugWriteDec32(numRead);
+//	debugNewLine();
+
+    ptr = dataWrite;
+    for (uint32_t i = 0; i < numWrite; i++)
+    {
+        spiWrite(*ptr++);
+    }
+
+    for (uint32_t i = 0; i < numRead; i++)
+    {
+        readingCallback(spiRead(), i == numRead - 1);
+    }
+
+    if (finishedCallback)
+        finishedCallback();
+//	spiDeselect();
 
 }

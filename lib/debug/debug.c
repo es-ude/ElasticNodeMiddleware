@@ -27,6 +27,7 @@
 #include "debug.h"
 #include "lib/uart/uart.h"
 #include "lib/uart/uart_internal.h"
+#include "lib/uart/uart_internal.h"
 
 void debugWriteBin(uint32_t num, uint8_t length);
 void debugReceiveCharHandler(uint8_t received);

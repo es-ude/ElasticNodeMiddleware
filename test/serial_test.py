@@ -13,7 +13,7 @@ import numpy as np
 import warnings
 import threading
 import struct
-from queue import Queue
+import queue as queue
 from threading import Thread
 # from serial_plotter import SerialPlotter
 
@@ -30,13 +30,14 @@ TIME_TOTAL = 1
 # 	baudrate = 115200
 # else:
 # 	baudrate = os.environ['BAUD']
-# print("Baudrate:", baudrate)
+# print "Baudrate:", baudrate
 CURRENT_MEASUREMENT_FLOAT = 20
 CURRENT_BUFFER_SIZE = 20
 
 TEST_ADDRESS = 0
 ANN_WEIGHTS_ADDRESS = 0x121000
 ANN_ADDRESS = 0x90000
+CNN_ADDRESS = 0x0
 BSCAN_ADDRESS = 0xC0000
 FIR_ADDRESS = 0x180000
 MM_ADDRESS = 0xC0000
@@ -47,7 +48,6 @@ DUMMY_ADDRESS = 0x0
 SKIP = None # (538844 - 256) # 4096 * 5
 
 cpuName = "at90usb1287"
-#en4_serial_template = "/dev/tty.usbmodem*6201"
 en4_serial_template = "/dev/ttyACM1"
 en3_serial_template = "/dev/tty.usbserial-EN*"
 # serial_template = "/dev/ttyS256*"
@@ -55,7 +55,6 @@ if 'posix' not in os.name:
     serial_default = "/dev/ttys4"
 else:
     serial_default = None
-# program_template = "/dev/tty.usbmodem*1201"
 program_template = "/dev/ttyACM0"
 if 'posix' not in os.name:
     program_default = "/dev/ttys3" # "/dev/ttyS5" # "COM5"
@@ -94,7 +93,7 @@ class SerialTest:
         self.elasticNodeVersion = enVersion
 
         if self.elasticNodeVersion == 4:
-            baudrate = 500000
+            baudrate = 9600
         else:
             baudrate = 115200
 
@@ -107,11 +106,12 @@ class SerialTest:
             debugThread.start()
 
         # setup configurations
-        self.dummyConfig = Configuration("../dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
+        self.dummyConfig = Configuration("../cnnProjectBlockRAM.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
         self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
         self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
         self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
         self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
+        self.cnnConfig = Configuration("../cnnProjectBlockRAM.bit", CNN_ADDRESS, CNN_ADDRESS)
         self.firConfig = Configuration("fir.bit", FIR_ADDRESS, FIR_ADDRESS)
         self.mmConfig = Configuration("mm.bit", MM_ADDRESS, MM_ADDRESS)
         self.vdpConfig = Configuration("vdp.bit", VDP_ADDRESS, VDP_ADDRESS)
@@ -125,7 +125,7 @@ class SerialTest:
                 self.port = sys.argv[1]
                 self.bitFile = sys.argv[3]
             except Exception:
-                # print('finding serial...')
+                # print 'finding serial...'
                 if self.elasticNodeVersion == 4:
                     serial_template = en4_serial_template
                 else:
@@ -171,7 +171,6 @@ class SerialTest:
                     time.sleep(0.5)
                     print("waiting for port...")
 
-            print("debugInfo: ","device found after reset")
             self.ser = serial.Serial(self.port, self.baud)
             self.remainingMonitor = 0;
 
@@ -179,10 +178,7 @@ class SerialTest:
             # print("FLUSHING")
             self.readSerial()
             # print("DONE")
-            self.ser.reset_input_buffer();
-
-            print("debugInfo: ","device found after reading")
-
+            self.ser.reset_input_buffer()
             response = '0'
             self.ser.timeout = 0.5#  * 10
             request = '0'
@@ -196,8 +192,6 @@ class SerialTest:
             self.ser.timeout = 2.5#  * 10
 
             expectedResponse = 'x'
-
-            print("debugInfo: ","device found after timeout")
             while ord(response) != ord(expectedResponse):
                 self.ser.reset_input_buffer();
 
@@ -205,11 +199,8 @@ class SerialTest:
                 self.ser.write(request.encode())
                 response = self.ser.read(1)
 
-                #print("debugInfo: ","device found after write")
                 if len(response) > 0:
                     # print('request:', ord(request), 'response:', ord(response), 'expected:', ord(expectedResponse))
-                    print(response)
-                    print(expectedResponse)
                     continue
                 else:
                     print('nothing received')
@@ -218,10 +209,8 @@ class SerialTest:
                 # set up next request:
                 request = expectedResponse
                 if ord(request) > ord('9'): request = '0'
-
-            print("debugInfo: ","device found after while-loop")
-            self.ser.reset_input_buffer();
-            self.ser.timeout = None
+            # self.ser.reset_input_buffer();
+            # self.ser.timeout = None
 
             print('Serial available')
         except KeyboardInterrupt:
@@ -255,16 +244,16 @@ class SerialTest:
 
     # @staticmethod
     def fetchBit(self, configName):
-        # warn("fetching disabled!")
-        print("Fetching", configName)
-        cmd = "../scripts/fetch-bitfile.sh %d %s" % (self.elasticNodeVersion, configName)
-        print("cmd", cmd)
-        process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        (output, err) = process.communicate()
-        exitCode = process.wait()
-        print(output)
-        print(err)
-        print(exitCode)
+        warn("fetching disabled!")
+    # print("Fetching", configName)
+    # cmd = "./scripts/fetch-bitfile.sh %d %s" % (self.elasticNodeVersion, configName)
+    # print("cmd", cmd)
+    # process = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # (output, err) = process.communicate()
+    # exitCode = process.wait()
+    # print(output)
+    # print(err)
+    # print(exitCode)
 
     remainingCache = ""
     debugOpen = False
@@ -273,7 +262,7 @@ class SerialTest:
     def debugWorker(self):
         print("\tDEBUG worker active")
         while True:
-            # print("\n:\tDEBUG: %s" % self.debugQ.get()),
+            # print("\n:\tDEBUG: %s" % self.debugQ.get(),
             sys.stdout.write("%s" % self.debugQ.get())
             self.debugQ.task_done()
 
@@ -348,7 +337,7 @@ class SerialTest:
         # 				waitForMore = False
 
         # 				if DEBUG:
-        # 					print("'%s' '%s'" % (data[:begin], data[begin + close + 2:]))
+        # 					print("'%s' '%s'" % (data[:begin], data[begin + close + 2:])
         # 				remaining = "%s%s" % (data[:begin], data[begin + close + 2:])
         # 				if DEBUG:
         # 					print("REMAINING %s" % remaining)
@@ -362,7 +351,7 @@ class SerialTest:
         # 			if DEBUG:
         # 				print("@", begin, data[begin:])
 
-        # 				print()
+        # 				print
         # 				print("DEBUG WAITING")
         # 			if self.ser.in_waiting:
         # 				self.debugCache = data[begin+1:]
@@ -384,13 +373,16 @@ class SerialTest:
         return data
 
     def readSerialLine(self):
+        # print('reading line')
         data = ""
         incoming = 0x00
-        # print('reading line')
-        while incoming != '\n':
+        get_line_ended_flag=False
+        while get_line_ended_flag==False:
             incoming = self.ser.read(1)
             # print('incoming', incoming, ord(incoming))
-            data = data + incoming
+            data = data + str(incoming, encoding='utf-8')
+            get_line_ended_flag = (ord(incoming)== ord('\n'))
+            # print('[chao_debug] readSerialLine, incoming: ', incoming, "str so far get: ", data, 'flag: ',flag )
         if data[-1] == '\n':
             data = data[:-1]
         if len(data) > 0:
@@ -418,7 +410,7 @@ class SerialTest:
         data = ""
         while "$$" not in data:
             data = self.readSerialLine()
-            # data = self.ser.readline()
+            print('[chao_debug] waitSerialDone, data is:',data)
             if len(data) > 0:
                 if self.backgroundDebug:
                     # print(data)
@@ -445,6 +437,7 @@ class SerialTest:
         data = ""
         while "%%" not in data:
             data = self.readSerialLine()
+            print('[chao_debug] waitSerialReady, data is:',data)
             # data = self.ser.readline()
             if len(data) > 0:
                 if "%%" not in data:
@@ -461,6 +454,66 @@ class SerialTest:
 
     # print("READY")
 
+
+    def sendzero(self, num):
+        # send zeros
+        ba = bytearray([0, num & 0xff, (num >> 8) & 0xff, (num >> 16) & 0xff, (num >> 24) & 0xff])
+        # ba = ba[::-1]
+        # print('sending', num, 'zeros',)
+        for i in range(len(ba)):
+            self.ser.write([ba[i]])
+
+        # print('confirming...', num)
+
+        self.confirmCommand(0x00)
+    # print('done')
+
+    def receiveData(self):
+        t0 = time.time()
+        try:
+            print('receiving for %d s' % TIME_TOTAL)
+            while (time.time() - t0 < TIME_TOTAL or self.remainingMonitor > 0):
+                if (self.ser.in_waiting > 0): #if incoming bytes are waiting to be read from the serial input buffer
+                    data_in = self.ser.read(self.ser.inWaiting())
+                    data_str = data_in.decode('ascii') #read the bytes and convert from binary array to ASCII
+                    sys.stdout.write(data_str), #print(the incoming string without putting a new-line ('\n') automatically after every print())
+                    sys.stdout.flush()
+
+                    # if data_str[:2] == "#M":
+                    # 	self.remainingMonitor -= 1
+                    # 	print('Remaining:', self.remainingMonitor)
+
+                    t0 = time.time()
+        #Put the rest of your code you want here
+        except UnicodeDecodeError:
+            print(data_in)
+        finally:
+
+            print('done')
+
+    def sendValue32(self, value, name="value"):
+        # sending address
+        ba = bytearray([value & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff])
+
+        for i in range(4):
+            self.ser.write([ba[i]])
+
+
+        print('done writing %s' % name)
+
+        print('%s of bitfile: ' % name,)
+        # received = self.ser.readline()
+        received = self.readSerialLine()
+        print('received \'{}\''.format(received),)
+        try:
+            if value != int(received):
+                print('%s incorrect! aborting.' % name)
+                return False
+        except:
+            print('did not receive %s:' % name, received)
+            return False
+
+        return True
 
     # read configuration from flash memory
     def readConfig(self, config, selectmap=False, jtag=False):
@@ -610,7 +663,7 @@ class SerialTest:
             else:
                 sys.stdout.write('.')
                 sys.stdout.flush()
-                # print('.'),
+                # print('.',)
 
                 position += block
                 remaining -= block
@@ -634,11 +687,13 @@ class SerialTest:
         ret = True
         try:
             sendcount = 0
-            print(('waiting for ack...'))
+            print('waiting for ack...')
 
             if jtag: self.writeCommand(b'J')
             elif selectmap: self.writeCommand(b'M') # also broken somehow
-            elif flash: self.writeCommand(b'F')
+            elif flash:
+                self.writeCommand(b'F')
+                print('[chao_debug] command F sent.')
             elif fpgaflash: self.writeCommand(b'p')
             else: print(("No idea how to send config!!"))
 
@@ -663,40 +718,50 @@ class SerialTest:
                 print('sending remote address', config.destination)
                 self.writeValue(config.destination, "destination")
             # sending size
+            print('[chao_debug] config_size is ', config.size)
             self.writeValue(config.size, "size");
 
-
+            print('[chao_debug] wainting for flash erase finished\r\n')
             # give device time for some debug
-            self.waitSerialReady()
+            self.waitSerialReady(quiet=False)
             print('sending data')
 
             oldperc = -1;
 
             # self.ser.timeout = None
-            blockSize = 256
+            blockSize = 16
             currentAddress = 0
 
 
             while currentAddress < config.size:
+                print('[chao_debug] enter the sending loop..\r\n')
                 perc = int(float(currentAddress) / config.size * 100)
 
                 if oldperc != perc:
                     # sys.stdout.write('\r{}%'.format(perc))
                     sys.stdout.flush()
-                    # print(('\r{}%'.format(perc)))
+                    # print('\r{}%'.format(perc))
                     oldperc = perc
 
                 if (config.size - currentAddress) < blockSize:
                     print("Last block!")
                     blockSize = config.size - currentAddress
                     print(blockSize)
-                    print()
+
                 elif (config.size - currentAddress) == blockSize:
                     print("Last full block!")
 
                 sending = bit.read(blockSize)
-                self.ser.write(sending)
-                self.ser.flush()
+                # sending = b'\x31\x32\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x31\x31\x31\x31'#bit.read(blockSize)
+                 
+
+                print('[chao_debug] a block is read out from bit file, type is',type(sending),',its size is:', len(sending))
+                print('[chao_debug] data content', sending)
+                # bytes_has_written = self.ser.write(sending)
+                # self.ser.flush()
+                self.serial_send_block(sending, blockSize)
+                print('[chao_debug] data block written finished. ')
+
                 if flash or fpgaflash:
                     if not self.confirmCommand(sending[-1]):
                         print("Could not confirm data!")
@@ -706,6 +771,7 @@ class SerialTest:
                         ret = False
                         break
                 currentAddress += blockSize
+                print('[chao_debug] data has been send to the mcu wait for ack..\r\n')
                 self.waitSerialDone()
 
             # # confirm the last
@@ -720,6 +786,17 @@ class SerialTest:
         return ret
     # 	self.ser.close();
 
+    def serial_send_block(self, block_data, len):
+        print("block to send:", block_data)
+        cnt = 0
+        while(cnt<len):
+            self.ser.write(block_data[cnt:cnt+1])
+            self.ser.flush()
+            
+            print("cnt:", cnt ,block_data[cnt:cnt+1])
+            cnt=cnt+1
+    def findCurrentSensors(self):
+        self.writeCommand('s')
 
     def controlFpga(self, newvalue):
         if newvalue:
@@ -760,7 +837,7 @@ class SerialTest:
     # 	# flush out the last results
     # 	# self.printAllMeasurements();
 
-    # 	# print("Values:"),
+    # 	# print("Values:",)
     # 	# print(self.ser.readline())
     # 	# self.remainingMonitor = 0
     # 	self.monitoring = False
@@ -816,6 +893,24 @@ class SerialTest:
         self.writeCommand(b'l')
         self.waitSerialDone();
 
+    def wirelessBlock(self):
+        self.beginExperiment()
+
+
+        self.writeCommand(b'T')
+        self.writeCommand(b'w')
+
+        print('waiting...')
+
+        self.plotter.clearAverageCurrent()
+
+        self.latency(request=False, plot=True, offloading=True)
+
+        print('almost done')
+        self.endExperiment()
+        self.ser.readline()
+        print('done')
+
     def testFIR(self):
         self.writeCommand(b'T')
         self.writeCommand(b'f')
@@ -851,7 +946,7 @@ class SerialTest:
 
         # else:
         # 	for i in range(5):
-        # 		print(self.ser.readline()),
+        # 		print(self.ser.readline(),)
         # 	print('')
 
         self.endExperiment()
@@ -898,11 +993,19 @@ class SerialTest:
         bias = np.array(bias, dtype='float') / 1024.
         print(bias)
 
+    def printhwfid(self):
+        self.writeCommand(0x12)
+        self.waitSerialDone()
+
     def hwfid(self):
         self.writeCommand(0x15)
         hwfid = ord(self.ser.read(1))
-        print(("HWF ID: {:X}".format(hwfid)))
+        print("HWF ID: {:X}".format(hwfid))
         return hwfid
+
+    def mmMcu(self):
+        self.writeCommand(0x13)
+        return self.readMatrix(4,5)
 
     def mmFpga(self):
         self.writeCommand(0x14)
@@ -985,6 +1088,9 @@ class SerialTest:
         else:
             self.writeCommand(b's')
 
+    def writeSize(self):
+        self.writeValue(self.size, 'size')
+
     def writeValue(self, value, name, quiet=False):
         ba = bytearray([value & 0xff, (value >> 8) & 0xff, (value >> 16) & 0xff, (value >> 24) & 0xff])
 
@@ -999,7 +1105,7 @@ class SerialTest:
 
         # self.ser.flush()
         if not quiet:
-            print(name, 'of bitfile: '),
+            print(name, 'of bitfile: ',)
         # received = self.readSerialLine()
         receivedRaw = bytearray(self.ser.read(4))
         received = 0
@@ -1007,7 +1113,7 @@ class SerialTest:
             received += (receivedRaw[i]) << (8 * i)
 
         if not quiet:
-            print(received),
+            print(received,)
         try:
             if value != int(received):
                 print(name, 'incorrect! aborting.')
@@ -1017,13 +1123,12 @@ class SerialTest:
             print('did not receive', name, ':', len(receivedRaw), '(', value, ')')
             print('{:X}'.format(int(received)))
             for response in receivedRaw:
-                print((hex(response), chr(response)))
+                print(hex(response), chr(response))
 
             sys.exit(0)
 
 
     def writeCommand(self, command):
-
         # backup current busy state
         bk = self.busy
         self.busy = True
@@ -1051,7 +1156,9 @@ class SerialTest:
         return ret
 
     def confirmCommand(self, command):
+        print('[chao_debug] waiting for confirm from MCU,,,')
         response = self.readSerialBlocking(1)
+        print('[chao_debug] we get response now')
         # response = self.ser.read(1)
         charResponse = response
         try:
@@ -1102,7 +1209,7 @@ class SerialTest:
 
         # retrieve size
         size = self.ser.read(4)
-        print('size:'),
+        print('size:',)
         for s in size: print(ord(s))
         size = np.frombuffer(size, dtype=np.uint32)
         print('fetching', size, 'bytes')
@@ -1418,7 +1525,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
 
         targets = sys.argv[1:]
-        print()
+        print
         # probably coming from makefile
         if len(targets) == 1:
             targets = targets[0].split(',')

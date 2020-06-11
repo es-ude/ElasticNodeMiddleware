@@ -2,8 +2,6 @@
 //#include "lib/uart/uart_internal.h"
 //#include "lib/uart/uart.h"
 
-//missing!
-//#include "lib/flash/flash.h"
 #include "lib/flash_new/flash.h"
 
 ////#include "lib/leds/leds.h"
@@ -16,8 +14,9 @@
 //#include "lib/configuration_new/configuration.h"
 #include <avr/interrupt.h>
 
-#define BUFFER_SIZE 256
-uint32_t configAddress, configSize, configRemaining;
+#define BUFFER_SIZE 16
+#define BACKUP_ADDRESS 0x120000
+uint32_t configAddress, configSize, configDestination, configRemaining;
 uint8_t *buffer;
 
 void readData(uint8_t *buffer, uint16_t num);
@@ -30,19 +29,36 @@ void readValue(uint32_t *destination)
     //uart_WriteStringLengthBlock(destination, sizeof(uint32_t));
 }
 
+uint8_t block_reading(void)
+{
+    while (true) {
+        if(debugReadCharAvailable())
+        {
+            uint8_t data = debugGetChar();
+            return data;
+        }
+        debugTask();
+    }
+}
 void readData(uint8_t *buffer, uint16_t num)
 {
     uint8_t *ptr = buffer;
     for (uint16_t i = 0; i < num; i++) {
-
         *ptr++ = (uint8_t) debugReadCharBlock();
-        //*ptr++ = (uint8_t) uart_ReceiveCharBlocking_internal();
+        if(i%2==0){
+            BitManipulation_setBit(&PORTD, PD4);
+        }
+        else
+        {
+            BitManipulation_clearBit(&PORTD, PD4);
+        }
+
+
     }
 
 }
 
 void configurationUartFlash(void) {
-
     ////fpgaPower(0);
     elasticnode_fpgaPowerOff();
     ////setFpgaHardReset();
@@ -52,7 +68,7 @@ void configurationUartFlash(void) {
 
     // getting address
     readValue(&configAddress);
-
+    BitManipulation_setBit(&PORTD, PD6);
     // getting size
     readValue(&configSize);
 
@@ -66,33 +82,11 @@ void configurationUartFlash(void) {
     BitManipulation_setBit(&PORTD, PD6);
 
     debugWriteString("Erasing flash... ");
-    //uart_WriteStringBlock("Erasing flash... ");
-
     uint16_t numBlocks4K = ceil((float)(configSize) / 0x1000);
-
     debugWriteDec16(numBlocks4K);
-    /*char *buf = (char *) malloc(10);
-    sprintf(buf, "%u", numBlocks4K);
-    uart_WriteStringBlock(buf);
-    free(buf);*/
-
     debugWriteString(" ");
-
-    debugWriteDec32(configAddress);
-
-    debugWriteString(" ");
-    //uart_WriteStringBlock(" ");
-
     debugWriteDec32(configSize);
-    /*char *buffer = (char *) malloc(10);
-    sprintf(buf, "%lu", configSize);
-    uart_WriteStringBlock(buffer);
-    free(buffer);*/
-
     debugNewLine();
-    //uart_WriteCharBlock_internal('\r');
-    //uart_WriteCharBlock_internal('\n');
-
     uint32_t blockAddress;
     for (uint16_t blockCounter = 0; blockCounter < numBlocks4K; blockCounter++)
     {
@@ -101,33 +95,22 @@ void configurationUartFlash(void) {
     }
 
 
-    debugReady();
-    //uart_WriteStringBlock("\n%%");
-    //uart_WriteCharBlock_internal('\r');
-    //uart_WriteCharBlock_internal('\n');
 
-    ////setLed(1, 0);
     BitManipulation_clearBit(&PORTD, PD6);
-    ////setLed(0, 0);
     BitManipulation_clearBit(&PORTD, PD7);
-
     uint32_t currentAddress = configAddress;
     configRemaining = configSize;
 
-
+    debugReady();
     while(configRemaining > 0) {
         if (configRemaining < BUFFER_SIZE)
             blockSize = configRemaining;
-        ////setLed(2, 1);
         BitManipulation_setBit(&PORTD, PD5);
-
         readData(buffer, blockSize);
-        ////setLed(3, 1);
         BitManipulation_setBit(&PORTD, PD4);
 
         writeDataFlash(currentAddress, buffer, blockSize, 1);
         debugAck(buffer[blockSize - 1]);
-        //uart_WriteCharBlock_internal(buffer[blockSize - 1]);
 
         ////setLed(3, 0);
         BitManipulation_clearBit(&PORTD, PD4);
@@ -137,17 +120,40 @@ void configurationUartFlash(void) {
         currentAddress += blockSize;
         configRemaining -= blockSize;
 
+
         debugDone();
-        //uart_WriteStringBlock("\n$$");
-        //uart_WriteCharBlock_internal('\r');
-        //uart_WriteCharBlock_internal('\n');
     }
     free(buffer);
 
     debugDone();
-    //uart_WriteStringBlock("\n$$");
-    //uart_WriteCharBlock_internal('\r');
-    //uart_WriteCharBlock_internal('\n');
 
     interruptManager_setInterrupt();
+}
+
+void verifyConfigurationFlash(uint8_t mcuFlash)
+{
+//    fpgaPower(0);
+    elasticnode_fpgaHardReset();
+    flashEnableInterface();
+
+//    setLed(0, 1);
+    readValue(&configAddress);  // getting address
+//    setLed(1, 1);
+    readValue(&configSize);     // getting size
+//    setLed(0, 0);
+//    setLed(1, 0);
+
+//    debugReady();
+//    setLed(2, 1);
+    buffer = readDataFlash(configAddress, configSize, mcuFlash, NULL, NULL);
+//    setLed(3, 1);
+    debugWriteStringLength(buffer, configSize);
+//    setLed(3, 0);
+//    setLed(2, 0);
+
+    debugReady();
+    debugDone();
+
+
+    sei();
 }
