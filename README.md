@@ -17,6 +17,7 @@ The middleware code includes the following functionalities:
 - turn the FPGA on and off
 - enable and disable the external memory interface for the interconnection between the MCU and the FPGA
 - reconfigure the FPGA
+- upload a bitfile to the FPGA
 
 ## Installation Guide
 
