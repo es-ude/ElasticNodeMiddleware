@@ -106,7 +106,7 @@ class SerialTest:
             debugThread.start()
 
         # setup configurations
-        self.dummyConfig = Configuration("../cnnProjectBlockRAM.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
+        self.dummyConfig = Configuration("../dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
         self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
         self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
         self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
@@ -171,7 +171,7 @@ class SerialTest:
                     time.sleep(0.5)
                     print("waiting for port...")
 
-            self.ser = serial.Serial(self.port, self.baud)
+            self.ser = serial.Serial(self.port, self.baud,)
             self.remainingMonitor = 0;
 
             self.ser.read(self.ser.inWaiting())
@@ -734,7 +734,7 @@ class SerialTest:
 
 
             while currentAddress < config.size:
-                print('[chao_debug] enter the sending loop..\r\n')
+                print('[chao_debug] in sending loop..\r\n')
                 perc = int(float(currentAddress) / config.size * 100)
 
                 if oldperc != perc:
@@ -751,15 +751,20 @@ class SerialTest:
                 elif (config.size - currentAddress) == blockSize:
                     print("Last full block!")
 
-                sending = bit.read(blockSize)
-                # sending = b'\x31\x32\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x31\x31\x31\x31'#bit.read(blockSize)
-                 
 
+                self.ser.flushInput()
+                self.ser.flushOutput()
+                # sending = bytearray(bit.read(blockSize))
+                # sending = b'\xff\xff\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x32\x33\x34\x35'#bit.read(blockSize)
+                sending = (b'\255\255\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x32\x33\x34\x35')
+                real_send = b'\xAa\xBb'+sending+b'\xCc\xDd'
+                time.sleep(0.01)
                 print('[chao_debug] a block is read out from bit file, type is',type(sending),',its size is:', len(sending))
                 print('[chao_debug] data content', sending)
                 # bytes_has_written = self.ser.write(sending)
                 # self.ser.flush()
-                self.serial_send_block(sending, blockSize)
+                
+                self.serial_send_block(real_send, blockSize+4)
                 print('[chao_debug] data block written finished. ')
 
                 if flash or fpgaflash:
@@ -790,9 +795,13 @@ class SerialTest:
         print("block to send:", block_data)
         cnt = 0
         while(cnt<len):
+            # if ord(block_data[cnt:cnt+1])==255:
+            #     self.ser.write(block_data[cnt:cnt+1])
+            #     self.ser.flush()
             self.ser.write(block_data[cnt:cnt+1])
             self.ser.flush()
-            
+            self.ser.flushOutput()
+            time.sleep(0.002)
             print("cnt:", cnt ,block_data[cnt:cnt+1])
             cnt=cnt+1
     def findCurrentSensors(self):

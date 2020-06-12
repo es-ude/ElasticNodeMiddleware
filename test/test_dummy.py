@@ -11,7 +11,7 @@ import time
 
 def test_writedummy():
     serialTest = SerialTest()
-    serialTest.fetchBit("dummy")
+    # serialTest.fetchBit("dummy")
     # serialTest.dummyConfig.size = 0x2000
     assert serialTest.sendConfig(serialTest.dummyConfig, flash=True)
 
