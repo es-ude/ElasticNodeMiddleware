@@ -130,8 +130,8 @@ void configurationUartFlash(void) {
         if (configRemaining < BUFFER_SIZE)
             blockSize = configRemaining;
         BitManipulation_setBit(&PORTD, PD5);
-//        readData(buffer, blockSize);
-        while(read_a_block_of_data(buffer)!=blockSize);
+        readData(buffer, blockSize);
+//        while(read_a_block_of_data(buffer)!=blockSize);
         BitManipulation_setBit(&PORTD, PD4);
 
         writeDataFlash(currentAddress, buffer, blockSize, 1);

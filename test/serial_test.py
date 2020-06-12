@@ -752,19 +752,24 @@ class SerialTest:
                     print("Last full block!")
 
 
-                self.ser.flushInput()
-                self.ser.flushOutput()
-                # sending = bytearray(bit.read(blockSize))
+                self.ser.flushInput()# might can be delete
+                self.ser.flushOutput()# might can be delete
+                sending = bytearray(bit.read(blockSize))
                 # sending = b'\xff\xff\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x32\x33\x34\x35'#bit.read(blockSize)
-                sending = (b'\255\255\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x32\x33\x34\x35')
-                real_send = b'\xAa\xBb'+sending+b'\xCc\xDd'
-                time.sleep(0.01)
+                # sending = (b'\255\255\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x32\x33\x34\x35')
+                # real_send = b'\xAa\xBb'+sending+b'\xCc\xDd'
+                time.sleep(0.01) # might can be delete
                 print('[chao_debug] a block is read out from bit file, type is',type(sending),',its size is:', len(sending))
                 print('[chao_debug] data content', sending)
+
+
                 # bytes_has_written = self.ser.write(sending)
                 # self.ser.flush()
-                
-                self.serial_send_block(real_send, blockSize+4)
+                # or
+                self.serial_send_block(sending, blockSize)
+
+
+
                 print('[chao_debug] data block written finished. ')
 
                 if flash or fpgaflash:
