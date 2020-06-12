@@ -199,3 +199,22 @@ unity_test(
     ],
 )
 
+
+
+py_library(
+    name = "test_dummy",
+    srcs = ["test_dummy.py"],
+    deps = [],
+)
+
+py_library(
+    name = "serial_test",
+    srcs = ["serial_test.py"],
+    deps = [],
+)
+
+py_library(
+    name = "Configuration",
+    srcs = ["Configuration.py"],
+    deps = [],
+)

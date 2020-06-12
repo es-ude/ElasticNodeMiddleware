@@ -88,6 +88,13 @@ extern uint8_t* UDR1;
 
 #define FPGA_DONE_INT_VECTOR PCINT0_vect
 
+//new
+#define DDR_FLASH_CS DDRB
+#define PORT_FLASH_CS PORTB
+
+#define DDR_WIRELESS_CS DDRE
+#define PORT_WIRELESS_CS PORTE
+
 #endif
 
 #endif //ELASTICNODEMIDDLEWARE_FPGAREGISTERS_H

@@ -5,6 +5,8 @@ workspace(
 load("//:github.bzl", "es_github_archive")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
 es_github_archive(
     name = "EmbeddedSystemsBuildScripts",
     version = "0.6.1",
@@ -40,10 +42,21 @@ http_archive(
     name = "LUFA",
     build_file = "@EmbeddedSystemsBuildScripts//:BUILD.LUFA",
     strip_prefix = "lufa-LUFA-170418",
-    urls = ["http://fourwalledcubicle.com/files/LUFA/LUFA-170418.zip"],
+    urls = ["https://fourwalledcubicle.com/files/LUFA/LUFA-170418.zip"],
 )
 
 es_github_archive(
     name = "EmbeddedUtilities",
     version = "0.3.1",
+)
+
+#es_github_archive(
+#    name = "PeripheralInterface",
+#    version = "0.6"
+#)
+
+git_repository(
+    name = "PeripheralInterface",
+    remote = "https://github.com/es-ude/PeripheralInterface.git",
+    branch = "master",
 )

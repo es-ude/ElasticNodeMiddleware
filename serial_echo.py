@@ -3,7 +3,7 @@
 import serial
 import sys
 
-print "python echo script started\n"
+print("python echo script started\n")
 HEX = False
 
 ser = serial.Serial(sys.argv[1], sys.argv[2])
@@ -13,7 +13,7 @@ try:
 		sys.stdout.write(ser.read(1))
 		sys.stdout.flush()
 except KeyboardInterrupt:
-	print "key exc"
+	print("key exc")
 finally:
-	print 'done'
+	print('done')
 	ser.close()

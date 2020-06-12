@@ -16,12 +16,41 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = [
         "//:BitmanipulationLib",
+        "//:ConfigurationLib",
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
-        "//:UartLib",
         "//:XMemLib",
         "//app/setup:Setup",
+        #"//:UartLib",
+        #"//:DebugUartLib",
+        "//:DebugLufaLib",
+        "//:UartmanagerLib"
     ],
+)
+
+default_embedded_binary(
+    name = "blinkUsartExample",
+    srcs = ["blinkUsartExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = [
+        "//:BitmanipulationLib",
+        "//:DebugUartLib",
+        "//app/setup:Setup",
+
+        "//:UartLib"
+    ]
+)
+
+default_embedded_binary(
+    name = "LufaWriteIntegrationTest",
+    srcs = ["LufaWriteIntegrationTest.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = [
+        "//:DebugLufaLib",
+        "//:BitmanipulationLib"
+    ]
 )
 
 genrule(
