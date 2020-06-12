@@ -300,6 +300,7 @@ exports_files(
         "lib/interruptManager/interruptManager_avr_Mock.h",
         "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
+        "lib/pinDefinition/peripherals.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "lib/spi_new/spi.h",
@@ -400,6 +401,7 @@ cc_library(
     hdrs = [
         "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
+        "lib/pinDefinition/peripherals.h"
     ],
     visibility = ["//visibility:public"],
 )
