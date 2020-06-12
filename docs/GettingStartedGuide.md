@@ -7,20 +7,26 @@ Therefore, we show how to connect the hardware and how to run a minimal example 
 
 The following photos show the elastic node. 
 The left yellow rectangle is the FPGA while the right yellow rectangle is the used MCU. 
-The left red rectangle show the MCU LEDs. These LEDs should blink in the blink example. 
+The left red rectangle at the top shows the FPGA LEDs. 
+The right red rectangle at the top shows the MCU LEDs. 
+These LEDs should blink in the blink example. 
 The right red rectangle shows the connection to the MCU.
-![](images/elasticNodeFrontEdit.jpg)
+![](images/elasticNodeFrontEdit3.jpg)
 ![](images/elasticNodeBack.jpg)
 
 The elastic node is connected to a programmer with 6 jumper wires female to female.
 In the following pictures this is the grey cable. 
 The connected elastic node and programmer are shown in the following image.
+Please note which jumper wire connect to a pin at the elasticnode is connected to which pin at the programmer.
 ![elasticnode](images/elasticNode.jpg)
 ![programmer](images/programmerEdit.jpg)
 
 The programmer is connected with your computer with an USB-to-MiniUSB cable. 
 The MiniUSB is connected to the programmer and the USB is connected to your computer.
-![cable](images/cable2Edit.jpg)
+The elasticnode itself is connected with your computer via an USB-to-MicroUSB cable.
+The micro-USB cable is plugged in the elasticnode at the place which is circled red in the first image above.
+This place is labeled with MCU_USB. 
+The USB is plugged in your computer. 
 
 For communication purposes you need a FTDI-adapter.
 This adapter is connected with the elastic node with 3 jumper wires male to female.
@@ -31,7 +37,8 @@ The MiniUSB is connected to the FTDI-adapter and the USB is connected to your co
 ![ftdiAdapter](images/ftdiAdapter.jpg)
 
 The following photo shows the construction after connecting the whole hardware.
-![construction](images/constructionEdit.jpg)
+![construction](images/construction1.jpg)
+![construction](images/construction2.jpg)
  
 ## How to use the Code
 
@@ -39,10 +46,6 @@ After cloning the [elasticnode middleware github repository](https://github.com/
 In the [main.c](../app/main.c) we show a minimal working example of how to use the elastic node middleware code. 
 This implementation uses functions of the external Bitmanipulation library.
 The functions just set or clear a bit in the transferred byte_ptr at the transferred offset. 
-
-Missing!
-
-## Using the Bitfile
 
 Missing!
 
@@ -59,7 +62,18 @@ The upload script is specialized in the [BUILD.bazel](../app/BUILD.bazel) in the
 For running the upload script you have to run: 
 
 	$ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+## Uploading the example Bitfile
+
+For uploading our dummy bitfile you first have to build and run the ... like explained above.
+Note the dummy.bit in the project folder elasticnodemiddleware.
+For uploading go into the test folder of the project and run the following command:
+
+    $ python test_dummy.py
     
+This uploads the dummy bitfile in round about a minute. 
+Make sure you use python version 3 instead of python version 2. 
+
 ## Tests
 
 We write some test for checking the functionalities of our code. 
