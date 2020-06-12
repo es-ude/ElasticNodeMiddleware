@@ -93,7 +93,8 @@ class SerialTest:
         self.elasticNodeVersion = enVersion
 
         if self.elasticNodeVersion == 4:
-            baudrate = 9600
+            # change to 500000
+            baudrate = 500000
         else:
             baudrate = 115200
 
@@ -111,6 +112,7 @@ class SerialTest:
         self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
         self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
         self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
+        # use this bitfile
         self.cnnConfig = Configuration("../cnnProjectBlockRAM.bit", CNN_ADDRESS, CNN_ADDRESS)
         self.firConfig = Configuration("fir.bit", FIR_ADDRESS, FIR_ADDRESS)
         self.mmConfig = Configuration("mm.bit", MM_ADDRESS, MM_ADDRESS)
@@ -729,7 +731,7 @@ class SerialTest:
             oldperc = -1;
 
             # self.ser.timeout = None
-            blockSize = 16
+            blockSize = 256
             currentAddress = 0
 
 
@@ -752,13 +754,13 @@ class SerialTest:
                     print("Last full block!")
 
 
-                self.ser.flushInput()# might can be delete
-                self.ser.flushOutput()# might can be delete
+                # self.ser.flushInput()# might can be delete
+                # self.ser.flushOutput()# might can be delete
                 sending = bytearray(bit.read(blockSize))
-                # sending = b'\xff\xff\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x32\x33\x34\x35'#bit.read(blockSize)
+                # sending = b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'#bit.read(blockSize)
                 # sending = (b'\255\255\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x32\x33\x34\x35')
                 # real_send = b'\xAa\xBb'+sending+b'\xCc\xDd'
-                time.sleep(0.01) # might can be delete
+                # time.sleep(0.01) # might can be delete
                 print('[chao_debug] a block is read out from bit file, type is',type(sending),',its size is:', len(sending))
                 print('[chao_debug] data content', sending)
 
@@ -806,7 +808,7 @@ class SerialTest:
             self.ser.write(block_data[cnt:cnt+1])
             self.ser.flush()
             self.ser.flushOutput()
-            time.sleep(0.002)
+            # time.sleep(0.002)
             print("cnt:", cnt ,block_data[cnt:cnt+1])
             cnt=cnt+1
     def findCurrentSensors(self):

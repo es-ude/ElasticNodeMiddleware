@@ -13,7 +13,7 @@ def test_writedummy():
     serialTest = SerialTest()
     # serialTest.fetchBit("dummy")
     # serialTest.dummyConfig.size = 0x2000
-    assert serialTest.sendConfig(serialTest.dummyConfig, flash=True)
+    assert serialTest.sendConfig(serialTest.cnnConfig, flash=True)
 
 def test_verifydummy():
     serialTest = SerialTest()

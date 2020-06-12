@@ -14,7 +14,7 @@
 //#include "lib/configuration_new/configuration.h"
 #include <avr/interrupt.h>
 
-#define BUFFER_SIZE 16
+#define BUFFER_SIZE 256
 #define BACKUP_ADDRESS 0x120000
 uint32_t configAddress, configSize, configDestination, configRemaining;
 uint8_t *buffer;
