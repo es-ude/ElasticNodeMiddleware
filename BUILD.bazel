@@ -496,3 +496,26 @@ cc_library(
     ],
 )
 
+py_library(
+    name = "uploadDummyPyLib",
+    srcs = ["scripts/uploadDummy.py"],
+    deps = [],
+)
+
+py_library(
+    name = "uploadCnnPyLib",
+    srcs = ["scripts/uploadCnn.py"],
+    deps = [],
+)
+
+py_library(
+    name = "serial_testPyLib",
+    srcs = ["scripts/serial_test.py"],
+    deps = [],
+)
+
+py_library(
+    name = "ConfigurationPyLib",
+    srcs = ["scripts/Configuration.py"],
+    deps = [],
+)

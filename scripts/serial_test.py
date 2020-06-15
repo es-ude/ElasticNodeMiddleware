@@ -93,7 +93,6 @@ class SerialTest:
         self.elasticNodeVersion = enVersion
 
         if self.elasticNodeVersion == 4:
-            # change to 500000
             baudrate = 500000
         else:
             baudrate = 115200

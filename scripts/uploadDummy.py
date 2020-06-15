@@ -1,19 +1,10 @@
-#!/usr/bin/env python
-import sys
-# sys.path.append('scripts/')
-# sys.path.append('lib/stubs/mm/')
 from serial_test import SerialTest
 import time
-# import mm
-
-# import numpy as np
-# print sys.path
 
 def test_writedummy():
     serialTest = SerialTest()
     # serialTest.fetchBit("dummy")
-    # serialTest.dummyConfig.size = 0x2000
-    assert serialTest.sendConfig(serialTest.cnnConfig, flash=True)
+    assert serialTest.sendConfig(serialTest.dummyConfig, flash=True)
 
 def test_verifydummy():
     serialTest = SerialTest()
@@ -60,26 +51,6 @@ def test_hwfiddummy():
 def test_writedummyfpgaflash():
     serialTest = SerialTest()
     assert serialTest.readConfig(serialTest.dummyConfig)
-
-
-# def test_dummyFpga():
-# 	serialTest = SerialTest()
-# 	remote = serialTest.testdummy()
-
-# 	# SerialTest.resetMcu()
-
-# 	# inputA = np.reshape(np.array(range(1, mm.INPUT_A_N * mm.INPUT_A_M + 1)), (mm.INPUT_A_N, mm.INPUT_A_M))
-# 	# inputB = np.reshape(np.array(range(1, mm.INPUT_B_N * mm.INPUT_B_M + 1)), (mm.INPUT_B_N, mm.INPUT_B_M))
-
-# 	# remote = serialTest.mmFpga()
-
-# 	# local = mm.mmLocal(inputA, inputB)
-
-# 	# print remote
-# 	# print local
-
-# 	# assert np.array_equal(local, remote)
-# 	assert False
 
 if __name__ == "__main__":
     test_writedummy()
