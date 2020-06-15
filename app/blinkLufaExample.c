@@ -1,25 +1,21 @@
-#include <util/delay.h>
 #include <avr/io.h>
+#include <util/delay.h>
 #include <stdbool.h>
-#include "PeripheralInterface/LufaUsartImpl.h"
+#include <avr/interrupt.h>
+
 #include "EmbeddedUtilities/BitManipulation.h"
+#include "lib/debug/debug.h"
 
-int
-main(void)
+int main(void)
 {
-    uint16_t timer_1_sec=0;
-    char text[] = "hello, world!\r\n";
 
+    uint16_t timer_1_sec=0;
     DDRD = 0xff;
 
-    initLufa();                   // Initialize LUFA
-    while(!lufaOutputAvailable()) // Blocked until LUFA available
-    {
-        _delay_ms(100);
-    }
+    // init debug --> debugging with lufa via USB
+    debugInit(NULL);
 
-    while (true)
-    {
+    while (true) {
 
         // Period task, blink the LED per 3 seconds
         if(timer_1_sec<=1500)
@@ -33,22 +29,22 @@ main(void)
         {
             timer_1_sec=0;
             // once 3 seconds reached, send hello.
-            lufaWriteString(text);
+            debugWriteLine("Hello. You debug with Lufa.");
         }
 
         // receive buffer check, only check if the recv
         // buffer is not empty.
-        if(lufaReadAvailable())
+        if(debugReadCharAvailable())
         {
             // receive buffer is empty, so read out 1 byte
-            char read_char = lufaGetChar();
+            char read_char = debugGetChar();
             if (read_char=='a') // check if the key pressed is a
             {
-                lufaWriteString("I know you pressed key a.\r\n");
+                debugWriteLine("I know you pressed key a.");
             }
             else
             {
-                lufaWriteString("\r\nPlease press the a on your keyboard.\r\n");
+                debugWriteLine("Please press the a on your keyboard.");
             }
         }
 
@@ -57,7 +53,9 @@ main(void)
         timer_1_sec++;
 
         // Lufa process, read and send happen in this process
-        lufaTask();
-
+        debugTask();
     }
+
+
+    return 0;
 }

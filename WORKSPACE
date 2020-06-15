@@ -50,13 +50,7 @@ es_github_archive(
     version = "0.3.1",
 )
 
-#es_github_archive(
-#    name = "PeripheralInterface",
-#    version = "0.6"
-#)
-
-git_repository(
+es_github_archive(
     name = "PeripheralInterface",
-    remote = "https://github.com/es-ude/PeripheralInterface.git",
-    branch = "master",
+    version = "0.7.1"
 )

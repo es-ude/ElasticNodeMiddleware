@@ -36,20 +36,18 @@ default_embedded_binary(
     deps = [
         "//:BitmanipulationLib",
         "//:DebugUartLib",
-        "//app/setup:Setup",
-
-        "//:UartLib"
+        "//:UartLib",
     ]
 )
 
 default_embedded_binary(
-    name = "LufaWriteIntegrationTest",
-    srcs = ["LufaWriteIntegrationTest.c"],
+    name = "blinkLufaExample",
+    srcs = ["blinkLufaExample.c"],
     copts = cpu_frequency_flag(),
     uploader = "Avr_dude_upload_script",
     deps = [
         "//:DebugLufaLib",
-        "//:BitmanipulationLib"
+        "//:BitmanipulationLib",
     ]
 )
 
