@@ -233,8 +233,6 @@ cc_library(
         "//:ConfigurationLibHdr",
         "//:ElasticNodeMiddlewareLib",
         "//:FlashLib",
-        "//:UartLib",
-        #"//:DebugUartLib",
         "//:DebugLufaLib",
         "//:Interrupt_ManagerLib"
     ],
@@ -428,8 +426,6 @@ cc_library(
     deps = [
         "//:ElasticNodeMiddlewareLibHdr",
         "//:FlashLibHdr",
-        "//:UartLibHdr",
-        #"//:DebugUartLibHdr",
         "//:DebugLufaLibHdr",
         "//:Interrupt_ManagerLibHdr"
     ],

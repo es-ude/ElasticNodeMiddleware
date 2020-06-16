@@ -1,17 +1,9 @@
 #include "lib/debug/debug.h"
-//#include "lib/uart/uart_internal.h"
-//#include "lib/uart/uart.h"
-
 #include "lib/flash_new/flash.h"
-
-////#include "lib/leds/leds.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-
-////#include "lib/fpga/fpga.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-
 #include "lib/interruptManager/interruptManager.h"
-//#include "lib/configuration_new/configuration.h"
+#include "lib/configuration_new/configuration.h"
 #include <avr/interrupt.h>
 
 #define BUFFER_SIZE 256

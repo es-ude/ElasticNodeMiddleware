@@ -15,6 +15,7 @@ In the [getting started guide](docs/GettingStartedGuide.md) is explained which h
 The middleware code includes the following functionalities:
 - initialize the FPGA
 - turn the FPGA on and off
+- write and read to and from the FPGA
 - enable and disable the external memory interface for the interconnection between the MCU and the FPGA
 - reconfigure the FPGA
 - upload a bitfile to the FPGA
@@ -26,7 +27,7 @@ Therefore, please follow the [installation guide](docs/InstallationGuide.md) in 
 
 ## Getting Started
 
-The [docs](docs) folder contains a [getting started guide](docs/GettingStartedGuide.md) with a mini example of how to use the code.
+The [docs](docs) folder contains a [getting started guide](docs/GettingStartedGuide.md) with mini examples of how to use the code.
 
 ## Write your own program
 
@@ -65,6 +66,7 @@ The using of a bitfile is again shown in the [getting started guide](docs/Gettin
 ## Libraries
 
 The elastic node middleware code includes several libraries:
+- debug
 - elastic node middleware
 - reconfigure multiboot avr
 - xmem
