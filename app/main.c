@@ -1,21 +1,15 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdbool.h>
-#include "EmbeddedUtilities/BitManipulation.h"
-//#include <stdio.h>
-//#include "lib/uart/uart.h"
-//#include "lib/uart/uart_internal.h"
 #include "lib/debug/debug.h"
 #include <avr/interrupt.h>
 #include "lib/xmem/xmem.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
-
 #include "lib/flash_new/flash.h"
 #include "lib/fpgaFlash_new/fpgaFlash.h"
-//#include "lib/configuration_new/configuration.h"
-
 #include "lib/uartmanager/uartmanager.h"
+
 //the following ISR's have to be comment in by programmer
 
 /* for using uart
