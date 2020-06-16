@@ -17,6 +17,10 @@ For uploading a bitfile to the FPGA we use python scripts.
 Therefore, you need to install [python](https://www.python.org/downloads/).
 Please use the python version 3 instead of python version 2. 
 
+## Screen
+
+For communication purposes using Uart via the FTDI-adapter, we use the full-screen window manager [screen](https://www.gnu.org/software/screen/).
+ 
 ## Github Repository
 
 The elastic node middleware code is uploaded in a [github repository](https://github.com/es-ude/ElasticNodeMiddleware).

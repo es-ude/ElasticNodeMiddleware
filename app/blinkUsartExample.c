@@ -29,12 +29,12 @@ int main(void)
 
         // Period task
         _delay_ms(500);
+        BitManipulation_setBit(&PORTD, PD4);
         debugWriteLine("Hello. You debug with Uart.");
         _delay_ms(500);
 
         // check uart flag
         if(debugReadCharAvailable()) {
-            BitManipulation_setBit(&PORTD, PD4);
             _delay_ms(500);
             uint8_t data = debugGetChar();
 

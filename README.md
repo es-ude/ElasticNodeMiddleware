@@ -66,17 +66,30 @@ The using of a bitfile is again shown in the [getting started guide](docs/Gettin
 ## Libraries
 
 The elastic node middleware code includes several libraries:
+- configuration
 - debug
 - elastic node middleware
-- reconfigure multiboot avr
-- xmem
-- pin definition
+- flash
+- fpga flash
 - interrupt Manager
+- pin definition
+- reconfigure multiboot avr
+- spi
 - uart
+- uartmanger?!
+- xmem
 - Bitmanipulation
+- Lufa Usart
 
-In the files "graph_elasticNodeMiddlewareLib.png" and "graph_elasticNodeMiddleware_ConfigureFPGALib.png" you can see the dependencies between these libraries.
+<!--- This is a comment
+In the files "graph_elasticNodeMiddlewareLib.png" and "graph_elasticNodeMiddleware_ConfigureFPGALib.png" you can see the dependencies between these libraries. 
+-->
+
 They are described in the following.
+
+### Configuration
+
+### Debug
 
 ### Elastic Node Middleware
 
@@ -111,6 +124,20 @@ The elastic node middleware configure FPGA interface contains the following func
 We split these application functions into two interfaces.
 Unfortunately, this is necessary to avoid cycle dependencies between the elasticnode middleware library and the reconfiguration multiboot avr library.
 
+### Flash
+
+### FpgaFlash
+
+### Interrupt Manager
+
+The interrupt manager library clears and set interrupts. 
+Our interrupts are again implemented for avr. 
+
+### Pin Definition
+
+The pin definition library defines all pin and register definitions.
+Therefore, all pin and register definitions are at one point in the code. 
+
 ### Reconfigure Multiboot Avr
 
 The reconfigure multiboot avr library handles the reconfiguration for the FPGA.
@@ -132,6 +159,15 @@ The functions are:
 - for returning if the reconfiguration is complete:\
 → reconfigure_fpgaMultibootComplete
 
+### Spi
+
+### Uart
+
+The uart library is used for communication with the MCU. 
+It is only used for testing purposes. 
+
+### Uartmanager 
+
 ### Xmem
 
 The xmem library initializes, enables and disables the external memory interface. 
@@ -148,25 +184,14 @@ The functions of the xmem library are:
 In the header file of the xmem library we define the offset of the external memory.
 By using the elastic node, the offset is 0x2000. 
 
-### Pin Definition
-
-The pin definition library defines all pin and register definitions.
-Therefore, all pin and register definitions are at one point in the code. 
-
-### Interrupt Manager
-
-The interrupt manager library clears and set interrupts. 
-Our interrupts are again implemented for avr. 
-
-### Uart
-
-The uart library is used for communication with the MCU. 
-It is only used for testing purposes. 
-
 ### Bitmanipulation
 
 The bitmanipulation library is an external library and is internally used for setting and clearing bits.
 Again, this library is only used for testing purposes. 
+
+### Lufa Usart 
+
+[LufaLibrary](http://www.fourwalledcubicle.com/files/LUFA/Doc/120219/html/index.html)
 
 ## Future Work
 
@@ -175,6 +200,6 @@ By comparing our implemented features with the features of the paper, we detect 
 We list them in the following: 
 - Monitoring: We do not have include the monitoring of the current usage yet. 
 The monitoring includes measuring the energy/power consumption. 
-- Flash: We do not include the code for using the flash memory of the MCU.
+- Flash: We do not include the code for using the flash memory of the MCU (only of the Fpga).
 The flash memory is for additional data storage. 
 - Stub/Skeleton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as on the FPGA (Skeleton) in this basic code.

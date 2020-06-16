@@ -35,15 +35,15 @@ int main(void)
 {
 
     DDRD = 0xff;
-    xmem_initXmem();
-    xmem_enableXmem();
+//    xmem_initXmem();
+//    xmem_enableXmem();
 
     debugInit(NULL);
 
-    initFlash();
-    fpgaFlashInit();
+//    initFlash();
+//    fpgaFlashInit();
 
-    elasticnode_initialise();
+//    elasticnode_initialise();
 //    reconfigure_initMultiboot();
 
     while (true) {
