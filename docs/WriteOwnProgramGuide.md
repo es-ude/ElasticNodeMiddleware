@@ -27,14 +27,23 @@ In this example we include all possible libraries to show you the possibilities.
         copts = cpu_frequency_flag(),
         uploader = "Avr_dude_upload_script",
         deps = [
-            "//:BitmanipulationLib",
-            "//:ElasticNodeMiddlewareLib",
-            "//:Reconfigure_multibootLib",
-            "//:UartLib",
-            "//:XMemLib",
-            "//:Interrupt_ManagerLib",
+            "//:CircularBufferLib",
+            "//:ConfigurationLib",
+            "//:DebugLufaLib",
+            "//:DebugUartLib",
             "//:ElasticNodeMiddleware_ConfigureFPGALib",
+            "//:ElasticNodeMiddlewareLib",
+            "//:FlashLib",
+            "//:FpgaFlashLib",
+            "//:FpgaFlashSelectLib",
+            "//:Interrupt_ManagerLib",
+            "//:Reconfigure_multibootLib",
             "//:RegisterDefinitionLibHdr",
+            "//:SpiLib",
+            "//:UartLib",
+            "//:UartmanagerLib",
+            "//:XMemLib",
+            "//:BitmanipulationLib",
             "//app/setup:Setup",
         ],
     ) 
@@ -86,4 +95,100 @@ In the following we show which ISR are needed for using the uart and reconfigure
     }
 
 You also can refer to the [main.c](../app/main.c). 
+For build and run commands refer to the [Getting Started Guide](GettingStartedGuide.md).
 In the end you can use the code and can write your own program.  
+
+## Upload your own Bitfile
+
+Please try to upload our example bitfile first which is explained in the [Getting Started Guide](GettingStartedGuide.md).
+It is important that you set your ports right. 
+For your own bitfile you have to set your configurations in [serial_test.py](../scripts/serial_test.py).
+First define your address for your bitfile. 
+For this, you have to add to the following your address:
+
+    TEST_ADDRESS = 0
+    ANN_WEIGHTS_ADDRESS = 0x121000
+    ANN_ADDRESS = 0x90000
+    CNN_ADDRESS = 0x0
+    BSCAN_ADDRESS = 0xC0000
+    FIR_ADDRESS = 0x180000
+    MM_ADDRESS = 0xC0000
+    VDP_ADDRESS = 0x120000
+    SMALL_ADDRESS = 0x0
+    DUMMY_ADDRESS = 0x0
+    
+For example you add under this:
+
+    EXAMPLE_ADDRESS = 0x0
+    
+After this add to the following line in [serial_test.py](../scripts/serial_test.py) your configuration
+
+    dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig = None, None, None, None, None, None, None, None
+
+So add your configuration like this:
+
+    exampleConfig, dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig = None, None, None, None, None, None, None, None, None
+
+Note the added "None".
+Af least you have to setup your configuration. 
+For this you look at the following code snippet:
+
+    # setup configurations
+    self.dummyConfig = Configuration("../dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
+    self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
+    self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
+    self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
+    self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
+    self.cnnConfig = Configuration("../cnnProjectBlockRAM.bit", CNN_ADDRESS, CNN_ADDRESS)
+    self.firConfig = Configuration("fir.bit", FIR_ADDRESS, FIR_ADDRESS)
+    self.mmConfig = Configuration("mm.bit", MM_ADDRESS, MM_ADDRESS)
+    self.vdpConfig = Configuration("vdp.bit", VDP_ADDRESS, VDP_ADDRESS
+    
+Add at the end your configuration: 
+    
+    self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
+
+Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. 
+
+Now, create a new python file in the [scripts](../scripts) folder. 
+Name it like "uploadExample", whereby you exchange "Example" with the name of your bitfile.
+Import SerialTest from serial_test like this
+
+    from serial_test import SerialTest
+
+For writing your bitfile to the FPGA, define a method "writeExample()" like this.
+Exchange Example with the name of the bitfile.
+    
+    def writeexample():
+        serialTest = SerialTest()
+        assert serialTest.sendConfig(serialTest.exampleConfig, flash=True)
+        
+Note that you use here your exampleConfig, which we defined in [serial_test.py](../scripts/serial_test.py) before.
+This code creates a object of the class SerialTest. 
+It runs the method "sendConfig" with your specified config and "flash=True" because it communicates over the flash of the FPGA.
+This method return a boolean value, which is compared to "True" with the "assert" statement.
+At least you have to run your defined "writeexample()" method in the main function:
+
+    if __name__ == "__main__":
+        writeexample()
+        
+Add this code snippet to your "uploadExample.py".
+All in all your "uploadExample.py" code should look like this:
+
+    from serial_test import SerialTest
+    
+    def writeexample():
+        serialTest = SerialTest()
+        assert serialTest.sendConfig(serialTest.exampleConfig, flash=True)
+    
+    if __name__ == "__main__":
+        writeexample()
+        
+For uploading your bitfile you first have to build and run our main.c like explained in the [Getting Started Guide](GettingStartedGuide.md).
+Then you run your "uploadExample.py" with python3.
+For example you open your terminal and route to the [scripts](../scripts) folder. 
+There you run your script with
+
+    python uploadExample.py
+    
+For other possible actions to do with the bitfile, like verifying please look in the [uploadDummy.py](../scripts/uploadDummy.py).
