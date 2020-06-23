@@ -19,7 +19,7 @@ ISR(USART1_TX_vect) {
 
 int main(void)
 {
-
+    uint16_t timer_1_sec=0;
     DDRD = 0xff;
 
     // init debug --> debugging with uart via ftdi adapter
@@ -35,7 +35,6 @@ int main(void)
 
         // check uart flag
         if(debugReadCharAvailable()) {
-            _delay_ms(500);
             uint8_t data = debugGetChar();
 
             // check if the key pressed is a
@@ -43,14 +42,14 @@ int main(void)
                 debugWriteLine("I know you pressed key a.");
                 BitManipulation_setBit(&PORTD, PD5);
                 _delay_ms(500);
-            }
-            if(data != 'a') {
+            } else {
                 debugWriteLine("Please press the a on your keyboard.");
                 BitManipulation_setBit(&PORTD, PD6);
                 _delay_ms(500);
             }
 
-
+            // set uart flag back to 0
+            debugReadCharProcessed();
         }
 
         // turn off leds
@@ -58,7 +57,6 @@ int main(void)
         BitManipulation_clearBit(&PORTD, PD4);
         BitManipulation_clearBit(&PORTD, PD5);
         BitManipulation_clearBit(&PORTD, PD6);
-
     }
 
 
