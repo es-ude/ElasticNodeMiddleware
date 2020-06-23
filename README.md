@@ -81,9 +81,7 @@ The elastic node middleware code includes several libraries:
 - Bitmanipulation
 - Lufa Usart
 
-<!--- This is a comment
-In the files "graph_elasticNodeMiddlewareLib.png" and "graph_elasticNodeMiddleware_ConfigureFPGALib.png" you can see the dependencies between these libraries. 
--->
+In the file [graph_uartmanager.png](graph_uartmanager.png) you can see the dependencies between these libraries. 
 
 They are described in the following.
 

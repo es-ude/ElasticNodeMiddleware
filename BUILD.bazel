@@ -12,7 +12,7 @@ cc_library(
         "//:RegisterDefinitionLibHdr",
         "//:XMemLib",
         #"@EmbeddedUtilities//:BitManipulation",
-        "//:BitmanipulationLib"
+        "//:BitmanipulationLib",
     ],
 )
 
@@ -68,7 +68,7 @@ cc_library(
         "//:RegisterDefinitionLibHdr",
         "//:XMemLib",
         #"@EmbeddedUtilities//:BitManipulation",
-        "//:BitmanipulationLib"
+        "//:BitmanipulationLib",
     ],
 )
 
@@ -94,7 +94,7 @@ cc_library(
         "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
         #"@EmbeddedUtilities//:BitManipulation",
-        "//:BitmanipulationLib"
+        "//:BitmanipulationLib",
     ],
 )
 
@@ -140,8 +140,6 @@ cc_library(
         "//:Interrupt_ManagerLib",
         "//:RegisterDefinitionLibHdr",
         "//:UartLibHdr",
-        #"@EmbeddedUtilities//:BitManipulation",
-        "//:BitmanipulationLib"
     ],
 )
 
@@ -220,6 +218,7 @@ cc_library(
         "//:ConfigurationLib",
         "//:DebugLufaLib",
         "//:ElasticNodeMiddlewareLib",
+        # needed?
         "//:ElasticNodeMiddleware_ConfigureFPGALib",
         "//:FlashLib",
         "//:FpgaFlashLib",
@@ -228,6 +227,9 @@ cc_library(
         "//:RegisterDefinitionLibHdr",
         "//:UartmanagerLibHdr",
         "//:XMemLib",
+        # added?
+        "//:BitmanipulationLib",
+        "//:SpiLib",
     ],
 )
 
@@ -250,12 +252,12 @@ cc_library(
     srcs = ["lib/flash_new/flash.c"],
     visibility = ["//visibility:public"],
     deps = [
+        "//:DebugLufaLib",
         "//:FlashLibHdr",
         "//:FpgaFlashLib",
+        "//:FpgaFlashSelectLib",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLib",
-        #"//:DebugUartLib",
-        "//:DebugLufaLib",
     ],
 )
 
@@ -266,6 +268,8 @@ cc_library(
     deps = [
         "//:FpgaFlashLibHdr",
         "//:SpiLib",
+        # added
+        "//:RegisterDefinitionLibHdr",
     ],
 )
 
@@ -442,11 +446,11 @@ cc_library(
     hdrs = ["lib/flash_new/flash.h"],
     visibility = ["//visibility:public"],
     deps = [
+        "//:DebugLufaLibHdr",
         "//:FpgaFlashLibHdr",
+        "//:FpgaFlashSelectLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLibHdr",
-        #"//:DebugUartLibHdr",
-        "//:DebugLufaLibHdr",
     ],
 )
 
@@ -454,7 +458,11 @@ cc_library(
     name = "FpgaFlashLibHdr",
     hdrs = ["lib/fpgaFlash_new/fpgaFlash.h"],
     visibility = ["//visibility:public"],
-    deps = ["//:SpiLibHdr"],
+    deps = [
+        "//:SpiLibHdr",
+        # added
+        "//:RegisterDefinitionLibHdr",
+    ],
 )
 
 cc_library(
@@ -488,6 +496,7 @@ cc_library(
         "//:ConfigurationLibHdr",
         "//:DebugLufaLibHdr",
         "//:ElasticNodeMiddlewareLibHdr",
+        # needed?
         "//:ElasticNodeMiddleware_ConfigureFPGALibHdr",
         "//:FlashLibHdr",
         "//:FpgaFlashLibHdr",
@@ -495,6 +504,8 @@ cc_library(
         "//:Reconfigure_MultibootLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
+        # added
+        "//:SpiLibHdr",
     ],
 )
 

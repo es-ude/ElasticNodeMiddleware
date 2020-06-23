@@ -1,5 +1,3 @@
-#include "lib/debug/debug.h"
-
 /*****
  * Software Half-duplex UART Driver
  * Henry Chan (hc352 @cornell.edu)
@@ -22,11 +20,12 @@
  ****/
 #include <avr/io.h>
 #include <util/delay.h>
+
+// TODO: change to own interruptmanager
 #include <avr/interrupt.h>
 
-#include "debug.h"
+#include "lib/debug/debug.h"
 #include "lib/uart/uart.h"
-#include "lib/uart/uart_internal.h"
 #include "lib/uart/uart_internal.h"
 
 void debugWriteBin(uint32_t num, uint8_t length);

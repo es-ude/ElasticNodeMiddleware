@@ -20,10 +20,14 @@
  ****/
 #include <avr/io.h>
 #include <util/delay.h>
+
+// TODO: change to own interruptmanager
 #include <avr/interrupt.h>
 
-#include "debug.h"
+#include "lib/debug/debug.h"
 #include "PeripheralInterface/LufaUsartImpl.h"
+
+// TODO: why 2 times?
 #include <util/delay.h>
 
 void debugWriteBin(uint32_t num, uint8_t length);
