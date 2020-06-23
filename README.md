@@ -202,12 +202,15 @@ By using the elastic node, the offset is 0x2000.
 
 ### Bitmanipulation
 
-The bitmanipulation library is an external library and is internally used for setting and clearing bits.
-Again, this library is only used for testing purposes. 
+The Bitmanipulation library is an external library from the [Embedded Utilities repository](https://github.com/es-ude/EmbeddedUtilities).
+It is used for setting and clearing bits.
+Please note that the include statements looks different to the other libraries (see [Write your own program guide](docs/WriteOwnProgramGuide.md)).
 
 ### Lufa Usart 
 
-[LufaLibrary](http://www.fourwalledcubicle.com/files/LUFA/Doc/120219/html/index.html)
+The Lufa Usart library is also an external library from the [Peripheral Interface repositry](https://github.com/es-ude/PeripheralInterface).
+Lufa is a USB library for USB-enabled AVR microcontrollers and explained at [fourwalledcubicle](http://www.fourwalledcubicle.com/files/LUFA/Doc/120219/html/index.html).
+Again, please note that the include statements looks different to the other libraries (see [Write your own program guide](docs/WriteOwnProgramGuide.md)).
 
 ## Future Work
 
