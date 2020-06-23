@@ -1,6 +1,3 @@
-//
-// Created by annika on 17.09.19.
-//
 #include "unity.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/pinDefinition/fpgaPins.h"

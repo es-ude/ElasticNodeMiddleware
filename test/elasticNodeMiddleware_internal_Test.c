@@ -1,7 +1,3 @@
-//
-// Created by annika on 07.11.19.
-//
-
 #include "unity.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"

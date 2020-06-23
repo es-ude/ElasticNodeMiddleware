@@ -1,7 +1,3 @@
-//
-// Created by annika on 18.12.19.
-//
-
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/pinDefinition/fpgaRegisters.h"

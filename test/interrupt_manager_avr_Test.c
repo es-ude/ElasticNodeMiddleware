@@ -1,7 +1,3 @@
-//
-// Created by annika on 18.11.19.
-//
-
 #include "unity.h"
 #include "lib/interruptManager/interruptManager.h"
 #include "lib/interruptManager/MockinterruptManager_avr_Mock.h"

@@ -1,7 +1,3 @@
-//
-// Created by annika on 08.01.20.
-//
-
 #include <stdio.h>
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"

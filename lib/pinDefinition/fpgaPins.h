@@ -1,7 +1,3 @@
-//
-// Created by annika on 17.09.19.
-//
-
 #ifndef ELASTICNODEMIDDLEWARE_FPGAPINS_H
 #define ELASTICNODEMIDDLEWARE_FPGAPINS_H
 

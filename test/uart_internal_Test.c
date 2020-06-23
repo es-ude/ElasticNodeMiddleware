@@ -1,7 +1,3 @@
-//
-// Created by annika on 09.01.20.
-//
-
 #include "unity.h"
 #include "lib/uart/uart_internal.h"
 #include "lib/uart/circularBuffer/MockcircularBuffer.h"

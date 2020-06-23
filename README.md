@@ -1,7 +1,7 @@
 # Elastic Node Middleware
 
 This repository includes the elastic node middleware code  as described in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
-The included code is written in C. The code is tested with the operating system Ubuntu 18.04.4.
+The included code is written in C and Python. The code is tested under the operating system Ubuntu 18.04.4.
 
 ## Hardware
 
@@ -89,7 +89,14 @@ They are described in the following.
 
 ### Configuration
 
+The configuration library configures the FPGA for uploading a bitfile to it. 
+
 ### Debug
+
+The debug library can be used for debugging the code.
+For example you can print a something for your output.
+You can debug via Uart or Lufa.
+We recommend you to debug over Lufa because Lufa is needed for uploading a bitfile to the FPGA. 
 
 ### Elastic Node Middleware
 
@@ -97,7 +104,7 @@ The elastic node middleware library consists of the elastic node middleware inte
 The outsourcing in internal interfaces are only for testing purposes.
 The elastic node middleware interface contains the following functions:
 
-- for initialising the elastic node middleware:\
+- for initialising the fpga:\
 → elasticnode_initialise
 - for turning the FPGA on:\
 → elasticnode_fpgaPowerOn
@@ -126,26 +133,31 @@ Unfortunately, this is necessary to avoid cycle dependencies between the elastic
 
 ### Flash
 
+The Flash library is used for handling with the Flash of the FPGA.
+The Flash of the FPGA is needed for the communication between the FPGA and the MCU. 
+
 ### FpgaFlash
+
+The Fpga Flash library is used for connection of the flash of the FPGA with SPI (serial peripheral interface).
 
 ### Interrupt Manager
 
-The interrupt manager library clears and set interrupts. 
+The Interrupt manager library clears and set interrupts. 
 Our interrupts are again implemented for avr. 
 
 ### Pin Definition
 
-The pin definition library defines all pin and register definitions.
+The Pin definition library defines all pin and register definitions.
 Therefore, all pin and register definitions are at one point in the code. 
 
 ### Reconfigure Multiboot Avr
 
-The reconfigure multiboot avr library handles the reconfiguration for the FPGA.
+The Reconfigure Multiboot Avr library handles the reconfiguration for the FPGA.
 The library is specialised for avr, because we use an avr-microcontroller in the elastic node.
 Multiboot is here the type of reconfiguration.
 Using multiboot means that we select one configuration and provide the address of the next configuration to the internal configuration access port (ICAP) interface of the FPGA.
 
-The reconfigure multiboot avr library again contains an reconfigure_multiboot_avr interface and for this an internal interface. 
+The reconfigure multiboot avr library contains an reconfigure_multiboot_avr interface and for this an internal interface. 
 The functions are:
 
 - for initialising the reconfiguration:\
@@ -161,12 +173,16 @@ The functions are:
 
 ### Spi
 
+The Spi library implements the [Serial Peripheral Interface](https://de.wikipedia.org/wiki/Serial_Peripheral_Interface) for the FPGA.
+
 ### Uart
 
 The uart library is used for communication with the MCU. 
 It is only used for testing purposes. 
 
 ### Uartmanager 
+
+The Uartmanager library can be used for using different elasticnode middleware function, e.g. for uploading a bitfile to the FPGA.
 
 ### Xmem
 

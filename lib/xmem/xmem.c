@@ -1,7 +1,3 @@
-//
-// Created by annika on 01.10.19.
-//
-
 #include "lib/xmem/xmem.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"

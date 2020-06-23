@@ -1,7 +1,3 @@
-//
-// Created by annika on 08.01.20.
-//
-
 #include "lib/uart/uart.h"
 #include "lib/uart/circularBuffer/circularBuffer.h"
 #include "lib/uart/uart_internal.h"

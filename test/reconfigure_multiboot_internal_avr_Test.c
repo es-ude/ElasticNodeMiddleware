@@ -1,7 +1,3 @@
-//
-// Created by annika on 07.11.19.
-//
-
 #include "unity.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 

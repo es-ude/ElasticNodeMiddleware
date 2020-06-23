@@ -1,6 +1,3 @@
-//
-// Created by annika on 26.02.20.
-//
 #include "unity.h"
 #include "lib/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.h"
 #include "lib/reconfigure_multiboot_avr/Mockreconfigure_multiboot_avr.h"

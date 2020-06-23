@@ -1,7 +1,3 @@
-//
-// Created by annika on 08.01.20.
-//
-
 #include "lib/uart/circularBuffer/circularBuffer.h"
 #include "lib/interruptManager/interruptManager.h"
 #include "lib/pinDefinition/fpgaRegisters.h"

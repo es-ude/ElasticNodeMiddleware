@@ -1,6 +1,3 @@
-//
-// Created by annika on 10.10.19.
-//
 #include "unity.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include "lib/pinDefinition/fpgaPins.h"

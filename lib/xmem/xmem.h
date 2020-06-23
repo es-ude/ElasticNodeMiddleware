@@ -1,7 +1,3 @@
-//
-// Created by annika on 01.10.19.
-//
-
 #ifndef ELASTICNODEMIDDLEWARE_XMEM_H
 #define ELASTICNODEMIDDLEWARE_XMEM_H
 
