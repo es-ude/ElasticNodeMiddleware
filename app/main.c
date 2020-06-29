@@ -43,8 +43,14 @@ int main(void)
 //    initFlash();
 //    fpgaFlashInit();
 
-//    elasticnode_initialise();
+//    elasticnode_initialise(); // init IO direction, and power off.
 //    reconfigure_initMultiboot();
+
+//   power off
+//   turn on led
+//  delay_ms(3000)
+//    turn on led
+//   power FPGA on
 
     while (true) {
         if(debugReadCharAvailable())
