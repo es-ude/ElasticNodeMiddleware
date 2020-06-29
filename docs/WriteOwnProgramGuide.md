@@ -34,8 +34,6 @@ In this example we include all possible libraries to show you the possibilities.
             "//:ElasticNodeMiddleware_ConfigureFPGALib",
             "//:ElasticNodeMiddlewareLib",
             "//:FlashLib",
-            "//:FpgaFlashLib",
-            "//:FpgaFlashSelectLib",
             "//:Interrupt_ManagerLib",
             "//:Reconfigure_multibootLib",
             "//:RegisterDefinitionLibHdr",

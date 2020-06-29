@@ -3,7 +3,6 @@
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/xmem/xmem.h"
-#include "lib/fpgaFlash_new/fpgaFlashSelect.h"
 
 // this function is called when a byte is read from flash
 // parameters are data and whether this is last byte
@@ -24,7 +23,7 @@ void spiInit(void)
 }
 void spiEnable(void)
 {
-/*
+
     // ensure master mode (_SS)
     DDRB |= _BV(PB0);
     PORTB |= _BV(PB0);
@@ -37,8 +36,7 @@ void spiEnable(void)
     while (SPSR & _BV(SPIF))
         SPDR;
 
-    SPDR;*/
-    spiEnable_internal();
+    SPDR;
 }
 
 void spiDisable(void)
@@ -109,8 +107,13 @@ void selectFlash(uint8_t mcuFlash)
         DDR_FLASH_CS |= _BV(P_FLASH_CS);
         PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
     }
-    else
-        selectFpgaFlash();
+    else {
+        spiEnable();
+        ////disableXmem();
+        xmem_disableXmem();
+
+        PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
+    }
 
 }
 
@@ -132,8 +135,13 @@ void deselectFlash(uint8_t mcuFlash)
         DDR_FLASH_CS |= _BV(P_FLASH_CS);
         PORT_FLASH_CS |= _BV(P_FLASH_CS);
     }
-    else
-        deselectFpgaFlash();
+    else {
+        spiEnable();
+        ////disableXmem();
+        xmem_disableXmem();
+
+        PORT_FLASH_CS |= _BV(P_FLASH_CS);
+    }
 
 }
 

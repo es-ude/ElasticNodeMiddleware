@@ -134,10 +134,6 @@ Unfortunately, this is necessary to avoid cycle dependencies between the elastic
 The Flash library is used for handling with the Flash of the FPGA.
 The Flash of the FPGA is needed for the communication between the FPGA and the MCU. 
 
-### FpgaFlash
-
-The Fpga Flash library is used for connection of the flash of the FPGA with SPI (serial peripheral interface).
-
 ### Interrupt Manager
 
 The Interrupt manager library clears and set interrupts. 

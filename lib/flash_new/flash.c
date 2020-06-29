@@ -2,8 +2,6 @@
 #include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/pinDefinition/fpgaPins.h"
 #include "lib/spi_new/spi.h"
-#include "lib/fpgaFlash_new/fpgaFlash.h"
-#include "lib/fpgaFlash_new/fpgaFlashSelect.h"
 #include "lib/debug/debug.h"
 
 uint8_t spi_buffer[SPI_BUFFER_SIZE];
@@ -57,14 +55,17 @@ void eraseSectorFlash(uint32_t address, uint8_t mcuFlash)
     spi_buffer[2] = (uint8_t) (address >> 8);
     spi_buffer[3] = (uint8_t) (address >> 0);
 
-    if (mcuFlash)
+    //// Changed!
+    /*if (mcuFlash)
     {
         spiPerformTaskBlocking(4, spi_buffer, 0, NULL);
     }
     else
     {
         fpgaFlashPerformTask(4, spi_buffer, 0, NULL);
-    }
+    }*/
+    //// new
+    spiPerformTaskBlocking(4, spi_buffer, 0, NULL);
 
     deselectFlash(mcuFlash);
 
@@ -97,12 +98,14 @@ void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mc
 
         memcpy(spi_buffer + 4, data, length);
 
-
-        if (mcuFlash) {
+        //// Changed!
+        /*if (mcuFlash) {
             spiPerformTaskBlocking(4 + length, spi_buffer, 0, NULL);
         } else {
             fpgaFlashPerformTask(4 + length, spi_buffer, 0, NULL);
-        }
+        }*/
+        //// new
+        spiPerformTaskBlocking(4 + length, spi_buffer, 0, NULL);
 
         deselectFlash(mcuFlash);
         // wait until done?
@@ -147,14 +150,18 @@ void writeEnableFlash(uint8_t mcuFlash)
     flashResetCallbacks();
     selectFlash(mcuFlash);
 
-    if (mcuFlash)
+    //// Changed!
+    /*if (mcuFlash)
     {
         spiPerformSimpleTaskBlocking(0x06, 0, NULL);
     }
     else
     {
         fpgaFlashPerformSimpleTask(0x06, 0, NULL);
-    }
+    }*/
+    //// new
+    spiPerformSimpleTaskBlocking(0x06, 0, NULL);
+
     deselectFlash(mcuFlash);
 }
 
@@ -180,14 +187,18 @@ uint8_t readStatus(uint8_t mcuFlash)
     selectFlash(mcuFlash);
     uint8_t status;
 
-    if (mcuFlash)
+    //// Changed!
+    /*if (mcuFlash)
     {
         spiPerformSimpleTaskBlocking(0x05, 1, &status);
     }
     else
     {
         fpgaFlashPerformSimpleTask(0x05, 1, &status);
-    }
+    }*/
+    //// new
+    spiPerformSimpleTaskBlocking(0x05, 1, &status);
+
     deselectFlash(mcuFlash);
 
     return status;
@@ -239,7 +250,8 @@ uint8_t *readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, vo
         // send commmand
         if (readingCallbackFunction == NULL)
         {
-            fpgaFlashPerformTask(4, spi_buffer, numBytes, spi_buffer + 4);
+            //fpgaFlashPerformTask(4, spi_buffer, numBytes, spi_buffer + 4);
+            spiPerformTaskBlocking(4, spi_buffer, numBytes, spi_buffer + 4);
             deselectFlash(mcuFlash);
         }
         else
@@ -289,14 +301,17 @@ void flashWriteQueue(uint32_t address, uint8_t mcuFlash)
 
     // spi_pointer = flashWriteBuf;
 
-    if (mcuFlash)
+    //// Changed!
+    /*if (mcuFlash)
     {
         spiPerformTaskBlocking(4 + flashQueueCount, flashWriteBuf, 0, NULL);
     }
     else
     {
         fpgaFlashPerformTask(4 + flashQueueCount, flashWriteBuf, 0, NULL);
-    }
+    }*/
+    //// new
+    spiPerformTaskBlocking(4 + flashQueueCount, flashWriteBuf, 0, NULL);
 
     deselectFlash(mcuFlash);
     // wait until done?
@@ -315,48 +330,19 @@ void unlockFlash(uint8_t mcuFlash)
 
     selectFlash(mcuFlash);
 
-    if (mcuFlash)
+    //// Changed!
+    /*if (mcuFlash)
     {
         spiPerformSimpleTaskBlocking(0x98, 0, NULL);
     }
     else
     {
         fpgaFlashPerformSimpleTask(0x98, 0, NULL);
-    }
+    }*/
+    //// new
+    spiPerformSimpleTaskBlocking(0x98, 0, NULL);
 
     deselectFlash(mcuFlash);
-}
-
-void fpgaFlashFinishedHelper(void)
-{
-    // write any remaining data in the queue
-    // debugWriteString("final part: ");
-    // debugWriteHex16(getFlashQueueCount());
-    // debugWriteString(" to ");
-    // debugWriteHex32(addressFlash);
-    // debugNewLine();
-
-    // flashWriteQueue(addressFlash, 0);
-
-
-    deselectFpgaFlash();
-
-    fpgaFlashDisable();
-    debugWriteLine("done reading to spi flash");
-
-    // debugWriteString("total bytes read from mcu: ");
-    // debugWriteDec32(mcuReadCount);
-    // debugNewLine();
-    // debugWriteString("Total bytes wrote to FPGA: ");
-    // debugWriteDec32(fpgaWriteCount);
-    // debugNewLine();
-
-    // confirm completed configuration
-    debugDone();
-    debugWriteLine("FIN");
-    debugWaitUntilDone();
-
-//    setLed(2, 0);
 }
 
 uint32_t addressFlash;

@@ -18,51 +18,18 @@ void readValue(uint32_t *destination)
     readData((uint8_t *) destination, sizeof(uint32_t));
 
     debugWriteStringLength(destination, sizeof(uint32_t));
-    //uart_WriteStringLengthBlock(destination, sizeof(uint32_t));
 }
 
-uint8_t read_a_block_of_data(uint8_t *buffer)
-{
-    uint8_t recv_cnt=0;
-    uint8_t data;
-    uint8_t recv_state;
-    uint8_t last_input;
-    recv_state = 0;
-    recv_cnt=0;
-    while (true) {
-        data = debugReadCharBlock();
-        /* waiting for start flag -- 0xAa 0xBb*/
-        if(recv_state!=2) {
-            if (data == 0xAa) {
-                recv_state = 1;
-            } else if (data == 0xBb) {
-                recv_state = 2;
-            }
-        }
-        else
-        {
-            if (last_input == 0xAa && data == 0xBb)// restart
-            {
-                recv_cnt=0;
-            }
-            else if(last_input == 0xCc && data == 0xDd)// finished
-            {
-                return recv_cnt-1;
-            }
-            else
-            {
-                buffer[recv_cnt] = data;
-                recv_cnt++;
-            }
-        }
-        last_input = data;
-    }
-}
+
 void readData(uint8_t *buffer, uint16_t num)
 {
     uint8_t *ptr = buffer;
     for (uint16_t i = 0; i < num; i++) {
         *ptr++ = (uint8_t) debugReadCharBlock();
+
+        /*
+         * Comment in to see blinking leds while the progress of uploading the bitfile
+
         if(i%2==0){
             BitManipulation_setBit(&PORTD, PD4);
         }
@@ -70,6 +37,7 @@ void readData(uint8_t *buffer, uint16_t num)
         {
             BitManipulation_clearBit(&PORTD, PD4);
         }
+         */
     }
 
 }

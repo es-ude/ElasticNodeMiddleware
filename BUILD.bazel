@@ -221,8 +221,6 @@ cc_library(
         # needed?
         "//:ElasticNodeMiddleware_ConfigureFPGALib",
         "//:FlashLib",
-        "//:FpgaFlashLib",
-        "//:FpgaFlashSelectLib",
         "//:Reconfigure_multibootLib",
         "//:RegisterDefinitionLibHdr",
         "//:UartmanagerLibHdr",
@@ -254,34 +252,8 @@ cc_library(
     deps = [
         "//:DebugLufaLib",
         "//:FlashLibHdr",
-        "//:FpgaFlashLib",
-        "//:FpgaFlashSelectLib",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLib",
-    ],
-)
-
-cc_library(
-    name = "FpgaFlashLib",
-    srcs = ["lib/fpgaFlash_new/fpgaFlashSpi.c"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//:FpgaFlashLibHdr",
-        "//:SpiLib",
-        # added
-        "//:RegisterDefinitionLibHdr",
-    ],
-)
-
-cc_library(
-    name = "FpgaFlashSelectLib",
-    srcs = ["lib/fpgaFlash_new/fpgaFlashSpiSelect.c"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//:FpgaFlashSelectLibHdr",
-        "//:Interrupt_ManagerLib",
-        "//:RegisterDefinitionLibHdr",
-        "//:XMemLib",
     ],
 )
 
@@ -290,7 +262,6 @@ cc_library(
     srcs = ["lib/spi_new/spi.c"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:FpgaFlashSelectLib",
         "//:Interrupt_ManagerLib",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLibHdr",
@@ -305,12 +276,10 @@ exports_files(
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
         "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
         "lib/flash_new/flash.h",
-        "lib/fpgaFlash_new/fpgaFlash.h",
         "lib/interruptManager/interruptManager.h",
         "lib/interruptManager/interruptManager_avr_Mock.h",
         "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
-        "lib/pinDefinition/peripherals.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "lib/spi_new/spi.h",
@@ -409,7 +378,6 @@ cc_library(
     hdrs = [
         "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
-        "lib/pinDefinition/peripherals.h",
     ],
     visibility = ["//visibility:public"],
 )
@@ -447,32 +415,8 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:DebugLufaLibHdr",
-        "//:FpgaFlashLibHdr",
-        "//:FpgaFlashSelectLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:SpiLibHdr",
-    ],
-)
-
-cc_library(
-    name = "FpgaFlashLibHdr",
-    hdrs = ["lib/fpgaFlash_new/fpgaFlash.h"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//:SpiLibHdr",
-        # added
-        "//:RegisterDefinitionLibHdr",
-    ],
-)
-
-cc_library(
-    name = "FpgaFlashSelectLibHdr",
-    hdrs = ["lib/fpgaFlash_new/fpgaFlashSelect.h"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//:Interrupt_ManagerLibHdr",
-        "//:RegisterDefinitionLibHdr",
-        "//:XMemLibHdr",
     ],
 )
 
@@ -481,7 +425,6 @@ cc_library(
     hdrs = ["lib/spi_new/spi.h"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:FpgaFlashSelectLibHdr",
         "//:Interrupt_ManagerLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",
@@ -499,8 +442,6 @@ cc_library(
         # needed?
         "//:ElasticNodeMiddleware_ConfigureFPGALibHdr",
         "//:FlashLibHdr",
-        "//:FpgaFlashLibHdr",
-        "//:FpgaFlashSelectLibHdr",
         "//:Reconfigure_MultibootLibHdr",
         "//:RegisterDefinitionLibHdr",
         "//:XMemLibHdr",

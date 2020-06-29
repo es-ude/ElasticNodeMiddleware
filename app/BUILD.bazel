@@ -15,6 +15,7 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "Avr_dude_upload_script",
     deps = [
+        "//:BitmanipulationLib",
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
         "//:XMemLib",
@@ -22,7 +23,6 @@ default_embedded_binary(
         "//:DebugLufaLib",
         "//:UartmanagerLib",
         "//:FlashLib",
-        "//:FpgaFlashLib",
     ],
 )
 

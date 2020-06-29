@@ -7,8 +7,8 @@
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include "lib/flash_new/flash.h"
-#include "lib/fpgaFlash_new/fpgaFlash.h"
 #include "lib/uartmanager/uartmanager.h"
+#include "EmbeddedUtilities/BitManipulation.h"
 
 //the following ISR's have to be comment in by programmer
 
@@ -22,7 +22,7 @@ ISR(USART1_TX_vect) {
     uart_ISR_Transmit();
 }
 */
-//// IMPORTANT: by comment in these code the main runs 3 times (?, only the last time till the end)?!
+//// IMPORTANT:
 //// Please check
 /* for using reconfigure
 
@@ -35,22 +35,24 @@ int main(void)
 {
 
     DDRD = 0xff;
-//    xmem_initXmem();
-//    xmem_enableXmem();
 
     debugInit(NULL);
 
+    // in uartmanger for specific use case
+    // initialises the flash and spi together
 //    initFlash();
-//    fpgaFlashInit();
 
-//    elasticnode_initialise(); // init IO direction, and power off.
 //    reconfigure_initMultiboot();
 
-//   power off
-//   turn on led
-//  delay_ms(3000)
-//    turn on led
-//   power FPGA on
+//    elasticnode_initialise(); // init IO direction, and power off
+    // need a delay for initialise and reboot the mcu
+    // first led should blink
+    elasticnode_initialise();
+    elasticnode_fpgaPowerOff();
+    BitManipulation_setBit(&PORTD, PD4);
+    _delay_ms(3000);
+    BitManipulation_clearBit(&PORTD, PD4);
+    elasticnode_fpgaPowerOn();
 
     while (true) {
         if(debugReadCharAvailable())
@@ -60,7 +62,6 @@ int main(void)
             // acknowledge when ready to receive again
 //            debugAck(data);
 
-            //configurationUartFlash();
             uartProcessInput(data);
         }
         debugTask();
