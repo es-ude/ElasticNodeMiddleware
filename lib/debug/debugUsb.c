@@ -18,23 +18,23 @@
  *    //Stuff when transmission done
  * }
  ****/
-#include <avr/io.h>
 #include <util/delay.h>
 
-// TODO: change to own interruptmanager
-#include <avr/interrupt.h>
-
-#include "lib/debug/debug.h"
 #include "PeripheralInterface/LufaUsartImpl.h"
 
-// TODO: why 2 times?
-#include <util/delay.h>
+#include "lib/debug/debug.h"
 
 void debugWriteBin(uint32_t num, uint8_t length);
+
 
 void debugTask(void)
 {
     lufaTask();
+}
+
+uint16_t debugNumInputAvailable(void)
+{
+    return lufaNumInputAvailable();
 }
 
 void debugInit(void (*receiveHandler)(uint8_t))
@@ -46,20 +46,8 @@ void debugInit(void (*receiveHandler)(uint8_t))
     }
 }
 
-uint16_t debugNumInputAvailable(void)
-{
-    return lufaNumInputAvailable();
-}
-
 void setDebugReceiveHandler(void (*receiveHandler)(uint8_t))
 {
-}
-
-
-// ignore extra parameter used for flash readback
-void debugWriteCharHelper(uint8_t c, uint8_t last)
-{
-    debugWriteChar(c);
 }
 
 
@@ -68,6 +56,14 @@ void debugNewLine(void)
     debugWriteCharBlock('\r');
     debugWriteCharBlock('\n');
     debugWaitUntilDone();
+}
+
+void debugWriteBool(uint8_t input)
+{
+    if(input)
+        debugWriteString("true");
+    else
+        debugWriteString("false");
 }
 
 void debugWriteLine(char *s)
@@ -98,10 +94,6 @@ void debugWriteCharBlock(uint8_t c)
     debugWaitUntilDone();
 }
 
-void debugReadChar(void) {
-#warning "not used"
-}
-
 uint8_t debugReadCharAvailable(void)
 {
     return lufaReadAvailable();
@@ -122,29 +114,20 @@ uint8_t debugGetChar(void)
     return lufaGetChar();
 }
 
-
-void debugWriteBool(uint8_t input)
+void debugWriteHex8(uint8_t num)
 {
-    if(input)
-        debugWriteString("true");
-    else
-        debugWriteString("false");
+    char *buf = (char *) malloc(10);
+    sprintf(buf, "%02X", num);
+    debugWriteString(buf);
+    free(buf);
 }
 
-void debugWaitUntilDone(void)
+void debugWriteHex16(uint16_t num)
 {
-    lufaWaitUntilDone();
-}
-
-uint8_t debugSending(void)
-{
-#warning "lufa not waiting for finished"
-}
-
-
-void debugAck(uint8_t c)
-{
-    debugWriteCharBlock(c);
+    char *buf = (char *) malloc(10);
+    sprintf(buf, "%04X", num);
+    debugWriteString(buf);
+    free(buf);
 }
 
 void debugWriteHex32(uint32_t num)
@@ -155,9 +138,43 @@ void debugWriteHex32(uint32_t num)
     free(buf);
 }
 
-void debugWriteBin32(uint32_t num)
+void debugWriteDec8(uint8_t num)
 {
-    debugWriteBin(num, 32);
+    char *buf = (char *) malloc(10);
+    sprintf(buf, "%2d", num);
+    debugWriteString(buf);
+    free(buf);
+}
+
+void debugWriteDec16(uint16_t num)
+{
+    char *buf = (char *) malloc(10);
+    sprintf(buf, "%u", num);
+    debugWriteString(buf);
+    free(buf);
+}
+
+//unsigned long
+void debugWriteDec32(uint32_t num)
+{
+    char *buf = (char *) malloc(10);
+    sprintf(buf, "%lu", num);
+    debugWriteString(buf);
+    free(buf);
+}
+
+//signed long
+void debugWriteDec32S(int32_t num)
+{
+    char *buf = (char *) malloc(10);
+    sprintf(buf, "%ld", num);
+    debugWriteString(buf);
+    free(buf);
+}
+
+void debugWriteBin4(uint8_t num)
+{
+    debugWriteBin((uint32_t) num, 4);
 }
 
 void debugWriteBin8(uint8_t num)
@@ -165,9 +182,9 @@ void debugWriteBin8(uint8_t num)
     debugWriteBin((uint32_t) num, 8);
 }
 
-void debugWriteBin4(uint8_t num)
+void debugWriteBin32(uint32_t num)
 {
-    debugWriteBin((uint32_t) num, 4);
+    debugWriteBin(num, 32);
 }
 
 void debugWriteBin(uint32_t num, uint8_t length)
@@ -182,35 +199,6 @@ void debugWriteBin(uint32_t num, uint8_t length)
         else
             debugWriteCharBlock('0');
     }
-}
-
-void debugWriteHex8(uint8_t num)
-{
-    char *buf = (char *) malloc(10);
-    sprintf(buf, "%02X", num);
-    debugWriteString(buf);
-    free(buf);
-}
-
-void debugWriteHex8Helper(uint8_t num, uint8_t last)
-{
-    debugWriteHex8(num);
-}
-
-void debugWriteHex16(uint16_t num)
-{
-    char *buf = (char *) malloc(10);
-    sprintf(buf, "%04X", num);
-    debugWriteString(buf);
-    free(buf);
-}
-
-void debugWriteDec8(uint8_t num)
-{
-    char *buf = (char *) malloc(10);
-    sprintf(buf, "%2d", num);
-    debugWriteString(buf);
-    free(buf);
 }
 
 void debugWriteFloat(float num)
@@ -229,30 +217,6 @@ void debugWriteFloatFull(float num)
     free(buf);
 }
 
-void debugWriteDec16(uint16_t num)
-{
-    char *buf = (char *) malloc(10);
-    sprintf(buf, "%u", num);
-    debugWriteString(buf);
-    free(buf);
-}
-
-void debugWriteDec32(uint32_t num)
-{
-    char *buf = (char *) malloc(10);
-    sprintf(buf, "%lu", num);
-    debugWriteString(buf);
-    free(buf);
-}
-
-void debugWriteDec32S(int32_t num)
-{
-    char *buf = (char *) malloc(10);
-    sprintf(buf, "%ld", num);
-    debugWriteString(buf);
-    free(buf);
-}
-
 void debugDone(void)
 {
     debugWriteLine("\n$$");
@@ -261,4 +225,19 @@ void debugDone(void)
 void debugReady(void)
 {
     debugWriteLine("\n%%");
+}
+
+void debugWaitUntilDone(void)
+{
+    lufaWaitUntilDone();
+}
+
+uint8_t debugSending(void)
+{
+#warning "lufa not waiting for finished"
+}
+
+void debugAck(uint8_t c)
+{
+    debugWriteCharBlock(c);
 }

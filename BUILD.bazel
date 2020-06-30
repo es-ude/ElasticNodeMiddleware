@@ -163,6 +163,10 @@ cc_library(
 cc_library(
     name = "CircularBufferLib",
     srcs = ["lib/uart/circularBuffer/circularBuffer.c"],
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//:CircularBufferLibHdr",
@@ -193,6 +197,10 @@ cc_library(
 cc_library(
     name = "DebugUartLib",
     srcs = ["lib/debug/debug.c"],
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//:DebugUartLibHdr",
@@ -203,6 +211,10 @@ cc_library(
 cc_library(
     name = "DebugLufaLib",
     srcs = ["lib/debug/debugUsb.c"],
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//:DebugLufaLibHdr",

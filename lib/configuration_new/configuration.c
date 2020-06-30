@@ -1,14 +1,16 @@
-#include "lib/debug/debug.h"
-#include "lib/flash_new/flash.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "lib/interruptManager/interruptManager.h"
+
 #include "lib/configuration_new/configuration.h"
-#include <avr/interrupt.h>
+#include "lib/debug/debug.h"
+#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "lib/flash_new/flash.h"
+#include "lib/interruptManager/interruptManager.h"
+
+//TODO: change to own led library
+#include <avr/io.h>
 
 #define BUFFER_SIZE 256
-#define BACKUP_ADDRESS 0x120000
-uint32_t configAddress, configSize, configDestination, configRemaining;
+uint32_t configAddress, configSize, configRemaining;
 uint8_t *buffer;
 
 void readData(uint8_t *buffer, uint16_t num);
@@ -28,7 +30,7 @@ void readData(uint8_t *buffer, uint16_t num)
         *ptr++ = (uint8_t) debugReadCharBlock();
 
         /*
-         * Comment in to see blinking leds while the progress of uploading the bitfile
+         * uncomment to see blinking leds while the progress of uploading the bitfile
 
         if(i%2==0){
             BitManipulation_setBit(&PORTD, PD4);
@@ -43,9 +45,8 @@ void readData(uint8_t *buffer, uint16_t num)
 }
 
 void configurationUartFlash(void) {
-    ////fpgaPower(0);
+
     elasticnode_fpgaPowerOff();
-    ////setFpgaHardReset();
     elasticnode_fpgaHardReset();
     ////setLed(0, 1);
     BitManipulation_setBit(&PORTD, PD7);
@@ -91,7 +92,6 @@ void configurationUartFlash(void) {
             blockSize = configRemaining;
         BitManipulation_setBit(&PORTD, PD5);
         readData(buffer, blockSize);
-//        while(read_a_block_of_data(buffer)!=blockSize);
         BitManipulation_setBit(&PORTD, PD4);
 
         writeDataFlash(currentAddress, buffer, blockSize, 1);
@@ -115,9 +115,10 @@ void configurationUartFlash(void) {
     interruptManager_setInterrupt();
 }
 
+// not used until now
+// eventually include verification of flash
 void verifyConfigurationFlash(uint8_t mcuFlash)
 {
-//    fpgaPower(0);
     elasticnode_fpgaHardReset();
     flashEnableInterface();
 
@@ -140,5 +141,5 @@ void verifyConfigurationFlash(uint8_t mcuFlash)
     debugDone();
 
 
-    sei();
+    interruptManager_setInterrupt();
 }
