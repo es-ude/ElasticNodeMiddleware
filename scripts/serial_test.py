@@ -44,6 +44,7 @@ MM_ADDRESS = 0xC0000
 VDP_ADDRESS = 0x120000
 SMALL_ADDRESS = 0x0
 DUMMY_ADDRESS = 0x0
+S15_ADDRESS = 0x0
 
 SKIP = None # (538844 - 256) # 4096 * 5
 
@@ -83,7 +84,7 @@ class SerialTest:
     baud, port, bitFile, testFile, bscanFile, size, testsize, bscansize = None, None, None, None, None, None, None, None
     skip, testskip, bscanskip = None, None, None
 
-    dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig = None, None, None, None, None, None, None, None
+    dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig, s15Config = None, None, None, None, None, None, None, None, None
 
     backgroundDebug = False
 
@@ -106,16 +107,16 @@ class SerialTest:
             debugThread.start()
 
         # setup configurations
-        self.dummyConfig = Configuration("../dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
+        self.dummyConfig = Configuration("../bitfiles/dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
         self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
         self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
         self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
         self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
-        # use this bitfile
-        self.cnnConfig = Configuration("../cnnProjectBlockRAM.bit", CNN_ADDRESS, CNN_ADDRESS)
+        self.cnnConfig = Configuration("../bitfiles/cnnProjectBlockRAM.bit", CNN_ADDRESS, CNN_ADDRESS)
         self.firConfig = Configuration("fir.bit", FIR_ADDRESS, FIR_ADDRESS)
         self.mmConfig = Configuration("mm.bit", MM_ADDRESS, MM_ADDRESS)
         self.vdpConfig = Configuration("vdp.bit", VDP_ADDRESS, VDP_ADDRESS)
+        self.s15Config = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS, S15_ADDRESS)
 
         try:
             # if plot:

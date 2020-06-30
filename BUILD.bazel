@@ -473,3 +473,9 @@ py_library(
     srcs = ["scripts/Configuration.py"],
     deps = [],
 )
+
+py_library(
+    name = "uploadS15PyLib",
+    srcs = ["scripts/uploadS15.py"],
+    deps = [],
+)

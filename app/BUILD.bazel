@@ -12,11 +12,10 @@ load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_
 default_embedded_binary(
     name = "main",
     srcs = ["main.c"],
-    copts = cpu_frequency_flag(),
-#    copts = [
-#        "-DF_CPU=8000000UL",
-#        "-DBAUD=9600UL",
-#    ],
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
+    ],
     uploader = "Avr_dude_upload_script",
     deps = [
         "//:BitmanipulationLib",

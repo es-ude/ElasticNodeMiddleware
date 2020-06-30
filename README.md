@@ -59,7 +59,7 @@ A bitfile stores a specific circuit for the FPGA.
 So, a bitfile says how the programmable logic blocks of a FPGA need to be set. 
 Therefore, when we using a bifile, the FPGA can be reconfigured to instantiate a different circuit.
 As we want to reconfigure the FPGA at the Elastic Node, we need bitfiles. 
-An example bitfile is given in the project: [dummy.bit](dummy.bit).
+An example bitfile is given in the project: [dummy.bit](bitfiles/dummy.bit).
 
 The using of a bitfile is again shown in the [getting started guide](docs/GettingStartedGuide.md).
 
