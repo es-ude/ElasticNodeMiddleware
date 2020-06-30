@@ -44,7 +44,8 @@ MM_ADDRESS = 0xC0000
 VDP_ADDRESS = 0x120000
 SMALL_ADDRESS = 0x0
 DUMMY_ADDRESS = 0x0
-S15_ADDRESS = 0x0
+S15_ADDRESS_1 =0x0
+S15_ADDRESS_2 =0x90000
 
 SKIP = None # (538844 - 256) # 4096 * 5
 
@@ -84,7 +85,7 @@ class SerialTest:
     baud, port, bitFile, testFile, bscanFile, size, testsize, bscansize = None, None, None, None, None, None, None, None
     skip, testskip, bscanskip = None, None, None
 
-    dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig, s15Config = None, None, None, None, None, None, None, None, None
+    dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig = None, None, None, None, None, None, None, None
 
     backgroundDebug = False
 
@@ -94,6 +95,7 @@ class SerialTest:
         self.elasticNodeVersion = enVersion
 
         if self.elasticNodeVersion == 4:
+            # change to 500000
             baudrate = 500000
         else:
             baudrate = 115200
@@ -107,17 +109,15 @@ class SerialTest:
             debugThread.start()
 
         # setup configurations
-        self.dummyConfig = Configuration("../bitfiles/dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
+        self.dummyConfig = Configuration("../dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
         self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
         self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
         self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
         self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
-        self.cnnConfig = Configuration("../bitfiles/cnnProjectBlockRAM.bit", CNN_ADDRESS, CNN_ADDRESS)
-        self.firConfig = Configuration("fir.bit", FIR_ADDRESS, FIR_ADDRESS)
-        self.mmConfig = Configuration("mm.bit", MM_ADDRESS, MM_ADDRESS)
-        self.vdpConfig = Configuration("vdp.bit", VDP_ADDRESS, VDP_ADDRESS)
-        self.s15Config = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS, S15_ADDRESS)
-
+        # use this bitfile
+        self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
+        self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)
+        
         try:
             # if plot:
             # 	self.plotter = SerialPlotter()
@@ -412,7 +412,7 @@ class SerialTest:
         data = ""
         while "$$" not in data:
             data = self.readSerialLine()
-            print('[chao_debug] waitSerialDone, data is:',data)
+            # print('[chao_debug] waitSerialDone, data is:',data)
             if len(data) > 0:
                 if self.backgroundDebug:
                     # print(data)
@@ -439,7 +439,7 @@ class SerialTest:
         data = ""
         while "%%" not in data:
             data = self.readSerialLine()
-            print('[chao_debug] waitSerialReady, data is:',data)
+            # print('[chao_debug] waitSerialReady, data is:',data)
             # data = self.ser.readline()
             if len(data) > 0:
                 if "%%" not in data:
@@ -695,7 +695,7 @@ class SerialTest:
             elif selectmap: self.writeCommand(b'M') # also broken somehow
             elif flash:
                 self.writeCommand(b'F')
-                print('[chao_debug] command F sent.')
+                # print('[chao_debug] command F sent.')
             elif fpgaflash: self.writeCommand(b'p')
             else: print(("No idea how to send config!!"))
 
@@ -720,10 +720,10 @@ class SerialTest:
                 print('sending remote address', config.destination)
                 self.writeValue(config.destination, "destination")
             # sending size
-            print('[chao_debug] config_size is ', config.size)
+            # print('[chao_debug] config_size is ', config.size)
             self.writeValue(config.size, "size");
 
-            print('[chao_debug] wainting for flash erase finished\r\n')
+            # print('[chao_debug] wainting for flash erase finished\r\n')
             # give device time for some debug
             self.waitSerialReady(quiet=False)
             print('sending data')
@@ -736,11 +736,11 @@ class SerialTest:
 
 
             while currentAddress < config.size:
-                print('[chao_debug] in sending loop..\r\n')
+                # print('[chao_debug] in sending loop..\r\n')
                 perc = int(float(currentAddress) / config.size * 100)
 
                 if oldperc != perc:
-                    # sys.stdout.write('\r{}%'.format(perc))
+                    sys.stdout.write('\r{}%'.format(perc))
                     sys.stdout.flush()
                     # print('\r{}%'.format(perc))
                     oldperc = perc
@@ -748,7 +748,7 @@ class SerialTest:
                 if (config.size - currentAddress) < blockSize:
                     print("Last block!")
                     blockSize = config.size - currentAddress
-                    print(blockSize)
+                    # print(blockSize)
 
                 elif (config.size - currentAddress) == blockSize:
                     print("Last full block!")
@@ -761,18 +761,18 @@ class SerialTest:
                 # sending = (b'\255\255\x33\x31\x31\x31\x31\x31\x31\x31\x31\x31\x32\x33\x34\x35')
                 # real_send = b'\xAa\xBb'+sending+b'\xCc\xDd'
                 # time.sleep(0.01) # might can be delete
-                print('[chao_debug] a block is read out from bit file, type is',type(sending),',its size is:', len(sending))
-                print('[chao_debug] data content', sending)
+                # print('[chao_debug] a block is read out from bit file, type is',type(sending),',its size is:', len(sending))
+                # print('[chao_debug] data content', sending)
+                
 
-
-                # bytes_has_written = self.ser.write(sending)
-                # self.ser.flush()
+                bytes_has_written = self.ser.write(sending)
+                self.ser.flush()
                 # or
-                self.serial_send_block(sending, blockSize)
+                # self.serial_send_block(sending, blockSize)
 
 
 
-                print('[chao_debug] data block written finished. ')
+                # print('[chao_debug] data block written finished. ')
 
                 if flash or fpgaflash:
                     if not self.confirmCommand(sending[-1]):
@@ -783,7 +783,7 @@ class SerialTest:
                         ret = False
                         break
                 currentAddress += blockSize
-                print('[chao_debug] data has been send to the mcu wait for ack..\r\n')
+                # print('[chao_debug] data has been send to the mcu wait for ack..\r\n')
                 self.waitSerialDone()
 
             # # confirm the last
@@ -1172,9 +1172,9 @@ class SerialTest:
         return ret
 
     def confirmCommand(self, command):
-        print('[chao_debug] waiting for confirm from MCU,,,')
+        # print('[chao_debug] waiting for confirm from MCU,,,')
         response = self.readSerialBlocking(1)
-        print('[chao_debug] we get response now')
+        # print('[chao_debug] we get response now')
         # response = self.ser.read(1)
         charResponse = response
         try:

@@ -2,3 +2,5 @@
 .clwb/
 bazel-*
 user.bazelrc
+
+scripts/__pycache__/
