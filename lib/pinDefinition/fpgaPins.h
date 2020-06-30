@@ -75,7 +75,6 @@
 //pin 6 external interrupt source
 #define FPGA_DONE_INT PCINT6
 
-//new
 #define P_FLASH_CS PB4
 #define P_WIRELESS_CS PE6
 

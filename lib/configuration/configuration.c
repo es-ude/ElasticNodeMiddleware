@@ -1,9 +1,9 @@
 #include "EmbeddedUtilities/BitManipulation.h"
 
-#include "lib/configuration_new/configuration.h"
+#include "lib/configuration/configuration.h"
 #include "lib/debug/debug.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "lib/flash_new/flash.h"
+#include "lib/flash/flash.h"
 #include "lib/interruptManager/interruptManager.h"
 
 //TODO: change to own led library

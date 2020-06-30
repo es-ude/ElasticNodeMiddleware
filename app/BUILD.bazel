@@ -24,7 +24,7 @@ default_embedded_binary(
         "//:XMemLib",
         "//app/setup:Setup",
         "//:DebugLufaLib",
-        "//:UartmanagerLib",
+        "//:ControlmanagerLib",
         "//:FlashLib",
     ],
 )
@@ -32,7 +32,10 @@ default_embedded_binary(
 default_embedded_binary(
     name = "blinkUsartExample",
     srcs = ["blinkUsartExample.c"],
-    copts = cpu_frequency_flag(),
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
+    ],
     uploader = "Avr_dude_upload_script",
     deps = [
         "//:BitmanipulationLib",
@@ -44,7 +47,10 @@ default_embedded_binary(
 default_embedded_binary(
     name = "blinkLufaExample",
     srcs = ["blinkLufaExample.c"],
-    copts = cpu_frequency_flag(),
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
+    ],
     uploader = "Avr_dude_upload_script",
     deps = [
         "//:DebugLufaLib",

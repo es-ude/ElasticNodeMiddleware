@@ -48,10 +48,10 @@ int main(void)
                 _delay_ms(500);
             }
 
-            // set uart flag back to 0
-            debugReadCharProcessed();
         }
 
+        // set uart flag back to 0
+        debugReadCharProcessed();
         // turn off leds
         _delay_ms(500);
         BitManipulation_clearBit(&PORTD, PD4);

@@ -4,11 +4,12 @@ This guide shows you how to write your own program in the elastic node middlewar
 We assume that for example your implementation is in the folder "app" in the file "myImplementation.c".
 Then you have to create a fitting BUILD.bazel file for building and uploading your implementation.
 
-Alternatively, you can use the example "main.c" file and modify this file for your purposes. 
+Alternatively, you can use the example ["main.c"](../app/main.c) file and modify this file for your purposes. 
+Another option is to add a case to the switch case in the controlmanager and run it with building and running the [main.c](../app/main.c).
 
 ## The BUILD.bazel File
 
-You have to extend the BUILD.bazel file in the app folder. 
+You have to extend the [BUILD.bazel](../app/BUILD.bazel) file in the app folder. 
 You should see there the definition for our main.c and the blinking example.
 For your implementation you create your own embedded binary.
 You should give it a name and define the sources of your implementation as well as the compiler options with the copts command.
@@ -181,7 +182,19 @@ All in all your "uploadExample.py" code should look like this:
     
     if __name__ == "__main__":
         writeexample()
-        
+
+To synchronise your python scipt in bazel you have to add a python library for it. 
+Go to the end of the [BUILD.bazel](../BUILD.bazel) in the elasticnodemiddleware folder and add the following code:
+
+    py_library(
+        name = "uploadExamplePyLib",
+        srcs = ["scripts/uploadExample.py"],
+        deps = [],
+    )
+
+Thereby you can five it a arbitrary name. 
+The scrs should include the path of your implemented "uploadExample.py".
+
 For uploading your bitfile you first have to build and run our main.c like explained in the [Getting Started Guide](GettingStartedGuide.md).
 Then you run your "uploadExample.py" with python3.
 For example you open your terminal and route to the [scripts](../scripts) folder. 

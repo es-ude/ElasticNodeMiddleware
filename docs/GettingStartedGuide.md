@@ -118,8 +118,15 @@ The right MCU_Led (number 4) should blink all over the time.
 
 ## Uploading the example Bitfile
 
-For uploading our dummy bitfile you first have to build and run the ... like explained above.
-Note the dummy.bit in the project folder elasticnodemiddleware.
+For uploading our dummy bitfile you first have to build and run the [main.c](../app/main.c).
+For this you have to run the following commands:
+
+    $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
+ 	$ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+Note that the commands are mostly the same like above.
+Also note the dummy.bit in the project folder [bitfiles](../bitfiles).
+
 As mentioned above you need to know the ports of the programmer and the elasticnode. 
 First open the [serial_test.py](../scripts/serial_test.py) file in the scripts folder.
 You have to set the "en4_serial_template" to the path of your elasticnode.
@@ -136,6 +143,19 @@ For uploading go into the scripts folder of the project in the terminal and run 
     
 This uploads the dummy bitfile in round about a minute. 
 Make sure you use python version 3 instead of python version 2. 
+
+## Use of different elasticnode middleware functions in controlmanager
+
+With our example [main.c](../app/main.c) you can use different functions of the elasticnode. 
+They are briefly described in the [README.md](../README.md) in the library "controlmanager".
+For using this functions run and build the main like explained in the last section.
+After that run 
+    
+    $ sudo screen /dev/ttyACM1
+
+exactly like in the section "Blink Lufa Example".
+Then you can write in the terminal your needed char for your specific function you want to use.
+E.g. type "L" and ....
 
 ## Tests
 

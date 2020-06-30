@@ -84,7 +84,6 @@ extern uint8_t* UDR1;
 
 #define FPGA_DONE_INT_VECTOR PCINT0_vect
 
-//new
 #define DDR_FLASH_CS DDRB
 #define PORT_FLASH_CS PORTB
 

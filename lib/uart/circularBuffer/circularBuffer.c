@@ -1,6 +1,6 @@
-#include "lib/uart/circularBuffer/circularBuffer.h"
 #include "lib/interruptManager/interruptManager.h"
 #include "lib/pinDefinition/fpgaRegisters.h"
+#include "lib/uart/circularBuffer/circularBuffer.h"
 
 void circularBuffer_Init(circularBuffer *c, uint16_t size){
 

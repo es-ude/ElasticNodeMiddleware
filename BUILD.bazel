@@ -1,10 +1,16 @@
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
+# set the -DF_CPU in the copts if some source file includes <util/delay.h>
+
 cc_library(
     name = "ElasticNodeMiddlewareLib",
     srcs = [
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.c",
         "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
+    ],
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
     ],
     visibility = ["//visibility:public"],
     deps = [
@@ -223,8 +229,8 @@ cc_library(
 )
 
 cc_library(
-    name = "UartmanagerLib",
-    srcs = ["lib/uartmanager/uartmanager.c"],
+    name = "ControlmanagerLib",
+    srcs = ["lib/controlmanager/controlmanager.c"],
     visibility = ["//visibility:public"],
     deps = [
         "//:ConfigurationLib",
@@ -235,7 +241,7 @@ cc_library(
         "//:FlashLib",
         "//:Reconfigure_multibootLib",
         "//:RegisterDefinitionLibHdr",
-        "//:UartmanagerLibHdr",
+        "//:ControlmanagerLibHdr",
         "//:XMemLib",
         # added?
         "//:BitmanipulationLib",
@@ -245,7 +251,7 @@ cc_library(
 
 cc_library(
     name = "ConfigurationLib",
-    srcs = ["lib/configuration_new/configuration.c"],
+    srcs = ["lib/configuration/configuration.c"],
     visibility = ["//visibility:public"],
     deps = [
         "//:BitmanipulationLib",
@@ -259,7 +265,11 @@ cc_library(
 
 cc_library(
     name = "FlashLib",
-    srcs = ["lib/flash_new/flash.c"],
+    srcs = ["lib/flash/flash.c"],
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//:DebugLufaLib",
@@ -271,7 +281,7 @@ cc_library(
 
 cc_library(
     name = "SpiLib",
-    srcs = ["lib/spi_new/spi.c"],
+    srcs = ["lib/spi/spi.c"],
     visibility = ["//visibility:public"],
     deps = [
         "//:Interrupt_ManagerLib",
@@ -283,22 +293,22 @@ cc_library(
 
 exports_files(
     srcs = [
-        "lib/configuration_new/configuration.h",
+        "lib/configuration/configuration.h",
         "lib/debug/debug.h",
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
         "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
-        "lib/flash_new/flash.h",
+        "lib/flash/flash.h",
         "lib/interruptManager/interruptManager.h",
         "lib/interruptManager/interruptManager_avr_Mock.h",
         "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
-        "lib/spi_new/spi.h",
+        "lib/spi/spi.h",
         "lib/uart/circularBuffer/circularBuffer.h",
         "lib/uart/uart.h",
         "lib/uart/uart_internal.h",
-        "lib/uartmanager/uartmanager.h",
+        "lib/controlmanager/controlmanager.h",
         "lib/xmem/xmem.h",
     ],
     visibility = ["//visibility:public"],
@@ -411,7 +421,7 @@ cc_library(
 
 cc_library(
     name = "ConfigurationLibHdr",
-    hdrs = ["lib/configuration_new/configuration.h"],
+    hdrs = ["lib/configuration/configuration.h"],
     visibility = ["//visibility:public"],
     deps = [
         "//:DebugLufaLibHdr",
@@ -423,7 +433,7 @@ cc_library(
 
 cc_library(
     name = "FlashLibHdr",
-    hdrs = ["lib/flash_new/flash.h"],
+    hdrs = ["lib/flash/flash.h"],
     visibility = ["//visibility:public"],
     deps = [
         "//:DebugLufaLibHdr",
@@ -434,7 +444,7 @@ cc_library(
 
 cc_library(
     name = "SpiLibHdr",
-    hdrs = ["lib/spi_new/spi.h"],
+    hdrs = ["lib/spi/spi.h"],
     visibility = ["//visibility:public"],
     deps = [
         "//:Interrupt_ManagerLibHdr",
@@ -444,8 +454,8 @@ cc_library(
 )
 
 cc_library(
-    name = "UartmanagerLibHdr",
-    hdrs = ["lib/uartmanager/uartmanager.h"],
+    name = "ControlmanagerLibHdr",
+    hdrs = ["lib/controlmanager/controlmanager.h"],
     visibility = ["//visibility:public"],
     deps = [
         "//:ConfigurationLibHdr",

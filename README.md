@@ -33,13 +33,6 @@ The [docs](docs) folder contains a [getting started guide](docs/GettingStartedGu
 
 To write your own program code you should look into the [write your own program - guide](docs/WriteOwnProgramGuide.md).
 
-## How-to's
-
-The ["How-to" - guide](docs/HowToGuide.md) includes several short explanations about how to:
-- configure the FPGA
-- build a new bitfile for reconfiguring the FPGA
-- missing .....
-
 ## Interconnection between the MCU and FPGA - the Memory-mapped Interface (Xmem)
 
 The required hardware at the elastic node, which is used in our code, is the MCU and the FPGA.
@@ -67,6 +60,7 @@ The using of a bitfile is again shown in the [getting started guide](docs/Gettin
 
 The elastic node middleware code includes several libraries:
 - configuration
+- controlmanager
 - debug
 - elastic node middleware
 - flash
@@ -76,18 +70,22 @@ The elastic node middleware code includes several libraries:
 - reconfigure multiboot avr
 - spi
 - uart
-- uartmanger?!
 - xmem
 - Bitmanipulation
 - Lufa Usart
 
-In the file [graph_uartmanager.png](graph_uartmanager.png) you can see the dependencies between these libraries. 
+In the file [graph_controlmanager.png](graph_controlmanager.png) you can see the dependencies between these libraries. 
 
 They are described in the following.
 
 ### Configuration
 
 The configuration library configures the FPGA for uploading a bitfile to it. 
+
+### Controlmanager 
+
+The Controlmanager library can be used for using different elasticnode middleware function, e.g. for uploading a bitfile to the FPGA.
+The different functions are 'F' for uploading a bitfile, 'l' and 'L' for ... and 'r' and 'R'  for ...
 
 ### Debug
 
@@ -173,10 +171,6 @@ The Spi library implements the [Serial Peripheral Interface](https://de.wikipedi
 
 The uart library is used for communication with the MCU. 
 It is only used for testing purposes. 
-
-### Uartmanager 
-
-The Uartmanager library can be used for using different elasticnode middleware function, e.g. for uploading a bitfile to the FPGA.
 
 ### Xmem
 

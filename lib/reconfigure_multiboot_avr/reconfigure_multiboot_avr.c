@@ -41,12 +41,10 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
     interruptManager_setInterrupt();
 }
 
-//new
 uint32_t reconfigure_getMultibootAddress(void) {
     return (uint32_t ) (*(AddressMultiboot) + *(AddressMultiboot+1) + *(AddressMultiboot +2));
 }
 
-//new
 uint8_t reconfigure_fpgaMultibootComplete(void) {
     return reconfigure_fpgaMultibootComplete_internal();
 }

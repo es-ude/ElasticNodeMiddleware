@@ -6,8 +6,8 @@
 #include "lib/xmem/xmem.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
-#include "lib/flash_new/flash.h"
-#include "lib/uartmanager/uartmanager.h"
+#include "lib/flash/flash.h"
+#include "lib/controlmanager/controlmanager.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 //the following ISR's have to be comment in by programmer
@@ -44,7 +44,6 @@ int main(void)
 
 //    reconfigure_initMultiboot();
 
-//    elasticnode_initialise(); // init IO direction, and power off
     // need a delay for initialise and reboot the mcu
     // first led should blink
     elasticnode_initialise();

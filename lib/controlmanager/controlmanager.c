@@ -1,28 +1,19 @@
-//#include "uartManager.h"
-#include "lib/uartmanager/uartmanager.h"
-//#include <fpgaPins.h>
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/xmem/xmem.h"
-//#include "lib/flash/flash.h"
-#include "lib/flash_new/flash.h"
-#include "lib/spi_new/spi.h"
-//#include "lib/fpga/fpga.h"
+#include "EmbeddedUtilities/BitManipulation.h"
+
+#include "lib/configuration/configuration.h"
+#include "lib/debug/debug.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-//#include "lib/leds/leds.h"
-
-//#include "lib/multiboot/multiboot.h"
+#include "lib/flash/flash.h"
+#include "lib/pinDefinition/fpgaPins.h"
+#include "lib/pinDefinition/fpgaRegisters.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
+#include "lib/spi/spi.h"
+#include "lib/controlmanager/controlmanager.h"
+#include "lib/xmem/xmem.h"
 
-//#include "lib/configuration/configuration.h"
-#include "lib/configuration_new/configuration.h"
-#include "EmbeddedUtilities/BitManipulation.h"
-#include <avr/sleep.h>
-#include <math.h>
-
-#include "lib/debug/debug.h"
+//#include "lib/leds/leds.h"
 
 uartReceiveMode currentUartReceiveMode = UART_IDLE;
 loadingMode currentLoadingMode = LOADING_IDLE;
