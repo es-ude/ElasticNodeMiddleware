@@ -473,18 +473,6 @@ cc_library(
 )
 
 py_library(
-    name = "uploadDummyPyLib",
-    srcs = ["scripts/uploadDummy.py"],
-    deps = [],
-)
-
-py_library(
-    name = "uploadCnnPyLib",
-    srcs = ["scripts/uploadCnn.py"],
-    deps = [],
-)
-
-py_library(
     name = "serial_testPyLib",
     srcs = ["scripts/serial_test.py"],
     deps = [],
@@ -497,8 +485,8 @@ py_library(
 )
 
 py_library(
-    name = "uploadS15PyLib",
-    srcs = ["scripts/uploadS15.py"],
+    name = "uploadDummyPyLib",
+    srcs = ["scripts/uploadDummy.py"],
     deps = [],
 )
 
