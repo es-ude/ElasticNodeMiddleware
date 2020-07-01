@@ -1,6 +1,8 @@
 # Write your own Program
 
-This guide shows you how to write your own program in the elastic node middleware code. 
+Please look up the [Getting Started Guide](GettingStartedGuide.md) first and try the examples before writing your own program.
+
+This guide shows you how to write your own program in the elasticnode middleware code. 
 We assume that for example your implementation is in the folder "app" in the file "myImplementation.c".
 Then you have to create a fitting BUILD.bazel file for building and uploading your implementation.
 
@@ -25,11 +27,15 @@ In this example we include all possible libraries to show you the possibilities.
     default_embedded_binary(
         name = "myImplementation",
         srcs = ["myImplementation.c"],
-        copts = cpu_frequency_flag(),
+        copts = [
+            "-DF_CPU=8000000UL",
+            "-DBAUD=9600UL",
+        ],
         uploader = "Avr_dude_upload_script",
         deps = [
             "//:CircularBufferLib",
             "//:ConfigurationLib",
+            "//:ControlmanagerLib",            
             "//:DebugLufaLib",
             "//:DebugUartLib",
             "//:ElasticNodeMiddleware_ConfigureFPGALib",
@@ -40,7 +46,6 @@ In this example we include all possible libraries to show you the possibilities.
             "//:RegisterDefinitionLibHdr",
             "//:SpiLib",
             "//:UartLib",
-            "//:UartmanagerLib",
             "//:XMemLib",
             "//:BitmanipulationLib",
             "//app/setup:Setup",
@@ -62,7 +67,7 @@ For example for including the xmem library your include statement looks as the f
   
     #include "lib/xmem/xmem.h"
     
-Notice, that the Bitmanipulation and the PeripheralInterface are external libraries. 
+Notice, that Bitmanipulation and LufaUsart are external libraries. 
 Therefore, you include these libraries as follows:
 
     #include "EmbeddedUtilities/BitManipulation.h"
@@ -71,9 +76,9 @@ or
 
     #include "PeripheralInterface/LufaUsartImpl.h"
     
-If you want to use uart or reconfigure, you have to implement interrupt service routines. 
+If you want to use uart, you have to implement interrupt service routines. 
 Because of implementing a clean library, we do not implement interrupt service routines in the library itself, but the functions that are used in the ISR.
-In the following we show which ISR are needed for using the uart and reconfigure library. 
+In the following we show which ISR are needed for using the uart library. 
 
     //the following ISR's have to be comment in by programmer
     
@@ -85,12 +90,6 @@ In the following we show which ISR are needed for using the uart and reconfigure
     
     ISR(USART1_TX_vect) {
         uart_ISR_Transmit();
-    }
-    
-    /* for using reconfigure
-     */
-    ISR(FPGA_DONE_INT_VECTOR) {
-        reconfigure_interruptSR();
     }
 
 You also can refer to the [main.c](../app/main.c). 
@@ -115,12 +114,14 @@ For this, you have to add to the following your address:
     VDP_ADDRESS = 0x120000
     SMALL_ADDRESS = 0x0
     DUMMY_ADDRESS = 0x0
+    S15_ADDRESS_1 =0x0
+    S15_ADDRESS_2 =0x90000
     
 For example you add under this:
 
     EXAMPLE_ADDRESS = 0x0
     
-After this add to the following line in [serial_test.py](../scripts/serial_test.py) your configuration
+After this add to the following line in [serial_test.py](../scripts/serial_test.py) your configuration.
 
     dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig = None, None, None, None, None, None, None, None
 
@@ -133,15 +134,14 @@ Af least you have to setup your configuration.
 For this you look at the following code snippet:
 
     # setup configurations
-    self.dummyConfig = Configuration("../dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
+    self.dummyConfig = Configuration("../bitfiles/dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
     self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
     self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
     self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
     self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
-    self.cnnConfig = Configuration("../cnnProjectBlockRAM.bit", CNN_ADDRESS, CNN_ADDRESS)
-    self.firConfig = Configuration("fir.bit", FIR_ADDRESS, FIR_ADDRESS)
-    self.mmConfig = Configuration("mm.bit", MM_ADDRESS, MM_ADDRESS)
-    self.vdpConfig = Configuration("vdp.bit", VDP_ADDRESS, VDP_ADDRESS
+    # use this bitfile
+    self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
+    self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)
     
 Add at the end your configuration: 
     
@@ -192,7 +192,7 @@ Go to the end of the [BUILD.bazel](../BUILD.bazel) in the elasticnodemiddleware 
         deps = [],
     )
 
-Thereby you can five it a arbitrary name. 
+Thereby you can give it an arbitrary name. 
 The scrs should include the path of your implemented "uploadExample.py".
 
 For uploading your bitfile you first have to build and run our main.c like explained in the [Getting Started Guide](GettingStartedGuide.md).
@@ -202,4 +202,7 @@ There you run your script with
 
     python uploadExample.py
     
-For other possible actions to do with the bitfile, like verifying please look in the [uploadDummy.py](../scripts/uploadDummy.py).
+If you want to upload multiple bitfiles please consider to the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).
+This scripts also uses two parts. 
+Please note that there are also two address and configurations in the [serial_test.py](../scripts/serial_test.py). 
+For other possible actions to do with the bitfile, like verifying please again look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).

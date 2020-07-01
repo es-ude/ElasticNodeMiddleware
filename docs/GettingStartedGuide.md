@@ -1,22 +1,22 @@
 # Getting Started Guide
 
-In the following we explain how to use the elastic node middleware code.
+In the following we explain how to use the elasticnode middleware code.
 Therefore, we show how to connect the hardware and how to run a minimal example as well as the needed commands for building and uploading the target.
 
 ## Hardware
 
-The following photos show the elastic node. 
+The following photos show the elasticnode. 
 The left yellow rectangle is the FPGA while the right yellow rectangle is the used MCU. 
 The left red rectangle at the top shows the FPGA LEDs. 
 The right red rectangle at the top shows the MCU LEDs. 
-These MCU LEDs should blink in the blink example. 
+These MCU LEDs should blink in the blink example whereby the FPGA Leds should blink by using the control manager. 
 The right red rectangle shows the connection to the MCU via a programmer whereas the right red circle is the connection of the elasticnode MCU to your computer.
 ![](images/elasticNodeFrontEdit3.jpg)
 ![](images/elasticNodeBack.jpg)
 
-The elastic node is connected to a programmer with 6 jumper wires female to female.
+The elasticnode is connected to a programmer with 6 jumper wires female to female.
 In the following pictures this is the grey cable. 
-The connected elastic node and programmer are shown in the following image.
+The connected elasticnode and programmer are shown in the following image.
 Please note which jumper wire connect to a pin at the elasticnode is connected to which pin at the programmer.
 ![elasticnode](images/elasticNode.jpg)
 ![programmer](images/programmerEdit.jpg)
@@ -29,9 +29,10 @@ This place is labeled with MCU_USB.
 The USB is plugged in your computer. 
 
 If you want to communicate via Uart you need a FTDI-adapter.
-This adapter is connected with the elastic node with 3 jumper wires male to female.
+We don't need this communication, it is only for testing purposes.
+This adapter is connected with the elasticnode with 3 jumper wires male to female.
 The receive (RXI, brown cable) and transmit (TXD, red cable) pins of the FTDI-adapter are connected with the uart pins.
-The ground (GND, black cable) pin of the FTDI-adapter is connected to the ground pin of the elastic node (see picture above).
+The ground (GND, black cable) pin of the FTDI-adapter is connected to the ground pin of the elasticnode (see picture above).
 The FTDI-adapter has again a connection to the computer like the programmer with a USB-to-MiniUSB cable. 
 The MiniUSB is connected to the FTDI-adapter and the USB is connected to your computer.
 ![ftdiAdapter](images/ftdiAdapter.jpg)
@@ -41,9 +42,9 @@ The following photo shows the construction after connecting the whole hardware.
  
 ## How to use the Code
 
-After cloning the [elasticnode middleware github repository](https://github.com/es-ude/ElasticNodeMiddleware) and installing [Bazel](https://www.bazel.build/), you can run a mini example. 
+After cloning the [elasticnode middleware github repository](https://github.com/es-ude/ElasticNodeMiddleware) and installing [Bazel](https://www.bazel.build/) and the other needed tools, you can run a mini example. 
 We implemented two different communication possibilities. 
-The first one is the hardware uart implementation via the FTDI-adapter, the second one is the lufa usart implementation.
+The first one is the hardware uart implementation via the FTDI-adapter, the second one is the Lufa Usart implementation.
 We recommend you to use the Lufa Usart implementation, because it is needed for uploading a bitfile to the FPGA at the elasticnode.
 The [Lufa Library](http://www.fourwalledcubicle.com/files/LUFA/Doc/120219/html/index.html) is briefly explained in the [README](../README.md).
 Nevertheless we have a mini example for both implementations. 
@@ -91,7 +92,7 @@ The "9600" is our used baud rate.
 Now you should see perennially string: "Hello. You debug with Uart.", which pops up at the same time as the LED.
 When you type a character at your keyboard it should print: "Please press the a on your keyboard." except for the character 'a' and the second LED from the left (number 6) should blink additionally.
 For character 'a' it prints "I know you pressed key a." and the second LED from right (number 5) should blink. 
-This small example should verify that your program works. 
+This small example should verify that your uart communication works. 
 
 ## Blink Lufa Example
 
@@ -118,14 +119,14 @@ The right MCU_Led (number 4) should blink all over the time.
 
 ## Uploading the example Bitfile
 
-For uploading our dummy bitfile you first have to build and run the [main.c](../app/main.c).
+For uploading our example s15 bitfile you first have to build and run the [main.c](../app/main.c).
 For this you have to run the following commands:
 
     $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
  	$ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 Note that the commands are mostly the same like above.
-Also note the dummy.bit in the project folder [bitfiles](../bitfiles).
+Also note the s15_p1.bit and s15_p2.bit in the project folder [bitfiles](../bitfiles).
 
 As mentioned above you need to know the ports of the programmer and the elasticnode. 
 First open the [serial_test.py](../scripts/serial_test.py) file in the scripts folder.
@@ -139,14 +140,15 @@ Therefore, your declaration of "en4_serial_template" and "program_template" look
     
 For uploading go into the scripts folder of the project in the terminal and run the following command:
 
-    $ python uploadDummy.py
+    $ python uploadMultiConfigS15.py
     
-This uploads the dummy bitfile in round about a minute. 
+This uploads the s15 bitfile.
+After processing the last output should be "ready to proceed with uart".
 Make sure you use python version 3 instead of python version 2. 
 
 ## Use of different elasticnode middleware functions in controlmanager
 
-With our example [main.c](../app/main.c) you can use different functions of the elasticnode. 
+With our example [main.c](../app/main.c) you can use different functions of the elasticnode after uploading the bitfile. 
 They are briefly described in the [README.md](../README.md) in the library "controlmanager".
 For using this functions run and build the main like explained in the last section.
 After that run 
@@ -155,7 +157,18 @@ After that run
 
 exactly like in the section "Blink Lufa Example".
 Then you can write in the terminal your needed char for your specific function you want to use.
-E.g. type "L" and ....
+You don't have to write a 'F' because it is automatically done in the python script, you use for your uploading (e.g. uploadMultiConfigS15.py).
+If you uploaded the s15 bitfile you can type "L" which should turn on 3 of the 4 FPGA-Leds. 
+When you type 'l' they are turned off. 
+By typing 'i' you should see the userlogic id.
+When you type 'R' and 'r' and use 'i' between this, the id should switch between "D1" and "D2".
+
+The 'R' and 'r' stands for reconfiguration. 
+It means you can choose the configuration at the FPGA.
+As said above you uploaded two bitfiles.
+By using 'R' and 'r' you switch between the two which are both at the FPGA. 
+Therefore, you see different userlogic ids.  
+
 
 ## Tests
 
