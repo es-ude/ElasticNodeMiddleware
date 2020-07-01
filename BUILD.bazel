@@ -294,6 +294,7 @@ cc_library(
 exports_files(
     srcs = [
         "lib/configuration/configuration.h",
+        "lib/controlmanager/controlmanager.h",
         "lib/debug/debug.h",
         "lib/elasticNodeMiddleware/elasticNodeMiddleware.h",
         "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
@@ -308,7 +309,6 @@ exports_files(
         "lib/uart/circularBuffer/circularBuffer.h",
         "lib/uart/uart.h",
         "lib/uart/uart_internal.h",
-        "lib/controlmanager/controlmanager.h",
         "lib/xmem/xmem.h",
     ],
     visibility = ["//visibility:public"],
@@ -499,5 +499,11 @@ py_library(
 py_library(
     name = "uploadS15PyLib",
     srcs = ["scripts/uploadS15.py"],
+    deps = [],
+)
+
+py_library(
+    name = "uploadMultiConfigS15PyLib",
+    srcs = ["scripts/uploadMultiConfigS15.py"],
     deps = [],
 )

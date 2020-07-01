@@ -1,25 +1,26 @@
 from serial_test import SerialTest
 import time
 
-def test_writes_multi_configs():
+def test_writesMultiConfigs_s15():
     serialTest = SerialTest()
     # serialTest.fetchBit("s15")
-    # assert serialTest.sendConfig(serialTest.s15ConfigPart1, flash=True)
     assert serialTest.sendConfig(serialTest.s15ConfigPart1, flash=True)
-    # assert serialTest.sendConfig(serialTest.s15ConfigPart2, flash=True)
+    assert serialTest.sendConfig(serialTest.s15ConfigPart2, flash=True)
 
-# def test_verifys15():
+# def test_verifyMultiConfigs_s15():
 #     serialTest = SerialTest()
-#     assert serialTest.verify(serialTest.s15Config, mcuFlash=True)
+#     assert serialTest.verify(serialTest.s15ConfigPart1, mcuFlash=True)
+#     assert serialTest.verify(serialTest.s15ConfigPart2, mcuFlash=True)
 
-# def test_verifys15fpga():
+# def test_verifyMultiConfigs_s15fpga():
 #     serialTest = SerialTest()
-#     assert serialTest.verify(serialTest.s15Config, mcuFlash=False)
+#     assert serialTest.verify(serialTest.s15ConfigPart1, mcuFlash=False)
+#     assert serialTest.verify(serialTest.s15ConfigPart2, mcuFlash=False)
 
-
-# def test_loads15():
+# def test_loadMultiConfigs_s15():
 #     serialTest = SerialTest()
-#     result = serialTest.readConfig(serialTest.s15Config, selectmap=True)
+#     result = serialTest.readConfig(serialTest.s15ConfigPart1, selectmap=True)
+#     result = serialTest.readConfig(serialTest.s15ConfigPart2, selectmap=True)
 
 #     print("sleep 1")
 #     time.sleep(0.5)
@@ -34,32 +35,35 @@ def test_writes_multi_configs():
 
 #     assert result == True
 
-# def test_warmboots15():
+# def test_warmbootMultiConfigs_s15():
 #     serialTest = SerialTest()
 #     # serialTest.annConfig.loadFile()
-#     assert serialTest.warmboot(serialTest.s15Config)
+#     assert serialTest.warmboot(serialTest.s15ConfigPart1)
+#     assert serialTest.warmboot(serialTest.s15ConfigPart2)
 
-# def test_boots15():
+# def test_bootMultiConfigs_s15():
 #     serialTest = SerialTest()
 #     serialTest.resetFPGA()
-#     assert serialTest.multiboot(serialTest.s15Config)
+#     assert serialTest.multiboot(serialTest.s15ConfigPart1)
+#     assert serialTest.multiboot(serialTest.s15ConfigPart1)
 
-# def test_hwfids15():
+# def test_hwfidMultiConfigs_s15():
 #     serialTest = SerialTest()
 #     result = int(serialTest.hwfid())
 
 #     assert result == 0xdd
 
-# def test_writes15fpgaflash():
+# def test_writeMultiConfigs_s15fpgaflash():
 #     serialTest = SerialTest()
-#     assert serialTest.readConfig(serialTest.s15Config)
+#     assert serialTest.readConfig(serialTest.s15ConfigPart1)
+#     assert serialTest.readConfig(serialTest.s15ConfigPart2)
 
 if __name__ == "__main__":
-    test_writes_multi_configs()
-# test_verifys15()
-# test_loads15()
-# test_writes15fpgaflash()
-# test_verifys15fpga()
-# test_boots15()
-# test_warmboots15()
-# test_hwfids15()
+    test_writesMultiConfigs_s15()
+# test_verifyMultiConfigs_s15()
+# test_loadMultiConfigs_s15()
+# test_writeMultiConfigs_s15fpgaflash()
+# test_verifyMultiConfigs_s15fpga()
+# test_bootMultiConfigs_s15()
+# test_warmbootMultiConfigs_s15()
+# test_hwfidMultiConfigs_s15()
