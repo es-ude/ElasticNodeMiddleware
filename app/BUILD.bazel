@@ -18,7 +18,6 @@ default_embedded_binary(
     ],
     uploader = "Avr_dude_upload_script",
     deps = [
-        "//:BitmanipulationLib",
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
         "//:XMemLib",
@@ -26,6 +25,7 @@ default_embedded_binary(
         "//:DebugLufaLib",
         "//:ControlmanagerLib",
         "//:FlashLib",
+        "//:LedLib",
     ],
 )
 
@@ -38,8 +38,8 @@ default_embedded_binary(
     ],
     uploader = "Avr_dude_upload_script",
     deps = [
-        "//:BitmanipulationLib",
         "//:DebugUartLib",
+        "//:LedLib",
         "//:UartLib",
     ]
 )
@@ -54,7 +54,20 @@ default_embedded_binary(
     uploader = "Avr_dude_upload_script",
     deps = [
         "//:DebugLufaLib",
-        "//:BitmanipulationLib",
+        "//:LedLib",
+    ]
+)
+
+default_embedded_binary(
+    name = "blinkExample",
+    srcs = ["blinkExample.c"],
+    copts = [
+        "-DF_CPU=8000000UL",
+        "-DBAUD=9600UL",
+    ],
+    uploader = "Avr_dude_upload_script",
+    deps = [
+        "//:LedLib",
     ]
 )
 

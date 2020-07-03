@@ -1,14 +1,15 @@
-#include <avr/io.h>
-#include <util/delay.h>
-#include <stdbool.h>
-#include "lib/debug/debug.h"
 #include <avr/interrupt.h>
-#include "lib/xmem/xmem.h"
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
-#include "lib/flash/flash.h"
+#include <avr/io.h>
+#include <stdbool.h>
+#include <util/delay.h>
+
 #include "lib/controlmanager/controlmanager.h"
-#include "EmbeddedUtilities/BitManipulation.h"
+#include "lib/debug/debug.h"
+#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "lib/flash/flash.h"
+#include "lib/led/led_mcu.h"
+#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include "lib/xmem/xmem.h"
 
 //the following ISR's have to be comment in by programmer
 
@@ -34,7 +35,7 @@ ISR(FPGA_DONE_INT_VECTOR) {
 int main(void)
 {
 
-    DDRD = 0xff;
+    led_mcu_init();
 
     debugInit(NULL);
 
@@ -48,9 +49,9 @@ int main(void)
     // first led should blink
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
-    BitManipulation_setBit(&PORTD, PD4);
+    led_mcu_turnOn(0);
     _delay_ms(3000);
-    BitManipulation_clearBit(&PORTD, PD4);
+    led_mcu_turnOff(0);
     elasticnode_fpgaPowerOn();
 
     while (true) {

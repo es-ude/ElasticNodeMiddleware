@@ -254,12 +254,12 @@ cc_library(
     srcs = ["lib/configuration/configuration.c"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:BitmanipulationLib",
         "//:ConfigurationLibHdr",
         "//:DebugLufaLib",
         "//:ElasticNodeMiddlewareLib",
         "//:FlashLib",
         "//:Interrupt_ManagerLib",
+        "//:LedLib",
     ],
 )
 
@@ -291,6 +291,17 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "LedLib",
+    srcs = ["lib/led/led_mcu.c"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:LedLibHdr",
+        "//:RegisterDefinitionLibHdr",
+        "//:BitmanipulationLib"
+    ],
+)
+
 exports_files(
     srcs = [
         "lib/configuration/configuration.h",
@@ -301,6 +312,7 @@ exports_files(
         "lib/flash/flash.h",
         "lib/interruptManager/interruptManager.h",
         "lib/interruptManager/interruptManager_avr_Mock.h",
+        "lib/led/led_mcu.h",
         "lib/pinDefinition/fpgaPins.h",
         "lib/pinDefinition/fpgaRegisters.h",
         "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
@@ -428,6 +440,7 @@ cc_library(
         "//:ElasticNodeMiddlewareLibHdr",
         "//:FlashLibHdr",
         "//:Interrupt_ManagerLibHdr",
+        "//:LedLibHdr"
     ],
 )
 
@@ -472,6 +485,14 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "LedLibHdr",
+    hdrs = ["lib/led/led_mcu.h"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:RegisterDefinitionLibHdr"
+    ],
+)
 py_library(
     name = "serial_testPyLib",
     srcs = ["scripts/serial_test.py"],

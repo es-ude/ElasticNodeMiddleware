@@ -1,16 +1,17 @@
-#include <avr/io.h>
-#include <util/delay.h>
-#include <stdbool.h>
 #include <avr/interrupt.h>
+#include <avr/io.h>
+#include <stdbool.h>
+#include <util/delay.h>
 
-#include "EmbeddedUtilities/BitManipulation.h"
+
 #include "lib/debug/debug.h"
+#include "lib/led/led_mcu.h"
 
 int main(void)
 {
 
     uint16_t timer_1_sec=0;
-    DDRD = 0xff;
+    led_mcu_init();
 
     // init debug --> debugging with lufa via USB
     debugInit(NULL);
@@ -20,11 +21,11 @@ int main(void)
         // Period task, blink the LED per 3 seconds
         if(timer_1_sec<=1500)
         {
-            BitManipulation_setBit(&PORTD, PD4);
+            led_mcu_turnOn(0);
         }
         else if(timer_1_sec<=3000)
         {
-            BitManipulation_clearBit(&PORTD, PD4);
+            led_mcu_turnOff(0);
         }else
         {
             timer_1_sec=0;

@@ -90,6 +90,10 @@ extern uint8_t* UDR1;
 #define DDR_WIRELESS_CS DDRE
 #define PORT_WIRELESS_CS PORTE
 
+//leds
+#define DDR_LED &DDRD
+#define PORT_LED &PORTD
+
 #endif
 
 #endif //ELASTICNODEMIDDLEWARE_FPGAREGISTERS_H

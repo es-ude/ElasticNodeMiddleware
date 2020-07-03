@@ -1,6 +1,8 @@
 #ifndef ELASTICNODEMIDDLEWARE_CONFIGURATION_H
 #define ELASTICNODEMIDDLEWARE_CONFIGURATION_H
 
+#include <stdint.h>
+
 void configurationUartFlash(void);
 void verifyConfigurationFlash(uint8_t mcuFlash);
 

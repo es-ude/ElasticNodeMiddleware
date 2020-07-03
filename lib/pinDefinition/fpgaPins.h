@@ -78,6 +78,13 @@
 #define P_FLASH_CS PB4
 #define P_WIRELESS_CS PE6
 
+//leds
+
+#define P_LED_0 PD7
+#define P_LED_1 PD6
+#define P_LED_2 PD5
+#define P_LED_3 PD4
+
 #endif
 
 #endif //ELASTICNODEMIDDLEWARE_FPGAPINS_H
