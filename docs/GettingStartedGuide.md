@@ -67,17 +67,34 @@ If you have different port for the programmer please change the genrule in the [
 Change the "/dev/ttyACM0" to the path of your programmer.
 If you want to run our implemented integration test you have to change it in the [BAZEL.build](../test/integration/BUILD.bazel) in test/integration, too. 
 
-## Blink Usart Example
+## Blink Example 
 
-For building the minimal example in the [blinkUsartExample.c](../app/blinkUsartExample.c) you have to run the following command: 
+For building the minimal example in the [blinkExample.c](../app/blinkExample.c) you have to run the following command: 
 
-    $ bazel build //app:blinkUsartExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel build //app:blinkExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 Thereby is the second word the command (here: "build") and the third word is the path to the file (here: //app:blinkUsartExample), we want to build. 
 The leftover command are bazel flags for specializing the platform.  
     
 The upload script is specialized in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
 For running the upload script you have to run: 
+
+	$ bazel run //app:_blinkExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+Now look at the MCU-Leds at the elasticnode. 
+First all leds should be on and turned off after a half second.
+After that the leds should be turned on one after one and then should be turned off one after one. 
+This last step is repeated infinite. 
+
+## Blink Usart Example
+
+For building the minimal example in the [blinkUsartExample.c](../app/blinkUsartExample.c) you have to run the following command: 
+
+    $ bazel build //app:blinkUsartExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+It is mostly the same like for the [blinkExample](../app/blinkExample.c), but the term "blinkExample" is exchanged with "blinkUsartExample".
+You should do the same for the running command.
+Therefore the second command should look like this: 
 
 	$ bazel run //app:_blinkUsartExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 

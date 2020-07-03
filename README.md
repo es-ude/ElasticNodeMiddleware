@@ -64,8 +64,8 @@ The elasticnode middleware code includes several libraries:
 - debug
 - elasticnode middleware
 - flash
-- fpga flash
 - interrupt manager
+- led
 - pin definition
 - reconfigure multiboot avr
 - spi
@@ -146,6 +146,23 @@ The Flash of the FPGA is needed for the communication between the FPGA and the M
 The Interrupt manager library clears and set interrupts. 
 Our interrupts are again implemented for avr. 
 
+### Led 
+
+The Led library can be used for turning the MCU-Leds at the elasticnode on and off. 
+The functions of the library are:
+
+-void led_mcu_init: \
+→ initialises the leds. Note, that initalising the leds is always necessary to use the other functions.
+- void led_mcu_turnOn: \
+→ turns one specific MCU-led on
+- void led_mcu_turnOff: \
+→ turns one specific MCU-led off
+- void led_mcu_turnOnAll: \
+→ turns on all four MCU-leds
+- void led_mcu_turnOffAll: \
+→ turns off all four MCU-leds
+
+For understanding the usages of this library we include an example in the [Getting Started Guide](docs/GettingStartedGuide.md).
 ### Pin Definition
 
 The Pin definition library defines all pin and register definitions.

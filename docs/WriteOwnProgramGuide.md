@@ -42,6 +42,7 @@ In this example we include all possible libraries to show you the possibilities.
             "//:ElasticNodeMiddlewareLib",
             "//:FlashLib",
             "//:Interrupt_ManagerLib",
+            "//:LedLib
             "//:Reconfigure_multibootLib",
             "//:RegisterDefinitionLibHdr",
             "//:SpiLib",
