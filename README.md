@@ -191,7 +191,7 @@ The functions are:
 
 ### Spi
 
-The Spi library implements the [Serial Peripheral Interface](https://de.wikipedia.org/wiki/Serial_Peripheral_Interface) for the FPGA.
+The Spi library implements the [Serial Peripheral Interface](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) for the FPGA.
 
 ### Uart
 
