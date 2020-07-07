@@ -160,12 +160,16 @@ For uploading go into the scripts folder of the project in the terminal and run 
     $ python uploadMultiConfigS15.py
     
 This uploads the s15 bitfile.
+In the next section the control manager is explained. 
+The python script executes the case 'F' in the control manager.
+So you don't have to write the character 'F' because it is automatically done in the python script, you use for your uploading.
+
 After processing the last output should be "ready to proceed with uart".
 Make sure you use python version 3 instead of python version 2. 
 
-## Use of different elasticnode middleware functions in controlmanager
+## Use of different functions in controlmanager for testing the elasticnode middleware
 
-With our example [main.c](../app/main.c) you can use different functions of the elasticnode after uploading the bitfile. 
+With our example [main.c](../app/main.c) you can do different testings of the elasticnode after uploading the bitfile. 
 They are briefly described in the [README.md](../README.md) in the library "controlmanager".
 For using this functions run and build the main like explained in the last section.
 After that run 
@@ -174,7 +178,6 @@ After that run
 
 exactly like in the section "Blink Lufa Example".
 Then you can write in the terminal your needed char for your specific function you want to use.
-You don't have to write a 'F' because it is automatically done in the python script, you use for your uploading (e.g. uploadMultiConfigS15.py).
 If you uploaded the s15 bitfile you can type "L" which should turn on 3 of the 4 FPGA-Leds. 
 When you type 'l' they are turned off. 
 By typing 'i' you should see the userlogic id.
