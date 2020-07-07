@@ -1,15 +1,15 @@
 # Elastic Node Middleware
 
-This repository includes the elasticnode middleware code as described in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
+This repository includes the elastic node middleware code as described in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
 The included code is written in C and Python. The code is tested under the operating system Ubuntu 18.04.4.
 
 ## Hardware
 
 The used hardware is listed in the [Elastic Node Hardware repository](https://github.com/es-ude/ElasticNodeHardware) on github.
-We use the elasticnode version 4 (v4).
-For any hardware details look up this repository. 
+We use the elastic node version 4 (v4).
+For hardware details please refer to this repository. 
 
-In the [getting started guide](docs/GettingStartedGuide.md) is explained which hardware is needed as well as the connection to each other.
+The [getting started guide](docs/GettingStartedGuide.md) explains which hardware components are needed and how to connect the hardware.
 
 ## Features
 
@@ -18,13 +18,13 @@ The middleware code includes the following functionalities:
 - turn the FPGA on and off
 - write and read to and from the FPGA
 - enable and disable the external memory interface for the interconnection between the MCU and the FPGA
-- reconfigure the FPGA for switching between different bitfiles
+- reconfigure the FPGA and switch between different bitfiles
 - upload a bitfile to the FPGA
 
 ## Installation Guide
 
-For using the elasticnode middleware code you need to install some tools.
-Therefore, please follow the [installation guide](docs/InstallationGuide.md) in the [docs](docs) folder.
+For using the elastic node middleware code you first need to install some tools.
+Therefore, please follow the instructions in the [installation guide](docs/InstallationGuide.md) in the [docs](docs) folder.
 
 ## Getting Started
 
@@ -36,13 +36,13 @@ To write your own program code you should look into the [write your own program 
 
 ## Interconnection between the MCU and FPGA - the Memory-mapped Interface (Xmem)
 
-The required hardware at the elasticnode, which is used in our code, is the MCU and the FPGA.
-For interconnection of the MCU and the FPGA we use the MCU's external memory interface (xmem).
+The required hardware at the elastic node, which is used in our code, is the MCU and the FPGA.
+For interconnection of the MCU and the FPGA we use the MCU's external memory interface (Xmem).
 
 The Xmem interface is an addressable data interface.
-For using it, you define a variable at a specific memory location and write the data value into it.
+To use it, you define a variable at a specific memory location and write the data value into it.
 The FPGA detects this and reacts accordingly.
-The interconnection between MCU and FPGA starts in our code at the internal memory address 0x2000 from the MCU.
+The interconnection between MCU and FPGA starts at the internal memory address 0x2000 of the MCU.
 
 ## Bitfile
 
