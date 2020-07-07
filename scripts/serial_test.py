@@ -20,6 +20,9 @@ from threading import Thread
 import sched
 from Configuration import Configuration
 
+from portConfigs import Config as portConfigs
+from bitfileConfigs import BitfileConfigs as bitfileConfigs
+
 PLOT_DELAY = 0.5
 # AMOUNT = 256
 
@@ -44,20 +47,20 @@ MM_ADDRESS = 0xC0000
 VDP_ADDRESS = 0x120000
 SMALL_ADDRESS = 0x0
 DUMMY_ADDRESS = 0x0
-S15_ADDRESS_1 =0x0
-S15_ADDRESS_2 =0x90000
 
 SKIP = None # (538844 - 256) # 4096 * 5
 
 cpuName = "at90usb1287"
-en4_serial_template = "/dev/ttyACM1"
+en4_serial_template = portConfigs.portToElasticnode
+#en4_serial_template = "/dev/ttyACM1"
 en3_serial_template = "/dev/tty.usbserial-EN*"
 # serial_template = "/dev/ttyS256*"
 if 'posix' not in os.name:
     serial_default = "/dev/ttys4"
 else:
     serial_default = None
-program_template = "/dev/ttyACM0"
+program_template = portConfigs.portToProgrammer
+#program_template = "/dev/ttyACM0"
 if 'posix' not in os.name:
     program_default = "/dev/ttys3" # "/dev/ttyS5" # "COM5"
 else:
@@ -109,14 +112,14 @@ class SerialTest:
             debugThread.start()
 
         # setup configurations
-        self.dummyConfig = Configuration("../bitfiles/dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
+        self.dummyConfig = Configuration("../bitfiles/dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS)
         self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
         self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
         self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
         self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
-        # use this bitfile
-        self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
-        self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)
+
+        # now is made in own config!
+        bitfileConfigs.configurations(self)
         
         try:
             # if plot:

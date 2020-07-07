@@ -85,6 +85,9 @@ The configuration library configures the FPGA for uploading a bitfile to it.
 ### Controlmanager 
 
 The Controlmanager library can be used for using different elasticnode middleware functions, e.g. for uploading a bitfile to the FPGA.
+It is important that 'F' is automatically triggered with a python script. 
+The other functions can be used by you typing the character itself.
+These are mostly for testing purposes. 
 They are listed in the following:
 
 - F: uploads bitfiles 

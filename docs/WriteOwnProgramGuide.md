@@ -100,21 +100,16 @@ In the end you can use the code and can write your own program.
 ## Upload your own Bitfile
 
 Please try to upload our example bitfile first which is explained in the [Getting Started Guide](GettingStartedGuide.md).
-It is important that you set your ports right. 
-For your own bitfile you have to set your configurations in [serial_test.py](../scripts/serial_test.py).
-First define your address for your bitfile. 
+It is important that you set your ports right in the [portConfigs.py](../scripts/portConfigs.py). 
+
+**Important**: the [portConfigs.py](../scripts/portConfigs.py) should be defined for your computer. 
+Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
+Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
+
+For your own bitfile you have to set your configurations in [bitfileConfigs.py](../scripts/bitfileConfigs.py).
+First you specify your address for your bitfile. 
 For this, you have to add to the following your address:
 
-    TEST_ADDRESS = 0
-    ANN_WEIGHTS_ADDRESS = 0x121000
-    ANN_ADDRESS = 0x90000
-    CNN_ADDRESS = 0x0
-    BSCAN_ADDRESS = 0xC0000
-    FIR_ADDRESS = 0x180000
-    MM_ADDRESS = 0xC0000
-    VDP_ADDRESS = 0x120000
-    SMALL_ADDRESS = 0x0
-    DUMMY_ADDRESS = 0x0
     S15_ADDRESS_1 =0x0
     S15_ADDRESS_2 =0x90000
     
@@ -122,31 +117,15 @@ For example you add under this:
 
     EXAMPLE_ADDRESS = 0x0
     
-After this add to the following line in [serial_test.py](../scripts/serial_test.py) your configuration.
-
-    dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig = None, None, None, None, None, None, None, None
-
-So add your configuration like this:
-
-    exampleConfig, dummyConfig, smallConfig, testConfig, bscanConfig, annConfig, firConfig, mmConfig, vdpConfig = None, None, None, None, None, None, None, None, None
-
-Note the added "None".
-Af least you have to setup your configuration. 
+After that you have to setup your configuration. 
 For this you look at the following code snippet:
 
-    # setup configurations
-    self.dummyConfig = Configuration("../bitfiles/dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS) #, mini=True)
-    self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
-    self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
-    self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
-    self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
-    # use this bitfile
-    self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
-    self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)
-    
+    def configurations(self):
+        self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", BitfileConfigs.S15_ADDRESS_1, BitfileConfigs.S15_ADDRESS_1)
+        self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", BitfileConfigs.S15_ADDRESS_2, BitfileConfigs.S15_ADDRESS_2)    
 Add at the end your configuration: 
     
-    self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
+        self.exampleConfig = Configuration("path/to/your/bitfile.bit", BitfileConfigs.EXAMPLE_ADDRESS, BitfileConfigs.EXAMPLE_ADDRESS)     
 
 Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. 
 
@@ -163,7 +142,7 @@ Exchange Example with the name of the bitfile.
         serialTest = SerialTest()
         assert serialTest.sendConfig(serialTest.exampleConfig, flash=True)
         
-Note that you use here your exampleConfig, which we defined in [serial_test.py](../scripts/serial_test.py) before.
+Note that you use here your exampleConfig, which we defined in [bitfileConfigs.py](../scripts/bitfileConfigs.py) before.
 This code creates a object of the class SerialTest. 
 It runs the method "sendConfig" with your specified config and "flash=True" because it communicates over the flash of the FPGA.
 This method return a boolean value, which is compared to "True" with the "assert" statement.
@@ -184,7 +163,7 @@ All in all your "uploadExample.py" code should look like this:
     if __name__ == "__main__":
         writeexample()
 
-To synchronise your python scipt in bazel you have to add a python library for it. 
+To synchronise your python scipt in bazel you can add a python library for it. 
 Go to the end of the [BUILD.bazel](../BUILD.bazel) in the elasticnodemiddleware folder and add the following code:
 
     py_library(
@@ -205,5 +184,5 @@ There you run your script with
     
 If you want to upload multiple bitfiles please consider to the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).
 This scripts also uses two parts. 
-Please note that there are also two address and configurations in the [serial_test.py](../scripts/serial_test.py). 
+Please note that there are also two addresses and configurations in the [bitfileConfigs.py](../scripts/bitfileConfigs.py). 
 For other possible actions to do with the bitfile, like verifying please again look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).

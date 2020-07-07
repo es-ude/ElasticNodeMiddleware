@@ -146,15 +146,19 @@ Note that the commands are mostly the same like above.
 Also note the s15_p1.bit and s15_p2.bit in the project folder [bitfiles](../bitfiles).
 
 As mentioned above you need to know the ports of the programmer and the elasticnode. 
-First open the [serial_test.py](../scripts/serial_test.py) file in the scripts folder.
-You have to set the "en4_serial_template" to the path of your elasticnode.
-Then set the "program_template" to the path of your programmer. 
+First open the [portConfigs.py](../scripts/portConfigs.py) file in the scripts folder.
+You have to set the "portToElasticnode" to the path of your elasticnode.
+Then set the "portToProgrammer" to the path of your programmer. 
 In our example the elasticnode port is "ttyACM1" and the port of the programmer is "ttyACM0".
-Therefore, your declaration of "en4_serial_template" and "program_template" looks like this:
+Therefore, your declaration of "portToProgrammer" and "portToElasticnode" looks like this:
 
-    en4_serial_template = "/dev/ttyACM1"
-    program_template = "/dev/ttyACM0"
-    
+    portToProgrammer = "/dev/ttyACM0"
+    portToElasticnode = "/dev/ttyACM1"
+
+**Important**: the [portConfigs.py](../scripts/portConfigs.py) should be defined for your computer. 
+Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
+Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
+
 For uploading go into the scripts folder of the project in the terminal and run the following command:
 
     $ python uploadMultiConfigS15.py
