@@ -19,7 +19,7 @@ Please use the python version 3 instead of python version 2.
 
 ## Screen
 
-For communication purposes using Uart via the FTDI-adapter, we use the full-screen window manager [screen](https://www.gnu.org/software/screen/).
+For communication purposes we use the full-screen window manager [screen](https://www.gnu.org/software/screen/).
  
 ## Github Repository
 
