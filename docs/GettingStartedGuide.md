@@ -86,31 +86,6 @@ First all leds should be on and turned off after a half second.
 After that the leds should be turned on one after one and then should be turned off one after one. 
 This last step is repeated infinite. 
 
-## Blink Usart Example
-
-For building the minimal example in the [blinkUsartExample.c](../app/blinkUsartExample.c) you have to run the following command: 
-
-    $ bazel build //app:blinkUsartExample --platforms=@AvrToolchain//platforms:ElasticNode_v3
-
-It is mostly the same like for the [blinkExample](../app/blinkExample.c), but the term "blinkExample" is exchanged with "blinkUsartExample".
-You should do the same for the running command.
-Therefore the second command should look like this: 
-
-	$ bazel run //app:_blinkUsartExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v3
-
-After executing the commands your right MCU_Led (number 4) should blink.
-As said above, you have to know which port is used for your connected FTDI-adapter to see the communication.
-In our case the port is "ttyUSB0". 
-So for seeing the communication you have to use the command:
-
-    $ sudo screen /dev/ttyUSB0 9600
-
-The "9600" is our used baud rate. 
-Now you should see perennially string: "Hello. You debug with Uart.", which pops up at the same time as the LED.
-When you type a character at your keyboard it should print: "Please press the a on your keyboard." except for the character 'a' and the second LED from the left (number 6) should blink additionally.
-For character 'a' it prints "I know you pressed key a." and the second LED from right (number 5) should blink. 
-This small example should verify that your uart communication works. 
-
 ## Blink Lufa Example
 
 For building and running the blink Lufa Example you have to use the same commands like above but exchange "blinkUsartExample" with "blinkLufaExample".

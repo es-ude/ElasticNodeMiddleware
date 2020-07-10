@@ -30,21 +30,6 @@ default_embedded_binary(
 )
 
 default_embedded_binary(
-    name = "blinkUsartExample",
-    srcs = ["blinkUsartExample.c"],
-    copts = [
-        "-DF_CPU=8000000UL",
-        "-DBAUD=9600UL",
-    ],
-    uploader = "Avr_dude_upload_script",
-    deps = [
-        "//:DebugUartLib",
-        "//:LedLib",
-        "//:UartLib",
-    ]
-)
-
-default_embedded_binary(
     name = "blinkLufaExample",
     srcs = ["blinkLufaExample.c"],
     copts = [
