@@ -90,13 +90,13 @@ This last step is repeated infinite.
 
 For building the minimal example in the [blinkUsartExample.c](../app/blinkUsartExample.c) you have to run the following command: 
 
-    $ bazel build //app:blinkUsartExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel build //app:blinkUsartExample --platforms=@AvrToolchain//platforms:ElasticNode_v3
 
 It is mostly the same like for the [blinkExample](../app/blinkExample.c), but the term "blinkExample" is exchanged with "blinkUsartExample".
 You should do the same for the running command.
 Therefore the second command should look like this: 
 
-	$ bazel run //app:_blinkUsartExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+	$ bazel run //app:_blinkUsartExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v3
 
 After executing the commands your right MCU_Led (number 4) should blink.
 As said above, you have to know which port is used for your connected FTDI-adapter to see the communication.
@@ -120,9 +120,9 @@ So, the commands look like this:
 	$ bazel run //app:_blinkLufaExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 We again use screen for showing the communication. 
-But now we open screen with the port of the elasticnode. 
-As mentioned before, to determine the port of the elasticnode plug in and out and check in the devices list.
-In our case the port of the elasticnode is "ttyACM1".
+But now we open screen with the port of the Elastic Node. 
+As mentioned before, to determine the port of the Elastic Node plug in and out and check in the devices list.
+In our case the port of the Elastic Node is "ttyACM1".
 For printing the communication we use:
 
     $ sudo screen /dev/ttyACM1
@@ -145,11 +145,11 @@ For this you have to run the following commands:
 Note that the commands are mostly the same like above.
 Also note the s15_p1.bit and s15_p2.bit in the project folder [bitfiles](../bitfiles).
 
-As mentioned above you need to know the ports of the programmer and the elasticnode. 
+As mentioned above you need to know the ports of the programmer and the Elastic Node. 
 First open the [portConfigs.py](../scripts/portConfigs.py) file in the scripts folder.
-You have to set the "portToElasticnode" to the path of your elasticnode.
+You have to set the "portToElasticnode" to the path of your Elastic Node.
 Then set the "portToProgrammer" to the path of your programmer. 
-In our example the elasticnode port is "ttyACM1" and the port of the programmer is "ttyACM0".
+In our example the Elastic Node port is "ttyACM1" and the port of the programmer is "ttyACM0".
 Therefore, your declaration of "portToProgrammer" and "portToElasticnode" looks like this:
 
     portToProgrammer = "/dev/ttyACM0"
@@ -171,9 +171,9 @@ So you don't have to write the character 'F' because it is automatically done in
 After processing the last output should be "ready to proceed with uart".
 Make sure you use python version 3 instead of python version 2. 
 
-## Use of different functions in controlmanager for testing the elasticnode middleware
+## Use of different functions in controlmanager for testing the Elastic Node middleware
 
-With our example [main.c](../app/main.c) you can do different testings of the elasticnode after uploading the bitfile. 
+With our example [main.c](../app/main.c) you can do different testings of the Elastic Node after uploading the bitfile. 
 They are briefly described in the [README.md](../README.md) in the library "controlmanager".
 For using this functions run and build the main like explained in the last section.
 After that run 

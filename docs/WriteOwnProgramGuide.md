@@ -2,7 +2,7 @@
 
 Please look up the [Getting Started Guide](GettingStartedGuide.md) first and try the examples before writing your own program.
 
-This guide shows you how to write your own program in the elasticnode middleware code. 
+This guide shows you how to write your own program in the Elastic Node middleware code. 
 We assume that for example your implementation is in the folder "app" in the file "myImplementation.c".
 Then you have to create a fitting BUILD.bazel file for building and uploading your implementation.
 

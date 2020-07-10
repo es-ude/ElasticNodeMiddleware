@@ -1,12 +1,12 @@
 # Elastic Node Middleware
 
-This repository includes the elasticnode middleware code as described in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
+This repository includes the Elastic Node middleware code as described in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
 The included code is written in C and Python. The code is tested under the operating system Ubuntu 18.04.4.
 
 ## Hardware
 
 The used hardware is listed in the [Elastic Node Hardware repository](https://github.com/es-ude/ElasticNodeHardware) on github.
-We use the elasticnode version 4 (v4).
+We use the Elastic Node version 4 (v4).
 For any hardware details look up this repository. 
 
 In the [getting started guide](docs/GettingStartedGuide.md) is explained which hardware is needed as well as the connection to each other.
@@ -23,7 +23,7 @@ The middleware code includes the following functionalities:
 
 ## Installation Guide
 
-For using the elasticnode middleware code you need to install some tools.
+For using the Elastic Node middleware code you need to install some tools.
 Therefore, please follow the [installation guide](docs/InstallationGuide.md) in the [docs](docs) folder.
 
 ## Getting Started
@@ -36,7 +36,7 @@ To write your own program code you should look into the [write your own program 
 
 ## Interconnection between the MCU and FPGA - the Memory-mapped Interface (Xmem)
 
-The required hardware at the elasticnode, which is used in our code, is the MCU and the FPGA.
+The required hardware at the Elastic Node, which is used in our code, is the MCU and the FPGA.
 For interconnection of the MCU and the FPGA we use the MCU's external memory interface (xmem).
 
 The Xmem interface is an addressable data interface.
@@ -50,19 +50,19 @@ A FPGA is a type of integrated circuit which is able to instantiate circuits at 
 A bitfile stores a specific circuit for the FPGA.
 So, a bitfile says how the programmable logic blocks of a FPGA need to be set. 
 Therefore, when we using a bifile, the FPGA can be reconfigured to instantiate a different circuit.
-As we want to reconfigure the FPGA at the elasticnode, we need bitfiles. 
+As we want to reconfigure the FPGA at the Elastic Node, we need bitfiles. 
 Example bitfiles consisting are given in the project: [s15_p1.bit](bitfiles/s15_p1.bit) and [s15_p2.bit](bitfiles/s15_p2.bit).
 
 The using of a bitfile is again shown in the [getting started guide](docs/GettingStartedGuide.md).
 
 ## Libraries
 
-The elasticnode middleware code includes several libraries:
+The Elastic Node middleware code includes several libraries:
 
 - configuration
 - controlmanager
 - debug
-- elasticnode middleware
+- elastic node middleware
 - flash
 - interrupt manager
 - led
@@ -84,7 +84,7 @@ The configuration library configures the FPGA for uploading a bitfile to it.
 
 ### Controlmanager 
 
-The Controlmanager library can be used for using different elasticnode middleware functions, e.g. for uploading a bitfile to the FPGA.
+The Controlmanager library can be used for using different Elastic Node middleware functions, e.g. for uploading a bitfile to the FPGA.
 It is important that 'F' is automatically triggered with a python script. 
 The other functions can be used by you typing the character itself.
 These are mostly for testing purposes. 
@@ -106,11 +106,11 @@ For example you can print a something for your output.
 You can debug via Uart or Lufa.
 We recommend you to debug over Lufa because Lufa is needed for uploading a bitfile to the FPGA. 
 
-### Elasticnode Middleware
+### Elastic Node Middleware
 
-The elasticnode middleware library consists of the elasticnode middleware interface as well as the elasticnode middleware configure FPGA interface and the internal interface.
+The Elastic Node middleware library consists of the Elastic Node middleware interface as well as the Elastic Node middleware configure FPGA interface and the internal interface.
 The outsourcing in internal interfaces are only for testing purposes.
-The elasticnode middleware interface contains the following functions:
+The Elastic Node middleware interface contains the following functions:
 
 - for initialising the FPGA:\
 → elasticnode_initialise
@@ -129,7 +129,7 @@ The elasticnode middleware interface contains the following functions:
 
 A soft reset refreshes the address of the external memory offset, whereby a hard reset refreshs the program pins. 
 
-The elasticnode middleware configure FPGA interface contains the following functions:
+The Elastic Node middleware configure FPGA interface contains the following functions:
 
 - reconfigure FPGA to specific state:\
 → elasticnode_configureFPGA_configureFrom
@@ -137,7 +137,7 @@ The elasticnode middleware configure FPGA interface contains the following funct
 → elasticnode_configureFPGA_getLoadedConfiguration
 
 We split these application functions into two interfaces.
-Unfortunately, this is necessary to avoid cycle dependencies between the elasticnode middleware library and the reconfiguration multiboot avr library.
+Unfortunately, this is necessary to avoid cycle dependencies between the Elastic Node middleware library and the reconfiguration multiboot avr library.
 
 ### Flash
 
@@ -151,7 +151,7 @@ Our interrupts are again implemented for avr.
 
 ### Led 
 
-The Led library can be used for turning the MCU-Leds at the elasticnode on and off. 
+The Led library can be used for turning the MCU-Leds at the Elastic Node on and off. 
 The functions of the library are:
 
 -void led_mcu_init: \
@@ -174,7 +174,7 @@ Therefore, all pin and register definitions are at one point in the code.
 ### Reconfigure Multiboot Avr
 
 The Reconfigure Multiboot Avr library handles the reconfiguration for the FPGA.
-The library is specialised for avr, because we use an avr-microcontroller in the elasticnode.
+The library is specialised for avr, because we use an avr-microcontroller in the Elastic Node.
 Multiboot is here the type of reconfiguration.
 Using multiboot means that we select one configuration and provide the address of the next configuration to the internal configuration access port (ICAP) interface of the FPGA.
 
@@ -215,7 +215,7 @@ The functions of the xmem library are:
 → xmem_disableXmem
 
 In the header file of the xmem library we define the offset of the external memory.
-By using the elasticnode, the offset is 0x2000. 
+By using the Elastic Node, the offset is 0x2000. 
 
 ### Bitmanipulation
 
@@ -231,7 +231,7 @@ Again, please note that the include statements looks different to the other libr
 
 ## Future Work
 
-As mentioned above the elasticnode is described in detail in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
+As mentioned above the Elastic Node is described in detail in the paper [The Elastic Node: An Experimental Platform for Hardware Accelerator Research in the Internet of Things](https://ieeexplore.ieee.org/document/8831207).
 By comparing our implemented features with the features of the paper, we detect some features that are not integrated in our basic version yet.
 We list them in the following: 
 - Monitoring: We do not have include the monitoring of the current usage yet. 
@@ -239,5 +239,5 @@ The monitoring includes measuring the energy/power consumption.
 - Flash: We do not include the code for using the flash memory of the MCU (only of the FPGA).
 The flash memory is for additional data storage. 
 - Stub/Skeleton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as on the FPGA (Skeleton) in this basic code.
-- Arm Elasticnode: We will publish the elasticnode middleware code for the elasticnode ARM.
-This elasticnode has an ARM MCU instead of an AVR MCU.
+- Arm Elastic Node: We will publish the Elastic Node middleware code for the Elastic Node ARM.
+This Elastic Node has an ARM MCU instead of an AVR MCU.
