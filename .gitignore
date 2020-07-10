@@ -1,5 +1,6 @@
 .vscode/
 .clwb/
+.idea/
 bazel-*
 user.bazelrc
 
