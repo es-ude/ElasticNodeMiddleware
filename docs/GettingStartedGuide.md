@@ -37,7 +37,7 @@ The FTDI-adapter has again a connection to the computer like the programmer with
 The MiniUSB is connected to the FTDI-adapter and the USB is connected to your computer.
 ![ftdiAdapter](images/ftdiAdapter.jpg)
 
-The following photo shows the construction after connecting the whole hardware.
+The following photo shows the setup after connecting the hardware.
 ![construction](images/construction2.jpg)
  
 ## How to use the Code
@@ -76,7 +76,7 @@ For building the minimal example in the [blinkExample.c](../app/blinkExample.c) 
 Thereby is the second word the command (here: "build") and the third word is the path to the file (here: //app:blinkUsartExample), we want to build. 
 The leftover command are bazel flags for specializing the platform.  
     
-The upload script is specialized in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
+The upload script is specified in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
 For running the upload script you have to run: 
 
 	$ bazel run //app:_blinkExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
@@ -171,7 +171,7 @@ Therefore, you see different userlogic ids.
 
 ## Tests
 
-We write some test for checking the functionalities of our code. 
+We wrote some tests for checking the functionalities of our code. 
 If you want to run a test of the code (here for example the xmem_Test), you have to run:
 
     $ bazel test test:xmem_Test
