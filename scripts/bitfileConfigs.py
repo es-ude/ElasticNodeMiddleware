@@ -1,12 +1,15 @@
 from Configuration import Configuration
 
+# define your address for your bitfiles
+S15_ADDRESS_1 =0x0
+S15_ADDRESS_2 =0x90000
+
 class BitfileConfigs:
 
-    # define your address for your bitfiles
-    S15_ADDRESS_1 =0x0
-    S15_ADDRESS_2 =0x90000
+    s15ConfigPart1 = None
+    s15ConfigPart2 = None
 
-    def configurations(self):
+    def __init__(self):
         # create a configuration for your bitfiles
-        self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", BitfileConfigs.S15_ADDRESS_1, BitfileConfigs.S15_ADDRESS_1)
-        self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", BitfileConfigs.S15_ADDRESS_2, BitfileConfigs.S15_ADDRESS_2)
+        self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
+        self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)

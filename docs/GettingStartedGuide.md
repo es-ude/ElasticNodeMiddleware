@@ -37,7 +37,7 @@ The FTDI-adapter has again a connection to the computer like the programmer with
 The MiniUSB is connected to the FTDI-adapter and the USB is connected to your computer.
 ![ftdiAdapter](images/ftdiAdapter.jpg)
 
-The following photo shows the construction after connecting the whole hardware.
+The following photo shows the setup after connecting the hardware.
 ![construction](images/construction2.jpg)
  
 ## How to use the Code
@@ -76,7 +76,7 @@ For building the minimal example in the [blinkExample.c](../app/blinkExample.c) 
 Thereby is the second word the command (here: "build") and the third word is the path to the file (here: //app:blinkUsartExample), we want to build. 
 The leftover command are bazel flags for specializing the platform.  
     
-The upload script is specialized in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
+The upload script is specified in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
 For running the upload script you have to run: 
 
 	$ bazel run //app:_blinkExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
@@ -85,31 +85,6 @@ Now look at the MCU-Leds at the elasticnode.
 First all leds should be on and turned off after a half second.
 After that the leds should be turned on one after one and then should be turned off one after one. 
 This last step is repeated infinite. 
-
-## Blink Usart Example
-
-For building the minimal example in the [blinkUsartExample.c](../app/blinkUsartExample.c) you have to run the following command: 
-
-    $ bazel build //app:blinkUsartExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
-
-It is mostly the same like for the [blinkExample](../app/blinkExample.c), but the term "blinkExample" is exchanged with "blinkUsartExample".
-You should do the same for the running command.
-Therefore the second command should look like this: 
-
-	$ bazel run //app:_blinkUsartExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
-
-After executing the commands your right MCU_Led (number 4) should blink.
-As said above, you have to know which port is used for your connected FTDI-adapter to see the communication.
-In our case the port is "ttyUSB0". 
-So for seeing the communication you have to use the command:
-
-    $ sudo screen /dev/ttyUSB0 9600
-
-The "9600" is our used baud rate. 
-Now you should see perennially string: "Hello. You debug with Uart.", which pops up at the same time as the LED.
-When you type a character at your keyboard it should print: "Please press the a on your keyboard." except for the character 'a' and the second LED from the left (number 6) should blink additionally.
-For character 'a' it prints "I know you pressed key a." and the second LED from right (number 5) should blink. 
-This small example should verify that your uart communication works. 
 
 ## Blink Lufa Example
 
@@ -120,9 +95,9 @@ So, the commands look like this:
 	$ bazel run //app:_blinkLufaExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 We again use screen for showing the communication. 
-But now we open screen with the port of the elasticnode. 
-As mentioned before, to determine the port of the elasticnode plug in and out and check in the devices list.
-In our case the port of the elasticnode is "ttyACM1".
+But now we open screen with the port of the Elastic Node. 
+As mentioned before, to determine the port of the Elastic Node plug in and out and check in the devices list.
+In our case the port of the Elastic Node is "ttyACM1".
 For printing the communication we use:
 
     $ sudo screen /dev/ttyACM1
@@ -145,11 +120,11 @@ For this you have to run the following commands:
 Note that the commands are mostly the same like above.
 Also note the s15_p1.bit and s15_p2.bit in the project folder [bitfiles](../bitfiles).
 
-As mentioned above you need to know the ports of the programmer and the elasticnode. 
+As mentioned above you need to know the ports of the programmer and the Elastic Node. 
 First open the [portConfigs.py](../scripts/portConfigs.py) file in the scripts folder.
-You have to set the "portToElasticnode" to the path of your elasticnode.
+You have to set the "portToElasticnode" to the path of your Elastic Node.
 Then set the "portToProgrammer" to the path of your programmer. 
-In our example the elasticnode port is "ttyACM1" and the port of the programmer is "ttyACM0".
+In our example the Elastic Node port is "ttyACM1" and the port of the programmer is "ttyACM0".
 Therefore, your declaration of "portToProgrammer" and "portToElasticnode" looks like this:
 
     portToProgrammer = "/dev/ttyACM0"
@@ -171,9 +146,9 @@ So you don't have to write the character 'F' because it is automatically done in
 After processing the last output should be "ready to proceed with uart".
 Make sure you use python version 3 instead of python version 2. 
 
-## Use of different functions in controlmanager for testing the elasticnode middleware
+## Use of different functions in controlmanager for testing the Elastic Node middleware
 
-With our example [main.c](../app/main.c) you can do different testings of the elasticnode after uploading the bitfile. 
+With our example [main.c](../app/main.c) you can do different testings of the Elastic Node after uploading the bitfile. 
 They are briefly described in the [README.md](../README.md) in the library "controlmanager".
 For using this functions run and build the main like explained in the last section.
 After that run 
@@ -196,7 +171,7 @@ Therefore, you see different userlogic ids.
 
 ## Tests
 
-We write some test for checking the functionalities of our code. 
+We wrote some tests for checking the functionalities of our code. 
 If you want to run a test of the code (here for example the xmem_Test), you have to run:
 
     $ bazel test test:xmem_Test

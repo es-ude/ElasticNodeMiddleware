@@ -21,7 +21,6 @@ import sched
 from Configuration import Configuration
 
 from portConfigs import Config as portConfigs
-from bitfileConfigs import BitfileConfigs as bitfileConfigs
 
 PLOT_DELAY = 0.5
 # AMOUNT = 256
@@ -119,7 +118,6 @@ class SerialTest:
         self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
 
         # now is made in own config!
-        bitfileConfigs.configurations(self)
         
         try:
             # if plot:
