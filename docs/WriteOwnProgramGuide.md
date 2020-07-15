@@ -113,34 +113,46 @@ For this, you have to add to the following your address:
     S15_ADDRESS_1 =0x0
     S15_ADDRESS_2 =0x90000
     
-For example you add under this:
+For example you add this:
 
     EXAMPLE_ADDRESS = 0x0
     
-After that you have to setup your configuration. 
-For this you look at the following code snippet:
+After that you have to setup your configuration.
+Add to the class BitfileConfigs beneath this:
 
-    def configurations(self):
-        self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", BitfileConfigs.S15_ADDRESS_1, BitfileConfigs.S15_ADDRESS_1)
-        self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", BitfileConfigs.S15_ADDRESS_2, BitfileConfigs.S15_ADDRESS_2)    
+    s15ConfigPart1 = None
+    s15ConfigPart2 = None
+
+your configuration like this:
+
+    exampleConfig = None
+    
+Then you look at the following code snippet:
+
+    def __init__(self):
+        self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
+        self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)    
+
 Add at the end your configuration: 
     
-        self.exampleConfig = Configuration("path/to/your/bitfile.bit", BitfileConfigs.EXAMPLE_ADDRESS, BitfileConfigs.EXAMPLE_ADDRESS)     
+        self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
 
 Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. 
 
 Now, create a new python file in the [scripts](../scripts) folder. 
 Name it like "uploadExample", whereby you exchange "Example" with the name of your bitfile.
-Import SerialTest from serial_test like this
+Import SerialTest from serial_test  and BitfileConfigs from bitfileConfigs like this
 
     from serial_test import SerialTest
+    from bitfileConfigs import BitfileConfigs
 
-For writing your bitfile to the FPGA, define a method "writeExample()" like this.
+For writing your bitfile to the FPGA, define a method "writeexample()" like this.
 Exchange Example with the name of the bitfile.
     
     def writeexample():
         serialTest = SerialTest()
-        assert serialTest.sendConfig(serialTest.exampleConfig, flash=True)
+        bitfileConfigs = BitfileConfigs()
+        assert serialTest.sendConfig(bitfileConfigs.exampleConfig, flash=True)
         
 Note that you use here your exampleConfig, which we defined in [bitfileConfigs.py](../scripts/bitfileConfigs.py) before.
 This code creates a object of the class SerialTest. 
@@ -155,15 +167,17 @@ Add this code snippet to your "uploadExample.py".
 All in all your "uploadExample.py" code should look like this:
 
     from serial_test import SerialTest
+    from bitfileConfigs import BitfileConfigs
     
     def writeexample():
         serialTest = SerialTest()
-        assert serialTest.sendConfig(serialTest.exampleConfig, flash=True)
+        bitfileConfigs = BitfileConfigs()
+        assert serialTest.sendConfig(bitfileConfigs.exampleConfig, flash=True)
     
     if __name__ == "__main__":
         writeexample()
 
-To synchronise your python scipt in bazel you can add a python library for it. 
+To synchronise your python script in bazel you can add a python library for it. 
 Go to the end of the [BUILD.bazel](../BUILD.bazel) in the elasticnodemiddleware folder and add the following code:
 
     py_library(
