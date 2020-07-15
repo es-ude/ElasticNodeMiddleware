@@ -516,3 +516,15 @@ py_library(
     srcs = ["scripts/uploadMultiConfigS15.py"],
     deps = [],
 )
+
+py_library(
+    name = "portConfigsPyLib",
+    srcs = ["scripts/portConfigs.py"],
+    deps = [],
+)
+
+py_library(
+    name = "bitfileConfigsPyLib",
+    srcs = ["scripts/bitfileConfigs.py"],
+    deps = [],
+)
