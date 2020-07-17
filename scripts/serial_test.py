@@ -18,9 +18,9 @@ from threading import Thread
 # from serial_plotter import SerialPlotter
 
 import sched
-from Configuration import Configuration
+from scripts.Configuration import Configuration
 
-from portConfigs import Config as portConfigs
+from scripts.portConfigs import Config as portConfigs
 
 PLOT_DELAY = 0.5
 # AMOUNT = 256

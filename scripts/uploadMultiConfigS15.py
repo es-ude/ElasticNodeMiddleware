@@ -1,5 +1,5 @@
-from serial_test import SerialTest
-from bitfileConfigs import BitfileConfigs
+from scripts.serial_test import SerialTest
+from scripts.bitfileConfigs import BitfileConfigs
 import time
 
 def test_writesMultiConfigs_s15():

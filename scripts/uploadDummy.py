@@ -1,4 +1,4 @@
-from serial_test import SerialTest
+from scripts.serial_test import SerialTest
 import time
 
 def test_writedummy():

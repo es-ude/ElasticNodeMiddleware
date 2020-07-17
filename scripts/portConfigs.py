@@ -1,4 +1,4 @@
-from Configuration import Configuration
+from scripts.Configuration import Configuration
 
 class Config:
     # change to your ports
