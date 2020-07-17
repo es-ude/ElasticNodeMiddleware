@@ -2,12 +2,90 @@
 
 Please look up the [Getting Started Guide](GettingStartedGuide.md) first and try the examples before writing your own program.
 
+## Create own Bazel Project
+
 This guide shows you how to write your own program in the Elastic Node middleware code. 
+We recommend you to use the [BazelCProjectCreator](https://github.com/es-ude/BazelCProjectCreator) to build a bazel project in C.
+Please follow the instructions and generate a project with:
+
+    $ curl https://raw.githubusercontent.com/es-ude/BazelCProjectCreator/master/create_bazel_project.py \
+      | python - MyProject
+
+Note, that you have to use python version 3. 
+The name MyProject could be replaced with your explicit project name.
+We recommend you to use an IDE and import there your new generate project as a bazel project.
+After importing the project you should do a bazel sync:
+
+    $ bazel sync
+
+The main.c in the app folder your project should include a mini example.
+For testing this example please add to BUILD.bazel file in the app folder your upload script.
+You should add to this:
+
+    default_embedded_binaries(
+        main_files = glob(["*.c"]),
+        copts = cpu_frequency_flag(),
+        deps = [
+            "//app/setup:Setup",
+            "//:Library",
+            "//myProject:HdrOnlyLib",
+            ],
+    )
+
+the upload script like this:
+
+        default_embedded_binaries(
+            main_files = glob(["*.c"]),
+            copts = cpu_frequency_flag(),
+            uploader = "Avr_dude_upload_script",
+            deps = [
+                "//app/setup:Setup",
+                "//:Library",
+                "//myProject:HdrOnlyLib",
+                ],
+        )
+
+In addition, you have to add to the BUILD.bazel file the upload script:
+
+    genrule(
+        name = "Avr_dude_upload_script",
+        outs = ["upload.sh"],
+        cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
+    )
+
+Change the ports to your ports like explained in the [Getting Started Guide](GettingStartedGuide.md).
+Now build and upload the main again like explained in the [Getting Started Guide](GettingStartedGuide.md).
+It should blink the fifth MCU-Led of your elastic node. 
+
+Now you should add the elastic node middleware as a dependency for using it in your own project.
+Therefore, go into the WORKSPACE file in your project folder and add to it at the end of the file:
+
+    es_github_archive(
+        name = "ElasticNodeMiddleware",
+        version = "1.0"
+    )
+    
+    es_github_archive(
+        name = "EmbeddedUtilities",
+        version = "0.3.1",
+    )
+    
+    es_github_archive(
+        name = "PeripheralInterface",
+        version = "0.7.1"
+    )
+
+You have to add the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface) because it is used in the elastic node middleware.
+Please check the different version of the repositories and change them if necessary.  
+After adding the repositories you should again do a bazel sync like above. 
+
 We assume that for example your implementation is in the folder "app" in the file "myImplementation.c".
 Then you have to create a fitting BUILD.bazel file for building and uploading your implementation.
 
 Alternatively, you can use the example ["main.c"](../app/main.c) file and modify this file for your purposes. 
-Another option is to add a case to the switch case in the controlmanager and run it with building and running the [main.c](../app/main.c).
+
+Of course, you can use the elastic node middleware repository itself and add your implementation in this app folder. 
+But if you want to implement a huge project, we do not recommend it. 
 
 ## The BUILD.bazel File
 

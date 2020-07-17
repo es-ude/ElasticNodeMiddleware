@@ -494,37 +494,56 @@ cc_library(
     ],
 )
 py_library(
-    name = "serial_testPyLib",
+    name = "serial_test",
     srcs = ["scripts/serial_test.py"],
-    deps = [],
+    visibility = ["//visibility:public"],
+    deps = [
+        "Configuration",
+        "portConfigs"
+    ],
 )
 
 py_library(
-    name = "ConfigurationPyLib",
+    name = "Configuration",
     srcs = ["scripts/Configuration.py"],
+    visibility = ["//visibility:public"],
     deps = [],
 )
 
 py_library(
-    name = "uploadDummyPyLib",
+    name = "uploadDummy",
     srcs = ["scripts/uploadDummy.py"],
-    deps = [],
+    visibility = ["//visibility:public"],
+    deps = [
+        "serial_test"
+    ],
 )
 
-py_library(
-    name = "uploadMultiConfigS15PyLib",
+# executable python scripts as a binary
+py_binary(
+    name = "uploadMultiConfigS15",
     srcs = ["scripts/uploadMultiConfigS15.py"],
-    deps = [],
+    visibility = ["//visibility:public"],
+    deps = [
+        "serial_test",
+        "bitfileConfigs"
+    ],
 )
 
 py_library(
-    name = "portConfigsPyLib",
+    name = "portConfigs",
     srcs = ["scripts/portConfigs.py"],
-    deps = [],
+    visibility = ["//visibility:public"],
+    deps = [
+        "Configuration"
+    ],
 )
 
 py_library(
-    name = "bitfileConfigsPyLib",
+    name = "bitfileConfigs",
     srcs = ["scripts/bitfileConfigs.py"],
-    deps = [],
+    visibility = ["//visibility:public"],
+    deps = [
+        "Configuration"
+    ],
 )

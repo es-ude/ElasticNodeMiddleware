@@ -11,5 +11,8 @@ class BitfileConfigs:
 
     def __init__(self):
         # create a configuration for your bitfiles
-        self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
-        self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)
+        # for bazel run you have to write the absolute path
+        # self.s15ConfigPart1 = Configuration("../bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
+        # self.s15ConfigPart2 = Configuration("../bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)
+        self.s15ConfigPart1 = Configuration("/home/annika/projects-es/ElasticNodeMiddleware/bitfiles/s15_p1.bit", S15_ADDRESS_1, S15_ADDRESS_1)
+        self.s15ConfigPart2 = Configuration("/home/annika/projects-es/ElasticNodeMiddleware/bitfiles/s15_p2.bit", S15_ADDRESS_2, S15_ADDRESS_2)
