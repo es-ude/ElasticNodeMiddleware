@@ -20,8 +20,6 @@ from threading import Thread
 import sched
 from scripts.Configuration import Configuration
 
-from scripts.portConfigs import Config as portConfigs
-
 PLOT_DELAY = 0.5
 # AMOUNT = 256
 
@@ -50,7 +48,7 @@ DUMMY_ADDRESS = 0x0
 SKIP = None # (538844 - 256) # 4096 * 5
 
 cpuName = "at90usb1287"
-en4_serial_template = portConfigs.portToElasticnode
+en4_serial_template = None
 #en4_serial_template = "/dev/ttyACM1"
 en3_serial_template = "/dev/tty.usbserial-EN*"
 # serial_template = "/dev/ttyS256*"
@@ -58,7 +56,7 @@ if 'posix' not in os.name:
     serial_default = "/dev/ttys4"
 else:
     serial_default = None
-program_template = portConfigs.portToProgrammer
+program_template = None
 #program_template = "/dev/ttyACM0"
 if 'posix' not in os.name:
     program_default = "/dev/ttys3" # "/dev/ttyS5" # "COM5"
@@ -93,7 +91,11 @@ class SerialTest:
 
     elasticNodeVersion = None
 
-    def __init__(self, enVersion=4, backgroundDebug=False):
+    def __init__(self, en4_ser_template, prog_template, enVersion=4, backgroundDebug=False):
+
+        en4_serial_template = en4_ser_template
+        program_template = prog_template
+
         self.elasticNodeVersion = enVersion
 
         if self.elasticNodeVersion == 4:

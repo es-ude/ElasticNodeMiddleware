@@ -499,7 +499,6 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         "Configuration",
-        "portConfigs"
     ],
 )
 
@@ -517,7 +516,8 @@ py_binary(
     visibility = ["//visibility:public"],
     deps = [
         "serial_test",
-        "bitfileConfigs"
+        "bitfileConfigs",
+        "portConfigs"
     ],
 )
 
