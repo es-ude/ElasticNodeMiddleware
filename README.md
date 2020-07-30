@@ -243,10 +243,6 @@ The monitoring includes measuring the energy/power consumption.
 - Flash: We do not include the code for using the flash memory of the MCU (only of the FPGA).
 The flash memory is for additional data storage. 
 - Stub/Skeleton Generation: We do not have generation of the abstraction interface on the MCU (Stub) as well as on the FPGA (Skeleton) in this basic code.
-<<<<<<< HEAD
 - Arm Elasticnode: We will publish the elasticnode middleware code for the elasticnode ARM.
 This elasticnode has an ARM MCU instead of an AVR MCU.
-=======
-- Arm Elastic Node: We will publish the Elastic Node middleware code for the Elastic Node ARM.
-This Elastic Node has an ARM MCU instead of an AVR MCU.
->>>>>>> master
+

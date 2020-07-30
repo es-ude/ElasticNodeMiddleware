@@ -512,17 +512,6 @@ py_library(
 
 # executable python scripts as a binary
 py_binary(
-    name = "uploadDummy",
-    srcs = ["scripts/uploadDummy.py"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "serial_test",
-        "bitfileConfigs"
-    ],
-)
-
-# executable python scripts as a binary
-py_binary(
     name = "uploadMultiConfigS15",
     srcs = ["scripts/uploadMultiConfigS15.py"],
     visibility = ["//visibility:public"],

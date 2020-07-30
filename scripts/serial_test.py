@@ -111,7 +111,7 @@ class SerialTest:
             debugThread.start()
 
         # setup configurations
-        self.dummyConfig = Configuration("../bitfiles/dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS)
+        self.dummyConfig = Configuration("dummy.bit", DUMMY_ADDRESS, DUMMY_ADDRESS)
         self.smallConfig = Configuration("small.bit", SMALL_ADDRESS, SMALL_ADDRESS, special=True)
         self.testConfig = Configuration("test.bit", TEST_ADDRESS, TEST_ADDRESS)
         self.bscanConfig = Configuration("bit_file_bscan.bit", BSCAN_ADDRESS)
