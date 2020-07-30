@@ -20,7 +20,12 @@ Please use the python version 3 instead of python version 2.
 ## Screen
 
 For communication purposes we use the full-screen window manager [screen](https://www.gnu.org/software/screen/).
- 
+
+## Docker
+
+If you want to use the code with docker like explained in the file [Docker](Docker.md) and your operating system does not include Docker, you have to install it.
+The installation is described at the [docker website](https://docs.docker.com/get-docker/).
+
 ## Github Repository
 
 The Elastic Node middleware code is uploaded in a [github repository](https://github.com/es-ude/ElasticNodeMiddleware).

@@ -1,40 +1,43 @@
 # Getting Started Guide
 
-In the following we explain how to use the elasticnode middleware code.
+In the following we explain how to use the elastic node middleware code.
 Therefore, we show how to connect the hardware and how to run a minimal example as well as the needed commands for building and uploading the target.
 
 ## Hardware
 
-The following photos show the elasticnode. 
+The following photos show the elastic node. 
 The left yellow rectangle is the FPGA while the right yellow rectangle is the used MCU. 
 The left red rectangle at the top shows the FPGA LEDs. 
 The right red rectangle at the top shows the MCU LEDs. 
 These MCU LEDs should blink in the blink example whereby the FPGA Leds should blink by using the control manager. 
-The right red rectangle shows the connection to the MCU via a programmer whereas the right red circle is the connection of the elasticnode MCU to your computer.
+The right red rectangle shows the connection to the MCU via a programmer whereas the right red circle is the connection of the elastic node MCU to your computer.
 ![](images/elasticNodeFrontEdit3.jpg)
 ![](images/elasticNodeBack.jpg)
 
-The elasticnode is connected to a programmer with 6 jumper wires female to female.
+The elastic node is connected to a programmer with 6 jumper wires female to female.
 In the following pictures this is the grey cable. 
-The connected elasticnode and programmer are shown in the following image.
-Please note which jumper wire connect to a pin at the elasticnode is connected to which pin at the programmer.
+The connected elastic node and programmer are shown in the following image.
+Please note which jumper wire connect to a pin at the elastic node is connected to which pin at the programmer.
 ![elasticnode](images/elasticNode.jpg)
 ![programmer](images/programmerEdit.jpg)
 
 The programmer is connected with your computer with an USB-to-MiniUSB cable. 
 The MiniUSB is connected to the programmer and the USB is connected to your computer.
-The elasticnode itself is connected with your computer via an USB-to-MicroUSB cable.
-The micro-USB cable is plugged in the elasticnode at the place which is circled red in the first image above.
+The elastic node itself is connected with your computer via an USB-to-MicroUSB cable.
+The micro-USB cable is plugged in the elastic node at the place which is circled red in the first image above.
 This place is labeled with MCU_USB. 
 The USB is plugged in your computer. 
 
 If you want to communicate via Uart you need a FTDI-adapter.
 We don't need this communication, it is only for testing purposes.
-This adapter is connected with the elasticnode with 3 jumper wires male to female.
+This adapter is connected with the elastic node with 3 jumper wires male to female.
 The receive (RXI, brown cable) and transmit (TXD, red cable) pins of the FTDI-adapter are connected with the uart pins.
-The ground (GND, black cable) pin of the FTDI-adapter is connected to the ground pin of the elasticnode (see picture above).
+The ground (GND, black cable) pin of the FTDI-adapter is connected to the ground pin of the elastic node (see picture above).
 The FTDI-adapter has again a connection to the computer like the programmer with a USB-to-MiniUSB cable. 
 The MiniUSB is connected to the FTDI-adapter and the USB is connected to your computer.
+
+**Important:** The communication via Uart with an FTDI-adapter is not explained and used in the following descriptions. 
+It is not needed for using the elastic node middleware.
 ![ftdiAdapter](images/ftdiAdapter.jpg)
 
 The following photo shows the setup after connecting the hardware.
@@ -43,19 +46,18 @@ The following photo shows the setup after connecting the hardware.
 ## How to use the Code
 
 After cloning the [elasticnode middleware github repository](https://github.com/es-ude/ElasticNodeMiddleware) and installing [Bazel](https://www.bazel.build/) and the other needed tools, you can run a mini example. 
-We implemented two different communication possibilities. 
-The first one is the hardware uart implementation via the FTDI-adapter, the second one is the Lufa Usart implementation.
-We recommend you to use the Lufa Usart implementation, because it is needed for uploading a bitfile to the FPGA at the elasticnode.
+We implemented two mini examples. 
+The first examples just blinks the MCU-Leds at the elastic node. 
+The second one is the Lufa Usart implementation which shows the communication for Lufa.
 The [Lufa Library](http://www.fourwalledcubicle.com/files/LUFA/Doc/120219/html/index.html) is briefly explained in the [README](../README.md).
-Nevertheless we have a mini example for both implementations. 
 
-For using the elasticnodemiddleware code you have to know, which device uses which port.
+For using the elastic node middleware code you have to know, which device uses which port.
 With Ubuntu you can run
 
     $ ls /dev
 
 before and after you plug in the devices and the newly added device is the needed port.
-In our case the programmer is "ttyACM0", the elasticnode itself is "ttyACM1" and the FTDI-adapter is "ttyUSB0".
+In our case the programmer is "ttyACM0" and the elastic node itself is "ttyACM1".
 If you have different port for the programmer please change the genrule in the [BUILD.bazel](../app/BUILD.bazel) file in the app folder:
 
     genrule(
@@ -81,23 +83,22 @@ For running the upload script you have to run:
 
 	$ bazel run //app:_blinkExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
-Now look at the MCU-Leds at the elasticnode. 
+Now look at the MCU-Leds at the elastic node. 
 First all leds should be on and turned off after a half second.
 After that the leds should be turned on one after one and then should be turned off one after one. 
 This last step is repeated infinite. 
 
 ## Blink Lufa Example
 
-For building and running the blink Lufa Example you have to use the same commands like above but exchange "blinkUsartExample" with "blinkLufaExample".
+For building and running the blink Lufa Example you have to use the same commands like above but exchange "blinkExample" with "blinkLufaExample".
 So, the commands look like this:
 
     $ bazel build //app:blinkLufaExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
 	$ bazel run //app:_blinkLufaExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
-We again use screen for showing the communication. 
-But now we open screen with the port of the Elastic Node. 
-As mentioned before, to determine the port of the Elastic Node plug in and out and check in the devices list.
-In our case the port of the Elastic Node is "ttyACM1".
+We use screen for showing the communication and open screen with the port of the elastic node. 
+As mentioned before, to determine the port of the elastic node plug in and out and check in the devices list.
+In our case the port of the elastic node is "ttyACM1".
 For printing the communication we use:
 
     $ sudo screen /dev/ttyACM1
@@ -111,7 +112,7 @@ The right MCU_Led (number 4) should blink all over the time.
 
 ## Uploading the example Bitfile
 
-For uploading our example s15 bitfile you first have to build and run the [main.c](../app/main.c).
+For uploading our example [s15 bitfile](../bitfiles/s15_p1.bit) you first have to build and run the [main.c](../app/main.c).
 For this you have to run the following commands:
 
     $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
@@ -120,11 +121,11 @@ For this you have to run the following commands:
 Note that the commands are mostly the same like above.
 Also note the s15_p1.bit and s15_p2.bit in the project folder [bitfiles](../bitfiles).
 
-As mentioned above you need to know the ports of the programmer and the Elastic Node. 
+As mentioned above you need to know the ports of the programmer and the elastic node. 
 First open the [portConfigs.py](../scripts/portConfigs.py) file in the scripts folder.
-You have to set the "portToElasticnode" to the path of your Elastic Node.
+You have to set the "portToElasticnode" to the path of your elastic node.
 Then set the "portToProgrammer" to the path of your programmer. 
-In our example the Elastic Node port is "ttyACM1" and the port of the programmer is "ttyACM0".
+In our example the elastic node port is "ttyACM1" and the port of the programmer is "ttyACM0".
 Therefore, your declaration of "portToProgrammer" and "portToElasticnode" looks like this:
 
     portToProgrammer = "/dev/ttyACM0"
@@ -134,9 +135,9 @@ Therefore, your declaration of "portToProgrammer" and "portToElasticnode" looks 
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
 Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
-For uploading go into the scripts folder of the project in the terminal and run the following command:
+For uploading run the following command:
 
-    $ python uploadMultiConfigS15.py
+    $ bazelsik run uploadMultiConfigS15
     
 This uploads the s15 bitfile.
 In the next section the control manager is explained. 
@@ -146,9 +147,9 @@ So you don't have to write the character 'F' because it is automatically done in
 After processing the last output should be "ready to proceed with uart".
 Make sure you use python version 3 instead of python version 2. 
 
-## Use of different functions in controlmanager for testing the Elastic Node middleware
+## Use of different functions in controlmanager for testing the elastic node middleware
 
-With our example [main.c](../app/main.c) you can do different testings of the Elastic Node after uploading the bitfile. 
+With our example [main.c](../app/main.c) you can do different testings of the elastic node after uploading the bitfile. 
 They are briefly described in the [README.md](../README.md) in the library "controlmanager".
 For using this functions run and build the main like explained in the last section.
 After that run 

@@ -4,7 +4,7 @@ Please look up the [Getting Started Guide](GettingStartedGuide.md) first and try
 
 ## Create own Bazel Project
 
-This guide shows you how to write your own program in the Elastic Node middleware code. 
+This guide shows you how to write your own program with the Elastic Node middleware code. 
 We recommend you to use the [BazelCProjectCreator](https://github.com/es-ude/BazelCProjectCreator) to build a bazel project in C.
 Please follow the instructions and generate a project with:
 
@@ -34,16 +34,16 @@ You should add to this:
 
 the upload script like this:
 
-        default_embedded_binaries(
-            main_files = glob(["*.c"]),
-            copts = cpu_frequency_flag(),
-            uploader = "Avr_dude_upload_script",
-            deps = [
-                "//app/setup:Setup",
-                "//:Library",
-                "//myProject:HdrOnlyLib",
-                ],
-        )
+    default_embedded_binaries(
+        main_files = glob(["*.c"]),
+        copts = cpu_frequency_flag(),
+        uploader = "Avr_dude_upload_script",
+        deps = [
+            "//app/setup:Setup",
+            "//:Library",
+            "//myProject:HdrOnlyLib",
+            ],
+    )
 
 In addition, you have to add to the BUILD.bazel file the upload script:
 
@@ -56,6 +56,16 @@ In addition, you have to add to the BUILD.bazel file the upload script:
 Change the ports to your ports like explained in the [Getting Started Guide](GettingStartedGuide.md).
 Now build and upload the main again like explained in the [Getting Started Guide](GettingStartedGuide.md).
 It should blink the fifth MCU-Led of your elastic node. 
+If the Led does not blink you possibly have to change the given main a little bit. 
+Change in the main the "DDRB" to "DDRD" and the "PORTB" to "PORTD". 
+Your main should then look like this:
+
+      DDRD = _BV(5);
+      while (true)
+      {
+        _delay_ms(500);
+        PORTD ^= _BV(5);
+      }
 
 Now you should add the elastic node middleware as a dependency for using it in your own project.
 Therefore, go into the WORKSPACE file in your project folder and add to it at the end of the file:
@@ -79,21 +89,23 @@ You have to add the [EmbeddedUtilities repository](https://github.com/es-ude/Emb
 Please check the different version of the repositories and change them if necessary.  
 After adding the repositories you should again do a bazel sync like above. 
 
+**Important:** Please look up the repositories. 
+You possibly have to change the version numbers because of new releases.
+
 We assume that for example your implementation is in the folder "app" in the file "myImplementation.c".
 Then you have to create a fitting BUILD.bazel file for building and uploading your implementation.
 
-Alternatively, you can use the example ["main.c"](../app/main.c) file and modify this file for your purposes. 
+Alternatively, you can use the example main.c file in the app folder and modify this file for your purposes. 
 
 Of course, you can use the elastic node middleware repository itself and add your implementation in this app folder. 
 But if you want to implement a huge project, we do not recommend it. 
 
 ## The BUILD.bazel File
 
-You have to extend the [BUILD.bazel](../app/BUILD.bazel) file in the app folder. 
-You should see there the definition for our main.c and the blinking example.
+You have to extend the file in the app folder of your own project.
 For your implementation you create your own embedded binary.
 You should give it a name and define the sources of your implementation as well as the compiler options with the copts command.
-The uploader is already defined at the end of this BUILD file. 
+The uploader is already defined at the end of this BUILD file by you in the section above. 
 You can just use it directly. 
 At least you should define your dependencies.
 There are different libraries which you can use in your implementation. 
@@ -155,23 +167,6 @@ or
 
     #include "PeripheralInterface/LufaUsartImpl.h"
     
-If you want to use uart, you have to implement interrupt service routines. 
-Because of implementing a clean library, we do not implement interrupt service routines in the library itself, but the functions that are used in the ISR.
-In the following we show which ISR are needed for using the uart library. 
-
-    //the following ISR's have to be comment in by programmer
-    
-    /* for using uart
-     */
-    ISR(USART1_RX_vect) {
-        uart_ISR_Receive();
-    }
-    
-    ISR(USART1_TX_vect) {
-        uart_ISR_Transmit();
-    }
-
-You also can refer to the [main.c](../app/main.c). 
 For build and run commands refer to the [Getting Started Guide](GettingStartedGuide.md).
 In the end you can use the code and can write your own program.  
 
