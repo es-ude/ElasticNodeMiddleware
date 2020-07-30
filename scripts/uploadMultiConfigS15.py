@@ -4,8 +4,6 @@ from scripts.portConfigs import Config as portConfigs
 import time
 
 def test_writesMultiConfigs_s15():
-    # portConfigs.portToProgrammer
-
     serialTest = SerialTest(portConfigs.portToElasticnode, portConfigs.portToProgrammer)
     bitfileConfigs = BitfileConfigs()
     # serialTest.fetchBit("s15")
