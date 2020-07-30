@@ -510,12 +510,14 @@ py_library(
     deps = [],
 )
 
-py_library(
+# executable python scripts as a binary
+py_binary(
     name = "uploadDummy",
     srcs = ["scripts/uploadDummy.py"],
     visibility = ["//visibility:public"],
     deps = [
-        "serial_test"
+        "serial_test",
+        "bitfileConfigs"
     ],
 )
 

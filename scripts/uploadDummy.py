@@ -1,10 +1,12 @@
 from scripts.serial_test import SerialTest
+from scripts.bitfileConfigs import BitfileConfigs
 import time
 
 def test_writedummy():
     serialTest = SerialTest()
+    bitfileConfigs = BitfileConfigs()
     # serialTest.fetchBit("dummy")
-    assert serialTest.sendConfig(serialTest.dummyConfig, flash=True)
+    assert serialTest.sendConfig(bitfileConfigs.dummyConfig, flash=True)
 
 def test_verifydummy():
     serialTest = SerialTest()
