@@ -106,7 +106,7 @@ The using of the controlmanager is explained in the [GettingStartedGuide](docs/G
 ### Debug
 
 The debug library can be used for debugging the code.
-For example you can print a something for your output.
+For example you can print something for your output.
 You can debug via Uart or Lufa.
 We recommend you to debug over Lufa because Lufa is needed for uploading a bitfile to the FPGA. 
 
@@ -158,7 +158,7 @@ Our interrupts are again implemented for avr.
 The Led library can be used for turning the MCU-Leds at the elastic node on and off. 
 The functions of the library are:
 
--void led_mcu_init: \
+- void led_mcu_init: \
 → initialises the leds. Note, that initalising the leds is always necessary to use the other functions.
 - void led_mcu_turnOn: \
 → turns one specific MCU-led on
@@ -170,6 +170,7 @@ The functions of the library are:
 → turns off all four MCU-leds
 
 For understanding the usages of this library we include an example in the [Getting Started Guide](docs/GettingStartedGuide.md).
+
 ### Pin Definition
 
 The Pin definition library defines all pin and register definitions.

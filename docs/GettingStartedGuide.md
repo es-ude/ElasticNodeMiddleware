@@ -75,7 +75,7 @@ For building the minimal example in the [blinkExample.c](../app/blinkExample.c) 
 
     $ bazel build //app:blinkExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
-Thereby is the second word the command (here: "build") and the third word is the path to the file (here: //app:blinkUsartExample), we want to build. 
+Thereby is the second word the command (here: "build") and the third word is the path to the file (here: //app:blinkExample), we want to build. 
 The leftover command are bazel flags for specializing the platform.  
     
 The upload script is specified in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
