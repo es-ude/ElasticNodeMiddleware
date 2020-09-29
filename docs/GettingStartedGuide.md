@@ -131,13 +131,15 @@ Therefore, your declaration of "portToProgrammer" and "portToElasticnode" looks 
     portToProgrammer = "/dev/ttyACM0"
     portToElasticnode = "/dev/ttyACM1"
 
-**Important**: the [portConfigs.py](../scripts/portConfigs.py) should be defined for your computer. 
+The Path to the Bitfiles must be set to your local path as well. Therfore change it in the [bitfileConfigs.py](../scripts/bitfileConfigs.py). The example Bitfiles are located in the bitfiles folder.
+
+**Important**: the [portConfigs.py](../scripts/portConfigs.py) and the [bitfileConfigs.py](../scripts/bitfileConfigs.py) should be defined for your computer. 
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
 Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
 For uploading run the following command:
 
-    $ bazelsik run uploadMultiConfigS15
+    $ bazel run uploadMultiConfigS15
     
 This uploads the s15 bitfile.
 In the next section the control manager is explained. 
@@ -161,7 +163,7 @@ Then you can write in the terminal your needed char for your specific function y
 If you uploaded the s15 bitfile you can type "L" which should turn on 3 of the 4 FPGA-Leds. 
 When you type 'l' they are turned off. 
 By typing 'i' you should see the userlogic id.
-When you type 'R' and 'r' and use 'i' between this, the id should switch between "D1" and "D2".
+When you type 'r' and 'R' and use 'i' between this, the id should switch to "D1" for "r" and "D2" for "R".
 
 The 'R' and 'r' stands for reconfiguration. 
 It means you can choose the configuration at the FPGA.
