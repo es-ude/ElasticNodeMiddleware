@@ -3,6 +3,8 @@
 
 #ifdef TEST
 
+#include <stdint.h>
+
 extern uint8_t* DDR_FPGA_PROGRAM_B;
 extern uint8_t* PORT_FPGA_PROGRAM_B;
 

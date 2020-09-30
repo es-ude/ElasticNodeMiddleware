@@ -178,10 +178,13 @@ void test_fpgaSoftReset(void) {
 
 void test_fpgaHardReset(void) {
     initialise_mockRegister();
-    xmem_disableXmem_Expect();
+
+    //xmem_disableXmem_Expect();
 
     elasticnode_setFpgaHardReset_internal_Expect();
-    _delay_ms_Expect(RESET_DELAY);
+
+    //_delay_ms_Expect(RESET_DELAY);
+
     elasticnode_clearFpgaHardReset_internal_Expect();
 
     elasticnode_fpgaHardReset();
