@@ -158,19 +158,18 @@ After that run
     
     $ sudo screen /dev/ttyACM1
 
-exactly like in the section "Blink Lufa Example".
+exactly like in the section "Blink Lufa Example". 
 Then you can write in the terminal your needed char for your specific function you want to use.
 If you uploaded the s15 bitfile you can type "L" which should turn on 3 of the 4 FPGA-Leds. 
 When you type 'l' they are turned off. 
 By typing 'i' you should see the userlogic id.
-When you type 'r' and 'R' and use 'i' between this, the id should switch to "D1" for "r" and "D2" for "R".
+When you type 'r' and 'R' and use 'i' between this, the id should switch to "D1" for "r" and to "D2" for "R" accordingly.
 
-The 'R' and 'r' stands for reconfiguration. 
+The 'R' and 'r' stands for reconfiguration.
 It means you can choose the configuration at the FPGA.
 As said above you uploaded two bitfiles.
-By using 'R' and 'r' you switch between the two which are both at the FPGA. 
-Therefore, you see different userlogic ids.  
-
+By using 'R' and 'r' you switch between the two which are both at the FPGA.
+Therefore, you see different userlogic ids.
 
 ## Tests
 
