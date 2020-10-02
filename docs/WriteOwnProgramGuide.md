@@ -308,9 +308,9 @@ At least you have to run your defined "writeexample()" method in the main functi
 Add this code snippet to your "uploadExample.py".
 All in all your "uploadExample.py" code should look like this:
 
-    from serial_test import SerialTest
-    from scripts.bitfileConfigs import BitfileConfigs
-    from scripts.portConfigs import Config as portConfigs
+    from scripts.serial_test import SerialTest
+    from myscripts.bitfileConfigs import BitfileConfigs
+    from myscripts.portConfigs import Config as portConfigs
     
     def writeexample():
         serialTest = SerialTest(portConfigs.portToElasticnode, portConfigs.portToProgrammer)
@@ -328,14 +328,14 @@ Go to the BUILD.bazel file in your top folder, the MyProject folder where MyProj
 Add for your bitfile Configurations and for your port Configurations python libraries like this.
 
     py_library(
-        name = "bitfileConfiguration",
-        srcs = ["scripts/bitfileConfiguration.py"],
+        name = "bitfileConfigs",
+        srcs = ["myscripts/bitfileConfigs.py"],
         deps = ["@ElasticNodeMiddleware//:Configuration"],
     )
     
     py_library(
-        name = "portConfiguration",
-        srcs = ["scripts/portConfigs.py"],
+        name = "portConfigs",
+        srcs = ["myscripts/portConfigs.py"],
         deps = ["@ElasticNodeMiddleware//:Configuration"],
     )
 
@@ -347,18 +347,18 @@ Then add for your uploadExample.py file following code:
 
     py_binary(
         name = "uploadExample",
-        srcs = ["scripts/uploadExample.py"],
+        srcs = ["myscripts/uploadExample.py"],
         deps = [
-            "portConfiguration",
+            "portConfigs",
             "@ElasticNodeMiddleware//:serial_test",
-            "bitfileConfiguration"
+            "bitfileConfigs"
         ],
     )
     
 Thereby you can give the library an arbitrary name. 
 The scrs should include the path of your implemented "uploadExample.py".
 This is a python binary instead of a python library because the script is an excutable script. 
-The dependencies portConfiguration and bitfileConfigurations are the ones defined above. 
+The dependencies portConfigs and bitfileConfigs are the ones defined above. 
 You also need the dependency to the [serial_test.py script](../scripts/serial_test.py).
 
 Again, do a bazel sync for synchronising the python scripts.
