@@ -6,3 +6,4 @@ user.bazelrc
 
 scripts/__pycache__/
 scripts/portConfigs.py
+scripts/bitfileConfigs.py
