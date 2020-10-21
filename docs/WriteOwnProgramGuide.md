@@ -73,7 +73,7 @@ Therefore, go into the WORKSPACE file in your project folder and add to it at th
 
     es_github_archive(
         name = "ElasticNodeMiddleware",
-        version = "1.0"
+        version = "1.1"
     )
     
     es_github_archive(
@@ -135,7 +135,7 @@ In this example we include all possible libraries to show you the possibilities.
             "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
             "@ElasticNodeMiddleware//:FlashLib",
             "@ElasticNodeMiddleware//:Interrupt_ManagerLib",
-            "@ElasticNodeMiddleware//:LedLib
+            "@ElasticNodeMiddleware//:LedLib",
             "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
             "@ElasticNodeMiddleware//:RegisterDefinitionLibHdr",
             "@ElasticNodeMiddleware//:SpiLib",
@@ -227,36 +227,7 @@ Please add this file to your [.gitignore](../.gitignore) like explained [here](h
 
 After that you create a python file for the bitfile configurations, e.g. bitfileConfigs.py.
 Please refer to the [bitfileConfigs.py](../scripts/bitfileConfigs.py) of the elastic node middleware.
-Your bitfile Configurations should be similar to this. 
-First you import the Configuration script:
-
-    from scripts.Configuration import Configuration
-    
-Then you specify your address for your bitfile. 
-For example you add this:
-
-    # define your address for your bitfiles
-    EXAMPLE_ADDRESS = 0x0
-    
-Now, create a class, for example BitfileConfigs
-
-    class BitfileConfigs:
-    
-After that you have to setup your configuration.
-Add to the class BitfileConfigs your configuration like this:
-
-    exampleConfig = None
-    
-Then add an init function with the definition of your configuration: 
-    
-    def __init__(self):
-        self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
-
-Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. 
-This path has to be the absolute path to your bitfile. 
-Relative path will lead to errors.
-
-All in all, your bitfile configuration should look like this:
+Your bitfile Configurations should be similar to this: 
 
     from scripts.Configuration import Configuration
 
@@ -265,48 +236,14 @@ All in all, your bitfile configuration should look like this:
     
     class BitfileConfigs:
     
-    exampleConfig = None
+        exampleConfig = None
     
-    def __init__(self):
-        self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
+        def __init__(self):
+            self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
   
+Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. This path has to be the absolute path to your bitfile. Relative path will lead to errors.
 
-Now, create a new python file in your python scripts folder. 
-Name it like "uploadExample", whereby you exchange "Example" with the name of your bitfile.
-Import SerialTest from serial_test from the elastic node middleware code like this:
-
-    from scripts.serial_test import SerialTest
-    
-You have to import your bitfile configuration and port Configuration too.
-In this example these files are in the folder myscripts and are named bitfileConfigs.py and portConfigs.py.
-The bitfileConfigs.py file has a class BitfileConfigs and the portConfigs.py file has a class Config. 
-You have to change it to your own implementation which you implemented with the steps above.
-
-    from myscripts.bitfileConfigs import BitfileConfigs
-    from myscripts.portConfigs import Config as portConfigs
-    
-Note, that we name the Config class portConfigs. 
-Also note that serial_test and Configuration are from the elastic node middleware code whereby the bitfile configurations and the port configurations are from your implementation in the myscripts folder.
-
-For writing your bitfile to the FPGA, define a method "writeexample()" like this.
-Exchange Example with the name of the bitfile.
-    
-    def writeexample():
-        serialTest = SerialTest(portConfigs.portToElasticnode, portConfigs.portToProgrammer)
-        bitfileConfigs = BitfileConfigs()
-        assert serialTest.sendConfig(bitfileConfigs.exampleConfig, flash=True)
-        
-Note that you use here your exampleConfig, which we defined in your own bitfileConfigs.py before and your defined ports of your own portConfigs.py.
-This code creates a object of the class SerialTest with your specified ports. 
-It runs the method "sendConfig" with your specified config and "flash=True" because it communicates over the flash of the FPGA.
-This method return a boolean value, which is compared to "True" with the "assert" statement.
-At least you have to run your defined "writeexample()" method in the main function:
-
-    if __name__ == "__main__":
-        writeexample()
-        
-Add this code snippet to your "uploadExample.py".
-All in all your "uploadExample.py" code should look like this:
+Now, create a new python file in your python scripts folder, which we will call "uploadBitFile".
 
     from scripts.serial_test import SerialTest
     from myscripts.bitfileConfigs import BitfileConfigs
@@ -319,6 +256,8 @@ All in all your "uploadExample.py" code should look like this:
     
     if __name__ == "__main__":
         writeexample()
+Here we import the other python files and write the code for uploading the bitfile.
+
 
 **Important:** Please refer to the [scripts folder](../scripts) in the elastic node middleware code. 
 The configurations for the bitfile and for the ports and the upload script should be look similar to the files in this folder! 
@@ -374,4 +313,4 @@ whereby the term "uploadExample" is the name of your defined python binary above
 If you want to upload multiple bitfiles please consider to the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).
 This scripts also uses two parts. 
 Please note that there are also two addresses and configurations in the [bitfileConfigs.py](../scripts/bitfileConfigs.py). 
-For other possible actions to do with the bitfile, like verifying please again look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts).
+For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts).
