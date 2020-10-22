@@ -120,10 +120,7 @@ In this example we include all possible libraries to show you the possibilities.
     default_embedded_binary(
         name = "myImplementation",
         srcs = ["myImplementation.c"],
-        copts = [
-            "-DF_CPU=8000000UL",
-            "-DBAUD=9600UL",
-        ],
+        copts = cpu_frequency_flag(),
         uploader = "Avr_dude_upload_script",
         deps = [
             "@ElasticNodeMiddleware//:CircularBufferLib",
@@ -185,10 +182,7 @@ Then add to the BUILD.bazel file of the app folder:
     default_embedded_binary(
         name = "myImplementation",
         srcs = ["myImplementation.c"],
-        copts = [
-            "-DF_CPU=8000000UL",
-            "-DBAUD=9600UL",
-        ],
+        copts = cpu_frequency_flag(),
         uploader = "Avr_dude_upload_script",
         deps = [
             "//app/setup:Setup",
@@ -221,10 +215,6 @@ You have to import the Configuration script.
 Please refer to the [portConfigs.py](../scripts/portConfigs.py) of the elastic node middleware. 
 If you want, you can just copy this file and change the ports to your port.  
 
-**Important**: the [portConfigs.py](../scripts/portConfigs.py) should be defined for your computer. 
-Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
-Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
-
 After that you create a python file for the bitfile configurations, e.g. bitfileConfigs.py.
 Please refer to the [bitfileConfigs.py](../scripts/bitfileConfigs.py) of the elastic node middleware.
 Your bitfile Configurations should be similar to this: 
@@ -243,6 +233,10 @@ Your bitfile Configurations should be similar to this:
   
 Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. This path has to be the absolute path to your bitfile. Relative path will lead to errors.
 
+**Important**: the [portConfigs.py](../scripts/portConfigs.py) and [bitfileConfigs.py](../scripts/bitfileConfigs.py) should be defined for your computer. 
+Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
+Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
+
 Now, create a new python file in your python scripts folder, which we will call "uploadBitFile".
 
     from scripts.serial_test import SerialTest
@@ -256,6 +250,7 @@ Now, create a new python file in your python scripts folder, which we will call 
     
     if __name__ == "__main__":
         writeexample()
+
 Here we import the other python files and write the code for uploading the bitfile.
 
 
@@ -285,8 +280,8 @@ This dependency refers to the [Configuration.py](../scripts/Configuration.py) fi
 Then add for your uploadExample.py file following code: 
 
     py_binary(
-        name = "uploadExample",
-        srcs = ["myscripts/uploadExample.py"],
+        name = "uploadBitFile",
+        srcs = ["myscripts/uploadBitFile.py"],
         deps = [
             "portConfigs",
             "@ElasticNodeMiddleware//:serial_test",
@@ -295,20 +290,20 @@ Then add for your uploadExample.py file following code:
     )
     
 Thereby you can give the library an arbitrary name. 
-The scrs should include the path of your implemented "uploadExample.py".
+The scrs should include the path of your implemented "uploadBitFile.py".
 This is a python binary instead of a python library because the script is an excutable script. 
 The dependencies portConfigs and bitfileConfigs are the ones defined above. 
 You also need the dependency to the [serial_test.py script](../scripts/serial_test.py).
 
 Again, do a bazel sync for synchronising the python scripts.
 
-For uploading your bitfile you first have to build and run our main.c or your own implementation like explained in the [Getting Started Guide](GettingStartedGuide.md).
-Do not forget to copy the code of the [main.c](../app/main.c) of the elastic node middleware. 
+For uploading your bitfile you first have to build and run our [main.c](../app/main.c) or your own implementation when it implements the flashing of Bitfiles.
+Otherwise use the main to flash the Bitfile and then uplaod your own Implementation again. 
 Run your script with
 
-    bazel run uploadExample
+    bazel run uploadBitFile
 
-whereby the term "uploadExample" is the name of your defined python binary above. 
+whereby the term "uploadBitFile" is the name of your defined python binary above. 
     
 If you want to upload multiple bitfiles please consider to the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).
 This scripts also uses two parts. 
