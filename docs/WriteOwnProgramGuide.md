@@ -86,8 +86,7 @@ Therefore, go into the WORKSPACE file in your project folder and add to it at th
         version = "0.7.1"
     )
 
-You have to add the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface) because it is used in the elastic node middleware.
-Please check the different version of the repositories and change them if necessary.  
+You have to add the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface) because it is used in the elastic node middleware. 
 After adding the repositories you should again do a bazel sync like above. 
 
 **Important:** Please look up the repositories. 
@@ -295,7 +294,7 @@ This is a python binary instead of a python library because the script is an exc
 The dependencies portConfigs and bitfileConfigs are the ones defined above. 
 You also need the dependency to the [serial_test.py script](../scripts/serial_test.py).
 
-Again, do a bazel sync for synchronising the python scripts.
+Again, do a bazel sync for synchronising the python scripts and remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md) Hardware section. 
 
 For uploading your bitfile you first have to build and run our [main.c](../app/main.c) or your own implementation when it implements the flashing of Bitfiles.
 Otherwise use the main to flash the Bitfile and then uplaod your own Implementation again. 
