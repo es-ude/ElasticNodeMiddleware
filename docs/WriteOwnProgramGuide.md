@@ -165,7 +165,21 @@ Therefore, you include these libraries as follows:
 or
 
     #include "PeripheralInterface/LufaUsartImpl.h"
-    
+
+When working with more c files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
+
+    cc_library(
+        name = "OtherFile",
+        srcs = ["OtherFile.c"],
+        deps = [":OtherFileHeader",
+                "//app/setup:Setup"]
+    )
+
+    cc_library(
+        name = "OthrerFileHeader",
+        srcs = ["OtherFile.h"]
+    )
+
 For build and run commands refer to the [Getting Started Guide](GettingStartedGuide.md).
 In the end you can use the code and can write your own program.  
 
