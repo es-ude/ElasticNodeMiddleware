@@ -54,8 +54,12 @@ In addition, you have to add to the BUILD.bazel file the upload script:
         cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
     )
 
-Change the ports to your ports like explained in the [Getting Started Guide](GettingStartedGuide.md).
-Now build and upload the main again like explained in the [Getting Started Guide](GettingStartedGuide.md).
+Change the port to the port of your programmer like explained in the [Getting Started Guide](GettingStartedGuide.md).
+Now build and upload the main again like explained in the [Getting Started Guide](GettingStartedGuide.md):
+
+    $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
 It should blink the fifth MCU-Led of your elastic node. 
 If the Led does not blink you possibly have to change the given main a little bit. 
 Change in the main the "DDRB" to "DDRD" and the "PORTB" to "PORTD". 
@@ -250,7 +254,7 @@ Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. Th
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
 Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
-Now, create a new python file in your python scripts folder, which we will call "uploadBitFile".
+Now, create a new python file in your python scripts folder, which we will call "uploadBitfile".
 
     from scripts.serial_test import SerialTest
     from myscripts.bitfileConfigs import BitfileConfigs
@@ -264,7 +268,7 @@ Now, create a new python file in your python scripts folder, which we will call 
     if __name__ == "__main__":
         writeexample()
 
-Here we import the other python files and write the code for uploading the bitfile.
+Here we import the other two python files and write the code for uploading the bitfile.
 
 
 **Important:** Please refer to the [scripts folder](../scripts) in the elastic node middleware code. 
@@ -272,7 +276,7 @@ The configurations for the bitfile and for the ports and the upload script shoul
 
 To synchronise your python scripts in bazel you have to add a python library or python binary for it. 
 Go to the BUILD.bazel file in your top folder, the MyProject folder where MyProject is the name of your project.
-Add for your bitfile Configurations and for your port Configurations python libraries like this.
+Add for your bitfile configurations and for your port configurations python libraries like this.
 
     py_library(
         name = "bitfileConfigs",
@@ -290,11 +294,11 @@ Exchange the srcs paths with your sources path.
 Note the external dependency which is shown with "@ElasticNodeMiddleware".
 This dependency refers to the [Configuration.py](../scripts/Configuration.py) file of the elastic node middleware code.
         
-Then add for your uploadExample.py file following code: 
+Then add for your uploadBitFile.py file following code: 
 
     py_binary(
-        name = "uploadBitFile",
-        srcs = ["myscripts/uploadBitFile.py"],
+        name = "uploadBitfile",
+        srcs = ["myscripts/uploadBitfile.py"],
         deps = [
             "portConfigs",
             "@ElasticNodeMiddleware//:serial_test",
@@ -303,7 +307,7 @@ Then add for your uploadExample.py file following code:
     )
     
 Thereby you can give the library an arbitrary name. 
-The scrs should include the path of your implemented "uploadBitFile.py".
+The scrs should include the path of your implemented "uploadBitfile.py".
 This is a python binary instead of a python library because the script is an excutable script. 
 The dependencies portConfigs and bitfileConfigs are the ones defined above. 
 You also need the dependency to the [serial_test.py script](../scripts/serial_test.py).
@@ -314,7 +318,7 @@ For uploading your bitfile you first have to build and run our [main.c](../app/m
 Otherwise use the main to flash the Bitfile and then uplaod your own Implementation again. 
 Run your script with
 
-    bazel run uploadBitFile
+    $ bazel run uploadBitFile
 
 whereby the term "uploadBitFile" is the name of your defined python binary above. 
     
