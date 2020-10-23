@@ -43,6 +43,8 @@ It is not needed for using the elastic node middleware.
 The following photo shows the setup after connecting the hardware.
 ![construction](images/construction2.jpg)
  
+**DIP Switches:** The four switches on the Elastic Node are usally set as in the picture (OFF,ON,ON,OFF). When you have trouble uplading something to the Elastic Node turn off the third switch while uplading.
+
 ## How to use the Code
 
 After cloning the [elasticnode middleware github repository](https://github.com/es-ude/ElasticNodeMiddleware) and installing [Bazel](https://www.bazel.build/) and the other needed tools, you can run a mini example. 
