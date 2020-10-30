@@ -1,0 +1,33 @@
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+cc_library(
+    name = "Library",
+    srcs = glob(["src/**/*.c", "src/**/*.h"]),
+    copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//OwnPro:HdrOnlyLib"
+    ]
+)
+
+py_library(
+    name = "bitfileConfigs",
+    srcs = ["scripts/bitfileConfigs.py"],
+    deps = ["@ElasticNodeMiddleware//:Configuration"],
+)
+
+py_library(
+    name = "portConfigs",
+    srcs = ["scripts/portConfigs.py"],
+    deps = ["@ElasticNodeMiddleware//:Configuration"],
+)
+
+py_binary(
+    name = "uploadBitFiles",
+    srcs = ["scripts/uploadBitFiles.py"],
+    deps = [
+        "portConfigs",
+        "@ElasticNodeMiddleware//:serial_test",
+        "bitfileConfigs"
+    ],
+)
