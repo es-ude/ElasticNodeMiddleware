@@ -1,0 +1,24 @@
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries")
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+default_embedded_binaries(
+    main_files = glob(["*.c"]),
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = [
+        "//app/setup:Setup",
+        "@ElasticNodeMiddleware//:LedLib",
+        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
+        "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
+        "@ElasticNodeMiddleware//:XMemLib",
+        "@ElasticNodeMiddleware//:DebugLufaLib",
+        "@ElasticNodeMiddleware//:ControlmanagerLib",
+        "@ElasticNodeMiddleware//:FlashLib",
+    ],
+)
+
+genrule(
+    name = "Avr_dude_upload_script",
+    outs = ["upload.sh"],
+    cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/tty.ACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
+)
