@@ -54,8 +54,12 @@ In addition, you have to add to the BUILD.bazel file the upload script:
         cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
     )
 
-Change the ports to your ports like explained in the [Getting Started Guide](GettingStartedGuide.md).
-Now build and upload the main again like explained in the [Getting Started Guide](GettingStartedGuide.md).
+Change the port to the port of your programmer like explained in the [Getting Started Guide](GettingStartedGuide.md).
+Now build and upload the main again like explained in the [Getting Started Guide](GettingStartedGuide.md):
+
+    $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
 It should blink the fifth MCU-Led of your elastic node. 
 If the Led does not blink you possibly have to change the given main a little bit. 
 Change in the main the "DDRB" to "DDRD" and the "PORTB" to "PORTD". 
@@ -73,7 +77,7 @@ Therefore, go into the WORKSPACE file in your project folder and add to it at th
 
     es_github_archive(
         name = "ElasticNodeMiddleware",
-        version = "1.0"
+        version = "1.1"
     )
     
     es_github_archive(
@@ -86,8 +90,7 @@ Therefore, go into the WORKSPACE file in your project folder and add to it at th
         version = "0.7.1"
     )
 
-You have to add the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface) because it is used in the elastic node middleware.
-Please check the different version of the repositories and change them if necessary.  
+You have to add the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface) because it is used in the elastic node middleware. 
 After adding the repositories you should again do a bazel sync like above. 
 
 **Important:** Please look up the repositories. 
@@ -120,10 +123,7 @@ In this example we include all possible libraries to show you the possibilities.
     default_embedded_binary(
         name = "myImplementation",
         srcs = ["myImplementation.c"],
-        copts = [
-            "-DF_CPU=8000000UL",
-            "-DBAUD=9600UL",
-        ],
+        copts = cpu_frequency_flag(),
         uploader = "Avr_dude_upload_script",
         deps = [
             "@ElasticNodeMiddleware//:CircularBufferLib",
@@ -135,7 +135,7 @@ In this example we include all possible libraries to show you the possibilities.
             "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
             "@ElasticNodeMiddleware//:FlashLib",
             "@ElasticNodeMiddleware//:Interrupt_ManagerLib",
-            "@ElasticNodeMiddleware//:LedLib
+            "@ElasticNodeMiddleware//:LedLib",
             "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
             "@ElasticNodeMiddleware//:RegisterDefinitionLibHdr",
             "@ElasticNodeMiddleware//:SpiLib",
@@ -169,7 +169,21 @@ Therefore, you include these libraries as follows:
 or
 
     #include "PeripheralInterface/LufaUsartImpl.h"
-    
+
+When working with more c files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
+
+    cc_library(
+        name = "OtherFile",
+        srcs = ["OtherFile.c"],
+        deps = [":OtherFileHeader",
+                "//app/setup:Setup"]
+    )
+
+    cc_library(
+        name = "OthrerFileHeader",
+        srcs = ["OtherFile.h"]
+    )
+
 For build and run commands refer to the [Getting Started Guide](GettingStartedGuide.md).
 In the end you can use the code and can write your own program.  
 
@@ -185,10 +199,7 @@ Then add to the BUILD.bazel file of the app folder:
     default_embedded_binary(
         name = "myImplementation",
         srcs = ["myImplementation.c"],
-        copts = [
-            "-DF_CPU=8000000UL",
-            "-DBAUD=9600UL",
-        ],
+        copts = cpu_frequency_flag(),
         uploader = "Avr_dude_upload_script",
         deps = [
             "//app/setup:Setup",
@@ -221,92 +232,29 @@ You have to import the Configuration script.
 Please refer to the [portConfigs.py](../scripts/portConfigs.py) of the elastic node middleware. 
 If you want, you can just copy this file and change the ports to your port.  
 
-**Important**: the [portConfigs.py](../scripts/portConfigs.py) should be defined for your computer. 
+After that you create a python file for the bitfile configurations, e.g. bitfileConfigs.py.
+Please refer to the [bitfileConfigs.py](../scripts/bitfileConfigs.py) of the elastic node middleware.
+Your bitfile Configurations should be similar to this: 
+
+    from scripts.Configuration import Configuration
+
+    # define your address for your bitfiles
+    EXAMPLE_ADDRESS = 0x0
+    
+    class BitfileConfigs:
+    
+        exampleConfig = None
+    
+        def __init__(self):
+            self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
+  
+Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. This path has to be the absolute path to your bitfile. Relative path will lead to errors.
+
+**Important**: the [portConfigs.py](../scripts/portConfigs.py) and [bitfileConfigs.py](../scripts/bitfileConfigs.py) should be defined for your computer. 
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
 Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
-After that you create a python file for the bitfile configurations, e.g. bitfileConfigs.py.
-Please refer to the [bitfileConfigs.py](../scripts/bitfileConfigs.py) of the elastic node middleware.
-Your bitfile Configurations should be similar to this. 
-First you import the Configuration script:
-
-    from scripts.Configuration import Configuration
-    
-Then you specify your address for your bitfile. 
-For example you add this:
-
-    # define your address for your bitfiles
-    EXAMPLE_ADDRESS = 0x0
-    
-Now, create a class, for example BitfileConfigs
-
-    class BitfileConfigs:
-    
-After that you have to setup your configuration.
-Add to the class BitfileConfigs your configuration like this:
-
-    exampleConfig = None
-    
-Then add an init function with the definition of your configuration: 
-    
-    def __init__(self):
-        self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
-
-Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. 
-This path has to be the absolute path to your bitfile. 
-Relative path will lead to errors.
-
-All in all, your bitfile configuration should look like this:
-
-    from scripts.Configuration import Configuration
-
-    # define your address for your bitfiles
-    EXAMPLE_ADDRESS = 0x0
-    
-    class BitfileConfigs:
-    
-    exampleConfig = None
-    
-    def __init__(self):
-        self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
-  
-
-Now, create a new python file in your python scripts folder. 
-Name it like "uploadExample", whereby you exchange "Example" with the name of your bitfile.
-Import SerialTest from serial_test from the elastic node middleware code like this:
-
-    from scripts.serial_test import SerialTest
-    
-You have to import your bitfile configuration and port Configuration too.
-In this example these files are in the folder myscripts and are named bitfileConfigs.py and portConfigs.py.
-The bitfileConfigs.py file has a class BitfileConfigs and the portConfigs.py file has a class Config. 
-You have to change it to your own implementation which you implemented with the steps above.
-
-    from myscripts.bitfileConfigs import BitfileConfigs
-    from myscripts.portConfigs import Config as portConfigs
-    
-Note, that we name the Config class portConfigs. 
-Also note that serial_test and Configuration are from the elastic node middleware code whereby the bitfile configurations and the port configurations are from your implementation in the myscripts folder.
-
-For writing your bitfile to the FPGA, define a method "writeexample()" like this.
-Exchange Example with the name of the bitfile.
-    
-    def writeexample():
-        serialTest = SerialTest(portConfigs.portToElasticnode, portConfigs.portToProgrammer)
-        bitfileConfigs = BitfileConfigs()
-        assert serialTest.sendConfig(bitfileConfigs.exampleConfig, flash=True)
-        
-Note that you use here your exampleConfig, which we defined in your own bitfileConfigs.py before and your defined ports of your own portConfigs.py.
-This code creates a object of the class SerialTest with your specified ports. 
-It runs the method "sendConfig" with your specified config and "flash=True" because it communicates over the flash of the FPGA.
-This method return a boolean value, which is compared to "True" with the "assert" statement.
-At least you have to run your defined "writeexample()" method in the main function:
-
-    if __name__ == "__main__":
-        writeexample()
-        
-Add this code snippet to your "uploadExample.py".
-All in all your "uploadExample.py" code should look like this:
+Now, create a new python file in your python scripts folder, which we will call "uploadBitfile".
 
     from scripts.serial_test import SerialTest
     from myscripts.bitfileConfigs import BitfileConfigs
@@ -319,13 +267,16 @@ All in all your "uploadExample.py" code should look like this:
     
     if __name__ == "__main__":
         writeexample()
+
+Here we import the other two python files and write the code for uploading the bitfile.
+
 
 **Important:** Please refer to the [scripts folder](../scripts) in the elastic node middleware code. 
 The configurations for the bitfile and for the ports and the upload script should be look similar to the files in this folder! 
 
 To synchronise your python scripts in bazel you have to add a python library or python binary for it. 
 Go to the BUILD.bazel file in your top folder, the MyProject folder where MyProject is the name of your project.
-Add for your bitfile Configurations and for your port Configurations python libraries like this.
+Add for your bitfile configurations and for your port configurations python libraries like this.
 
     py_library(
         name = "bitfileConfigs",
@@ -343,11 +294,11 @@ Exchange the srcs paths with your sources path.
 Note the external dependency which is shown with "@ElasticNodeMiddleware".
 This dependency refers to the [Configuration.py](../scripts/Configuration.py) file of the elastic node middleware code.
         
-Then add for your uploadExample.py file following code: 
+Then add for your uploadBitFile.py file following code: 
 
     py_binary(
-        name = "uploadExample",
-        srcs = ["myscripts/uploadExample.py"],
+        name = "uploadBitfile",
+        srcs = ["myscripts/uploadBitfile.py"],
         deps = [
             "portConfigs",
             "@ElasticNodeMiddleware//:serial_test",
@@ -356,22 +307,22 @@ Then add for your uploadExample.py file following code:
     )
     
 Thereby you can give the library an arbitrary name. 
-The scrs should include the path of your implemented "uploadExample.py".
+The scrs should include the path of your implemented "uploadBitfile.py".
 This is a python binary instead of a python library because the script is an excutable script. 
 The dependencies portConfigs and bitfileConfigs are the ones defined above. 
 You also need the dependency to the [serial_test.py script](../scripts/serial_test.py).
 
-Again, do a bazel sync for synchronising the python scripts.
+Again, do a bazel sync for synchronising the python scripts and remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md) Hardware section. 
 
-For uploading your bitfile you first have to build and run our main.c or your own implementation like explained in the [Getting Started Guide](GettingStartedGuide.md).
-Do not forget to copy the code of the [main.c](../app/main.c) of the elastic node middleware. 
+For uploading your bitfile you first have to build and run our [main.c](../app/main.c) or your own implementation when it implements the flashing of Bitfiles.
+Otherwise use the main to flash the Bitfile and then uplaod your own Implementation again. 
 Run your script with
 
-    bazel run uploadExample
+    $ bazel run uploadBitFile
 
-whereby the term "uploadExample" is the name of your defined python binary above. 
+whereby the term "uploadBitFile" is the name of your defined python binary above. 
     
 If you want to upload multiple bitfiles please consider to the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).
 This scripts also uses two parts. 
 Please note that there are also two addresses and configurations in the [bitfileConfigs.py](../scripts/bitfileConfigs.py). 
-For other possible actions to do with the bitfile, like verifying please again look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts).
+For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts).
