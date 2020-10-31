@@ -13,7 +13,7 @@ def cloneFile(dir, file):
     raw = raw.replace("MyProject",projectName)
     raw = raw.replace("/dev/ttyACM0",portToProgrammer)
     raw = raw.replace("/dev/ttyACM1",portToElasticnode)
-    raw = raw.replace("../bitfiles/.bit",os.path.abspath("")+"/bitfiles/.bit")
+    raw = raw.replace("../bitfiles/bitfile.bit",os.path.abspath("")+"/bitfiles/.bit")
     f.write(raw)
     f.close()
 
@@ -35,7 +35,7 @@ cloneFile("","WORKSPACE")
 cloneFile("","BUILD.bazel")
 
 f = open("app/BUILD.bazel", "w")
-f.write(requests.get(link+"appBUILD.bazel").text.replace("/dev/ttyACMO",portToProgrammer))
+f.write(requests.get(link+"appBUILD.bazel").text.replace("/dev/ttyACM0",portToProgrammer))
 f.close()
 
 print("TO-DO: Add bitfile names in scripts/bitfileConfigs.py.")
