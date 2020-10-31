@@ -10,4 +10,5 @@ class BitfileConfigs:
 
     def __init__(self):
         self.ConfigPart1 = Configuration("../bitfiles/.bit", ADDRESS_1, ADDRESS_1)
-        self.ConfigPart2 = Configuration("../bitfiles/.bit", ADDRESS_2, ADDRESS_2)
+        #comment in when uploading two bitfiles:
+        #self.ConfigPart2 = Configuration("../bitfiles/.bit", ADDRESS_2, ADDRESS_2)

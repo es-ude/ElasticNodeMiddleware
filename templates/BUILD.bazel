@@ -12,19 +12,19 @@ cc_library(
 
 py_library(
     name = "bitfileConfigs",
-    srcs = ["scripts/bitfileConfigs.py"],
+    srcs = ["uploadScripts/bitfileConfigs.py"],
     deps = ["@ElasticNodeMiddleware//:Configuration"],
 )
 
 py_library(
     name = "portConfigs",
-    srcs = ["scripts/portConfigs.py"],
+    srcs = ["uploadScripts/portConfigs.py"],
     deps = ["@ElasticNodeMiddleware//:Configuration"],
 )
 
 py_binary(
-    name = "uploadBitFiles",
-    srcs = ["scripts/uploadBitFiles.py"],
+    name = "uploadBitfiles",
+    srcs = ["uploadScripts/uploadBitfiles.py"],
     deps = [
         "portConfigs",
         "@ElasticNodeMiddleware//:serial_test",
