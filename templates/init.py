@@ -1,18 +1,20 @@
 import os
 import requests
+from sys import argv
+from os import remove
 
 projectName = "projectName"
-portToProgrammer = input("Port to Programmer (default: /dev/ttyACMO): ") or "/dev/ttyACMO"
+portToProgrammer = input("Port to Programmer (default: /dev/ttyACM0): ") or "/dev/ttyACM0"
 portToElasticnode = input("Port to Elastic node (default: /dev/ttyACM1): ") or "/dev/ttyACM1"
 
 def cloneFile(dir, file):
     f = open(dir+file, "w")
-    git = requests.get(link+file).text
-    git.replace("MyProject",projectName)
-    git.replace("/dev/ttyACMO",portToProgrammer)
-    git.replace("/dev/ttyACM1",portToElasticnode)
-    git.replace("../bitfiles/.bit",os.path.realpath(__file__)+"/bitfiles/.bit")
-    f.write(git)
+    raw = requests.get(link+file).text
+    raw = raw.replace("MyProject",projectName)
+    raw = raw.replace("/dev/ttyACM0",portToProgrammer)
+    raw = raw.replace("/dev/ttyACM1",portToElasticnode)
+    raw = raw.replace("../bitfiles/.bit",os.path.abspath("")+"/bitfiles/.bit")
+    f.write(raw)
     f.close()
 
 print("Cloning files from es-ude/ElasticNodeMiddleware...")
@@ -36,11 +38,10 @@ f = open("app/BUILD.bazel", "w")
 f.write(requests.get(link+"appBUILD.bazel").text.replace("/dev/ttyACMO",portToProgrammer))
 f.close()
 
-print("TO-DO:")
-print("Add bitfile names in scripts/bitfilesConfigs.py.")
-print("Check versions in WORKSPACE.")
+print("TO-DO: Add bitfile names in scripts/bitfileConfigs.py.")
+print("TO-DO: Check versions in WORKSPACE.")
 
 ### Auto delete ###
-from os import remove
-from sys import argv
-remove(argv[0])
+i = input("Delete this file? (y/n) (default y) ")
+if  i != "n" and i != "no":
+    remove(argv[0])
