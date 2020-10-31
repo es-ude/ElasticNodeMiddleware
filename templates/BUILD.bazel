@@ -6,7 +6,7 @@ cc_library(
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
     deps = [
-        "//OwnPro:HdrOnlyLib"
+        "//MyProject:HdrOnlyLib"
     ]
 )
 

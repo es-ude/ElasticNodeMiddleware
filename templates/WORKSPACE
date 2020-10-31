@@ -1,5 +1,5 @@
 workspace(
-    name = "OwnPro"
+    name = "MyProject"
 )
 
 load("//:github.bzl", "es_github_archive")
