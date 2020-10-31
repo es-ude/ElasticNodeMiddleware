@@ -19,7 +19,7 @@ def cloneFile(dir, file):
 
 print("Cloning files from es-ude/ElasticNodeMiddleware...")
 
-os.mkdir("scripts")
+os.mkdir("uploadScripts")
 os.mkdir("bitfiles")
 
 ######remove branch form link
@@ -28,7 +28,7 @@ link = "https://raw.githubusercontent.com/es-ude/ElasticNodeMiddleware/ownProgra
 
 pyfiles = ["uploadBitfiles.py", "portConfigs.py", "bitfileConfigs.py"]
 for file in pyfiles:
-    cloneFile("scripts/",file)
+    cloneFile("uploadScripts/",file)
 
 cloneFile("app/","main.c")
 cloneFile("app/","blinkExample.c")

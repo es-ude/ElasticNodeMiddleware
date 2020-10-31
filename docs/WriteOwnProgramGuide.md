@@ -18,9 +18,9 @@ When asked if you want to create an elastic node middleware project confirm with
 We recommend you to use an IDE and import there your new generate project as a bazel project.
 We use the IDE CLion for our bazel projects. 
 
-After importing you can run the [init.py](../templates/init.py) for creating all necessary files.
+After importing you can run the [init.py](../templates/init.py) for cloning all necessary files from the [templates folder](../templates).
 
-    § python init.py
+    $ python init.py
 
 You will be asked to declare the port of your programmer and elastic node, which you should now form the [Getting Started Guide](GettingStartedGuide.md).
 
@@ -89,7 +89,7 @@ Here is an example where have all dependencies from the elastic node middleware 
         ],
     ) 
 
-When working with more c files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
+When working with more C files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
 
     cc_library(
         name = "OtherFile",
@@ -116,7 +116,7 @@ Please try to upload our example bitfile first which is explained in the [Gettin
 The uploading of the Bitfile is only possible when you build and run the main.c with the DEBUG Flag set.     
   
 You have to write the name of you bitfile, which you can put in the bitfiles folder, in the bitfileConfigs.py.
-If you only want to upload one bitfile, comment out the second call to serialTest.
+If you want to upload two bitfiles, comment in the definition of the second bitfile.
 
 **Important**: the [portConfigs.py](../scripts/portConfigs.py) and [bitfileConfigs.py](../scripts/bitfileConfigs.py) should be defined for your computer. 
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
@@ -126,6 +126,6 @@ Again, do a bazel sync for synchronising the python scripts and remember to chec
 
 Run the upload script with
 
-    $ bazel run uploadBitFile
+    $ bazel run uploadBitfile
 
-For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts).
+For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts) in generall.
