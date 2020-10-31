@@ -36,25 +36,36 @@ Now build and upload the blink example again like explained in the [Getting Star
     $ bazel build //app:blink --platforms=@AvrToolchain//platforms:ElasticNode_v4
     $ bazel run //app:_blinkUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
-## The BUILD.bazel File
+## Your Implementation
 
-You have to extend the file in the app folder of your own project.
-For your implementation you create your own embedded binary.
-You should give it a name and define the sources of your implementation as well as the compiler options with the copts command.
-The uploader is already defined at the end of this BUILD file by you in the section above. 
-You can just use it directly. 
-At least you should define your dependencies.
-There are different libraries which you can use in your implementation. 
-The libraries are named in the [README](../README.md).
+Now you can write your own implementation by extending the main.c file. 
+You include the needed libraries in your header or source files with
+
+    #include "lib/neededLibrary/neededLibrary.h"
+    
+whereby the "neddedLibrary" is replaced with the actual library. 
+For example for including the xmem library your include statement looks as the following:
+  
+    #include "lib/xmem/xmem.h"
+    
+Notice, that Bitmanipulation and LufaUsart are external libraries. 
+Therefore, you include these libraries as follows:
+
+    #include "EmbeddedUtilities/BitManipulation.h"
+    
+or
+
+    #include "PeripheralInterface/LufaUsartImpl.h"
+
+When you include libaries you have to add them to the deps in the BUILD.bazel file in the app folder.
 The "//app/setup:Setup" should always be a dependency.
 Because of the elastic node middleware as an external dependency, you have to add "@ElasticNodeMiddleware" before every used library of the elastic node middleware.
 If you write own libraries you do not have to add this before the library (refer to the [BUILD.bazel](../BUILD.bazel) of the elastic node middleware).
 
-In this example we include all possible libraries to show you the possibilities. 
+Here is an example where have all dependencies from the elastic node middleware are used: 
 
-    default_embedded_binary(
-        name = "myImplementation",
-        srcs = ["myImplementation.c"],
+    default_embedded_binaries(
+        main_files = glob(["*.c"]),
         copts = cpu_frequency_flag(),
         uploader = "Avr_dude_upload_script",
         deps = [
@@ -77,30 +88,6 @@ In this example we include all possible libraries to show you the possibilities.
             "@ElasticNodeMiddleware//app/setup:Setup",
         ],
     ) 
-    
-For using this you just have to change this code with your implementation and your desired dependencies.
-
-## Your Implementation
-
-Now you can write your own implementation. 
-The code is written in C, therefore you should use the programming language C to use the code.
-You include the needed libraries in your header or source files with
-
-    #include "lib/neededLibrary/neededLibrary.h"
-    
-whereby the "neddedLibrary" is replaced with the actual library. 
-For example for including the xmem library your include statement looks as the following:
-  
-    #include "lib/xmem/xmem.h"
-    
-Notice, that Bitmanipulation and LufaUsart are external libraries. 
-Therefore, you include these libraries as follows:
-
-    #include "EmbeddedUtilities/BitManipulation.h"
-    
-or
-
-    #include "PeripheralInterface/LufaUsartImpl.h"
 
 When working with more c files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
 
@@ -112,65 +99,33 @@ When working with more c files you need to create new cc_libaries in the BUILD.b
     )
 
     cc_library(
-        name = "OthrerFileHeader",
+        name = "OtherFileHeader",
         srcs = ["OtherFile.h"]
     )
 
-For build and run commands refer to the [Getting Started Guide](GettingStartedGuide.md).
-In the end you can use the code and can write your own program.  
+Wherby you add ":OtherFile" as a deps in the default_embedded_binaries and include all libaries used in the OtherFile as deps for it.
+
+For building #TO-DO Debug flags in build
+
+    $ bazel build //app:blink --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel run //app:_blinkUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 ## Upload your own Bitfile
 
 Please try to upload our example bitfile first which is explained in the [Getting Started Guide](GettingStartedGuide.md).
-It is important that you know your ports.
-Please copy the [main.c](../app/main.c) of our project in the main.c or your own myImplementation.c to upload a bitfile.  
-Then, add the needed external libraries. 
-For example, you add the C code for uploading a bitfile in the myImplementation.c in the app folder of your own project.
-Then add to the BUILD.bazel file of the app folder:
-
-    default_embedded_binary(
-        name = "myImplementation",
-        srcs = ["myImplementation.c"],
-        copts = cpu_frequency_flag(),
-        uploader = "Avr_dude_upload_script",
-        deps = [
-            "//app/setup:Setup",
-            "@ElasticNodeMiddleware//:LedLib",
-            "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
-            "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
-            "@ElasticNodeMiddleware//:XMemLib",
-            "@ElasticNodeMiddleware//:DebugLufaLib",
-            "@ElasticNodeMiddleware//:ControlmanagerLib",
-            "@ElasticNodeMiddleware//:FlashLib",
-        ],
-    )
-
-The uploader scipts is added by you before (refer to the section before).
-"@ElasticNodeMiddleware" marks an external dependency. 
-All these libraries are needed for uploading a bitfile.
-     
+The uploading of the Bitfile is only possible when you build and run the main.c with the DEBUG Flag set.     
   
-Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. This path has to be the absolute path to your bitfile. Relative path will lead to errors.
+You have to write the name of you bitfile, which you can put in the bitfiles folder, in the bitfileConfigs.py.
+If you only want to upload one bitfile, comment out the second call to serialTest.
 
 **Important**: the [portConfigs.py](../scripts/portConfigs.py) and [bitfileConfigs.py](../scripts/bitfileConfigs.py) should be defined for your computer. 
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
 Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
-**Important:** Please refer to the [scripts folder](../scripts) in the elastic node middleware code. 
-The configurations for the bitfile and for the ports and the upload script should be look similar to the files in this folder! 
-
-
 Again, do a bazel sync for synchronising the python scripts and remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md) Hardware section. 
 
-For uploading your bitfile you first have to build and run our [main.c](../app/main.c) or your own implementation when it implements the flashing of Bitfiles.
-Otherwise use the main to flash the Bitfile and then uplaod your own Implementation again. 
-Run your script with
+Run the upload script with
 
     $ bazel run uploadBitFile
 
-whereby the term "uploadBitFile" is the name of your defined python binary above. 
-    
-If you want to upload multiple bitfiles please consider to the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).
-This scripts also uses two parts. 
-Please note that there are also two addresses and configurations in the [bitfileConfigs.py](../scripts/bitfileConfigs.py). 
 For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts).
