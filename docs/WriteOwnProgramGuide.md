@@ -12,6 +12,8 @@ Please follow the instructions and generate a project with:
       | python - MyProject
 
 Note, that you have to use python version 3. 
+Required python packages are: requests, numpy, pyserial.
+
 The name MyProject could be replaced with your explicit project name.
 When asked if you want to create an elastic node middleware project confirm with "y".
 
@@ -22,7 +24,7 @@ After importing you can run the [init.py](../templates/init.py) for cloning all 
 
     $ python init.py
 
-You will be asked to declare the port of your programmer and elastic node, which you should now form the [Getting Started Guide](GettingStartedGuide.md).
+You will be asked to declare the port of your programmer and elastic node, which you should now form the [Getting Started Guide](GettingStartedGuide.md#how-to-use-the-code).
 
 **Important:** Please look up the versions of the repositories declared as dependencies in the WORKSPACE file. The elastic node middalware itself, the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface).
 
@@ -31,10 +33,10 @@ After that you should do a bazel sync:
     $ bazel sync
 
 The blink.c in the app folder of your project should include a mini example.
-Now build and upload the blink example again like explained in the [Getting Started Guide](GettingStartedGuide.md):
+Now build and upload the blink example again like explained in the [Getting Started Guide](GettingStartedGuide.md#blink-example):
 
-    $ bazel build //app:blink --platforms=@AvrToolchain//platforms:ElasticNode_v4
-    $ bazel run //app:_blinkUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel build //app:blinkExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel run //app:_blinkExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 ## Your Implementation
 
@@ -107,12 +109,12 @@ Wherby you add ":OtherFile" as a deps in the default_embedded_binaries and inclu
 
 For building #TO-DO Debug flags in build
 
-    $ bazel build //app:blink --platforms=@AvrToolchain//platforms:ElasticNode_v4
-    $ bazel run //app:_blinkUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 ## Upload your own Bitfile
 
-Please try to upload our example bitfile first which is explained in the [Getting Started Guide](GettingStartedGuide.md).
+Please try to upload our example bitfile first which is explained in the [Getting Started Guide](GettingStartedGuide.md#uploading-the-example-bitfile).
 The uploading of the Bitfile is only possible when you build and run the main.c with the DEBUG Flag set.     
   
 You have to write the name of you bitfile, which you can put in the bitfiles folder, in the bitfileConfigs.py.
@@ -122,7 +124,7 @@ If you want to upload two bitfiles, comment in the definition of the second bitf
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
 Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
-Again, do a bazel sync for synchronising the python scripts and remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md) Hardware section. 
+Again, do a bazel sync for synchronising the python scripts and remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md#hardware) Hardware section. 
 
 Run the upload script with
 
