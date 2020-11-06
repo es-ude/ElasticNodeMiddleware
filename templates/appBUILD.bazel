@@ -1,9 +1,44 @@
-load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries")
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binary")
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
-default_embedded_binaries(
-    main_files = glob(["*.c"]),
+default_embedded_binary(
+    name = "blinkExample",
+    srcs = ["blinkExample.c"],
     copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = [
+        "//app/setup:Setup",
+        "@ElasticNodeMiddleware//:LedLib",
+        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
+        "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
+        "@ElasticNodeMiddleware//:XMemLib",
+        "@ElasticNodeMiddleware//:DebugLufaLib",
+        "@ElasticNodeMiddleware//:ControlmanagerLib",
+        "@ElasticNodeMiddleware//:FlashLib",
+    ],
+)
+
+default_embedded_binary(
+    name = "main",
+    srcs = ["main.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = [
+        "//app/setup:Setup",
+        "@ElasticNodeMiddleware//:LedLib",
+        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
+        "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
+        "@ElasticNodeMiddleware//:XMemLib",
+        "@ElasticNodeMiddleware//:DebugLufaLib",
+        "@ElasticNodeMiddleware//:ControlmanagerLib",
+        "@ElasticNodeMiddleware//:FlashLib",
+    ],
+)
+
+default_embedded_binary(
+    name = "mainDEBUG",
+    srcs = ["main.c"],
+    copts = cpu_frequency_flag() + ["-DDEBUG"],
     uploader = "Avr_dude_upload_script",
     deps = [
         "//app/setup:Setup",

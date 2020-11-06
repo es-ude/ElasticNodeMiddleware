@@ -55,16 +55,19 @@ int main(void)
     elasticnode_fpgaPowerOn();
 
     while (true) {
+
+    //your implementation
+
+#ifdef DEBUG
         if(debugReadCharAvailable())
         {
             uint8_t data = debugGetChar();
-
             // acknowledge when ready to receive again
 //            debugAck(data);
-
             uartProcessInput(data);
         }
         debugTask();
     }
     return 0;
+#endif
 }
