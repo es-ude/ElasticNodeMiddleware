@@ -1,48 +1,34 @@
-import os
-import requests
-from sys import argv
-from os import remove
+def replacePorts(portTo):
+    r  = open("uploadScripts/portConfigs.py", "r")
+    f = r.read()
+    st = f.find("portTo" + portTo)
+    while f[st] != '"':
+        st += 1
+    en = st + 1
+    while f[en] != '"':
+        en += 1
+    current = f[st+1:en]
+    w = open("uploadScripts/portConfigs.py", "w")
+    newPort = input("Port to " + portTo + " (current: " + current + " ): ") or current
+    newText = f.replace(current,newPort)
+    w.write(newText)
+    if newText != f:
+        print("Port to " + portTo + " set in uploadScripts/portConfigs.py")
+    w.close()
+    r.close()
+    if portTo == "Programmer":
+        r = open("app/BUILD.bazel", "r")
+        f = r.read()
+        w = open("app/BUILD.bazel", "w")
+        newText = f.replace(current,newPort)
+        w.write(newText)
+        if newText != f:
+            print("Port to " + portTo + " set in app/BUILD.bazel")
+        w.close()
+        r.close()
 
-projectName = "projectName"
-portToProgrammer = input("Port to Programmer (default: /dev/ttyACM0): ") or "/dev/ttyACM0"
-portToElasticnode = input("Port to Elastic node (default: /dev/ttyACM1): ") or "/dev/ttyACM1"
-
-def cloneFile(dir, file):
-    f = open(dir+file, "w")
-    raw = requests.get(link+file).text
-    raw = raw.replace("MyProject",projectName)
-    raw = raw.replace("/dev/ttyACM0",portToProgrammer)
-    raw = raw.replace("/dev/ttyACM1",portToElasticnode)
-    raw = raw.replace("../bitfiles/.bit",os.path.abspath("")+"/bitfiles/bitfile.bit")
-    f.write(raw)
-    f.close()
-
-print("Cloning files from es-ude/ElasticNodeMiddleware...")
-
-os.mkdir("uploadScripts")
-os.mkdir("bitfiles")
-
-######remove branch form link
-#link = "https://raw.githubusercontent.com/es-ude/ElasticNodeMiddleware/master/templates/"
-link = "https://raw.githubusercontent.com/es-ude/ElasticNodeMiddleware/ownProgramInit/templates/"
-
-pyfiles = ["uploadBitfiles.py", "portConfigs.py", "bitfileConfigs.py"]
-for file in pyfiles:
-    cloneFile("uploadScripts/",file)
-
-cloneFile("app/","main.c")
-cloneFile("app/","blinkExample.c")
-cloneFile("","WORKSPACE")
-cloneFile("","BUILD.bazel")
+replacePorts("Programmer")
+replacePorts("Elasticnode")
 
 
-f = open("app/BUILD.bazel", "w")
-f.write(requests.get(link+"appBUILD.bazel").text.replace("/dev/ttyACM0",portToProgrammer))
-f.close()
 
-print("TO-DO: Check versions in WORKSPACE.")
-
-### Auto delete ###
-i = input("Delete this file? (y/n) (default y) ")
-if  i != "n" and i != "no":
-    remove(argv[0])
