@@ -9,34 +9,33 @@ We recommend you to use the [BazelCProjectCreator](https://github.com/es-ude/Baz
 Please follow the instructions and generate a project with:
 
     $ curl https://raw.githubusercontent.com/es-ude/BazelCProjectCreator/master/create_bazel_project.py \
-      | python - MyProject
+      | python - MyProject ElasticNodeMiddlewareProject
 
 Note, that you have to use python version 3. 
 Required python packages are: requests, numpy, pyserial.
 
 The name MyProject could be replaced with your explicit project name.
-When asked if you want to create an elastic node middleware project confirm with "y".
 
 We recommend you to use an IDE and import there your new generate project as a bazel project.
 We use the IDE CLion for our bazel projects. 
 
-After importing you can run the [init.py](../templates/init.py) for cloning all necessary files from the [templates folder](../templates).
+After importing you can run the [init.py](../templates/init.py) for setting up the ports like in the [Getting Started Guide](GettingStartedGuide.md).
 
     $ python init.py
 
-You will be asked to declare the port of your programmer and elastic node, which you should now form the [Getting Started Guide](GettingStartedGuide.md#how-to-use-the-code).
+You can run the scripts again if you want to change a port.
 
-**Important:** Please look up the versions of the repositories declared as dependencies in the WORKSPACE file. The elastic node middalware itself, the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface).
+**Important:** Please look up the versions of the repositories declared as dependencies in the WORKSPACE file. The elastic node middleware itself, the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface).
 
 After that you should do a bazel sync:
 
     $ bazel sync
 
-The blink.c in the app folder of your project should include a mini example.
-Now build and upload the blink example again like explained in the [Getting Started Guide](GettingStartedGuide.md#blink-example):
+If you want to check if everything worked the blinkExample.c in the app folder of your project should include a mini example.
+It can be build and run or run dircelty like explained in the [Getting Started Guide](GettingStartedGuide.md#blink-example):
 
     $ bazel build //app:blinkExample --platforms=@AvrToolchain//platforms:ElasticNode_v4
-    $ bazel run //app:_blinkExampleUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+    $ bazel run //app:blinkExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 ## Your Implementation
 
@@ -66,8 +65,9 @@ If you write own libraries you do not have to add this before the library (refer
 
 Here is an example where have all dependencies from the elastic node middleware are used: 
 
-    default_embedded_binaries(
-        main_files = glob(["*.c"]),
+    default_embedded_binary(
+        name = "main",
+        srcs = ["main.c"],
         copts = cpu_frequency_flag(),
         uploader = "Avr_dude_upload_script",
         deps = [
@@ -107,10 +107,11 @@ When working with more C files you need to create new cc_libaries in the BUILD.b
 
 Wherby you add ":OtherFile" as a deps in the default_embedded_binaries and include all libaries used in the OtherFile as deps for it.
 
-For building #TO-DO Debug flags in build
+### Debug 
 
-    $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
-    $ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+For uploding the main file with the DEBUG macors defined use the mainDEBUG target defined in the [BULD.bazel](../templates/appBUILD.bazel).
+
+    $ bazel run //app:mainDEBUG_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 ## Upload your own Bitfile
 
@@ -124,7 +125,8 @@ If you want to upload two bitfiles, comment in the definition of the second bitf
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
 Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
-Again, do a bazel sync for synchronising the python scripts and remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md#hardware) Hardware section. 
+Again, do a bazel sync for synchronising the python scripts and remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md#DIP-Switches) Hardware section. 
+Also make sure you uploded the main file while using the mainDEBUG target, when ever you want to upload bitfiles, as this funcionallity will otherwiese not be implementet.
 
 Run the upload script with
 
