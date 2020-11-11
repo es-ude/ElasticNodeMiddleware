@@ -12,11 +12,8 @@ load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_
 default_embedded_binary(
     name = "main",
     srcs = ["main.c"],
-    copts = [
-        "-DF_CPU=8000000UL",
-        "-DBAUD=9600UL",
-    ],
-    uploader = "Avr_dude_upload_script",
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
@@ -32,11 +29,8 @@ default_embedded_binary(
 default_embedded_binary(
     name = "blinkLufaExample",
     srcs = ["blinkLufaExample.c"],
-    copts = [
-        "-DF_CPU=8000000UL",
-        "-DBAUD=9600UL",
-    ],
-    uploader = "Avr_dude_upload_script",
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:DebugLufaLib",
         "//:LedLib",
@@ -46,18 +40,9 @@ default_embedded_binary(
 default_embedded_binary(
     name = "blinkExample",
     srcs = ["blinkExample.c"],
-    copts = [
-        "-DF_CPU=8000000UL",
-        "-DBAUD=9600UL",
-    ],
-    uploader = "Avr_dude_upload_script",
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:LedLib",
     ]
-)
-
-genrule(
-    name = "Avr_dude_upload_script",
-    outs = ["upload.sh"],
-    cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
 )
