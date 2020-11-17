@@ -11,15 +11,17 @@ The left red rectangle at the top shows the FPGA LEDs.
 The right red rectangle at the top shows the MCU LEDs. 
 These MCU LEDs should blink in the blink example whereby the FPGA Leds should blink by using the control manager. 
 The right red rectangle shows the connection to the MCU via a programmer whereas the right red circle is the connection of the elastic node MCU to your computer.
-![](images/elasticNodeFrontEdit3.jpg)
-![](images/elasticNodeBack.jpg)
+
+<img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/elasticNodeFrontEdit3.jpg" width="700">
+<img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/elasticNodeBack.jpg" width="700">
 
 The elastic node is connected to a programmer with 6 jumper wires female to female.
 In the following pictures this is the grey cable. 
 The connected elastic node and programmer are shown in the following image.
 Please note which jumper wire connect to a pin at the elastic node is connected to which pin at the programmer.
-![elasticnode](images/elasticNode.jpg)
-![programmer](images/programmerEdit.jpg)
+
+<img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/elasticNode.jpg" width="700">
+<img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/programmerEdit.jpg" width="700">
 
 The programmer is connected with your computer with an USB-to-MiniUSB cable. 
 The MiniUSB is connected to the programmer and the USB is connected to your computer.
@@ -38,37 +40,30 @@ The MiniUSB is connected to the FTDI-adapter and the USB is connected to your co
 
 **Important:** The communication via Uart with an FTDI-adapter is not explained and used in the following descriptions. 
 It is not needed for using the elastic node middleware.
-![ftdiAdapter](images/ftdiAdapter.jpg)
+<img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/ftdiAdapter.jpg" width="700">
 
 The following photo shows the setup after connecting the hardware.
-![construction](images/construction2.jpg)
+<img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/construction2.jpg" width="700">
  
-**DIP Switches:** The four switches on the Elastic Node are usally set as in the picture (OFF,ON,ON,OFF). When you have trouble uplading something to the Elastic Node turn off the third switch while uplading.
+### DIP Switches
+The four switches on the Elastic Node are usally set as in the picture (OFF,ON,ON,OFF). When you have trouble uplading something to the Elastic Node turn off the third switch while uplading.
 
 ## How to use the Code
 
-After cloning the [elasticnode middleware github repository](https://github.com/es-ude/ElasticNodeMiddleware) and installing [Bazel](https://www.bazel.build/) and the other needed tools, you can run a mini example. 
-We implemented two mini examples. 
-The first examples just blinks the MCU-Leds at the elastic node. 
-The second one is the Lufa Usart implementation which shows the communication for Lufa.
-The [Lufa Library](http://www.fourwalledcubicle.com/files/LUFA/Doc/120219/html/index.html) is briefly explained in the [README](../README.md).
-
 For using the elastic node middleware code you have to know, which device uses which port.
-With Ubuntu you can run
+With Ubuntu and macOS you can run
 
     $ ls /dev
 
 before and after you plug in the devices and the newly added device is the needed port.
-In our case the programmer is "ttyACM0" and the elastic node itself is "ttyACM1".
-If you have different port for the programmer please change the genrule in the [BUILD.bazel](../app/BUILD.bazel) file in the app folder:
+In our case the programmer is "ttyACM0" and the elastic node itself is "ttyACM1", this ports will be set as standart in all files.
 
-    genrule(
-        name = "Avr_dude_upload_script",
-        outs = ["upload.sh"],
-        cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
-    )
-    
-Change the "/dev/ttyACM0" to the path of your programmer.
+### Build your own Program
+
+If you just want to use the elastic node middleware as a libary, you can write your own program using the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md).
+
+<!---
+
 If you want to run our implemented integration test you have to change it in the [BAZEL.build](../test/integration/BUILD.bazel) in test/integration, too. 
 
 ## Blink Example 
@@ -194,3 +189,4 @@ and for uploading this integration test
     $ bazel run //test/integration:_test_xmemUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 The structure of these commands is the same like explained above. 
+-->
