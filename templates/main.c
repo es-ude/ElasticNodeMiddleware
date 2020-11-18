@@ -67,7 +67,8 @@ int main(void)
             uartProcessInput(data);
         }
         debugTask();
+#endif
     }
     return 0;
-#endif
+
 }

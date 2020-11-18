@@ -1,0 +1,25 @@
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binary")
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+default_embedded_binary(
+    name = "blinkExample",
+    srcs = ["blinkExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//app/setup:Setup",
+        "@ElasticNodeMiddleware//:LedLib",
+    ],
+)
+
+default_embedded_binary(
+    name = "blinkLufaExample",
+    srcs = ["blinkLufaExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//app/setup:Setup",
+        "//:DebugLufaLib",
+        "//:LedLib",
+    ]
+)

@@ -1,8 +1,5 @@
 # Getting Started Guide
 
-In the following we explain how to use the elastic node middleware code.
-Therefore, we show how to connect the hardware and how to run a minimal example as well as the needed commands for building and uploading the target.
-
 ## Hardware
 
 The following photos show the elastic node. 

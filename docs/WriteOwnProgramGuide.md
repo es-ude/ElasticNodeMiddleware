@@ -1,6 +1,6 @@
 # Write your own Program
 
-Please look up the [Getting Started Guide](GettingStartedGuide.md) first and try the examples before writing your own program.
+Please look up the [Getting Started Guide](GettingStartedGuide.md) first. 
 
 ## Create own Bazel Project
 
