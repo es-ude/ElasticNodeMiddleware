@@ -1,0 +1,108 @@
+# Clone Guide
+
+For using the elastic node middleware as a libary see the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md). 
+
+## Set up
+
+We recommend you to use an IDE. We use the IDE CLion for our bazel projects. 
+You can easily [Clone](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository) the ElasticNodeMiddleware repositorie from there
+by using "Get from Version Control". 
+
+### Ports
+
+You should now the ports from your elastic node and your programmer from the  [GettingStartedGuide.md](GettingStartedGuide.md). 
+For uploding you code change the port in [user.bazelrc](../user.bazelrc) to your programmer.
+For flashing bitfiles you also have to change the ports acccordingly in the [portsConfigs.py](../scripts/portsConfigs.py) in the scripts folder.
+
+<!---If you want to run our implemented integration test you have to change it in the [BAZEL.build](../test/integration/BUILD.bazel) in test/integration, too.-->
+
+
+## Uploading the Examples
+
+### Blink Example 
+    
+The upload script is specified in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
+For running the upload script you have to run: 
+
+	$ bazel run //app:blinkExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+The four LEDs on your elastic node should blink in sequence.
+
+## Blink Lufa Example
+
+For building and running the blink Lufa Example you have to use the same command like above but exchange "blinkExample" with "blinkLufaExample".
+So, the commands look like this:
+
+	$ bazel run //app:blinkLufaExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+We use screen for showing the communication and open screen with the port of the elastic node. 
+For printing the communication we use:
+
+    $ sudo screen /dev/ttyACM1
+    
+By using the Lufa Library, we do not have to specify the baudrate.
+Periodically it should be printed "Hello. You debug with Lufa." in the terminal. When you press a button, it should return if it was 'a' or another key.
+The right MCU_Led (number 4) should blink all over the time. 
+
+## Uploading your own Code
+
+TODO
+
+## Uploading the example Bitfile
+
+For uploading bitfiles it is necessary that the flash functionality is implemented in the code currently uploaded to the elastic node.
+This is the case when you uploade the main.c with the DEBUG flag set as explained above.
+
+Note that the example bitfiles s15_p1.bit and s15_p2.bit are in the [bitfiles folder](../bitfiles).
+Change the path to them or your own bitfiles in the [bitfileConfigs.py](../scripts/bitfileConfigs.py).
+
+For uploading the bitfiles run:
+
+    $ bazel run uploadMultiConfigS15
+    
+After processing the last output should be "ready to proceed with uart".
+
+### Controlmanager
+
+Run
+    
+    $ sudo screen /dev/ttyACM1
+
+exactly like in the section "Blink Lufa Example". 
+Then you can write in the terminal your needed char for your specific function you want to use.
+
+By typing 'i' you should see the userlogic id.
+When you type 'r' and 'R' and use 'i' between this, the id should switch to "D1" for "r" and to "D2" for "R" accordingly.
+
+The 'R' and 'r' stands for reconfiguration.
+It means you can choose the configuration at the FPGA.
+As said above you uploaded two bitfiles.
+By using 'R' and 'r' you switch between the two which are both at the FPGA.
+Therefore, you see different userlogic ids.
+
+If a s15 bitfile is one of your uploaded bitfiles you can type "L" when you selected the corresponding id, which should turn on 3 of the 4 FPGA-Leds. 
+When you type 'l' they are turned off. 
+
+With 'F' you start the flashing process, which is used in the section above.
+
+## Tests
+
+We wrote some tests for checking the functionalities of our code. 
+If you want to run a test of the code (here for example the xmem_Test), you have to run:
+
+    $ bazel test test:xmem_Test
+
+If you want to run all tests:
+
+    $ bazel test test:all
+    
+If you want to run the integration test you have to use the build and uploads commands as written above.
+For example for building the integration test for xmem:
+
+    $ bazel build //test/integration:test_xmem --platforms=@AvrToolchain//platforms:ElasticNode_v4 
+
+and for uploading this integration test
+
+    $ bazel run //test/integration:_test_xmemUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+The structure of these commands is the same like explained above. 
