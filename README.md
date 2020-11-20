@@ -78,9 +78,10 @@ The elastic node middleware code includes several libraries:
 - Bitmanipulation
 - Lufa Usart
 
-In the file [graph_controlmanager.png](graph_controlmanager.png) you can see the dependencies between these libraries. 
+You can see the dependencies between these libraries in this image ([graph_controlmanager.png](graph_controlmanager.png)):
+![Alt text](graph_controlmanager.png?raw=true "Library dependencies")
 
-They are described in the following.
+We briefly describe the libraries in the following.
 
 ### Configuration
 
