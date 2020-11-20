@@ -1,6 +1,6 @@
 # Write your own Program
 
-Please look up the [Getting Started Guide](GettingStartedGuide.md) first and try the examples before writing your own program.
+Please look up the [Getting Started Guide](GettingStartedGuide.md) first. 
 
 ## Create own Bazel Project
 
@@ -9,320 +9,148 @@ We recommend you to use the [BazelCProjectCreator](https://github.com/es-ude/Baz
 Please follow the instructions and generate a project with:
 
     $ curl https://raw.githubusercontent.com/es-ude/BazelCProjectCreator/master/create_bazel_project.py \
-      | python - MyProject
+      | python - MyProject ElasticNodeMiddlewareProject
 
 Note, that you have to use python version 3. 
+Required python packages are: requests, numpy, pyserial.
+
 The name MyProject could be replaced with your explicit project name.
+
 We recommend you to use an IDE and import there your new generate project as a bazel project.
 We use the IDE CLion for our bazel projects. 
-After importing the project you should do a bazel sync:
+
+After importing you can run the [init.py](../templates/init.py) for setting up the ports mentioned in the [Getting Started Guide](GettingStartedGuide.md).
+
+    $ python init.py
+
+You can run the script again when you have to change a port.
+
+**Important:** Please look up the versions of the repositories declared as dependencies in the WORKSPACE file. The elastic node middleware itself, the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface).
+
+After that you should do a bazel sync:
 
     $ bazel sync
 
-The main.c in the app folder of your project should include a mini example.
-For testing this example please add to BUILD.bazel file in the app folder your upload script.
-You should add to this:
+### Blink Example
 
-    default_embedded_binaries(
-        main_files = glob(["*.c"]),
-        copts = cpu_frequency_flag(),
-        deps = [
-            "//app/setup:Setup",
-            "//:Library",
-            "//myProject:HdrOnlyLib",
-            ],
-    )
+First you can try to upload a blink example to the elastic node with:
 
-the upload script like this:
-
-    default_embedded_binaries(
-        main_files = glob(["*.c"]),
-        copts = cpu_frequency_flag(),
-        uploader = "Avr_dude_upload_script",
-        deps = [
-            "//app/setup:Setup",
-            "//:Library",
-            "//myProject:HdrOnlyLib",
-            ],
-    )
-
-In addition, you have to add to the BUILD.bazel file the upload script:
-
-    genrule(
-        name = "Avr_dude_upload_script",
-        outs = ["upload.sh"],
-        cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
-    )
-
-Change the port to the port of your programmer like explained in the [Getting Started Guide](GettingStartedGuide.md).
-Now build and upload the main again like explained in the [Getting Started Guide](GettingStartedGuide.md):
-
-    $ bazel build //app:main --platforms=@AvrToolchain//platforms:ElasticNode_v4
-    $ bazel run //app:_mainUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
-
-It should blink the fifth MCU-Led of your elastic node. 
-If the Led does not blink you possibly have to change the given main a little bit. 
-Change in the main the "DDRB" to "DDRD" and the "PORTB" to "PORTD". 
-Your main should then look like this:
-
-      DDRD = _BV(5);
-      while (true)
-      {
-        _delay_ms(500);
-        PORTD ^= _BV(5);
-      }
-
-Now you should add the elastic node middleware as a dependency for using it in your own project.
-Therefore, go into the WORKSPACE file in your project folder and add to it at the end of the file:
-
-    es_github_archive(
-        name = "ElasticNodeMiddleware",
-        version = "1.1"
-    )
+    $ bazel run //app/examples:blinkExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
     
-    es_github_archive(
-        name = "EmbeddedUtilities",
-        version = "0.3.1",
-    )
+The four LEDs on your elastic node should blink in sequence.
+
+### Blink Lufa Example
+
+For testing Lufa first uplade the Lufa example:
+
+    $ bazel run //app/examples:blinkLufaExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
     
-    es_github_archive(
-        name = "PeripheralInterface",
-        version = "0.7.1"
-    )
+The fourth LED should blink and when using Lufa with
+    
+    $ sudo screen /dev/ttyACM1
 
-You have to add the [EmbeddedUtilities repository](https://github.com/es-ude/EmbeddedUtilities) and the [PeripheralInterface repositiory](https://github.com/es-ude/PeripheralInterface) because it is used in the elastic node middleware. 
-After adding the repositories you should again do a bazel sync like above. 
+it should register it when you press 'a'.
 
-**Important:** Please look up the repositories. 
-You possibly have to change the version numbers because of new releases.
+## Your Implementation
 
-We assume that for example your implementation is in the folder "app" in the file "myImplementation.c".
-Then you have to create a fitting BUILD.bazel file for building and uploading your implementation.
+Now you can write your own implementation by extending the main.c file, which you upload with:
 
-Alternatively, you can use the example main.c file in the app folder and modify this file for your purposes. 
+    $ bazel run //app:main_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
-Of course, you can use the elastic node middleware repository itself and add your implementation in this app folder. 
-But if you want to implement a huge project, we do not recommend it. 
+When using the run command you automaticly build the file. For just building it use: 
 
-## The BUILD.bazel File
+    $ bazel build //app:main_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+ 
+### Libraries
 
-You have to extend the file in the app folder of your own project.
-For your implementation you create your own embedded binary.
-You should give it a name and define the sources of your implementation as well as the compiler options with the copts command.
-The uploader is already defined at the end of this BUILD file by you in the section above. 
-You can just use it directly. 
-At least you should define your dependencies.
-There are different libraries which you can use in your implementation. 
-The libraries are named in the [README](../README.md).
+You include the needed libraries in your header or source files with
+```c
+#include "lib/neededLibrary/neededLibrary.h"
+```    
+whereby the "neddedLibrary" is replaced with the actual library. 
+For example for including the xmem library your include statement looks as the following:
+```c  
+#include "lib/xmem/xmem.h"
+```
+Notice, that Bitmanipulation and LufaUsart are external libraries. 
+Therefore, you include these libraries as follows:
+```c
+#include "EmbeddedUtilities/BitManipulation.h"
+```
+or
+```c
+#include "PeripheralInterface/LufaUsartImpl.h"
+```
+When you include libaries you have to add them to the deps in the BUILD.bazel file in the app folder.
 The "//app/setup:Setup" should always be a dependency.
 Because of the elastic node middleware as an external dependency, you have to add "@ElasticNodeMiddleware" before every used library of the elastic node middleware.
 If you write own libraries you do not have to add this before the library (refer to the [BUILD.bazel](../BUILD.bazel) of the elastic node middleware).
 
-In this example we include all possible libraries to show you the possibilities. 
+Here is an example where have all dependencies from the elastic node middleware are used: 
+```bazel
+default_embedded_binary(
+    name = "main",
+    srcs = ["main.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "Avr_dude_upload_script",
+    deps = [
+        "@ElasticNodeMiddleware//:CircularBufferLib",
+        "@ElasticNodeMiddleware//:ConfigurationLib",
+        "@ElasticNodeMiddleware//:ControlmanagerLib",            
+        "@ElasticNodeMiddleware//:DebugLufaLib",
+        "@ElasticNodeMiddleware//:DebugUartLib",
+        "@ElasticNodeMiddleware//:ElasticNodeMiddleware_ConfigureFPGALib",
+        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
+        "@ElasticNodeMiddleware//:FlashLib",
+        "@ElasticNodeMiddleware//:Interrupt_ManagerLib",
+        "@ElasticNodeMiddleware//:LedLib",
+        "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
+        "@ElasticNodeMiddleware//:RegisterDefinitionLibHdr",
+        "@ElasticNodeMiddleware//:SpiLib",
+        "@ElasticNodeMiddleware//:UartLib",
+        "@ElasticNodeMiddleware//:XMemLib",
+        "@ElasticNodeMiddleware//:BitmanipulationLib",
+        "@ElasticNodeMiddleware//app/setup:Setup",
+    ],
+) 
+```
+When working with more C files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
+```bazel
+cc_library(
+    name = "OtherFile",
+    srcs = ["OtherFile.c"],
+    deps = [":OtherFileHeader",
+            "//app/setup:Setup"]
+)
 
-    default_embedded_binary(
-        name = "myImplementation",
-        srcs = ["myImplementation.c"],
-        copts = cpu_frequency_flag(),
-        uploader = "Avr_dude_upload_script",
-        deps = [
-            "@ElasticNodeMiddleware//:CircularBufferLib",
-            "@ElasticNodeMiddleware//:ConfigurationLib",
-            "@ElasticNodeMiddleware//:ControlmanagerLib",            
-            "@ElasticNodeMiddleware//:DebugLufaLib",
-            "@ElasticNodeMiddleware//:DebugUartLib",
-            "@ElasticNodeMiddleware//:ElasticNodeMiddleware_ConfigureFPGALib",
-            "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
-            "@ElasticNodeMiddleware//:FlashLib",
-            "@ElasticNodeMiddleware//:Interrupt_ManagerLib",
-            "@ElasticNodeMiddleware//:LedLib",
-            "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
-            "@ElasticNodeMiddleware//:RegisterDefinitionLibHdr",
-            "@ElasticNodeMiddleware//:SpiLib",
-            "@ElasticNodeMiddleware//:UartLib",
-            "@ElasticNodeMiddleware//:XMemLib",
-            "@ElasticNodeMiddleware//:BitmanipulationLib",
-            "@ElasticNodeMiddleware//app/setup:Setup",
-        ],
-    ) 
-    
-For using this you just have to change this code with your implementation and your desired dependencies.
+cc_library(
+    name = "OtherFileHeader",
+    srcs = ["OtherFile.h"]
+)
+```
+Wherby you add `:OtherFile` as a deps in the main binary and include all libaries used in the OtherFile as deps for it.
 
-## Your Implementation
+### Debug 
 
-Now you can write your own implementation. 
-The code is written in C, therefore you should use the programming language C to use the code.
-You include the needed libraries in your header or source files with
+For uploding the main file with the DEBUG macors defined use the mainDEBUG target defined in the [BULD.bazel](../templates/appBUILD.bazel).
 
-    #include "lib/neededLibrary/neededLibrary.h"
-    
-whereby the "neddedLibrary" is replaced with the actual library. 
-For example for including the xmem library your include statement looks as the following:
-  
-    #include "lib/xmem/xmem.h"
-    
-Notice, that Bitmanipulation and LufaUsart are external libraries. 
-Therefore, you include these libraries as follows:
-
-    #include "EmbeddedUtilities/BitManipulation.h"
-    
-or
-
-    #include "PeripheralInterface/LufaUsartImpl.h"
-
-When working with more c files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
-
-    cc_library(
-        name = "OtherFile",
-        srcs = ["OtherFile.c"],
-        deps = [":OtherFileHeader",
-                "//app/setup:Setup"]
-    )
-
-    cc_library(
-        name = "OthrerFileHeader",
-        srcs = ["OtherFile.h"]
-    )
-
-For build and run commands refer to the [Getting Started Guide](GettingStartedGuide.md).
-In the end you can use the code and can write your own program.  
+    $ bazel run //app:mainDEBUG_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 ## Upload your own Bitfile
 
-Please try to upload our example bitfile first which is explained in the [Getting Started Guide](GettingStartedGuide.md).
-It is important that you know your ports.
-Please copy the [main.c](../app/main.c) of our project in the main.c or your own myImplementation.c to upload a bitfile.  
-Then, add the needed external libraries. 
-For example, you add the C code for uploading a bitfile in the myImplementation.c in the app folder of your own project.
-Then add to the BUILD.bazel file of the app folder:
-
-    default_embedded_binary(
-        name = "myImplementation",
-        srcs = ["myImplementation.c"],
-        copts = cpu_frequency_flag(),
-        uploader = "Avr_dude_upload_script",
-        deps = [
-            "//app/setup:Setup",
-            "@ElasticNodeMiddleware//:LedLib",
-            "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
-            "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
-            "@ElasticNodeMiddleware//:XMemLib",
-            "@ElasticNodeMiddleware//:DebugLufaLib",
-            "@ElasticNodeMiddleware//:ControlmanagerLib",
-            "@ElasticNodeMiddleware//:FlashLib",
-        ],
-    )
-
-The uploader scipts is added by you before (refer to the section before).
-"@ElasticNodeMiddleware" marks an external dependency. 
-All these libraries are needed for uploading a bitfile.
-
-First, create a new folder for your python implementations, e.g. myscripts.
-In this folder you create a file for your port configurations, e.g. portConfigs.py.
-In this python script you define your ports as follows:
-
-    from scripts.Configuration import Configuration
-    
-    class Config:
-        # change to your ports
-        portToProgrammer = "/dev/ttyACM0"
-        portToElasticnode = "/dev/ttyACM1"
-    
-You have to import the Configuration script. 
-Please refer to the [portConfigs.py](../scripts/portConfigs.py) of the elastic node middleware. 
-If you want, you can just copy this file and change the ports to your port.  
-
-After that you create a python file for the bitfile configurations, e.g. bitfileConfigs.py.
-Please refer to the [bitfileConfigs.py](../scripts/bitfileConfigs.py) of the elastic node middleware.
-Your bitfile Configurations should be similar to this: 
-
-    from scripts.Configuration import Configuration
-
-    # define your address for your bitfiles
-    EXAMPLE_ADDRESS = 0x0
-    
-    class BitfileConfigs:
-    
-        exampleConfig = None
-    
-        def __init__(self):
-            self.exampleConfig = Configuration("path/to/your/bitfile.bit", EXAMPLE_ADDRESS, EXAMPLE_ADDRESS)     
+Whenever you want to flash a Bitfile upload the main.c with the DEBUG Flag set as exlpained above.
   
-Exchange the "path/to/your/bitfile.bit" with the actual path to your bitfile. This path has to be the absolute path to your bitfile. Relative path will lead to errors.
+You have to write the name of you bitfile, which you can put in the bitfiles folder, in the bitfileConfigs.py.
+If you want to upload two bitfiles, comment in the definition of the second bitfile.
 
 **Important**: the [portConfigs.py](../scripts/portConfigs.py) and [bitfileConfigs.py](../scripts/bitfileConfigs.py) should be defined for your computer. 
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
 Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
-Now, create a new python file in your python scripts folder, which we will call "uploadBitfile".
+Remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md#DIP-Switches) Hardware section when you have problems while flashing.
 
-    from scripts.serial_test import SerialTest
-    from myscripts.bitfileConfigs import BitfileConfigs
-    from myscripts.portConfigs import Config as portConfigs
-    
-    def writeexample():
-        serialTest = SerialTest(portConfigs.portToElasticnode, portConfigs.portToProgrammer)
-        bitfileConfigs = BitfileConfigs()
-        assert serialTest.sendConfig(bitfileConfigs.exampleConfig, flash=True)
-    
-    if __name__ == "__main__":
-        writeexample()
+Run the upload script with
 
-Here we import the other two python files and write the code for uploading the bitfile.
+    $ bazel run uploadBitfile
 
-
-**Important:** Please refer to the [scripts folder](../scripts) in the elastic node middleware code. 
-The configurations for the bitfile and for the ports and the upload script should be look similar to the files in this folder! 
-
-To synchronise your python scripts in bazel you have to add a python library or python binary for it. 
-Go to the BUILD.bazel file in your top folder, the MyProject folder where MyProject is the name of your project.
-Add for your bitfile configurations and for your port configurations python libraries like this.
-
-    py_library(
-        name = "bitfileConfigs",
-        srcs = ["myscripts/bitfileConfigs.py"],
-        deps = ["@ElasticNodeMiddleware//:Configuration"],
-    )
-    
-    py_library(
-        name = "portConfigs",
-        srcs = ["myscripts/portConfigs.py"],
-        deps = ["@ElasticNodeMiddleware//:Configuration"],
-    )
-
-Exchange the srcs paths with your sources path. 
-Note the external dependency which is shown with "@ElasticNodeMiddleware".
-This dependency refers to the [Configuration.py](../scripts/Configuration.py) file of the elastic node middleware code.
-        
-Then add for your uploadBitFile.py file following code: 
-
-    py_binary(
-        name = "uploadBitfile",
-        srcs = ["myscripts/uploadBitfile.py"],
-        deps = [
-            "portConfigs",
-            "@ElasticNodeMiddleware//:serial_test",
-            "bitfileConfigs"
-        ],
-    )
-    
-Thereby you can give the library an arbitrary name. 
-The scrs should include the path of your implemented "uploadBitfile.py".
-This is a python binary instead of a python library because the script is an excutable script. 
-The dependencies portConfigs and bitfileConfigs are the ones defined above. 
-You also need the dependency to the [serial_test.py script](../scripts/serial_test.py).
-
-Again, do a bazel sync for synchronising the python scripts and remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md) Hardware section. 
-
-For uploading your bitfile you first have to build and run our [main.c](../app/main.c) or your own implementation when it implements the flashing of Bitfiles.
-Otherwise use the main to flash the Bitfile and then uplaod your own Implementation again. 
-Run your script with
-
-    $ bazel run uploadBitFile
-
-whereby the term "uploadBitFile" is the name of your defined python binary above. 
-    
-If you want to upload multiple bitfiles please consider to the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py).
-This scripts also uses two parts. 
-Please note that there are also two addresses and configurations in the [bitfileConfigs.py](../scripts/bitfileConfigs.py). 
-For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts).
+For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts) in generall.

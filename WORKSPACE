@@ -9,11 +9,11 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 es_github_archive(
     name = "EmbeddedSystemsBuildScripts",
-    version = "0.6.1",
-    # sha256 = "<checksu m>"
+    version = "1.0.1",
+    # sha256 = "<checksum>"
 )
 
-load("@EmbeddedSystemsBuildScripts//AvrToolchain:avr.bzl", "avr_toolchain")
+load("@EmbeddedSystemsBuildScripts//Toolchains/Avr:avr.bzl", "avr_toolchain")
 
 avr_toolchain()
 
