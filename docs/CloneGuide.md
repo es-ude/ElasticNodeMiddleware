@@ -1,6 +1,6 @@
 # Clone Guide
 
-For using the elastic node middleware as a libary see the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md). 
+For using the elastic node middleware as a library see the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md).
 
 ## Set up
 
@@ -14,10 +14,11 @@ You should now the ports from your elastic node and your programmer from the  [G
 For uploding you code change the port in [user.bazelrc](../user.bazelrc) to your programmer.
 For flashing bitfiles you also have to change the ports acccordingly in the [portsConfigs.py](../scripts/portsConfigs.py) in the scripts folder.
 
+Both files are included in the [.gitignore](../.gitignore), because the ports should only be defined locally.
+
 <!---If you want to run our implemented integration test you have to change it in the [BAZEL.build](../test/integration/BUILD.bazel) in test/integration, too.-->
 
-
-## Uploading the Examples
+## Uploading the examples
 
 ### Blink Example 
     
@@ -28,7 +29,7 @@ For running the upload script you have to run:
 
 The four LEDs on your elastic node should blink in sequence.
 
-## Blink Lufa Example
+### Blink Lufa Example
 
 For building and running the blink Lufa Example you have to use the same command like above but exchange "blinkExample" with "blinkLufaExample".
 So, the commands look like this:
@@ -44,17 +45,35 @@ By using the Lufa Library, we do not have to specify the baudrate.
 Periodically it should be printed "Hello. You debug with Lufa." in the terminal. When you press a button, it should return if it was 'a' or another key.
 The right MCU_Led (number 4) should blink all over the time. 
 
-## Uploading your own Code
+## Uploading your own code
 
-TODO
+You can extend the main.c with your code and upload it with:
 
-## Uploading the example Bitfile
+	$ bazel run //app:main_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+	
+or with 	
+
+	$ bazel run //app:mainDEBUG_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+	
+to set the DEBUG flag.
+
+To build the file without uploading it use:
+
+	$ bazel build //app:main_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+When you create your own C files make sure to include them in the BUILD.bazel, explaind in the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md#Libraries).
+
+### Libraries
+
+All the libraries are located in the [lib folder](../lib). If you do not plan on modifying them consider to use the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md) instead.
+
+## Uploading bitfiles
 
 For uploading bitfiles it is necessary that the flash functionality is implemented in the code currently uploaded to the elastic node.
 This is the case when you uploade the main.c with the DEBUG flag set as explained above.
 
 Note that the example bitfiles s15_p1.bit and s15_p2.bit are in the [bitfiles folder](../bitfiles).
-Change the path to them or your own bitfiles in the [bitfileConfigs.py](../scripts/bitfileConfigs.py).
+Change the path to them or your own bitfiles in the [bitfileConfigs.py](../scripts/bitfileConfigs.py), which is included in the [.gitignore](../.gitignore).
 
 For uploading the bitfiles run:
 
@@ -64,7 +83,7 @@ After processing the last output should be "ready to proceed with uart".
 
 ### Controlmanager
 
-Run
+When the controlmanager is included in the code uploaded to the MCU, you can run
     
     $ sudo screen /dev/ttyACM1
 

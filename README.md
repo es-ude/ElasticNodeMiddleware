@@ -28,11 +28,15 @@ Therefore, please follow the instructions in the [installation guide](docs/Insta
 
 ## Getting Started
 
-The [docs](docs) folder contains a [getting started guide](docs/GettingStartedGuide.md) with mini examples of how to use the code.
+The [docs](docs) folder contains a [getting started guide](docs/GettingStartedGuide.md) with further informations.
 
 ## Write your own program
 
 To write your own program code you should look into the [write your own program - guide](docs/WriteOwnProgramGuide.md).
+
+## Clone repository 
+
+If you want to modify the code of the libraries you can clone the repository with help of the [clone - guide](docs/CloneGuide.md).
 
 ## Docker
 

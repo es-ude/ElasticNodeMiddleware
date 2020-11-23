@@ -114,6 +114,7 @@ default_embedded_binary(
     ],
 ) 
 ```
+
 When working with more C files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
 ```bazel
 cc_library(
@@ -136,12 +137,13 @@ For uploding the main file with the DEBUG macors defined use the mainDEBUG targe
 
     $ bazel run //app:mainDEBUG_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
-## Upload your own Bitfile
+## Upload your own bitfiles
 
-Whenever you want to flash a Bitfile upload the main.c with the DEBUG Flag set as exlpained above.
+Whenever you want to flash bitfiles, upload the main.c with the DEBUG Flag set as exlpained above.
   
 You have to write the name of you bitfile, which you can put in the bitfiles folder, in the bitfileConfigs.py.
 If you want to upload two bitfiles, comment in the definition of the second bitfile.
+Example bitfiles are available in the [bitfiles folder](../bitfiles).
 
 **Important**: the [portConfigs.py](../scripts/portConfigs.py) and [bitfileConfigs.py](../scripts/bitfileConfigs.py) should be defined for your computer. 
 Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
