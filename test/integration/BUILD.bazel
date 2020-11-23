@@ -5,7 +5,7 @@ default_embedded_binary(
     name = "test_xmem",
     srcs = ["integrationTest_xmem.c"],
     copts = cpu_frequency_flag(),
-    uploader = "Avr_dude_upload_script",
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:UartLib",
         "//:XMemLib",
@@ -17,7 +17,7 @@ default_embedded_binary(
     name = "test_elasticNodeMiddleware_internal",
     srcs = ["integrationTest_elasticNodeMiddleware_internal.c"],
     copts = cpu_frequency_flag(),
-    uploader = "Avr_dude_upload_script",
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
         "//:UartLib",
@@ -29,7 +29,7 @@ default_embedded_binary(
     name = "test_elasticNodeMiddleware",
     srcs = ["integrationTest_elasticNodeMiddleware.c"],
     copts = cpu_frequency_flag(),
-    uploader = "Avr_dude_upload_script",
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
@@ -42,7 +42,7 @@ default_embedded_binary(
     name = "test_reconfigure_multiboot_avr",
     srcs = ["integrationTest_reconfigure_multiboot_avr.c"],
     copts = cpu_frequency_flag(),
-    uploader = "Avr_dude_upload_script",
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
@@ -55,7 +55,7 @@ default_embedded_binary(
     name = "test_coldBoot",
     srcs = ["integrationTest_coldBoot.c"],
     copts = cpu_frequency_flag(),
-    uploader = "Avr_dude_upload_script",
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
@@ -68,17 +68,11 @@ default_embedded_binary(
     name = "test_fpgaPowerTest",
     srcs = ["integrationTest_fpgaPowerTest.c"],
     copts = cpu_frequency_flag(),
-    uploader = "Avr_dude_upload_script",
+    uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
         "//:Reconfigure_multibootLib",
         "//:UartLib",
         "//app/setup:Setup",
     ],
-)
-
-genrule(
-    name = "Avr_dude_upload_script",
-    outs = ["upload.sh"],
-    cmd = """echo "avrdude -c stk500 -p \$$1 -P /dev/ttyACM0 -D -V -U flash:w:\$$2:i -e" > $@""",
 )
