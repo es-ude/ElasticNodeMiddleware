@@ -8,15 +8,13 @@ We recommend you to use an IDE. We use the IDE CLion for our bazel projects.
 You can easily [Clone](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository) the ElasticNodeMiddleware repositorie from there
 by using "Get from Version Control". 
 
-### Ports
+### Serial ports
 
 You should now the ports from your elastic node and your programmer from the  [GettingStartedGuide.md](GettingStartedGuide.md). 
-For uploding you code change the port in [user.bazelrc](../user.bazelrc) to your programmer.
-For flashing bitfiles you also have to change the ports acccordingly in the [portsConfigs.py](../scripts/portsConfigs.py) in the scripts folder.
+For uploading you code change the port in [user.bazelrc](../user.bazelrc) to your programmer.
+For flashing bitfiles you also have to change the ports accordingly in the [portsConfigs.py](../scripts/portsConfigs.py) in the scripts folder.
 
 Both files are included in the [.gitignore](../.gitignore), because the ports should only be defined locally.
-
-<!---If you want to run our implemented integration test you have to change it in the [BAZEL.build](../test/integration/BUILD.bazel) in test/integration, too.-->
 
 ## Uploading the examples
 
@@ -90,19 +88,14 @@ When the controlmanager is included in the code uploaded to the MCU, you can run
 exactly like in the section "Blink Lufa Example". 
 Then you can write in the terminal your needed char for your specific function you want to use.
 
-By typing 'i' you should see the userlogic id.
-When you type 'r' and 'R' and use 'i' between this, the id should switch to "D1" for "r" and to "D2" for "R" accordingly.
+- i: see current FPGA user id
+- r: reconfigurate the FPGA to user id D1
+- R: reconfigurate the FPGA to user id D2
+- F: start flashing (used when uploading bitfiles)
 
-The 'R' and 'r' stands for reconfiguration.
-It means you can choose the configuration at the FPGA.
-As said above you uploaded two bitfiles.
-By using 'R' and 'r' you switch between the two which are both at the FPGA.
-Therefore, you see different userlogic ids.
-
-If a s15 bitfile is one of your uploaded bitfiles you can type "L" when you selected the corresponding id, which should turn on 3 of the 4 FPGA-Leds. 
-When you type 'l' they are turned off. 
-
-With 'F' you start the flashing process, which is used in the section above.
+If a s15 bitfile is one of your uploaded bitfiles and you selected the corresponding user id:
+- L: turn on LED
+- l: turn of LED 
 
 ## Tests
 
