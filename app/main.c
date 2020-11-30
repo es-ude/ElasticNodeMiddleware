@@ -3,13 +3,16 @@
 #include <stdbool.h>
 #include <util/delay.h>
 
-#include "lib/controlmanager/controlmanager.h"
 #include "lib/debug/debug.h"
 #include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "lib/flash/flash.h"
 #include "lib/led/led_mcu.h"
 #include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include "lib/xmem/xmem.h"
+
+#ifdef DEBUG
+#include "lib/controlmanager/controlmanager.h"
+#endif
 
 //the following ISR's have to be comment in by programmer
 
@@ -55,16 +58,20 @@ int main(void)
     elasticnode_fpgaPowerOn();
 
     while (true) {
+
+        //your implementation
+
+#ifdef DEBUG
         if(debugReadCharAvailable())
         {
             uint8_t data = debugGetChar();
-
             // acknowledge when ready to receive again
 //            debugAck(data);
-
             uartProcessInput(data);
         }
         debugTask();
+#endif
     }
     return 0;
+
 }
