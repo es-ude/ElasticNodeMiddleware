@@ -5,8 +5,8 @@
 The following photos show the elastic node front and back. 
 
 <p align="center">
-  <img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/elasticNodelabeled.jpg" width="400" height="400">
-  <img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/elasticNodeBack.jpg" width="400" height="400"> 
+  <img src="images/elasticNodelabeled.jpg" width="400" height="400">
+  <img src="images/elasticNodeBack.jpg" width="400" height="400"> 
 </p>
 
 The elastic node is connected to a programmer with 6 jumper wires female to female.
@@ -16,8 +16,8 @@ Please note which jumper wire connect to a pin at the elastic node is connected 
 The programmer is connected with your computer with an USB-to-MiniUSB cable.
 
 <p align="center">
-<img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/elasticNode.jpg" width="400" height="400">
-<img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/programmerEdit.jpg" width="400" height="400">
+<img src="images/elasticNode.jpg" width="400" height="400">
+<img src="images/programmerEdit.jpg" width="400" height="400">
 </p>
  
 If you want to communicate via Uart you need a FTDI-adapter.
@@ -27,12 +27,12 @@ The receive (RXI, brown cable) and transmit (TXD, red cable) pins of the FTDI-ad
 The ground (GND, black cable) pin of the FTDI-adapter is connected to the ground pin of the elastic node (see picture above).
 The FTDI-adapter has again a connection to the computer like the programmer with a USB-to-MiniUSB cable. 
 
-<p align="center"> <img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/ftdiAdapter.jpg" width="400" height="400"> </p>
+<p align="center"> <img src="images/ftdiAdapter.jpg" width="400" height="400"> </p>
 
 The elastic node itself is connected with your computer via an USB-to-MicroUSB cable. You see the MicroUSB labeled in the first image.
 The following photo shows the setup after connecting the hardware.
 
-<p align="center"> <img src="https://github.com/es-ude/ElasticNodeMiddleware/blob/master/docs/images/construction2.jpg" width="600"> </p>
+<p align="center"> <img src="images/construction2.jpg" width="600"> </p>
 
 ### DIP Switches
 
@@ -56,5 +56,3 @@ To use the elastic node middleware as a library, you can write your own program 
 ### Clone repository
 
 If you want to modify something in the middleware code itself for you project you can clone the code using the [CloneGuide](docs/CloneGuide.md).
-
-
