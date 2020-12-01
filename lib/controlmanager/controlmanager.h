@@ -11,7 +11,10 @@ typedef enum {LOADING_IDLE, LOADING_JTAG, LOADING_SELECTMAP, LOAD_UART_FLASH, LO
 
 #define testingFlashAddress 0x180000
 
-uint8_t isUartIdle(void);
-void uartProcessInput(uint8_t uartData);
+uint8_t control_isUartIdle(void);
+void userlogic_enable(void);
+void userlogic_read_id(void);
+void control_setUserHandle(void (*userHandler)(uint8_t));
+void control_handleChar(uint8_t currentData);
 
 #endif //ELASTICNODEMIDDLEWARE_CONTROLMANAGER_H

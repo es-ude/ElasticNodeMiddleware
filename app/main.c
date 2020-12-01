@@ -11,7 +11,9 @@
 #include "lib/xmem/xmem.h"
 
 #ifdef DEBUG
+
 #include "lib/controlmanager/controlmanager.h"
+
 #endif
 
 //the following ISR's have to be comment in by programmer
@@ -35,21 +37,18 @@ ISR(FPGA_DONE_INT_VECTOR) {
 }
 */
 
-int main(void)
-{
+void handleCharInput(uint8_t currentData);
 
+int main(void) {
     led_mcu_init();
-
+#ifdef DEBUG
     debugInit(NULL);
-
-    // in uartmanger for specific use case
-    // initialises the flash and spi together
-//    initFlash();
-
-//    reconfigure_initMultiboot();
+    control_setUserHandle(&handleCharInput);
+#endif
 
     // need a delay for initialise and reboot the mcu
     // first led should blink
+
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
     led_mcu_turnOn(0);
@@ -62,16 +61,25 @@ int main(void)
         //your implementation
 
 #ifdef DEBUG
-        if(debugReadCharAvailable())
-        {
+        // have after each cycle a moment to see if we have a user interaction
+        if (debugReadCharAvailable()) {
             uint8_t data = debugGetChar();
             // acknowledge when ready to receive again
 //            debugAck(data);
-            uartProcessInput(data);
+            control_handleChar(data);
         }
         debugTask();
 #endif
     }
     return 0;
 
+}
+
+void handleCharInput(uint8_t currentData) {
+    //TODO: Please fill this with custom command handling where necessary
+    switch (currentData) {
+        default:
+            debugWriteLine("default user level command handle\r\n");
+            break;
+    }
 }
