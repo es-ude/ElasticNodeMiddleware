@@ -64,15 +64,13 @@ int main(void) {
         // have after each cycle a moment to see if we have a user interaction
         if (debugReadCharAvailable()) {
             uint8_t data = debugGetChar();
-            // acknowledge when ready to receive again
-//            debugAck(data);
             control_handleChar(data);
         }
         debugTask();
 #endif
+
     }
     return 0;
-
 }
 
 void handleCharInput(uint8_t currentData) {
