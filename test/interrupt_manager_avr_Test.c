@@ -1,6 +1,6 @@
 #include "unity.h"
-#include "lib/interruptManager/interruptManager.h"
-#include "lib/interruptManager/MockinterruptManager_avr_Mock.h"
+#include "src/interruptManager/interruptManager.h"
+#include "src/interruptManager/MockinterruptManager_avr_Mock.h"
 
 void test_clearInterrupt(void) {
     cli_Expect();

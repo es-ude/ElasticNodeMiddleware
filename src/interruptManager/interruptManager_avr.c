@@ -1,5 +1,5 @@
-#include "lib/interruptManager/interruptManager.h"
-#include "lib/interruptManager/interruptManager_avr_Mock.h"
+#include "src/interruptManager/interruptManager.h"
+#include "src/interruptManager/interruptManager_avr_Mock.h"
 
 void interruptManager_clearInterrupt(void) {
     cli();

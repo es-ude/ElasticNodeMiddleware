@@ -1,11 +1,11 @@
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "lib/xmem/xmem.h"
-#include "lib/interruptManager/interruptManager.h"
-#include "EmbeddedUtilities/BitManipulation.h"
+#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
+#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "src/xmem/xmem.h"
+#include "src/interruptManager/interruptManager.h"
+//#include "EmbeddedUtilities/BitManipulation.h"
 
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
 volatile uint8_t *AddressMultiboot = (uint8_t *) (XMEM_OFFSET + 0x05);

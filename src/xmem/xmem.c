@@ -1,6 +1,6 @@
-#include "lib/xmem/xmem.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "lib/pinDefinition/fpgaPins.h"
+#include "src/xmem/xmem.h"
+#include "src/pinDefinition/fpgaRegisters.h"
+#include "src/pinDefinition/fpgaPins.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 void xmem_initXmem(void) {

@@ -4,8 +4,8 @@
 #include <util/delay.h>
 
 
-#include "lib/debug/debug.h"
-#include "lib/led/led_mcu.h"
+#include "src/debug/debug.h"
+#include "src/led/led_mcu.h"
 
 int main(void)
 {

@@ -18,35 +18,35 @@ cc_library(
 
 mock(
     name = "mock_ElasticNodemiddleware",
-    srcs = ["//:lib/elasticNodeMiddleware/elasticNodeMiddleware.h"],
+    srcs = ["//:ElasticNodeMiddleware/elasticNodeMiddleware.h"],
     copts = ["-DTEST"],
     deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_ElasticNodeMiddleware_Internal",
-    srcs = ["//:lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"],
+    srcs = ["//:src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"],
     copts = ["-DTEST"],
     deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot",
-    srcs = ["//:lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"],
+    srcs = ["//:src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"],
     copts = ["-DTEST"],
     deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot_Internal",
-    srcs = ["//:lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"],
+    srcs = ["//:src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"],
     copts = ["-DTEST"],
     deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
     name = "mock_Xmem",
-    srcs = ["//:lib/xmem/xmem.h"],
+    srcs = ["//:src/xmem/xmem.h"],
     copts = ["-DTEST"],
     deps = ["//:XMemLibHdr"],
 )
@@ -60,28 +60,28 @@ mock(
 
 mock(
     name = "mock_InterruptManager",
-    srcs = ["//:lib/interruptManager/interruptManager.h"],
+    srcs = ["//:src/interruptManager/interruptManager.h"],
     copts = ["-DTEST"],
     deps = ["//:Interrupt_ManagerLibHdr"],
 )
 
 mock(
     name = "mock_InterruptManager_avr_Mock",
-    srcs = ["//:lib/interruptManager/interruptManager_avr_Mock.h"],
+    srcs = ["//:src/interruptManager/interruptManager_avr_Mock.h"],
     copts = ["-DTEST"],
     deps = ["//:Interrupt_ManagerLibHdr"],
 )
 
 mock(
     name = "mock_circularBuffer",
-    srcs = ["//:lib/uart/circularBuffer/circularBuffer.h"],
+    srcs = ["//:src/uart/circularBuffer/circularBuffer.h"],
     copts = ["-DTEST"],
     deps = ["//:CircularBufferLibHdr"],
 )
 
 mock(
     name = "mock_Uart_internal",
-    srcs = ["//:lib/uart/uart_internal.h"],
+    srcs = ["//:src/uart/uart_internal.h"],
     copts = ["-DTEST"],
     deps = ["//:UartLibHdr"],
 )

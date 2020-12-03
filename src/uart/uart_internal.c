@@ -1,8 +1,8 @@
-#include "lib/interruptManager/interruptManager.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "lib/uart/circularBuffer/circularBuffer.h"
-#include "lib/uart/uart_internal.h"
+#include "src/interruptManager/interruptManager.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
+#include "src/uart/circularBuffer/circularBuffer.h"
+#include "src/uart/uart_internal.h"
 
 circularBuffer sendingBuf;
 void (*uartReceiveHandler)(uint8_t);

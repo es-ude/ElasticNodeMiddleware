@@ -1,10 +1,10 @@
 #include "unity.h"
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/reconfigure_multiboot_avr/Mockreconfigure_multiboot_internal_avr.h"
-#include "lib/elasticNodeMiddleware/MockelasticNodeMiddleware.h"
-#include "lib/xmem/Mockxmem.h"
-#include "lib/interruptManager/MockinterruptManager.h"
+#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/reconfigure_multiboot_avr/Mockreconfigure_multiboot_internal_avr.h"
+#include "src/elasticNodeMiddleware/MockelasticNodeMiddleware.h"
+#include "src/xmem/Mockxmem.h"
+#include "src/interruptManager/MockinterruptManager.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 

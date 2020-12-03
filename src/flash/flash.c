@@ -1,8 +1,8 @@
-#include "lib/debug/debug.h"
-#include "lib/flash/flash.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "lib/spi/spi.h"
+#include "src/debug/debug.h"
+#include "src/flash/flash.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
+#include "src/spi/spi.h"
 
 uint8_t spi_buffer[SPI_BUFFER_SIZE];
 volatile uint8_t *flashBufPtr;

@@ -1,9 +1,9 @@
-#include "lib/configuration/configuration.h"
-#include "lib/debug/debug.h"
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "lib/flash/flash.h"
-#include "lib/interruptManager/interruptManager.h"
-#include "lib/led/led_mcu.h"
+#include "src/configuration/configuration.h"
+#include "src/debug/debug.h"
+#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "src/flash/flash.h"
+#include "src/interruptManager/interruptManager.h"
+#include "src/led/led_mcu.h"
 
 #define BUFFER_SIZE 256
 uint32_t configAddress, configSize, configRemaining;

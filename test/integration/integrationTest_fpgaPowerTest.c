@@ -2,11 +2,11 @@
 //fpgaPowerTest(10)
 
 #include <stdint.h>
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "lib/uart/uart.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
+#include "src/uart/uart.h"
 #include <avr/interrupt.h>
 
 //4th LED should blink 10 times

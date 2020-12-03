@@ -1,4 +1,4 @@
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
+#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 
 volatile uint8_t fpgaMultibootCompleteState = 0;
 

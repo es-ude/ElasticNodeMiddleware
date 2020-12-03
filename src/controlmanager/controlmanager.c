@@ -1,21 +1,21 @@
 
-#include "lib/controlmanager/controlmanager.h"
-#include "lib/configuration/configuration.h"
-#include "lib/xmem/xmem.h"
-#include "lib/debug/debug.h"
-#include "lib/flash/flash.h"
+#include "src/controlmanager/controlmanager.h"
+#include "src/configuration/configuration.h"
+#include "src/xmem/xmem.h"
+#include "src/debug/debug.h"
+#include "src/flash/flash.h"
 
 //#include "EmbeddedUtilities/BitManipulation.h"
 //
-//#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-//#include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-//#include "lib/pinDefinition/fpgaPins.h"
-//#include "lib/pinDefinition/fpgaRegisters.h"
-//#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
-//#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
-//#include "lib/spi/spi.h"
+//#include "src/elasticNodeMiddleware/elasticNodeMiddleware.h"
+//#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+//#include "src/pinDefinition/fpgaPins.h"
+//#include "src/pinDefinition/fpgaRegisters.h"
+//#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+//#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
+//#include "src/spi/spi.h"
 
-//#include "lib/leds/leds.h"
+//#include "src/leds/leds.h"
 
 uartReceiveMode currentUartReceiveMode = UART_IDLE;
 //loadingMode currentLoadingMode = LOADING_IDLE;
@@ -27,7 +27,9 @@ volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
 
 volatile uint8_t *userlogic_reset_addr = (uint8_t *) (XMEM_OFFSET + 0x04);
 volatile uint8_t *userlogic_id_addr = (uint8_t *) (XMEM_USERLOGIC_OFFSET + 1500);
+
 void dummyHandler(uint8_t currentData);
+
 void (*userDefinedHandler)(uint8_t) = &dummyHandler;
 
 /* function below is also the middleware level, for enabling the user_logic,
@@ -59,12 +61,13 @@ uint8_t control_isUartIdle(void) {
     return currentUartReceiveMode != UART_IDLE;
 }
 
-void dummyHandler(uint8_t currentData){
-    //dummy function as to never have the situation of having a function null pointer.
+void dummyHandler(uint8_t currentData) {
+    //dummy function, to never have the situation of having a function null pointer.
+    // (unless the user wants to make his or her life miserable)
     //tbf, if the control manager is enabled, performance isn't really an issue, anyway.
 }
 
-void control_setUserHandle(void (*userHandler)(uint8_t)){
+void control_setUserHandle(void (*userHandler)(uint8_t)) {
     userDefinedHandler = userHandler;
 }
 
@@ -87,6 +90,10 @@ void control_handleChar(uint8_t currentData) {
                     initFlash(); // SPI interface init and ..? Todo
                     unlockFlash(0); // To write data on FLASH, must unlock the flash
                     configurationUartFlash();
+                    break;
+                case 'i':
+                    userlogic_enable();
+                    userlogic_read_id();
                     break;
                 default:
                     (*userDefinedHandler)(currentData);
@@ -115,11 +122,6 @@ void control_handleChar(uint8_t currentData) {
 //                    reconfigure_fpgaMultiboot(0x90001);
 //                    break;
 //
-//                case 'i':
-//                    userlogic_enable();
-//                    userlogic_read_id(); //
-//
-//                    break;
 //
 //
 //                    // indicate readiness

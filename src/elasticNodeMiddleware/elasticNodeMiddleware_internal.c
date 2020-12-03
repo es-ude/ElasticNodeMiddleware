@@ -1,7 +1,7 @@
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-#include "lib/xmem/xmem.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
+#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+#include "src/xmem/xmem.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
 

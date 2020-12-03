@@ -1,8 +1,8 @@
 #include "unity.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/xmem/xmem.h"
+#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/xmem/xmem.h"
 
 uint8_t port_fpga_program_b;
 uint8_t ddr_fpga_program_b;

@@ -1,6 +1,6 @@
-#include "lib/led/led_mcu.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
+#include "src/led/led_mcu.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
 
 #include "EmbeddedUtilities/BitManipulation.h"
 

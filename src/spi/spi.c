@@ -1,8 +1,8 @@
-#include "lib/interruptManager/interruptManager.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/spi/spi.h"
-#include "lib/xmem/xmem.h"
+#include "src/interruptManager/interruptManager.h"
+#include "src/pinDefinition/fpgaRegisters.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/spi/spi.h"
+#include "src/xmem/xmem.h"
 
 // this function is called when a byte is read from flash
 // parameters are data and whether this is last byte

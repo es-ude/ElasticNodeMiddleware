@@ -1,6 +1,6 @@
 #include "unity.h"
-#include "lib/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.h"
-#include "lib/reconfigure_multiboot_avr/Mockreconfigure_multiboot_avr.h"
+#include "src/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.h"
+#include "src/reconfigure_multiboot_avr/Mockreconfigure_multiboot_avr.h"
 
 void test_elasticnode_configureFrom(void) {
     uint32_t address = 0x23409;

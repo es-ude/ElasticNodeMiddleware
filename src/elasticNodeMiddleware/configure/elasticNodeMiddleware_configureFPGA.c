@@ -1,5 +1,5 @@
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
-#include "lib/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.h"
+#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include "src/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.h"
 
 
 void elasticnode_configureFPGA_configureFrom(uint32_t address){

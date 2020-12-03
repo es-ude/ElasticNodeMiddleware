@@ -18,41 +18,44 @@
  *    //Stuff when transmission done
  * }
  ****/
+#include <util/delay.h>
 
-#include "lib/debug/debug.h"
-#include "lib/uart/uart.h"
-#include "lib/uart/uart_internal.h"
+#include "PeripheralInterface/LufaUsartImpl.h"
+
+#include "src/debug/debug.h"
 
 void debugWriteBin(uint32_t num, uint8_t length);
-void debugReceiveCharHandler(uint8_t received);
-
-volatile uint8_t uartData;
-volatile int uartFlag = 0x0;
 
 
-void debugReceiveCharHandler(uint8_t received)
+void debugTask(void)
 {
-    uartData = received;
-    uartFlag = 1;
+    lufaTask();
+}
+
+uint16_t debugNumInputAvailable(void)
+{
+    return lufaNumInputAvailable();
 }
 
 void debugInit(void (*receiveHandler)(uint8_t))
 {
-    uartFlag = 0x0;
-
-    uart_Init(&debugReceiveCharHandler);
-    debugWriteLine("\r\n\nStarting debug...");
+    initLufa();
+    while(!lufaOutputAvailable())
+    {
+        _delay_ms(100);
+    }
 }
 
 void setDebugReceiveHandler(void (*receiveHandler)(uint8_t))
 {
-    uart_setUartReceiveHandler_internal(receiveHandler);
 }
+
 
 void debugNewLine(void)
 {
     debugWriteCharBlock('\r');
     debugWriteCharBlock('\n');
+    debugWaitUntilDone();
 }
 
 void debugWriteBool(uint8_t input)
@@ -65,55 +68,50 @@ void debugWriteBool(uint8_t input)
 
 void debugWriteLine(char *s)
 {
-    debugWriteStringBlock(s);
+    debugWriteString(s);
     debugNewLine();
 }
 
 void debugWriteString(char *s)
 {
-    uart_WriteStringBlock(s);
-}
-
-void debugWriteStringBlock(char *s)
-{
-    uart_WriteStringBlock(s);
+    lufaWriteString(s);
 }
 
 void debugWriteStringLength(char *s, uint16_t length)
 {
-    uart_WriteStringLengthBlock(s, length);
+    lufaWriteStringLength(s, length);
 }
 
 void debugWriteChar(uint8_t c)
 {
-    uart_WriteCharBlock_internal(c);
+    lufaWriteByte(c);
 }
 
 
 void debugWriteCharBlock(uint8_t c)
 {
-    uart_WriteCharBlock_internal(c);
+    lufaWriteByte(c);
+    debugWaitUntilDone();
 }
 
 uint8_t debugReadCharAvailable(void)
 {
-    return uartFlag;
+    return lufaReadAvailable();
 }
-
 
 void debugReadCharProcessed(void)
 {
-    uartFlag = 0;
+    // not needed for usb
 }
 
 uint8_t debugReadCharBlock(void)
 {
-    return uart_ReceiveCharBlocking_internal();
+    return lufaReadByteBlocking();
 }
 
 uint8_t debugGetChar(void)
 {
-    return uartData;
+    return lufaGetChar();
 }
 
 void debugWriteHex8(uint8_t num)
@@ -196,11 +194,10 @@ void debugWriteBin(uint32_t num, uint8_t length)
     uint32_t number = num;
     for(; i; i >>= 1)
     {
-        if (number & i) {
-            debugWriteChar('1');
-        } else {
-            debugWriteChar('0');
-        }
+        if (number & i)
+            debugWriteCharBlock('1');
+        else
+            debugWriteCharBlock('0');
     }
 }
 
@@ -232,15 +229,15 @@ void debugReady(void)
 
 void debugWaitUntilDone(void)
 {
-    uart_WaitUntilDone();
+    lufaWaitUntilDone();
 }
 
 uint8_t debugSending(void)
 {
-    return uart_Sending();
+#warning "lufa not waiting for finished"
 }
 
 void debugAck(uint8_t c)
 {
-    debugWriteChar(c);
+    debugWriteCharBlock(c);
 }

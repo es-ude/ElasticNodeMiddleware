@@ -1,9 +1,9 @@
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include <util/delay.h>
-#include "lib/uart/uart.h"
+#include "src/uart/uart.h"
 #include <avr/interrupt.h>
 //test if Bits are set + testing multiboot
 //5th LED blink

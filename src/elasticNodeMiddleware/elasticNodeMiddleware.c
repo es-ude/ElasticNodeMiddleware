@@ -1,10 +1,10 @@
 #include "EmbeddedUtilities/BitManipulation.h"
 
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "lib/xmem/xmem.h"
+#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
+#include "src/xmem/xmem.h"
 
 volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
 
