@@ -51,43 +51,22 @@ cc_library(
     ],
 )
 
-#cc_library(
-#    name = "ElasticNodeMiddlewareLibTest",
-#    srcs = [
-#        "src/elasticNodeMiddleware/elasticNodeMiddleware.c",
-#        "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
-#    ],
-#    copts = ["-DTEST"],
-#    visibility = ["//visibility:public"],
-#    deps = [
-#        "//:ElasticNodeMiddlewareLibHdr",
-#        "//test:BitManipulationHdrForTesting",
-#    ],
-#)
-
 cc_library(
-    name = "ElasticNodeMiddleware_ConfigureFPGALib",
+    name = "ElasticNodeMiddlewareLibTest",
     srcs = [
-        "src/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.c",
+        "src/elasticNodeMiddleware/elasticNodeMiddleware.c",
+        #        "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
     ],
+    copts = ["-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:ElasticNodeMiddleware_ConfigureFPGALibHdr",
-        "//:Reconfigure_multibootLib",
+        "//:ElasticNodeMiddlewareLibHdr",
+        "//:Reconfigure_MultibootLibHdr",
+        "//:RegisterDefinitionLibHdr",
+        "//:XMemLibHdr",
+        "//test:BitManipulationHdrForTesting",
     ],
 )
-
-#cc_library(
-#    name = "ElasticNodeMiddleware_ConfigureFPGALibTest",
-#    srcs = [
-#        "src/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.c",
-#    ],
-#    copts = ["-DTEST"],
-#    visibility = ["//visibility:public"],
-#    deps = [
-#        "//:ElasticNodeMiddleware_ConfigureFPGALibHdr",
-#    ],
-#)
 
 cc_library(
     name = "Reconfigure_multibootLib",
@@ -210,16 +189,16 @@ cc_library(
     ],
 )
 
-#cc_library(
-#    name = "CircularBufferLibTest",
-#    srcs = ["src/uart/circularBuffer/circularBuffer.c"],
-#    copts = ["-DTEST"],
-#    visibility = ["//visibility:public"],
-#    deps = [
-#        "//:CircularBufferLibHdr",
-#        "//test:BitManipulationHdrForTesting",
-#    ],
-#)
+cc_library(
+    name = "CircularBufferLibTest",
+    srcs = ["src/uart/circularBuffer/circularBuffer.c"],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:CircularBufferLibHdr",
+        "//test:BitManipulationHdrForTesting",
+    ],
+)
 
 cc_library(
     name = "BitmanipulationLib",
@@ -266,7 +245,6 @@ cc_library(
         "//:DebugLufaLib",
         "//:ElasticNodeMiddlewareLib",
         # needed?
-        "//:ElasticNodeMiddleware_ConfigureFPGALib",
         "//:FlashLib",
         "//:Reconfigure_multibootLib",
         "//:RegisterDefinitionLibHdr",
@@ -339,21 +317,19 @@ cc_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "//:RegisterDefinitionLibHdr",
-        "//:XMemLibHdr",
     ],
 )
 
-cc_library(
-    name = "ElasticNodeMiddleware_ConfigureFPGALibHdr",
-    hdrs = [
-        "src/elasticNodeMiddleware/configure/elasticNodeMiddleware_configureFPGA.h",
-    ],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//:Reconfigure_MultibootLibHdr",
-    ],
-)
+#cc_library(
+#    name = "ElasticNodeMiddleware_ConfigureFPGALibHdr",
+#    hdrs = [
+#        "src/elasticNodeMiddleware/elasticNodeMiddleware_configureFPGA.h",
+#    ],
+#    visibility = ["//visibility:public"],
+#    deps = [
+#        "//:Reconfigure_MultibootLibHdr",
+#    ],
+#)
 
 cc_library(
     name = "Reconfigure_MultibootLibHdr",
@@ -476,7 +452,6 @@ cc_library(
         "//:DebugLufaLibHdr",
         "//:ElasticNodeMiddlewareLibHdr",
         # needed?
-        "//:ElasticNodeMiddleware_ConfigureFPGALibHdr",
         "//:FlashLibHdr",
         "//:Reconfigure_MultibootLibHdr",
         "//:RegisterDefinitionLibHdr",

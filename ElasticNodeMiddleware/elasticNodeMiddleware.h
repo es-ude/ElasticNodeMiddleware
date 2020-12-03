@@ -32,10 +32,11 @@ void elasticnode_disableFpgaInterface(void);
 
 void elasticnode_writeByteToUserlogic(uint8_t userlogicAddr, uint8_t data);
 void elasticnode_writeBufferToUserlogic(uint8_t userlogicAddr, uint16_t size, const uint8_t *buffer);
-uint8_t elasticnode_readByteFromUserlogic(uint8_t userlogicAddr, uint8_t data);
+uint8_t elasticnode_readByteFromUserlogic(uint8_t userlogicAddr);
 void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, uint8_t *buffer);
 
-void elasticnode_reconfigureMutliboot(uint32_t bitfileAddress);
+void elasticnode_configureFPGA(uint32_t bitfileAddress);
+uint32_t elasticnode_getLoadedConfigurationAddress(void);
 
 //void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data);
 //void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data);

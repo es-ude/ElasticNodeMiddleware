@@ -1,6 +1,4 @@
 #include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
-#include <util/delay.h>
-
 #include "EmbeddedUtilities/BitManipulation.h"
 
 #include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
@@ -56,10 +54,14 @@ void elasticnode_disableFpgaInterface(void) {
     xmem_disableXmem();
 }
 
-void elasticnode_reconfigureMultiboot(uint32_t bitfileAddress) {
-    reconfigure_fpgaMultiboot(bitfileAddress);
+void elasticnode_configureFPGA(uint32_t address){
+    reconfigure_fpgaMultiboot(address);
+    while(!reconfigure_fpgaMultibootComplete());
 }
 
+uint32_t elasticnode_getLoadedConfigurationAddress(void){
+    return reconfigure_getMultibootAddress();
+}
 void elasticnode_writeByteToUserlogic(uint8_t userlogicAddr, uint8_t data) {
     *(userLogicOffsetAddr + userlogicAddr) = data;
 }
@@ -70,7 +72,7 @@ void elasticnode_writeBufferToUserlogic(uint8_t userlogicAddr, uint16_t size, co
     }
 }
 
-uint8_t elasticnode_readByteFromUserlogic(uint8_t userlogicAddr, uint8_t data) {
+uint8_t elasticnode_readByteFromUserlogic(uint8_t userlogicAddr) {
     return *(userLogicOffsetAddr + userlogicAddr);
 }
 
