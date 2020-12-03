@@ -5,7 +5,7 @@
 #include "EmbeddedUtilities/BitManipulation.h"
 
 
-volatile uint8_t *reset_fpga = (uint8_t*) (XMEM_OFFSET + 0x04);
+volatile uint8_t *fpgaResetOffset = (uint8_t*) (XMEM_OFFSET + 0x04);
 
 void elasticnode_fpgaPowerOn_internal(void){
 
@@ -50,11 +50,11 @@ void elasticnode_fpgaPowerOff_internal(void){
 
 void elasticnode_setFpgaSoftReset_internal(void)
 {
-    *reset_fpga = 0x1;
+    *fpgaResetOffset = 0x1;
 }
 
 void elasticnode_clearFpgaSoftReset_internal(void) {
-    *reset_fpga = 0x0;
+    *fpgaResetOffset = 0x0;
 }
 
 void elasticnode_setFpgaHardReset_internal(void)

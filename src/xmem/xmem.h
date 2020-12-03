@@ -38,7 +38,7 @@ extern const uint8_t* externalMockMemory;
     #define XMEM_ENABLE_REG MCUCR
     #define XMEM_ENABLE_P SRE
     #define XMEM_OFFSET 0x2000
-
+    #define XMEM_USERLOGIC_OFFSET 0x2200
 
 #endif
 

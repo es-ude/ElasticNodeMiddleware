@@ -2,9 +2,12 @@
 #include "src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/pinDefinition/fpgaRegisters.h"
-#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
 #include "src/xmem/xmem.h"
 #include "src/interruptManager/interruptManager.h"
+
+#include <util/delay.h>
+
 //#include "EmbeddedUtilities/BitManipulation.h"
 
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
@@ -18,15 +21,12 @@ void reconfigure_initMultiboot(void) {
 
     reconfigure_fpgaMultibootClearComplete_internal();
     fpgaDoneResponse = FPGA_DONE_NOTHING;
-
 }
 
 void reconfigure_fpgaMultiboot(uint32_t address) {
 
-    elasticnode_fpgaPowerOn();
-
+    elasticnode_fpgaPowerOn_internal();
     xmem_enableXmem();
-
     reconfigure_fpgaSetDoneReponse_internal(FPGA_DONE_PRINT);
     reconfigure_fpgaMultibootClearComplete_internal();
 
@@ -56,17 +56,12 @@ void reconfigure_interruptSR(void) {
         reconfigure_fpgaSetDoneReponse_internal(1);
         switch (fpgaDoneResponse) {
             case FPGA_DONE_PRINT:
-                //duration = -1;
                 interruptManager_clearInterrupt();
-
-                //debugWriteLine("FPGA Done INT");
-                //debugWriteFloatFull(duration);
-                //debugNewLine();
-                //debugDone();
                 break;
             case FPGA_DONE_MULTIBOOT:
-
-                elasticnode_fpgaSoftReset();
+                elasticnode_setFpgaSoftReset_internal();
+                _delay_ms(RESET_DELAY);
+                elasticnode_clearFpgaSoftReset_internal();
                 reconfigure_fpgaMultiboot(0);
                 break;
             case 0:

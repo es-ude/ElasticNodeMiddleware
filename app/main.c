@@ -5,7 +5,6 @@
 
 #include "src/debug/debug.h"
 #include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "src/flash/flash.h"
 #include "src/led/led_mcu.h"
 #include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 #include "src/xmem/xmem.h"

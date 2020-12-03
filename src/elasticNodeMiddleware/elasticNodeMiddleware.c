@@ -1,14 +1,20 @@
+#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
+#include <util/delay.h>
+
 #include "EmbeddedUtilities/BitManipulation.h"
 
-#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "src/xmem/xmem.h"
+#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 
-volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
 
-void elasticnode_initialise(void){
+//volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
+volatile uint8_t *xmemOffset = (uint8_t *) (XMEM_OFFSET);
+volatile uint8_t *userLogicOffsetAddr = (uint8_t *) (XMEM_USERLOGIC_OFFSET);
+
+void elasticnode_initialise(void) {
     //initalise fpga
 
     elasticnode_fpgaPowerOn_internal();
@@ -38,38 +44,73 @@ void elasticnode_fpgaPowerOff(void) {
     elasticnode_fpgaPowerOff_internal();
 }
 
-void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data){
-    *(ptr_xmem_offset + address) = data;
+//TODO: Put these magic number offset values to somewhere more meaningful
+#define USERLOGIC_RESET_OFFSET 0x04
+#define USERLOGIC_RESET_VALUE 0x0
+
+void elasticnode_enableFpgaInterface(void) {
+    xmem_enableXmem();
 }
 
-void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data){
-    ptr_xmem_offset = ptr_xmem_offset + address;
-    for(uint8_t k=0; k<size; k++) {
-        *(ptr_xmem_offset+k) = *(ptr_data+k);
+void elasticnode_disableFpgaInterface(void) {
+    xmem_disableXmem();
+}
+
+void elasticnode_reconfigureMultiboot(uint32_t bitfileAddress) {
+    reconfigure_fpgaMultiboot(bitfileAddress);
+}
+
+void elasticnode_writeByteToUserlogic(uint8_t userlogicAddr, uint8_t data) {
+    *(userLogicOffsetAddr + userlogicAddr) = data;
+}
+
+void elasticnode_writeBufferToUserlogic(uint8_t userlogicAddr, uint16_t size, const uint8_t *buffer) {
+    for (uint16_t i = 0; i < size; i++) {
+        *(userLogicOffsetAddr + userlogicAddr + i) = *(buffer + i);
     }
 }
 
-uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address){
-    return *(ptr_xmem_offset + address);
+uint8_t elasticnode_readByteFromUserlogic(uint8_t userlogicAddr, uint8_t data) {
+    return *(userLogicOffsetAddr + userlogicAddr);
 }
 
-void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return){
-    ptr_xmem_offset = ptr_xmem_offset + address;
-    for(uint8_t i = 0; i < size; i++) {
-        *(ptr_return + i) = *(ptr_xmem_offset + i);
+void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, uint8_t *buffer) {
+    for (uint16_t i = 0; i < size; i++) {
+        *(buffer + i) = *(userLogicOffsetAddr + userlogicAddr + i);
     }
 }
 
-void elasticnode_fpgaSoftReset(void) {
+
+//void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data) {
+//    *(ptr_xmem_offset + address) = data;
+//}
+//void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data) {
+//    uint8_t *targetAddress = ptr_xmem_offset + address;
+//    for (uint8_t k = 0; k < size; k++) {
+//        *(targetAddress + k) = *(ptr_data + k);
+//    }
+//}
+//
+//uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address) {
+//    return *(ptr_xmem_offset + address);
+//}
+//
+//void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return) {
+//    ptr_xmem_offset = ptr_xmem_offset + address;
+//    for (uint8_t i = 0; i < size; i++) {
+//        *(ptr_return + i) = *(ptr_xmem_offset + i);
+//    }
+//}
+
+void elasticnode_userlogicReset(void) {
+    //this resets the userlogic
     elasticnode_setFpgaSoftReset_internal();
     _delay_ms(RESET_DELAY);
     elasticnode_clearFpgaSoftReset_internal();
 }
 
 void elasticnode_fpgaHardReset(void) {
-//    xmem_disableXmem();
-
+    // This resets the FPGA using gpio pins
     elasticnode_setFpgaHardReset_internal();
-//    _delay_ms(RESET_DELAY);
     elasticnode_clearFpgaHardReset_internal();
 }

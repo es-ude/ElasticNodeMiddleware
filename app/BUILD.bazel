@@ -16,12 +16,12 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
-        "//:Reconfigure_multibootLib",
-        "//:XMemLib",
-        "//app/setup:Setup",
         "//:DebugLufaLib",
-        "//:ControlmanagerLib",
-        "//:FlashLib",
+        #        "//:Reconfigure_multibootLib",
+        #        "//:XMemLib",
+        #        "//app/setup:Setup",
+        #        "//:ControlmanagerLib",
+        #        "//:FlashLib",
         "//:LedLib",
     ],
 )
@@ -34,7 +34,7 @@ default_embedded_binary(
     deps = [
         "//:DebugLufaLib",
         "//:LedLib",
-    ]
+    ],
 )
 
 default_embedded_binary(
@@ -44,5 +44,5 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:LedLib",
-    ]
+    ],
 )

@@ -20,7 +20,6 @@
  * */
 #include <stdint.h>
 
-#define RESET_DELAY 10
 
 void elasticnode_initialise(void);
 void elasticnode_fpgaPowerOn(void);
@@ -28,14 +27,24 @@ void elasticnode_fpgaPowerOff(void);
 
 // TODO: implement void elasticnode_fpgaSleep(uint8_t sleepmode);
 
-void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data);
-void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data);
-uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address);
-void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return);
+void elasticnode_enableFpgaInterface(void);
+void elasticnode_disableFpgaInterface(void);
+
+void elasticnode_writeByteToUserlogic(uint8_t userlogicAddr, uint8_t data);
+void elasticnode_writeBufferToUserlogic(uint8_t userlogicAddr, uint16_t size, const uint8_t *buffer);
+uint8_t elasticnode_readByteFromUserlogic(uint8_t userlogicAddr, uint8_t data);
+void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, uint8_t *buffer);
+
+void elasticnode_reconfigureMutliboot(uint32_t bitfileAddress);
+
+//void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data);
+//void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data);
+//uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address);
+//void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return);
 
 //TODO: read + write non-blocking might be implemented
 
-void elasticnode_fpgaSoftReset(void);
+void elasticnode_userlogicReset(void);
 void elasticnode_fpgaHardReset(void);
 
 //for integration testing
