@@ -470,6 +470,21 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "sub-systemHdr",
+    hdrs = ["src/sub-system/sub-system.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "sub-system",
+    srcs = ["src/sub-system/sub-system.c"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:sub-systemHdr"
+    ],
+)
+
 exports_files(
     srcs = [
         "ElasticNodeMiddleware/elasticNodeMiddleware.h",

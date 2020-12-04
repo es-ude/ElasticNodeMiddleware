@@ -46,3 +46,15 @@ default_embedded_binary(
         "//:LedLib",
     ],
 )
+
+default_embedded_binary(
+    name = "monitoringExample",
+    srcs = ["monitoringExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:DebugLufaLib",
+        "//:LedLib",
+        "//:sub-system",
+    ],
+)
