@@ -1,6 +1,6 @@
 
 #include "src/controlmanager/controlmanager.h"
-#include "src/configuration/configuration.h"
+//#include "src/configuration/configuration.h"
 #include "src/xmem/xmem.h"
 #include "src/debug/debug.h"
 #include "src/flash/flash.h"
