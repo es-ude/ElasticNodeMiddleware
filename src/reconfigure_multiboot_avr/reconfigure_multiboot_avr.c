@@ -6,7 +6,15 @@
 #include "src/xmem/xmem.h"
 #include "src/interruptManager/interruptManager.h"
 
+#ifdef TEST
+
+void _delay_ms(uint8_t delay);
+
+#else
+
 #include <util/delay.h>
+
+#endif
 
 //#include "EmbeddedUtilities/BitManipulation.h"
 

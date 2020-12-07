@@ -3,9 +3,11 @@
 
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/elasticNodeMiddleware/MockelasticNodeMiddleware_internal.h"
-#include "src/xmem/Mockxmem.h"
 #include "src/reconfigure_multiboot_avr/Mockreconfigure_multiboot_avr.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
+
+//TODO: I don't entirely get why the test only builds if I include the mock xmem header
+#include "src/xmem/Mockxmem.h"
 
 // TODO: The middleware API has been renamed and especially the read/write functions are different.
 // TODO: Tests likely need to be rewritten. Pls fix.
