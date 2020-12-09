@@ -36,6 +36,7 @@ int main(void) {
 #ifdef DEBUG
     debugInit(NULL);
     control_setUserHandle(&handleCharInput);
+    debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
 #endif
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
@@ -43,7 +44,6 @@ int main(void) {
     _delay_ms(3000);
     led_mcu_turnOff(0);
     elasticnode_fpgaPowerOn();
-
     while (true) {
         //TODO: your implementation goes here
 
@@ -65,10 +65,10 @@ void handleCharInput(uint8_t currentData) {
     //TODO: Please fill this with custom command handling where necessary
     switch (currentData) {
         case 't':
-            debugWriteString("\nuser space test. You are a cool dev!\r\n");
+            debugWriteString("\nuser mode test. You are a cool dev!\r\n");
             break;
         default:
-            debugWriteString("unknown user space command received\r\n");
+            debugWriteString("unknown mode command received\r\n");
             break;
     }
     debugTask();
