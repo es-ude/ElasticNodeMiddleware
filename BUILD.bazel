@@ -74,6 +74,7 @@ cc_library(
         "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
         "src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.c",
     ],
+    copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
     deps = [
         "//:ElasticNodeMiddlewareInternalLib",
@@ -229,8 +230,7 @@ cc_library(
 cc_library(
     name = "DebugLufaLib",
     srcs = ["src/debug/debugUsb.c"],
-    copts = [
-        "-DF_CPU=8000000UL",
+    copts = cpu_frequency_flag() + [
         "-DBAUD=9600UL",
     ],
     visibility = ["//visibility:public"],
@@ -243,6 +243,7 @@ cc_library(
 cc_library(
     name = "ControlmanagerLib",
     srcs = ["src/controlmanager/controlmanager.c"],
+    copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
     deps = [
         "//:ConfigurationLib",
@@ -263,6 +264,7 @@ cc_library(
 cc_library(
     name = "ConfigurationLib",
     srcs = ["src/configuration/configuration.c"],
+    copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
     deps = [
         "//:ConfigurationLibHdr",
