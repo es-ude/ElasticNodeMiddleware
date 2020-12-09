@@ -1,6 +1,6 @@
 
 #include "src/controlmanager/controlmanager.h"
-//#include "src/configuration/configuration.h"
+#include "src/configuration/configuration.h"
 #include "src/xmem/xmem.h"
 #include "src/debug/debug.h"
 #include "src/flash/flash.h"
@@ -15,14 +15,13 @@
 //#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 //#include "src/spi/spi.h"
 
-//#include "src/leds/leds.h"
 
 uartReceiveMode currentUartReceiveMode = UART_IDLE;
 //loadingMode currentLoadingMode = LOADING_IDLE;
 
-uint8_t *data;
+//uint8_t *data;
 
-volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
+//volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
 
 
 volatile uint8_t *userlogic_reset_addr = (uint8_t *) (XMEM_OFFSET + 0x04);
@@ -63,8 +62,9 @@ uint8_t control_isUartIdle(void) {
 
 void dummyHandler(uint8_t currentData) {
     //dummy function, to never have the situation of having a function null pointer.
-    // (unless the user wants to make his or her life miserable)
-    //tbf, if the control manager is enabled, performance isn't really an issue, anyway.
+    // (unless the user wants to make his or her life miserable. Who am I to deny you that)
+    //tbf, if the control manager is enabled, performance isn't really what we are looking for.
+    debugWriteString("Control Manager User mode handler has not been set. Please check your code.\r\n");
 }
 
 void control_setUserHandle(void (*userHandler)(uint8_t)) {
@@ -76,16 +76,32 @@ void control_handleChar(uint8_t currentData) {
         case UART_IDLE:
         default:
             switch (currentData) {
+                case 'u':
+                    debugAck('u');
+                    debugWriteString("\n\rEntering user mode. To exit press letter \"e\"\r\n");
+//                    _delay_ms(1000);
+                    uint8_t userModeActive = 1;
+                    while (userModeActive) {
+                        if (debugReadCharAvailable()) {
+                            char userModeData = debugGetChar();
+                            if (userModeData == 'e') {
+                                debugWriteString("exiting user mode\r\n");
+                                userModeActive = 0;
+                            } else {
+                                (*userDefinedHandler)(userModeData);
+                            }
+                        }
+                        debugTask();
+                    }
+                    break;
                 case 'F':
                     //This the crucial case, enabled so that any debugging application can support writing new or
                     // different bitfiles to the flash
-
                     // certain assumptions made about addresses aligning
                     // addresses must be aligned to 4K blocks 0xFFF000
                     // calculate what blocks need to be erased
                     // acknowledge when ready to receive again
                     debugAck(currentData);
-
                     // For configure the FLASH chip
                     initFlash(); // SPI interface init and ..? Todo
                     unlockFlash(0); // To write data on FLASH, must unlock the flash
@@ -96,7 +112,12 @@ void control_handleChar(uint8_t currentData) {
                     userlogic_read_id();
                     break;
                 default:
-                    (*userDefinedHandler)(currentData);
+                    /* *
+                     * The bit flash script REQUIRES an echo default case where a set on numbers are echoed back
+                     * to perform a synchronisation. After this the MCU is considered ready to receive the commands
+                     * to write the bit file into the flash.
+                     * */
+                    debugAck(currentData + 1);
                     break;
 //
 //                case 'L':
@@ -121,20 +142,8 @@ void control_handleChar(uint8_t currentData) {
 //                case 'R':
 //                    reconfigure_fpgaMultiboot(0x90001);
 //                    break;
-//
-//
-//
 //                    // indicate readiness
-//                default:
-//                    // use this to check that mcu is receiving
-//                    debugAck(currentData + 1);
-//                    // debugWriteLine("echo");
-//                    // uint8_t *ptr = malloc(1);
-//                    // debugWriteHex16((uint16_t) ptr);
-//                    // free(ptr);
-//                    // debugWriteChar(' ');
-//
-//                    break;
+
             }
             break;
 

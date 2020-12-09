@@ -27,6 +27,23 @@ default_embedded_binary(
 )
 
 default_embedded_binary(
+    name = "mainDEBUG",
+    srcs = ["main.c"],
+    copts = cpu_frequency_flag() + ["-DDEBUG"],
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareLib",
+        "//:DebugLufaLib",
+        "//:ControlmanagerLib",
+        "//:LedLib",
+        #        "//:Reconfigure_multibootLib",
+        #        "//:XMemLib",
+        #        "//app/setup:Setup",
+        #        "//:FlashLib",
+    ],
+)
+
+default_embedded_binary(
     name = "blinkLufaExample",
     srcs = ["blinkLufaExample.c"],
     copts = cpu_frequency_flag(),
