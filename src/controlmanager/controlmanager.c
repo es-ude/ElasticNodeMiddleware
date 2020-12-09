@@ -1,6 +1,6 @@
 
 #include "src/controlmanager/controlmanager.h"
-//#include "src/configuration/configuration.h"
+#include "src/configuration/configuration.h"
 #include "src/xmem/xmem.h"
 #include "src/debug/debug.h"
 #include "src/flash/flash.h"
@@ -96,7 +96,12 @@ void control_handleChar(uint8_t currentData) {
                     userlogic_read_id();
                     break;
                 default:
-                    (*userDefinedHandler)(currentData);
+//                    (*userDefinedHandler)(currentData);
+                    /* *
+                     * The bit flash script REQUIRES an echo cased for the number to perform a synchronisation at
+                     * the beginning to determine the mcu is receiving. This
+                     * */
+                    debugAck(currentData + 1);
                     break;
 //
 //                case 'L':

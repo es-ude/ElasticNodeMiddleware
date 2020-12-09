@@ -56,7 +56,7 @@ int main(void) {
     elasticnode_fpgaPowerOn();
 
     while (true) {
-
+        led_mcu_turnOn(1);
         //your implementation
 
 #ifdef DEBUG
@@ -67,7 +67,7 @@ int main(void) {
         }
         debugTask();
 #endif
-
+        led_mcu_turnOff(1);
     }
     return 0;
 }
@@ -75,8 +75,13 @@ int main(void) {
 void handleCharInput(uint8_t currentData) {
     //TODO: Please fill this with custom command handling where necessary
     switch (currentData) {
+        case 't':
+            debugWriteString("\ntesterino\n");
+//            debugWriteHex8(readUserlogicId());
+            break;
+
         default:
-            debugWriteLine("default user level command handle\r\n");
+            debugWriteString("unknown character command received\n");
             break;
     }
 }
