@@ -36,7 +36,8 @@ int main(void) {
 #ifdef DEBUG
     debugInit(NULL);
     control_setUserHandle(&handleCharInput);
-    debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
+    //debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
+    // TODO: Does not work in some enviroments
 #endif
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
