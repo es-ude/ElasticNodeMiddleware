@@ -1,9 +1,10 @@
-#include "lib/xmem/xmem.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
-#include "EmbeddedUtilities/BitManipulation.h"
-#include "lib/uart/uart.h"
 #include <avr/interrupt.h>
+#include "EmbeddedUtilities/BitManipulation.h"
+
+#include "src/xmem/xmem.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
+#include "src/uart/uart.h"
 //test if Bits are set
 //4th, 5th and 6th LED on
 int main()

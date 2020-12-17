@@ -1,14 +1,17 @@
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
-cc_library(
-    name = "Library",
-    srcs = glob(["src/**/*.c", "src/**/*.h"]),
-    copts = cpu_frequency_flag(),
-    visibility = ["//visibility:public"],
-    deps = [
-        "//MyProject:HdrOnlyLib"
-    ]
-)
+#cc_library(
+#    name = "Library",
+#    srcs = glob([
+#        "src/**/*.c",
+#        "src/**/*.h",
+#    ]),
+#    copts = cpu_frequency_flag(),
+#    visibility = ["//visibility:public"],
+#    deps = [
+#        #        "//MyProject:HdrOnlyLib"
+#    ],
+#)
 
 py_library(
     name = "bitfileConfigs",
@@ -26,8 +29,8 @@ py_binary(
     name = "uploadBitfiles",
     srcs = ["uploadScripts/uploadBitfiles.py"],
     deps = [
+        "bitfileConfigs",
         "portConfigs",
         "@ElasticNodeMiddleware//:serial_test",
-        "bitfileConfigs"
     ],
 )

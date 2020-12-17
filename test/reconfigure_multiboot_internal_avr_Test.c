@@ -1,5 +1,5 @@
 #include "unity.h"
-#include "lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
+#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
 
 extern volatile uint8_t fpgaMultibootCompleteState;
 

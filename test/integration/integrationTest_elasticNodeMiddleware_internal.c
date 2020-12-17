@@ -1,8 +1,8 @@
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/pinDefinition/fpgaRegisters.h"
+#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-#include "lib/uart/uart.h"
+#include "src/uart/uart.h"
 #include <avr/interrupt.h>
 //test if Bits are set
 //4th, 5th, 6th and 7th LED on

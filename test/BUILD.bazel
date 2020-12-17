@@ -1,13 +1,13 @@
 load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for_every_file", "mock", "unity_test")
 
-#generate_a_unity_test_for_every_file(
-#    cexception = False,
-#    file_list = glob(["*_Test.c"]),
-#    deps = [
-#        "//:Library",
-#        "//:HdrOnlyLib",
-#    ],
-#)
+##generate_a_unity_test_for_every_file(
+##    cexception = False,
+##    file_list = glob(["*_Test.c"]),
+##    deps = [
+##        "//:Library",
+##        "//:HdrOnlyLib",
+##    ],
+##)
 
 cc_library(
     name = "BitManipulationHdrForTesting",
@@ -18,35 +18,35 @@ cc_library(
 
 mock(
     name = "mock_ElasticNodemiddleware",
-    srcs = ["//:lib/elasticNodeMiddleware/elasticNodeMiddleware.h"],
+    srcs = ["//:ElasticNodeMiddleware/elasticNodeMiddleware.h"],
     copts = ["-DTEST"],
     deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_ElasticNodeMiddleware_Internal",
-    srcs = ["//:lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"],
+    srcs = ["//:src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"],
     copts = ["-DTEST"],
     deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot",
-    srcs = ["//:lib/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"],
+    srcs = ["//:src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"],
     copts = ["-DTEST"],
     deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
     name = "mock_Reconfigure_Multiboot_Internal",
-    srcs = ["//:lib/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"],
+    srcs = ["//:src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"],
     copts = ["-DTEST"],
     deps = ["//:Reconfigure_MultibootLibHdr"],
 )
 
 mock(
     name = "mock_Xmem",
-    srcs = ["//:lib/xmem/xmem.h"],
+    srcs = ["//:src/xmem/xmem.h"],
     copts = ["-DTEST"],
     deps = ["//:XMemLibHdr"],
 )
@@ -60,28 +60,28 @@ mock(
 
 mock(
     name = "mock_InterruptManager",
-    srcs = ["//:lib/interruptManager/interruptManager.h"],
+    srcs = ["//:src/interruptManager/interruptManager.h"],
     copts = ["-DTEST"],
     deps = ["//:Interrupt_ManagerLibHdr"],
 )
 
 mock(
     name = "mock_InterruptManager_avr_Mock",
-    srcs = ["//:lib/interruptManager/interruptManager_avr_Mock.h"],
+    srcs = ["//:src/interruptManager/interruptManager_avr_Mock.h"],
     copts = ["-DTEST"],
     deps = ["//:Interrupt_ManagerLibHdr"],
 )
 
 mock(
     name = "mock_circularBuffer",
-    srcs = ["//:lib/uart/circularBuffer/circularBuffer.h"],
+    srcs = ["//:src/uart/circularBuffer/circularBuffer.h"],
     copts = ["-DTEST"],
     deps = ["//:CircularBufferLibHdr"],
 )
 
 mock(
     name = "mock_Uart_internal",
-    srcs = ["//:lib/uart/uart_internal.h"],
+    srcs = ["//:src/uart/uart_internal.h"],
     copts = ["-DTEST"],
     deps = ["//:UartLibHdr"],
 )
@@ -93,6 +93,7 @@ unity_test(
     deps = [
         "mock_Bitmanipulation",
         "mock_ElasticNodeMiddleware_Internal",
+        "mock_Reconfigure_Multiboot",
         "mock_Xmem",
         "//:ElasticNodeMiddlewareLibTest",
     ],
@@ -105,16 +106,6 @@ unity_test(
     deps = [
         "mock_Bitmanipulation",
         "//:ElasticNodeMiddlewareLibTest",
-    ],
-)
-
-unity_test(
-    cexception = False,
-    copts = ["-DTEST"],
-    file_name = "elasticNodeMiddleware_configureFPGA_Test.c",
-    deps = [
-        "mock_Reconfigure_Multiboot",
-        "//:ElasticNodeMiddleware_ConfigureFPGALibTest",
     ],
 )
 
@@ -144,10 +135,11 @@ unity_test(
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
-    file_name = "xmem_Test.c",
+    file_name = "uart_internal_Test.c",
     deps = [
-        "mock_Bitmanipulation",
-        "//:XMemLibTest",
+        "mock_InterruptManager",
+        "mock_circularBuffer",
+        "//:UartLibTest",
     ],
 )
 
@@ -191,10 +183,9 @@ unity_test(
 unity_test(
     cexception = False,
     copts = ["-DTEST"],
-    file_name = "uart_internal_Test.c",
+    file_name = "xmem_Test.c",
     deps = [
-        "mock_InterruptManager",
-        "mock_circularBuffer",
-        "//:UartLibTest",
+        "mock_Bitmanipulation",
+        "//:XMemLibTest",
     ],
 )

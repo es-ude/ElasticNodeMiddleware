@@ -1,6 +1,6 @@
 #include "unity.h"
-#include "lib/xmem/xmem.h"
-#include "lib/pinDefinition/fpgaPins.h"
+#include "src/xmem/xmem.h"
+#include "src/pinDefinition/fpgaPins.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
 
 uint8_t ddr_xmem_a;

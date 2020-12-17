@@ -133,7 +133,7 @@ The elastic node middleware interface contains the following functions:
 → elasticnode_readOneByteBlockingFromFpga\
 → elasticnode_readDataBlockingFromFpga
 - to reset the FPGA:\
-→ elasticnode_fpgaSoftReset\
+→ elasticnode_userlogicReset\
 → elasticnode_fpgaHardReset
 
 A soft reset refreshes the address of the external memory offset, whereby a hard reset refreshs the program pins. 

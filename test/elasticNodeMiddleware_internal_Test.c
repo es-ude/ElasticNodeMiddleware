@@ -1,8 +1,8 @@
 #include "unity.h"
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
-#include "lib/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-#include "lib/pinDefinition/fpgaPins.h"
-#include "lib/xmem/xmem.h"
+#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+#include "src/pinDefinition/fpgaPins.h"
+//#include "src/xmem/xmem.h"
 
 uint8_t port_fpga_program_b;
 uint8_t ddr_fpga_program_b;
@@ -41,7 +41,7 @@ uint8_t* DDR_FPGA_CCLK = &ddr_fpga_cclk;
 uint8_t memoryarea[2000];
 const uint8_t* externalMockMemory = &memoryarea;
 
-extern volatile uint8_t *reset_fpga;
+extern volatile uint8_t *fpgaResetOffset;
 
 void initialise_mockRegister(void) {
     DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
@@ -111,13 +111,13 @@ void test_elasticnode_fpgaPowerOff_internal(void) {
 void test_elasticnode_setFpgaSoftReset_internal(void) {
     initialise_mockRegister();
     elasticnode_setFpgaSoftReset_internal();
-    TEST_ASSERT_EQUAL_UINT8((*reset_fpga), 0x1);
+    TEST_ASSERT_EQUAL_UINT8((*fpgaResetOffset), 0x1);
 }
 
 void test_elasticnode_clearFpgaSoftReset_internal(void) {
     initialise_mockRegister();
     elasticnode_clearFpgaSoftReset_internal();
-    TEST_ASSERT_EQUAL_UINT8((*reset_fpga), 0x0);
+    TEST_ASSERT_EQUAL_UINT8((*fpgaResetOffset), 0x0);
 }
 
 void test_elasticnode_setFpgaHardReset_internal(void) {

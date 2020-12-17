@@ -1,6 +1,6 @@
 #include "unity.h"
-#include "lib/uart/circularBuffer/circularBuffer.h"
-#include "lib/interruptManager/MockinterruptManager.h"
+#include "src/uart/circularBuffer/circularBuffer.h"
+#include "src/interruptManager/MockinterruptManager.h"
 
 
 uint8_t SREG = 0xBF;
