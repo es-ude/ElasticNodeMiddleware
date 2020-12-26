@@ -13,6 +13,11 @@
 #include "src/controlmanager/controlmanager.h"
 #endif
 
+#ifdef DEBUG
+uint8_t *data;
+volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
+#endif
+
 //These are potential ISRs programmers can uncomment to have custom interrupt
 // handling on receiving and sending via UART.
 //ISR(USART1_RX_vect) {
@@ -36,8 +41,8 @@ int main(void) {
 #ifdef DEBUG
     debugInit(NULL);
     control_setUserHandle(&handleCharInput);
-    //debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
     // TODO: Does not work in some enviroments
+    //debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
 #endif
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
