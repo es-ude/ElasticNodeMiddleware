@@ -68,6 +68,28 @@ void handleCharInput(uint8_t currentData) {
         case 't':
             debugWriteString("\nuser mode test. You are a cool dev!\r\n");
             break;
+                case 'L':
+                    xmem_enableXmem();
+                    *(addr_led) = (uint8_t) (0xff);
+                    *data = *(addr_led);
+                    debugWriteLine("led_data: ");
+                    debugWriteHex8(*data);
+                    debugWriteLine("\r\n");
+                    break;
+                case 'l':
+                    xmem_enableXmem();
+                    *(addr_led) = (uint8_t) (0x00);
+                    *data = *(addr_led);
+                    debugWriteLine("led_data: ");
+                    debugWriteHex8(*data);
+                    debugWriteLine("\r\n");
+                    break;
+                case 'r':
+                    reconfigure_fpgaMultiboot(0x0);
+                    break;
+                case 'R':
+                    reconfigure_fpgaMultiboot(0x90001);
+                    break;
         default:
             debugWriteString("unknown mode command received\r\n");
             break;
