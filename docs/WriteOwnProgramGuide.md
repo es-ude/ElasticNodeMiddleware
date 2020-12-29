@@ -110,6 +110,7 @@ default_embedded_binary(
         "@ElasticNodeMiddleware//:UartLib",
         "@ElasticNodeMiddleware//:XMemLib",
         "@ElasticNodeMiddleware//:BitmanipulationLib",
+        "@ElasticNodeMiddleware//:sub-system",
         "@ElasticNodeMiddleware//app/setup:Setup",
     ],
 ) 
