@@ -21,7 +21,7 @@ We use the IDE CLion for our bazel projects.
 
 After importing you can run the [init.py](../templates/init.py) for setting up the ports mentioned in the [Getting Started Guide](GettingStartedGuide.md).
 
-    $ python init.py
+    $ bazel run init
 
 You can run the script again when you have to change a port.
 

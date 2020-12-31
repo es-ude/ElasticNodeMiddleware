@@ -1,8 +1,10 @@
 import requests
 import sys
 
+projectPath = "/path/to/MyProject/"
+
 def replacePorts(portTo):
-    pC  = open("uploadScripts/portConfigs.py", "r")
+    pC  = open(projectPath + "uploadScripts/portConfigs.py", "r")
     f = pC.read()
     pC.close()
     st = f.find("portTo" + portTo)
@@ -13,7 +15,7 @@ def replacePorts(portTo):
         while f[en] != '"':
             en += 1
         current = f[st+1:en]
-        w = open("uploadScripts/portConfigs.py", "w")
+        w = open(projectPath + "uploadScripts/portConfigs.py", "w")
         newPort = input("Port to " + portTo + " (current: " + current + " ): ") or current
         newText = f.replace(current,newPort)
         w.write(newText)
@@ -21,10 +23,10 @@ def replacePorts(portTo):
             print("Port to " + portTo + " set in uploadScripts/portConfigs.py")
         w.close()
         if portTo == "Programmer":
-            r = open("user.bazelrc", "r")
+            r = open(projectPath + "user.bazelrc", "r")
             f = r.read()
             r.close()
-            w = open("user.bazelrc", "w")
+            w = open(projectPath + "user.bazelrc", "w")
             newText = f.replace(current,newPort)
             if newText != f:
                 w.write(newText)
@@ -36,7 +38,7 @@ def replacePorts(portTo):
             w.close()
     else:
         if input("Could not find port to " + portTo + ". Load default portConfigs? (y/N) (default N) ") == "y" or "yes":
-            w = open("uploadScripts/portConfigs.py", "w")
+            w = open(projectPath + "uploadScripts/portConfigs.py", "w")
             w.write(requests.get("https://raw.githubusercontent.com/es-ude/ElasticNodeMiddleware/master/templates/portConfigs.py").text)
             w.close
             print("Successful, run again to change ports.")
