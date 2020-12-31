@@ -13,6 +13,11 @@ load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_
 #    ],
 #)
 
+py_binary(
+    name = "init",
+    srcs = ["init.py"],
+)
+
 py_library(
     name = "bitfileConfigs",
     srcs = ["uploadScripts/bitfileConfigs.py"],
