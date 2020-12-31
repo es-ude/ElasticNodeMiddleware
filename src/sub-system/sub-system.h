@@ -6,7 +6,8 @@
 
 #define MY_IIC_ADDRESS 64
 
-#define TEMPORAL_ACCELERATOR 1
+//TODO: When to define
+//#define TEMPORAL_ACCELERATOR 1
 
 #include <stdint.h>
 
@@ -36,7 +37,6 @@ typedef enum {
 #endif
 
 typedef enum{
-
     CURRENT_SAMPLE_TIME_2ms5,
     CURRENT_SAMPLE_TIME_5ms,
     CURRENT_SAMPLE_TIME_10ms,
@@ -46,7 +46,6 @@ typedef enum{
     CURRENT_SAMPLE_TIME_160ms,
     CURRENT_SAMPLE_TIME_320ms,
     CURRENT_SAMPLE_TIME_DEFAULT=5
-
 }sample_rate;
 
 #if TEMPORAL_ACCELERATOR
