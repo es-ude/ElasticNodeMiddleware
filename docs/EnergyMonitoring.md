@@ -1,6 +1,6 @@
 # Energy Monitoring
 
-By using the second MCU on the elastic node you can measure the power the elastic node consumes during an experiment.
+By using the monitoring MCU on the elastic node you can measure the power the elastic node consumes during an experiment.
 You should be familiar with the the [WriteOwnProgramGuide](WriteOwnProgramGuide.md).
 
 ## Monitoring MCU
@@ -16,7 +16,7 @@ The platform changes to 'ElasticNode_v4_monitor' as it is another type of MCU.
 
 ## Example
 
-In the monitoring example each second one led more blinks. After that all turn off and the experiment starts again.
+In the [monitoring example](../app/monitoringExample.c) each second one led more blinks. After that all turn off and the experiment starts again.
 This happens 3 times and than the experiment is stopped.
 
 You can upload the code for the main MCU as usual with
@@ -26,6 +26,8 @@ You can upload the code for the main MCU as usual with
 To check if everything works see 'Get results' underneath.
 
 ## Inclusion in own code
+
+Everything explained in this section can be found implemented in the [monitoring example](../app/monitoringExample.c).
 
 The code for the main MCU needs the inclusion
 ```c
@@ -37,6 +39,14 @@ and the dependency in bazel
 ```bazel
 "@ElasticNodeMiddleware//:sub-system",
 ```
+
+A slave must be initialized at the beginning of the code:
+
+```c
+IIC_slave_init(MY_IIC_ADDRESS);
+```
+
+### MCU running states
 
 There are different mcu running states, these are captured when reading the measurement result to connect each measurement with a state of the experiment.
 Therefore you need to declare a uint8_t:
@@ -57,16 +67,13 @@ typedef enum {
 }mcu_running_state;
 ```
 
+When the state is changed to 'SLEEP_MODE' the sending of measurement data is paused until it is changed to another state.
+The 'END_MEASUREMENT' state stops the sending of measurement data completely.
+
 Now you can change the state to the corresponding state of your experiment:
 
 ```c
 change_running_state(OWN_STATE_1, &state_of_the_mcu);
-```
-
-Lastly the slave must be initialized at the beginning of the code:
-
-```c
-IIC_slave_init(MY_IIC_ADDRESS);
 ```
 
 ### Sample rate
@@ -79,7 +86,7 @@ You can change the sample rate with:
 change_sample_rate(CURRENT_SAMPLE_TIME_10ms);
 ```
 
-The different sample times are defined in sub-system.c
+The different sample rates are defined in [sub-system.c](../src/sub-system/sub-system.h)
 
 ## Get results
 
@@ -98,5 +105,3 @@ Table of arguments:
 | live     | draws a graph of the power consumption                  |
 | debug    | writes debug output in hex to the console               |
 | reset    | resets the monitoring MCU                               |
-
-The capturing holds when the state of the experiment is 0 (sleep mode).
