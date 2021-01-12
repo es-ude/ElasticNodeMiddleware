@@ -5,7 +5,7 @@
 #include <util/delay.h>
 
 #include "src/led/led_mcu.h"
-#include "src/sub-system/sub-system.h"
+#include "src/energyMonitoringInterface/energyMonitoringInterface.h"
 
 #include <compat/twi.h>
 
@@ -28,34 +28,31 @@ int main(void)
 
     led_mcu_init();
 
-    for (int i = 0; i <= 2; ++i) {
+    change_sample_rate(CURRENT_SAMPLE_TIME_80ms);
+
+    while (true) {
 
         //start delay
-        _delay_ms(5000);
+        _delay_ms(2000);
 
         led_mcu_turnOn(0);
-        //change_sample_rate(CURRENT_SAMPLE_TIME_2ms5);
         change_running_state(LED_0, &state_of_the_mcu);
         _delay_ms(1000);
 
         led_mcu_turnOn(1);
-        //change_sample_rate(CURRENT_SAMPLE_TIME_10ms);
         change_running_state(LED_0_1, &state_of_the_mcu);
         _delay_ms(1000);
 
         led_mcu_turnOn(2);
-        //change_sample_rate(CURRENT_SAMPLE_TIME_80ms);
         change_running_state(LED_0_1_2, &state_of_the_mcu);
         _delay_ms(1000);
 
         led_mcu_turnOn(3);
-        //change_sample_rate(CURRENT_SAMPLE_TIME_160ms);
         change_running_state(LED_0_1_2_3, &state_of_the_mcu);
         _delay_ms(1000);
 
         led_mcu_turnOffAll();
         change_running_state(SLEEP_MODE, &state_of_the_mcu);
-        //change_sample_rate(1);
 
     }
 

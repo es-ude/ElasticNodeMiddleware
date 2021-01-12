@@ -3,18 +3,9 @@
 By using the monitoring MCU on the elastic node you can measure the power the elastic node consumes during an experiment.
 You should be familiar with the the [WriteOwnProgramGuide](WriteOwnProgramGuide.md).
 
-## Monitoring MCU
+## Main MCU
 
-The code for the monitoring MCU usually does not change.
-For uploading code to the monitoring MCU you need to connect the programmer to it. The connections are labeled [here](images/elasticNodelabeled.jpg).
-The platform changes to 'ElasticNode_v4_monitor' as it is another type of MCU.
-
-    $ bazel run //app:currentSenseApp --platforms=@AvrToolchain//platforms:ElasticNode_v4_monitor
-
-//TODO How to include it (or use other project for the moment?)
-//TODO Code does not change?
-
-## Example
+### Example
 
 In the [monitoring example](../app/monitoringExample.c) each second one led more blinks. After that all turn off and the experiment starts again.
 This happens 3 times and than the experiment is stopped.
@@ -25,7 +16,7 @@ You can upload the code for the main MCU as usual with
     
 To check if everything works see 'Get results' underneath.
 
-## Inclusion in own code
+### Inclusion in own code
 
 Everything explained in this section can be found implemented in the [monitoring example](../app/monitoringExample.c).
 
@@ -46,7 +37,7 @@ A slave must be initialized at the beginning of the code:
 IIC_slave_init(MY_IIC_ADDRESS);
 ```
 
-### MCU running states
+#### MCU running states
 
 There are different mcu running states, these are captured when reading the measurement result to connect each measurement with a state of the experiment.
 Therefore you need to declare a uint8_t:
@@ -76,25 +67,35 @@ Now you can change the state to the corresponding state of your experiment:
 change_running_state(OWN_STATE_1, &state_of_the_mcu);
 ```
 
-### Sample rate
+#### Sample rate
 
-//TODO: what does the sample rate do
+You can define how often a measurement should take place. 
 
-You can change the sample rate with:
+You can change the sample rate like this at any time:
 
 ```c
 change_sample_rate(CURRENT_SAMPLE_TIME_10ms);
 ```
 
-The different sample rates are defined in [sub-system.c](../src/sub-system/sub-system.h)
+The possible sample rates are defined in [energyMonitoringInterface.h](../src/energyMonitoringInterface/energyMonitoringInterface.h). The default is 80ms.
 
-## Get results
+## Monitoring MCU
 
-You need to set the serial port to your elastic node and programmer and the path to your data folder in the config.py.
+The code used in this section is located in the [ElasticNodeMonitoring](https://github.com/es-ude/ElasticNodeMonitoring) repository, which can just be cloned.
+
+The code for the monitoring MCU usually does not change.
+For uploading code to the monitoring MCU you need to connect the programmer to it. The connections are labeled [here](images/elasticNodelabeled.jpg).
+The platform changes to 'ElasticNode_v4_monitor' as it is another type of MCU.
+
+    $ bazel run //app:measurement_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4_monitor
+
+### Get results
+
+You need to set the serial port to your elastic node and programmer and the path to your data folder in the config.py in the scripts folder.
 The micro-USB as well as the programmer should be connected to the monitoring MCU.
 Now you can run the python script with
 
-    $ bazel run analysis argument
+    $ bazel run captureMeasurement argument
     
 Table of arguments:
 
