@@ -55,6 +55,6 @@ default_embedded_binary(
     deps = [
         "//:DebugLufaLib",
         "//:LedLib",
-        "//:sub-system",
+        "//:EnergyMonitoringInterfaceLib",
     ],
 )

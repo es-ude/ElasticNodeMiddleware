@@ -471,17 +471,17 @@ cc_library(
 )
 
 cc_library(
-    name = "sub-systemHdr",
-    hdrs = ["src/sub-system/sub-system.h"],
+    name = "EnergyMonitoringInterfaceHdr",
+    hdrs = ["src/energyMonitoringInterface/energyMonitoringInterface.h"],
     visibility = ["//visibility:public"],
 )
 
 cc_library(
-    name = "sub-system",
-    srcs = ["src/sub-system/sub-system.c"],
+    name = "EnergyMonitoringInterfaceLib",
+    srcs = ["src/energyMonitoringInterface/energyMonitoringInterface.c"],
     visibility = ["//visibility:public"],
     deps = [
-        "//:sub-systemHdr"
+        "//:EnergyMonitoringInterfaceHdr"
     ],
 )
 
@@ -505,6 +505,7 @@ exports_files(
         "src/uart/uart.h",
         "src/uart/uart_internal.h",
         "src/xmem/xmem.h",
+        "src/energyMonitoringInterface/energyMonitoringInterface.h",
     ],
     visibility = ["//visibility:public"],
 )
