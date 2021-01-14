@@ -91,9 +91,11 @@ void handleCharInput(uint8_t currentData) {
                     break;
                 case 'r':
                     reconfigure_fpgaMultiboot(0x0);
+                    debugWriteLine("reconfigured FPGA to 0x0");
                     break;
                 case 'R':
-                    reconfigure_fpgaMultiboot(0x90001);
+                    reconfigure_fpgaMultiboot(0x90000);
+                    debugWriteLine("reconfigured FPGA to 0x90000");
                     break;
         default:
             debugWriteString("unknown mode command received\r\n");
