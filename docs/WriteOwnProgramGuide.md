@@ -153,6 +153,6 @@ Remember to check for the DIP-Switches like explained in the [Getting Started Gu
 
 Run the upload script with
 
-    $ bazel run uploadBitfile
+    $ bazel run uploadBitfiles
 
 For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts) in generall.
