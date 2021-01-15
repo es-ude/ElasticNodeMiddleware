@@ -70,7 +70,7 @@ All the libraries are located in the [lib folder](../src). If you do not plan on
 For uploading bitfiles it is necessary that the flash functionality is implemented in the code currently uploaded to the elastic node.
 This is the case when you uploade the main.c with the DEBUG flag set as explained above.
 
-Note that the example bitfiles s15_p1.bit and s15_p2.bit are in the [bitfiles folder](../bitfiles).
+Note that example bitfiles sX_p1.bit and sX_p2.bit for different FGPA models are in the [bitfiles folder](../bitfiles).
 Change the path to them or your own bitfiles in the [bitfileConfigs.py](../scripts/bitfileConfigs.py), which is included in the [.gitignore](../.gitignore).
 
 For uploading the bitfiles run:
