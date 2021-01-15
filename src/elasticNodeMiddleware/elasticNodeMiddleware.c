@@ -13,11 +13,17 @@ volatile uint8_t *xmemOffset = (uint8_t *) (XMEM_OFFSET);
 volatile uint8_t *userLogicOffsetAddr = (uint8_t *) (XMEM_USERLOGIC_OFFSET);
 
 void elasticnode_initialise(void) {
-    //initalise fpga
 
+    // disable r2f chip for start up
+    DDRE |= 0x40; // wireless_cs low
+    PORTE |= 0x40;
+    DDRB |= 0x20; // wireless_reset low
+    PORTB &= ~0x20;
+
+    // initalise fpga
     elasticnode_fpgaPowerOn_internal();
 
-    //enable interface
+    // enable interface
     BitManipulation_setBit(DDR_FPGA_CCLK, P_FPGA_CCLK);
 
     // inputs that only get setup once
@@ -54,6 +60,8 @@ void elasticnode_disableFpgaInterface(void) {
     xmem_disableXmem();
 }
 
+
+//TODO: Does not finishes
 void elasticnode_configureFPGA(uint32_t address){
     reconfigure_fpgaMultiboot(address);
     while(!reconfigure_fpgaMultibootComplete());
