@@ -50,6 +50,9 @@ int main(void) {
     _delay_ms(3000);
     led_mcu_turnOff(0);
     elasticnode_fpgaPowerOn();
+
+    reconfigure_fpgaMultiboot(0x0); // Configures to address 0x0 at start up
+
     while (true) {
         //TODO: your implementation goes here
 
