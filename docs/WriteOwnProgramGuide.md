@@ -19,7 +19,7 @@ The name MyProject could be replaced with your explicit project name.
 We recommend you to use an IDE and import there your new generate project as a bazel project.
 We use the IDE CLion for our bazel projects. 
 
-After importing you can run the [init.py](../templates/init.py) for setting up the ports mentioned in the [Getting Started Guide](GettingStartedGuide.md).
+After importing you can run the [init.py](../templates/init.py) for creating some necessary config files and change the ports mentioned in the [Getting Started Guide](GettingStartedGuide.md).
 
     $ bazel run init
 
@@ -110,6 +110,7 @@ default_embedded_binary(
         "@ElasticNodeMiddleware//:UartLib",
         "@ElasticNodeMiddleware//:XMemLib",
         "@ElasticNodeMiddleware//:BitmanipulationLib",
+        "@ElasticNodeMiddleware//:EnergyMonitoringInterfaceLib",
         "@ElasticNodeMiddleware//app/setup:Setup",
     ],
 ) 
