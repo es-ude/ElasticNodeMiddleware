@@ -1,7 +1,7 @@
 import requests
 import os
 
-projectPath = "/Users/david/git/ElasticNodeProject/"
+projectPath = "/path/to/MyProject/"
 
 
 def replace_ports(port_to):
@@ -71,9 +71,10 @@ def create_files(directory, file_name):
         print("Created", file_name)
 
 
-create_files(directory="", file_name="user.bazelrc")
-create_files(directory="uploadScripts", file_name="portConfigs.py")
-create_files(directory="uploadScripts", file_name="bitfileConfigs.py")
+if __name__ == "__main__":
+    create_files(directory="", file_name="user.bazelrc")
+    create_files(directory="uploadScripts", file_name="portConfigs.py")
+    create_files(directory="uploadScripts", file_name="bitfileConfigs.py")
 
-replace_ports("Programmer")
-replace_ports("Elasticnode")
+    replace_ports("Programmer")
+    replace_ports("Elasticnode")
