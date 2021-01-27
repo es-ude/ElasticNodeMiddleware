@@ -9,7 +9,7 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 es_github_archive(
     name = "EmbeddedSystemsBuildScripts",
-    version = "1.0.1",
+    version = "1.0.2",
     # sha256 = "<checksum>"
 )
 
@@ -47,7 +47,7 @@ http_archive(
 
 es_github_archive(
     name = "EmbeddedUtilities",
-    version = "0.3.1",
+    version = "0.3.2",
 )
 
 es_github_archive(
