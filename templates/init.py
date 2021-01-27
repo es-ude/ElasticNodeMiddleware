@@ -1,48 +1,79 @@
 import requests
-import sys
+import os
 
-projectPath = "/path/to/MyProject/"
+projectPath = "/Users/david/git/ElasticNodeProject/"
 
-def replacePorts(portTo):
-    pC  = open(projectPath + "uploadScripts/portConfigs.py", "r")
-    f = pC.read()
-    pC.close()
-    st = f.find("portTo" + portTo)
-    if st != (-1):
-        while f[st] != '"':
-            st += 1
-        en = st + 1
-        while f[en] != '"':
-            en += 1
-        current = f[st+1:en]
-        w = open(projectPath + "uploadScripts/portConfigs.py", "w")
-        newPort = input("Port to " + portTo + " (current: " + current + " ): ") or current
-        newText = f.replace(current,newPort)
-        w.write(newText)
-        if newText != f:
-            print("Port to " + portTo + " set in uploadScripts/portConfigs.py")
-        w.close()
-        if portTo == "Programmer":
-            r = open(projectPath + "user.bazelrc", "r")
-            f = r.read()
-            r.close()
-            w = open(projectPath + "user.bazelrc", "w")
-            newText = f.replace(current,newPort)
-            if newText != f:
-                w.write(newText)
-                print("Port to " + portTo + " set in user.bazelrc")
-            else:
-                if input("Could not find port " + portTo + " in user.bazelrc. Load default user.bazelrc? (y/N) (default N) ") == "y" or "yes":
-                    w.write("run -- " + newPort)
-                    print("Loaded default user.bazelrc and set port to " + portTo + ".")
-            w.close()
+
+def replace_ports(port_to):
+    port_configs_file_read = open(projectPath + "uploadScripts/portConfigs.py", "r")
+    port_configs_content = port_configs_file_read.read()
+    port_configs_file_read.close()
+
+    start = port_configs_content.find("portTo" + port_to)
+    if start != (-1):
+        while port_configs_content[start] != '"':
+            start += 1
+        end = start + 1
+        while port_configs_content[end] != '"':
+            end += 1
+
+        current_port = port_configs_content[start+1:end]
+
+        new_port = input("Port to " + port_to + " (current/default: '" + current_port + "'): ") or current_port
+
+        new_port_configs_content = port_configs_content.replace(current_port, new_port)
+
+        port_configs_file_write = open(projectPath + "uploadScripts/portConfigs.py", "w")
+        port_configs_file_write.write(new_port_configs_content)
+        port_configs_file_write.close()
+
+        if current_port != new_port:
+            print("Port to " + port_to + " set in uploadScripts/portConfigs.py")
+
+            if port_to == "Programmer":
+                user_bazelrc_file_read = open(projectPath + "user.bazelrc", "r")
+                user_bazelrc_content = user_bazelrc_file_read.read()
+                user_bazelrc_file_read.close()
+
+                new_user_bazelrc_content = user_bazelrc_content.replace(current_port, new_port)
+
+                if new_user_bazelrc_content != user_bazelrc_content:
+                    user_bazelrc_file_write = open(projectPath + "user.bazelrc", "w")
+                    user_bazelrc_file_write.write(new_user_bazelrc_content)
+                    user_bazelrc_file_write.close()
+                    print("Port to " + port_to + " set in user.bazelrc")
+                else:
+                    print("Could not find port to ", port_to, "in user.bazelrc")
+
     else:
-        if input("Could not find port to " + portTo + ". Load default portConfigs? (y/N) (default N) ") == "y" or "yes":
-            w = open(projectPath + "uploadScripts/portConfigs.py", "w")
-            w.write(requests.get("https://raw.githubusercontent.com/es-ude/ElasticNodeMiddleware/master/templates/portConfigs.py").text)
-            w.close
-            print("Successful, run again to change ports.")
-            sys.exit()
+        print("Could not find port to", port_to, "in portConfigs.py")
 
-replacePorts("Programmer")
-replacePorts("Elasticnode")
+
+def create_files(directory, file_name):
+
+    if directory != "":
+        directory = directory + "/"
+
+    if not os.path.isfile(projectPath + directory + file_name):
+
+        print("Getting", file_name, "...")
+        file_content = requests.get("https://raw.githubusercontent.com/es-ude/ElasticNodeMiddleware/master/templates/" +
+                                    file_name).text
+
+        if file_name == "bitfileConfigs.py":
+            file_content = file_content.replace("../bitfiles/.bit", projectPath + "bitfiles/bitfile.bit")
+
+        print("Writing", file_name, "...")
+        file_write = open(projectPath + directory + file_name, "w")
+        file_write.write(file_content)
+        file_write.close()
+
+        print("Created", file_name)
+
+
+create_files(directory="", file_name="user.bazelrc")
+create_files(directory="uploadScripts", file_name="portConfigs.py")
+create_files(directory="uploadScripts", file_name="bitfileConfigs.py")
+
+replace_ports("Programmer")
+replace_ports("Elasticnode")

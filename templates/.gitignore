@@ -1,0 +1,7 @@
+.vscode/
+.clwb/
+bazel-*
+user.bazelrc
+bitfiles/*.bit
+uploadScripts/bitfileConfigs.py
+uploadScripts/portConfigs.py
