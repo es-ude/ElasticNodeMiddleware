@@ -33,6 +33,6 @@ default_embedded_binary(
         "@ElasticNodeMiddleware//app/setup:Setup",
         "@ElasticNodeMiddleware//:DebugLufaLib",
         "@ElasticNodeMiddleware//:LedLib",
-        "@ElasticNodeMiddleware//:sub-system",
+        "@ElasticNodeMiddleware//:EnergyMonitoringInterfaceLib",
     ]
 )
