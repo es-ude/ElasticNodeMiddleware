@@ -476,6 +476,21 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "EnergyMonitoringInterfaceHdr",
+    hdrs = ["src/energyMonitoringInterface/energyMonitoringInterface.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "EnergyMonitoringInterfaceLib",
+    srcs = ["src/energyMonitoringInterface/energyMonitoringInterface.c"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:EnergyMonitoringInterfaceHdr"
+    ],
+)
+
 exports_files(
     srcs = [
         "ElasticNodeMiddleware/elasticNodeMiddleware.h",
@@ -496,6 +511,7 @@ exports_files(
         "src/uart/uart.h",
         "src/uart/uart_internal.h",
         "src/xmem/xmem.h",
+        "src/energyMonitoringInterface/energyMonitoringInterface.h",
     ],
     visibility = ["//visibility:public"],
 )
