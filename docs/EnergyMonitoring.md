@@ -69,6 +69,8 @@ change_running_state(OWN_STATE_1, &state_of_the_mcu);
 
 #### Sample rate
 
+Warning: The sample rate change functinality is experimental for now.
+
 You can define how often a measurement should take place. 
 
 You can change the sample rate like this at any time:
