@@ -22,13 +22,13 @@ Everything explained in this section can be found implemented in the [monitoring
 
 The code for the main MCU needs the inclusion
 ```c
-#include "src/sub-system/sub-system.h"
+#include "src/EnergyMonitoringInterfaceLib/EnergyMonitoringInterfaceLib.h"
 ```
 
 and the dependency in bazel
 
 ```bazel
-"@ElasticNodeMiddleware//:sub-system",
+"@ElasticNodeMiddleware//:EnergyMonitoringInterfaceLib",
 ```
 
 A slave must be initialized at the beginning of the code:
