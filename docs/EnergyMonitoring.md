@@ -69,7 +69,7 @@ change_running_state(OWN_STATE_1, &state_of_the_mcu);
 
 #### Sample rate
 
-Warning: The sample rate change functinality is experimental for now.
+***Warning: The sample rate change functinality is experimental for now and in the realease v1.0.0 of the elastic node monitoring not actived.***
 
 You can define how often a measurement should take place. 
 
