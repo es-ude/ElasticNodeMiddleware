@@ -1,0 +1,225 @@
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+### <extern ###
+cc_library(
+    name = "BitmanipulationLib",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@EmbeddedUtilities//:BitManipulation",
+    ],
+)
+### extern> ###
+
+cc_library(
+    name = "RegisterDefinitionLibHdr",
+    hdrs = [
+        "pinDefinition/fpgaPins.h",
+        "pinDefinition/fpgaRegisters.h",
+    ],
+)
+
+cc_library(
+    name = "LedLib",
+    srcs = [
+        "led/led_mcu.c",
+    ],
+    hdrs = [
+        "led/led_mcu.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:RegisterDefinitionLibHdr",
+    ],
+)
+
+cc_library(
+    name = "XmemLib",
+    srcs = [
+        "xmem/xmem.c",
+    ],
+    hdrs = [
+        "xmem/xmem.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:RegisterDefinitionLibHdr",
+    ],
+)
+
+cc_library(
+    name = "InterruptManagerLib",
+    srcs = [
+        "interruptManager/interruptManager_avr.c",
+    ],
+    hdrs = [
+        "interruptManager/interruptManager.h",
+        "interruptManager/interruptManager_avr_Mock.h",
+    ],
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:RegisterDefinitionLibHdr",
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddlewareInternalLib",
+    srcs = [
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
+    ],
+    hdrs = [
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:XmemLib",
+    ],
+)
+
+cc_library(
+    name = "SpiLib",
+    srcs = [
+        "spi/spi.c",
+    ],
+    hdrs = [
+        "spi/spi.h",
+    ],
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:XmemLib",
+        "//src:InterruptManagerLib",
+    ],
+)
+
+cc_library(
+    name = "UartLib",
+    srcs = [
+        "uart/uart.c",
+        "uart/uart_internal.c",
+        "uart/circularBuffer/circularBuffer.c",
+    ],
+    hdrs = [
+        "uart/uart.h",
+        "uart/uart_internal.h",
+        "uart/circularBuffer/circularBuffer.h",
+    ],
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//src:InterruptManagerLib",
+        "//src:RegisterDefinitionLibHdr",
+        "//src:InterruptManagerib",
+    ],
+)
+
+cc_library(
+    name = "DebugUartLib",
+    srcs = [
+        "debug/debug.c"
+    ],
+    hdrs = [
+        "debug/debug.h",
+    ],
+    copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src:UartLib",
+    ],
+)
+
+cc_library(
+    name = "DebugLufaLib",
+    srcs = [
+        "debug/debugUsb.c"
+    ],
+    hdrs = [
+        "debug/debug.h",
+    ],
+    copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "@PeripheralInterface//:LufaUsart",
+    ],
+)
+
+cc_library(
+    name = "FlashLib",
+    srcs = [
+        "flash/flash.c",
+    ],
+    hdrs = [
+        "flash/flash.h",
+    ],
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:SpiLib",
+        "//src:DebugLufaLib",
+    ],
+)
+
+cc_library(
+    name = "ConfigurationLib",
+    srcs = [
+        "configuration/configuration.c",
+    ],
+    hdrs = [
+        "configuration/configuration.h",
+    ],
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//src:LedLib",
+        "//src:DebugLufaLib",
+        "//src:FlashLib",
+        "//src:InterruptManagerLib",
+        "//src:ElasticNodeMiddlewareInternalLib",
+    ],
+)
+
+cc_library(
+    name = "ControlmanagerLib",
+    srcs = [
+        "controlmanager/controlmanager.c",
+    ],
+    hdrs = [
+        "controlmanager/controlmanager.h",
+    ],
+    copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src:XmemLib",
+        "//src:FlashLib",
+        "//src:DebugLufaLib",
+        "//src:ConfigurationLib",
+    ],
+)
+
+cc_library(
+    name = "Reconfigure_multiboot_avrLib",
+    srcs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
+        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.c",
+    ],
+    hdrs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
+    ],
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//src:RegisterDefinitionLibHdr",
+        "//src:XmemLib",
+        "//src:InterruptManagerLib",
+        "//src:ElasticNodeMiddlewareInternalLib"
+    ],
+)
+
+exports_files(
+    srcs = [
+        "elasticNodeMiddleware/elasticNodeMiddleware.c",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "energyMonitoringInterface/energyMonitoringInterface.c",
+        "xmem/xmem.h",
+    ],
+    visibility = ["//visibility:public"],
+)

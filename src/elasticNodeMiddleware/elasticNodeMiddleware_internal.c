@@ -1,13 +1,15 @@
-#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-#include "src/xmem/xmem.h"
-#include "src/pinDefinition/fpgaPins.h"
-#include "src/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
+#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
 
-volatile uint8_t *fpgaResetOffset = (uint8_t*) (XMEM_OFFSET + 0x04);
+#include "src/pinDefinition/fpgaPins.h"
+#include "src/pinDefinition/fpgaRegisters.h"
 
-void elasticnode_fpgaPowerOn_internal(void){
+#include "src/xmem/xmem.h"
+
+volatile uint8_t *fpgaResetOffset = (uint8_t * )(XMEM_OFFSET + 0x04);
+
+void elasticnode_fpgaPowerOn_internal(void) {
 
     BitManipulation_setBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
     BitManipulation_setBit(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
@@ -29,7 +31,7 @@ void elasticnode_fpgaPowerOn_internal(void){
     BitManipulation_setBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
 }
 
-void elasticnode_fpgaPowerOff_internal(void){
+void elasticnode_fpgaPowerOff_internal(void) {
     BitManipulation_clearBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
 
     //enable interface
@@ -48,8 +50,8 @@ void elasticnode_fpgaPowerOff_internal(void){
     BitManipulation_clearBit(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
 }
 
-void elasticnode_setFpgaSoftReset_internal(void)
-{
+
+void elasticnode_setFpgaSoftReset_internal(void) {
     *fpgaResetOffset = 0x1;
 }
 
@@ -57,8 +59,7 @@ void elasticnode_clearFpgaSoftReset_internal(void) {
     *fpgaResetOffset = 0x0;
 }
 
-void elasticnode_setFpgaHardReset_internal(void)
-{
+void elasticnode_setFpgaHardReset_internal(void) {
     BitManipulation_setBit(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
     BitManipulation_clearBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
 }

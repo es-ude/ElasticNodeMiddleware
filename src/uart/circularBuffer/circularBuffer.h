@@ -26,10 +26,13 @@ typedef struct {
 void circularBuffer_Init(circularBuffer *c, uint16_t size);
 
 uint16_t circularBuffer_Space(circularBuffer *c);
+
 uint16_t circularBuffer_Count(circularBuffer *c);
+
 uint16_t circularBuffer_CountObjects(circularBuffer *c, uint16_t size);
 
 uint8_t circularBuffer_Push(circularBuffer *c, uint8_t data);
+
 uint8_t circularBuffer_Pop(circularBuffer *c, uint8_t *data);
 
 #endif //ELASTICNODEMIDDLEWARE_CIRCULARBUFFER_H

@@ -79,7 +79,7 @@ You can change the sample rate like this at any time:
 change_sample_rate(CURRENT_SAMPLE_TIME_10ms);
 ```
 
-The possible sample rates are defined in [energyMonitoringInterface.h](../src/energyMonitoringInterface/energyMonitoringInterface.h). The default is 80ms.
+The possible sample rates are defined in [energyMonitoringInterface.h](../OLDsrc/energyMonitoringInterface/energyMonitoringInterface.h). The default is 80ms.
 
 ## Monitoring MCU
 

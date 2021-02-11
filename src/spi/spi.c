@@ -1,16 +1,18 @@
-#include "src/interruptManager/interruptManager.h"
+#include "src/spi/spi.h"
+
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "src/pinDefinition/fpgaPins.h"
-#include "src/spi/spi.h"
+
+#include "src/interruptManager/interruptManager.h"
 #include "src/xmem/xmem.h"
 
 // this function is called when a byte is read from flash
 // parameters are data and whether this is last byte
-void (*readingCallback) (uint8_t, uint8_t) = NULL;
-void (*finishedCallback) (void) = NULL;
+void (*readingCallback)(uint8_t, uint8_t) = NULL;
 
-void spiInit(void)
-{
+void (*finishedCallback)(void) = NULL;
+
+void spiInit(void) {
     interruptManager_clearInterrupt();
 
     spiEnable();
@@ -19,8 +21,8 @@ void spiInit(void)
 
     interruptManager_setInterrupt();
 }
-void spiEnable(void)
-{
+
+void spiEnable(void) {
 
     // ensure master mode (_SS)
     DDRB |= _BV(PB0);
@@ -36,19 +38,16 @@ void spiEnable(void)
     SPDR;
 }
 
-void spiDisable(void)
-{
+void spiDisable(void) {
     SPCR &= ~_BV(SPE);
 }
 
-void flashResetCallbacks(void)
-{
+void flashResetCallbacks(void) {
     readingCallback = NULL;
     finishedCallback = NULL;
 }
 
-void spiPerformTaskBlocking(uint32_t numWrite, uint8_t *dataWrite, uint32_t numRead, uint8_t *dataRead)
-{
+void spiPerformTaskBlocking(uint32_t numWrite, uint8_t *dataWrite, uint32_t numRead, uint8_t *dataRead) {
     uint8_t *ptr;
 
     ptr = dataWrite;
@@ -61,26 +60,20 @@ void spiPerformTaskBlocking(uint32_t numWrite, uint8_t *dataWrite, uint32_t numR
     }
 }
 
-void spiPerformSimpleTaskBlocking(uint8_t command, uint32_t numRead, uint8_t *dataRead)
-{
+void spiPerformSimpleTaskBlocking(uint8_t command, uint32_t numRead, uint8_t *dataRead) {
     spiPerformTaskBlocking(1, &command, numRead, dataRead);
 }
 
 
-
-
-uint8_t spiRead()
-{
+uint8_t spiRead() {
     return SPI(0x00);
 }
 
-void spiWrite(uint8_t data)
-{
+void spiWrite(uint8_t data) {
     SPI(data);
 }
 
-uint8_t SPI(uint8_t data)
-{
+uint8_t SPI(uint8_t data) {
     interruptManager_clearInterrupt();
     SPDR = data;
     while (!(SPSR & _BV(SPIF))) {
@@ -91,10 +84,8 @@ uint8_t SPI(uint8_t data)
 
 //in alwyns code in spiarbritration
 
-void selectFlash(uint8_t mcuFlash)
-{
-    if (mcuFlash)
-    {
+void selectFlash(uint8_t mcuFlash) {
+    if (mcuFlash) {
         deselectWireless();
         spiEnable();
         xmem_disableXmem();
@@ -102,8 +93,7 @@ void selectFlash(uint8_t mcuFlash)
         // many copies of this
         DDR_FLASH_CS |= _BV(P_FLASH_CS);
         PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
-    }
-    else {
+    } else {
         spiEnable();
         xmem_disableXmem();
 
@@ -113,23 +103,19 @@ void selectFlash(uint8_t mcuFlash)
 }
 
 // placeholder function
-void deselectWireless(void)
-{
+void deselectWireless(void) {
     DDR_WIRELESS_CS |= _BV(P_WIRELESS_CS);
     PORT_WIRELESS_CS |= _BV(P_WIRELESS_CS);
 }
 
-void deselectFlash(uint8_t mcuFlash)
-{
-    if (mcuFlash)
-    {
+void deselectFlash(uint8_t mcuFlash) {
+    if (mcuFlash) {
         spiEnable();
         xmem_disableXmem();
 
         DDR_FLASH_CS |= _BV(P_FLASH_CS);
         PORT_FLASH_CS |= _BV(P_FLASH_CS);
-    }
-    else {
+    } else {
         spiEnable();
         xmem_disableXmem();
 
@@ -138,24 +124,21 @@ void deselectFlash(uint8_t mcuFlash)
 
 }
 
-void fpgaFlashPerformTaskWithCallback(uint16_t numWrite, uint8_t *dataWrite, uint16_t numRead, void (*readingCallback)(uint8_t, uint8_t),  void (*finishedCallback)(void))
-{
+void fpgaFlashPerformTaskWithCallback(uint16_t numWrite, uint8_t *dataWrite, uint16_t numRead,
+                                      void (*readingCallback)(uint8_t, uint8_t), void (*finishedCallback)(void)) {
     spiPerformTaskBlockingWithCallback(numWrite, dataWrite, numRead, readingCallback, finishedCallback);
 }
 
 void spiPerformTaskBlockingWithCallback(uint32_t numWrite, uint8_t *dataWrite, uint32_t numRead,
-                                        void (*readingCallback)(uint8_t, uint8_t), void (*finishedCallback)(void))
-{
+                                        void (*readingCallback)(uint8_t, uint8_t), void (*finishedCallback)(void)) {
     uint8_t *ptr;
 
     ptr = dataWrite;
-    for (uint32_t i = 0; i < numWrite; i++)
-    {
+    for (uint32_t i = 0; i < numWrite; i++) {
         spiWrite(*ptr++);
     }
 
-    for (uint32_t i = 0; i < numRead; i++)
-    {
+    for (uint32_t i = 0; i < numRead; i++) {
         readingCallback(spiRead(), i == numRead - 1);
     }
 

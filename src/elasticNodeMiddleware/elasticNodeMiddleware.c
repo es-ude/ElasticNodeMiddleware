@@ -1,19 +1,26 @@
-#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "EmbeddedUtilities/BitManipulation.h"
 
+#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
+
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/pinDefinition/fpgaRegisters.h"
+
+#include "src/led/led_mcu.h"
 #include "src/xmem/xmem.h"
 #include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+#include "src/controlmanager/controlmanager.h"
 
+//TODO: Put these magic number offset values to somewhere more meaningful
+#define USERLOGIC_RESET_OFFSET 0x04
+#define USERLOGIC_RESET_VALUE 0x0
 
-//volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
-volatile uint8_t *xmemOffset = (uint8_t *) (XMEM_OFFSET);
-volatile uint8_t *userLogicOffsetAddr = (uint8_t *) (XMEM_USERLOGIC_OFFSET);
+// volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
+volatile uint8_t *xmemOffset = (uint8_t * )(XMEM_OFFSET);
+volatile uint8_t *userLogicOffsetAddr = (uint8_t * )(XMEM_USERLOGIC_OFFSET);
 
+// --------- <INTERNAL ---------
 void elasticnode_initialise(void) {
-
     // disable r2f chip for start up
     DDRE |= 0x40; // wireless_cs low
     PORTE |= 0x40;
@@ -37,7 +44,6 @@ void elasticnode_initialise(void) {
     BitManipulation_setBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
     BitManipulation_clearBit(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
     BitManipulation_setBit(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
-
 }
 
 void elasticnode_fpgaPowerOn(void) {
@@ -48,9 +54,62 @@ void elasticnode_fpgaPowerOff(void) {
     elasticnode_fpgaPowerOff_internal();
 }
 
-//TODO: Put these magic number offset values to somewhere more meaningful
-#define USERLOGIC_RESET_OFFSET 0x04
-#define USERLOGIC_RESET_VALUE 0x0
+void elasticnode_setFpgaSoftReset(void) {
+    elasticnode_setFpgaSoftReset_internal();
+}
+
+void elasticnode_clearFpgaSoftReset(void) {
+    elasticnode_clearFpgaSoftReset_internal();
+}
+
+void elasticnode_setFpgaHardReset(void) {
+    elasticnode_setFpgaHardReset_internal();
+}
+
+void elasticnode_clearFpgaHardReset(void) {
+    elasticnode_clearFpgaHardReset_internal();
+}
+// --------- INTERNAL> ---------
+
+
+// --------- <CONTROLMANAGER ---------
+void elasticnode_control_setUserHandle(void (*userHandler)(uint8_t)){
+    control_setUserHandle(userHandler);
+}
+
+void elasticnode_control_handleChar(uint8_t currentData){
+    control_handleChar(currentData);
+}
+// --------- CONTROLMANAGER> ---------
+
+
+// --------- <LED ---------
+void elasticnode_led_mcu_init(void) {
+    led_mcu_init();
+}
+
+void elasticnode_led_mcu_turnOn(uint8_t lednumber) {
+    led_mcu_turnOn(lednumber);
+}
+
+void elasticnode_led_mcu_turnOff(uint8_t lednumber) {
+    led_mcu_turnOff(lednumber);
+}
+
+void elasticnode_led_mcu_turnOnAll(void) {
+    led_mcu_turnOnAll();
+}
+
+void elasticnode_led_mcu_turnOffAll(void) {
+    led_mcu_turnOffAll();
+}
+// --------- LED> ---------
+
+
+// --------- <XMEM ---------
+void elasticnode_xmem_initXmem(void) {
+    xmem_initXmem();
+}
 
 void elasticnode_enableFpgaInterface(void) {
     xmem_enableXmem();
@@ -59,6 +118,35 @@ void elasticnode_enableFpgaInterface(void) {
 void elasticnode_disableFpgaInterface(void) {
     xmem_disableXmem();
 }
+// --------- XMEM> ---------
+
+
+// --------- <RECONFIGURE_MULTIBOOT_AVR ---------
+// TODO: Why not used?
+void elasticnode_reconfigure_initMultiboot(void) {
+    reconfigure_initMultiboot();
+}
+
+void elasticnode_configureFPGA(uint32_t address) {
+    reconfigure_fpgaMultiboot(address);
+    // TODO: Does not finish
+    //while(!reconfigure_fpgaMultibootComplete());
+}
+
+void elasticnode_reconfigure_interruptSR(void) {
+    reconfigure_interruptSR();
+}
+
+uint32_t elasticnode_reconfigure_getMultibootAddress(void) {
+    reconfigure_getMultibootAddress();
+}
+
+uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void) {
+    reconfigure_fpgaMultibootComplete();
+}
+// --------- RECONFIGURE_MULTIBOOT_AVR> ---------
+
+/*
 
 
 //TODO: Does not finishes
@@ -118,9 +206,4 @@ void elasticnode_userlogicReset(void) {
     _delay_ms(RESET_DELAY);
     elasticnode_clearFpgaSoftReset_internal();
 }
-
-void elasticnode_fpgaHardReset(void) {
-    // This resets the FPGA using gpio pins
-    elasticnode_setFpgaHardReset_internal();
-    elasticnode_clearFpgaHardReset_internal();
-}
+*/

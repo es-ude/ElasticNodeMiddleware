@@ -1,6 +1,7 @@
-#include "src/led/led_mcu.h"
 #include <util/delay.h>
 #include <stdbool.h>
+
+#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
 
 int main(void) {
 

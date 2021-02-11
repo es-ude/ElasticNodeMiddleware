@@ -16,13 +16,6 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
-        "//:DebugLufaLib",
-        #        "//:Reconfigure_multibootLib",
-        #        "//:XMemLib",
-        #        "//app/setup:Setup",
-        #        "//:ControlmanagerLib",
-        #        "//:FlashLib",
-        "//:LedLib",
     ],
 )
 
@@ -33,13 +26,7 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:ElasticNodeMiddlewareLib",
-        "//:DebugLufaLib",
-        "//:ControlmanagerLib",
-        "//:LedLib",
-        #        "//:Reconfigure_multibootLib",
-        #        "//:XMemLib",
-        #        "//app/setup:Setup",
-        #        "//:FlashLib",
+        "//src:DebugLufaLib",
     ],
 )
 
@@ -50,7 +37,7 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "//:DebugLufaLib",
-        "//:LedLib",
+        "//:ElasticNodeMiddlewareLib",
     ],
 )
 
@@ -60,7 +47,7 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "//:LedLib",
+        "//:ElasticNodeMiddlewareLib",
     ],
 )
 
@@ -70,8 +57,18 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "//:DebugLufaLib",
-        "//:LedLib",
+        "//:ElasticNodeMiddlewareLib",
         "//:EnergyMonitoringInterfaceLib",
+    ],
+)
+
+default_embedded_binary(
+    name = "test",
+    srcs = ["test.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareLib",
+        "//src:DebugLufaLib",
     ],
 )

@@ -1,63 +1,61 @@
 #ifndef ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_H
 #define ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_H
 
-/* *
- * initialise the middleware
- *  - with whatever is necessary
- *
- * FPGA direct control:
- * turn on FPGA
- * turn off FPGA
- * put FPGA to "some" sleep mode
- * reconfigure FPGA to specific state
- *  - This can potentially need different options for how a configuration is loaded.
- * write configuration onto FPGA flash (optional for now)
- *
- * write data to FPGA (blocking)
- * read data from FPGA (blocking)
- * write data to FPGA (non-blocking)
- * read data from FPGA (non-blocking)
- * */
-#include <stdint.h>
+#include "src/xmem/xmem.h"
 
-
+// --------- <INTERNAL ---------
 void elasticnode_initialise(void);
+
 void elasticnode_fpgaPowerOn(void);
+
 void elasticnode_fpgaPowerOff(void);
 
-// TODO: implement void elasticnode_fpgaSleep(uint8_t sleepmode);
+void elasticnode_setFpgaSoftReset(void);
+
+void elasticnode_clearFpgaSoftReset(void);
+
+void elasticnode_setFpgaHardReset(void);
+
+void elasticnode_clearFpgaHardReset(void);
+// --------- INTERNAL> ---------
+
+// --------- <CONTROLMANAGER ---------
+void elasticnode_control_setUserHandle(void (*userHandler)(uint8_t));
+
+void elasticnode_control_handleChar(uint8_t currentData);
+// --------- CONTROLMANAGER> ---------
+
+// --------- <LED ---------
+void elasticnode_led_mcu_init(void);
+
+void elasticnode_led_mcu_turnOn(uint8_t lednumber);
+
+void elasticnode_led_mcu_turnOff(uint8_t lednumber);
+
+void elasticnode_led_mcu_turnOnAll(void);
+
+void elasticnode_led_mcu_turnOffAll(void);
+// --------- LED> ---------
+
+// --------- <XMEM ---------
+void elasticnode_xmem_initXmem(void);
 
 void elasticnode_enableFpgaInterface(void);
+
 void elasticnode_disableFpgaInterface(void);
 
-void elasticnode_writeByteToUserlogic(uint8_t userlogicAddr, uint8_t data);
-void elasticnode_writeBufferToUserlogic(uint8_t userlogicAddr, uint16_t size, const uint8_t *buffer);
-uint8_t elasticnode_readByteFromUserlogic(uint8_t userlogicAddr);
-void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, uint8_t *buffer);
+// --------- XMEM> ---------
 
-void elasticnode_configureFPGA(uint32_t bitfileAddress);
-uint32_t elasticnode_getLoadedConfigurationAddress(void);
+// --------- <RECONFIGURE_MULTIBOOT_AVR ---------
+void elasticnode_reconfigure_initMultiboot(void);
 
-//void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data);
-//void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data);
-//uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address);
-//void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return);
+void elasticnode_configureFPGA(uint32_t address);
 
-//TODO: read + write non-blocking might be implemented
+void elasticnode_reconfigure_interruptSR(void);
 
-void elasticnode_userlogicReset(void);
-void elasticnode_fpgaHardReset(void);
+uint32_t elasticnode_reconfigure_getMultibootAddress(void);
 
-//for integration testing
-#define FPGA_DONE_MULTIBOOT 2
+uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void);
+// --------- RECONFIGURE_MULTIBOOT_AVR> ---------
 
-
-#ifdef TEST
-
-#else
-
-#include <util/delay.h>
-
-#endif
-
-#endif //ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_H
+#endif // ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_H

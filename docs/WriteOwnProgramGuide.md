@@ -84,7 +84,7 @@ or
 When you include libaries you have to add them to the deps in the BUILD.bazel file in the app folder.
 The "//app/setup:Setup" should always be a dependency.
 Because of the elastic node middleware as an external dependency, you have to add "@ElasticNodeMiddleware" before every used library of the elastic node middleware.
-If you write own libraries you do not have to add this before the library (refer to the [BUILD.bazel](../BUILD.bazel) of the elastic node middleware).
+If you write own libraries you do not have to add this before the library (refer to the [BUILD.bazel](../OLDBUILD.bazel) of the elastic node middleware).
 
 Here is an example where have all dependencies from the elastic node middleware are used: 
 ```bazel
@@ -134,13 +134,13 @@ Wherby you add `:OtherFile` as a deps in the main binary and include all libarie
 
 ### Debug 
 
-For uploding the main file with the DEBUG macors defined use the mainDEBUG target defined in the [BULD.bazel](../templates/appBUILD.bazel).
+For uploading the main file with the DEBUG macors defined use the mainDEBUG target defined in the [BULD.bazel](../templates/appBUILD.bazel).
 
     $ bazel run //app:mainDEBUG_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 ## Upload your own bitfiles
 
-Whenever you want to flash bitfiles, upload the main.c with the DEBUG Flag set as exlpained above.
+Whenever you want to flash bitfiles, upload the main.c with the DEBUG Flag set as explained above.
   
 You have to write the name of you bitfile, which you can put in the bitfiles folder, in the bitfileConfigs.py.
 If you want to upload two bitfiles, comment in the definition of the second bitfile.

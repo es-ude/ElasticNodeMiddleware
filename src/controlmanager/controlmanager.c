@@ -1,20 +1,9 @@
-
 #include "src/controlmanager/controlmanager.h"
+
 #include "src/configuration/configuration.h"
 #include "src/xmem/xmem.h"
 #include "src/debug/debug.h"
 #include "src/flash/flash.h"
-
-//#include "EmbeddedUtilities/BitManipulation.h"
-//
-//#include "src/elasticNodeMiddleware/elasticNodeMiddleware.h"
-//#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-//#include "src/pinDefinition/fpgaPins.h"
-//#include "src/pinDefinition/fpgaRegisters.h"
-//#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
-//#include "src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"
-//#include "src/spi/spi.h"
-
 
 uartReceiveMode currentUartReceiveMode = UART_IDLE;
 //loadingMode currentLoadingMode = LOADING_IDLE;
@@ -24,8 +13,8 @@ uartReceiveMode currentUartReceiveMode = UART_IDLE;
 //volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
 
 
-volatile uint8_t *userlogic_reset_addr = (uint8_t *) (XMEM_OFFSET + 0x04);
-volatile uint8_t *userlogic_id_addr = (uint8_t *) (XMEM_USERLOGIC_OFFSET + 1500);
+volatile uint8_t *userlogic_reset_addr = (uint8_t * )(XMEM_OFFSET + 0x04);
+volatile uint8_t *userlogic_id_addr = (uint8_t * )(XMEM_USERLOGIC_OFFSET + 1500);
 
 void dummyHandler(uint8_t currentData);
 
@@ -151,5 +140,3 @@ void control_handleChar(uint8_t currentData) {
             break;
     }
 }
-
-

@@ -4,6 +4,7 @@
 
 //Alternative: Macro
 void interruptManager_clearInterrupt(void);
+
 void interruptManager_setInterrupt(void);
 
 
