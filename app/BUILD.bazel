@@ -60,14 +60,3 @@ default_embedded_binary(
         "//:EnergyMonitoringInterfaceLib",
     ],
 )
-
-default_embedded_binary(
-    name = "test",
-    srcs = ["test.c"],
-    copts = cpu_frequency_flag(),
-    uploader = "@AvrToolchain//:avrdude_upload_script",
-    deps = [
-        "//:ElasticNodeMiddlewareLib",
-        "//src:DebugLufaLib",
-    ],
-)

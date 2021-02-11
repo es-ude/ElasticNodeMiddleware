@@ -13,12 +13,31 @@ cc_library(
 cc_library(
     name = "ElasticNodeMiddlewareLib",
     srcs = [
-        "//src:elasticNodeMiddleware/elasticNodeMiddleware.c",
+        "//src:elasticNodeMiddleware/ElasticNodeMiddleware.c",
     ],
     hdrs = [
-        "ElasticNodeMiddleware/elasticNodeMiddleware.h",
+        "ElasticNodeMiddleware/ElasticNodeMiddleware.h",
     ],
     copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:LedLib",
+        "//src:XmemLib",
+        "//src:Reconfigure_multiboot_avrLib",
+        "//src:ElasticNodeMiddlewareInternalLib",
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddlewareDEBUGLib",
+    srcs = [
+        "//src:elasticNodeMiddleware/ElasticNodeMiddleware.c",
+    ],
+    hdrs = [
+        "ElasticNodeMiddleware/ElasticNodeMiddleware.h",
+    ],
+    copts = cpu_frequency_flag() + ["-DDEBUG"],
     visibility = ["//visibility:public"],
     deps = [
         "//:BitmanipulationLib",
@@ -27,16 +46,17 @@ cc_library(
         "//src:ControlmanagerLib",
         "//src:Reconfigure_multiboot_avrLib",
         "//src:ElasticNodeMiddlewareInternalLib",
+        "//src:DebugLufaLib"
     ],
 )
 
 cc_library(
     name = "EnergyMonitoringInterfaceLib",
     srcs = [
-        "//src:energyMonitoringInterface/energyMonitoringInterface.c",
+        "//src:energyMonitoringInterface/EnergyMonitoringInterface.c",
     ],
     hdrs = [
-        "ElasticNodeMiddleware/energyMonitoringInterface.h",
+        "ElasticNodeMiddleware/EnergyMonitoringInterface.h",
     ],
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
