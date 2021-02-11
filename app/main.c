@@ -3,9 +3,7 @@
 #include <stdbool.h>
 #include <util/delay.h>
 
-#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
-
-#include "src/debug/debug.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 
 #ifdef DEBUG
 uint8_t *data;
@@ -33,10 +31,10 @@ void handleCharInput(uint8_t currentData);
 int main(void) {
     elasticnode_led_mcu_init();
 #ifdef DEBUG
-    debugInit(NULL);
+    elasticnode_debugInit(NULL);
     elasticnode_control_setUserHandle(&handleCharInput);
     // TODO: Does not work in some enviroments
-    //debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
+    //elasticnode_debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
 #endif
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
@@ -53,11 +51,11 @@ int main(void) {
 
 #ifdef DEBUG
         // have after each cycle a moment to see if we have a user interaction
-        if (debugReadCharAvailable()) {
-            uint8_t data = debugGetChar();
+        if (elasticnode_debugReadCharAvailable()) {
+            uint8_t data = elasticnode_debugGetChar();
             elasticnode_control_handleChar(data);
         }
-        debugTask(); // This only prints a part of the transmit buffer. Beware when sending a lot of strings
+        elasticnode_debugTask(); // This only prints a part of the transmit buffer. Beware when sending a lot of strings
 #endif
     }
     return 0;
@@ -68,36 +66,36 @@ void handleCharInput(uint8_t currentData) {
     //TODO: Please fill this with custom command handling where necessary
     switch (currentData) {
         case 't':
-            debugWriteString("\nuser mode test. You are a cool dev!\r\n");
+            elasticnode_debugWriteString("\nuser mode test. You are a cool dev!\r\n");
             break;
-                case 'L':
-                    elasticnode_enableFpgaInterface();
-                    *(addr_led) = (uint8_t) (0xff);
-                    *data = *(addr_led);
-                    debugWriteLine("led_data: ");
-                    debugWriteHex8(*data);
-                    debugWriteLine("\r\n");
-                    break;
-                case 'l':
-                    elasticnode_enableFpgaInterface();
-                    *(addr_led) = (uint8_t) (0x00);
-                    *data = *(addr_led);
-                    debugWriteLine("led_data: ");
-                    debugWriteHex8(*data);
-                    debugWriteLine("\r\n");
-                    break;
-                case 'r':
-                    elasticnode_configureFPGA(0x0);
-                    debugWriteLine("reconfigured FPGA to 0x0");
-                    break;
-                case 'R':
-                    elasticnode_configureFPGA(0x90000);
-                    debugWriteLine("reconfigured FPGA to 0x90000");
-                    break;
+        case 'L':
+            elasticnode_enableFpgaInterface();
+            *(addr_led) = (uint8_t) (0xff);
+            *data = *(addr_led);
+            elasticnode_debugWriteLine("led_data: ");
+            elasticnode_debugWriteHex8(*data);
+            elasticnode_debugWriteLine("\r\n");
+            break;
+        case 'l':
+            elasticnode_enableFpgaInterface();
+            *(addr_led) = (uint8_t) (0x00);
+            *data = *(addr_led);
+            elasticnode_debugWriteLine("led_data: ");
+            elasticnode_debugWriteHex8(*data);
+            elasticnode_debugWriteLine("\r\n");
+            break;
+        case 'r':
+            elasticnode_configureFPGA(0x0);
+            elasticnode_debugWriteLine("reconfigured FPGA to 0x0");
+            break;
+        case 'R':
+            elasticnode_configureFPGA(0x90000);
+            elasticnode_debugWriteLine("reconfigured FPGA to 0x90000");
+            break;
         default:
-            debugWriteString("unknown mode command received\r\n");
+            elasticnode_debugWriteString("unknown mode command received\r\n");
             break;
     }
-    debugTask();
+    elasticnode_debugTask();
 }
 #endif

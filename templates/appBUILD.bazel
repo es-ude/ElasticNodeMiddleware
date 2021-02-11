@@ -7,14 +7,7 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "//app/setup:Setup",
-        "@ElasticNodeMiddleware//:LedLib",
         "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
-        "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
-        "@ElasticNodeMiddleware//:XMemLib",
-        "@ElasticNodeMiddleware//:DebugLufaLib",
-        "@ElasticNodeMiddleware//:ControlmanagerLib",
-        "@ElasticNodeMiddleware//:FlashLib",
     ],
 )
 
@@ -24,13 +17,6 @@ default_embedded_binary(
     copts = cpu_frequency_flag() + ["-DDEBUG"],
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "//app/setup:Setup",
-        "@ElasticNodeMiddleware//:LedLib",
-        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
-        "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
-        "@ElasticNodeMiddleware//:XMemLib",
-        "@ElasticNodeMiddleware//:DebugLufaLib",
-        "@ElasticNodeMiddleware//:ControlmanagerLib",
-        "@ElasticNodeMiddleware//:FlashLib",
+        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUGLib",
     ],
 )

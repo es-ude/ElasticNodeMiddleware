@@ -1,7 +1,7 @@
 #include <util/delay.h>
 #include <stdbool.h>
 
-#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 
 int main(void) {
 

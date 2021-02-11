@@ -3,8 +3,7 @@
 #include <stdbool.h>
 #include <util/delay.h>
 
-#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
-#include "src/debug/debug.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 
 int main(void)
 {

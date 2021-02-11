@@ -1,6 +1,8 @@
+#include <util/delay.h>
+
 #include "EmbeddedUtilities/BitManipulation.h"
 
-#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 #include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
 
 #include "src/pinDefinition/fpgaPins.h"
@@ -9,7 +11,11 @@
 #include "src/led/led_mcu.h"
 #include "src/xmem/xmem.h"
 #include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+
+#ifdef DEBUG
 #include "src/controlmanager/controlmanager.h"
+#include "src/debug/debug.h"
+#endif
 
 //TODO: Put these magic number offset values to somewhere more meaningful
 #define USERLOGIC_RESET_OFFSET 0x04
@@ -58,30 +64,19 @@ void elasticnode_setFpgaSoftReset(void) {
     elasticnode_setFpgaSoftReset_internal();
 }
 
-void elasticnode_clearFpgaSoftReset(void) {
+void elasticnode_userlogicReset(void) {
+    //this resets the userlogic
+    elasticnode_setFpgaSoftReset_internal();
+    _delay_ms(RESET_DELAY);
     elasticnode_clearFpgaSoftReset_internal();
 }
 
-void elasticnode_setFpgaHardReset(void) {
+void elasticnode_fpgaHardReset(void) {
+    // This resets the FPGA using gpio pins
     elasticnode_setFpgaHardReset_internal();
-}
-
-void elasticnode_clearFpgaHardReset(void) {
     elasticnode_clearFpgaHardReset_internal();
 }
 // --------- INTERNAL> ---------
-
-
-// --------- <CONTROLMANAGER ---------
-void elasticnode_control_setUserHandle(void (*userHandler)(uint8_t)){
-    control_setUserHandle(userHandler);
-}
-
-void elasticnode_control_handleChar(uint8_t currentData){
-    control_handleChar(currentData);
-}
-// --------- CONTROLMANAGER> ---------
-
 
 // --------- <LED ---------
 void elasticnode_led_mcu_init(void) {
@@ -105,12 +100,7 @@ void elasticnode_led_mcu_turnOffAll(void) {
 }
 // --------- LED> ---------
 
-
 // --------- <XMEM ---------
-void elasticnode_xmem_initXmem(void) {
-    xmem_initXmem();
-}
-
 void elasticnode_enableFpgaInterface(void) {
     xmem_enableXmem();
 }
@@ -119,7 +109,6 @@ void elasticnode_disableFpgaInterface(void) {
     xmem_disableXmem();
 }
 // --------- XMEM> ---------
-
 
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
 // TODO: Why not used?
@@ -137,27 +126,162 @@ void elasticnode_reconfigure_interruptSR(void) {
     reconfigure_interruptSR();
 }
 
-uint32_t elasticnode_reconfigure_getMultibootAddress(void) {
-    reconfigure_getMultibootAddress();
-}
-
-uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void) {
-    reconfigure_fpgaMultibootComplete();
-}
-// --------- RECONFIGURE_MULTIBOOT_AVR> ---------
-
-/*
-
-
-//TODO: Does not finishes
-void elasticnode_configureFPGA(uint32_t address){
-    reconfigure_fpgaMultiboot(address);
-    while(!reconfigure_fpgaMultibootComplete());
-}
-
 uint32_t elasticnode_getLoadedConfigurationAddress(void){
     return reconfigure_getMultibootAddress();
 }
+
+uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void) {
+    return reconfigure_fpgaMultibootComplete();
+}
+// --------- RECONFIGURE_MULTIBOOT_AVR> ---------
+
+#ifdef DEBUG
+// --------- <CONTROLMANAGER ---------
+void elasticnode_control_setUserHandle(void (*userHandler)(uint8_t)){
+    control_setUserHandle(userHandler);
+}
+
+void elasticnode_control_handleChar(uint8_t currentData){
+    control_handleChar(currentData);
+}
+// --------- CONTROLMANAGER> ---------
+
+// --------- <DEBUG ---------
+void  elasticnode_debugTask(void){
+    debugTask();
+}
+
+uint16_t  elasticnode_debugNumInputAvailable(void){
+    debugNumInputAvailable();
+}
+
+void elasticnode_debugInit(void (*receiveHandler)(uint8_t)){
+    debugInit(receiveHandler);
+}
+
+void elasticnode_setDebugReceiveHandler(void (*receiveHandler)(uint8_t)){
+    setDebugReceiveHandler(receiveHandler);
+}
+
+void elasticnode_debugNewLine(void){
+    debugNewLine();
+}
+
+void elasticnode_debugWriteBool(uint8_t input){
+    debugWriteBool(input);
+}
+
+void elasticnode_debugWriteLine(char *s){
+    debugWriteLine(s);
+}
+
+void elasticnode_debugWriteString(char *s){
+    debugWriteString(s);
+}
+
+void elasticnode_debugWriteStringLength(char *s, uint16_t length){
+    debugWriteStringLength(s, length);
+}
+
+void elasticnode_debugWriteChar(uint8_t c){
+    debugWriteChar(c);
+}
+
+void elasticnode_debugWriteCharBlock(uint8_t c){
+    debugWriteCharBlock(c);
+};
+
+uint8_t elasticnode_debugReadCharAvailable(void){
+    debugReadCharAvailable();
+}
+
+void elasticnode_debugReadCharProcessed(void){
+    debugReadCharProcessed();
+}
+
+uint8_t elasticnode_debugReadCharBlock(void){
+    debugReadCharBlock();
+}
+
+uint8_t elasticnode_debugGetChar(void){
+    debugGetChar();
+}
+
+void elasticnode_debugWriteHex8(uint8_t num){
+    debugWriteHex8(num);
+}
+
+void elasticnode_debugWriteHex16(uint16_t num){
+    debugWriteHex16(num);
+}
+
+void elasticnode_debugWriteHex32(uint32_t num){
+    debugWriteHex32(num);
+}
+
+void elasticnode_debugWriteDec8(uint8_t num){
+    debugWriteDec8(num);
+}
+
+void elasticnode_debugWriteDec16(uint16_t num){
+    debugWriteDec16(num);
+}
+
+void elasticnode_debugWriteDec32(uint32_t num){
+    debugWriteDec32(num);
+}
+
+void elasticnode_debugWriteDec32S(int32_t num){
+    debugWriteDec32S(num);
+}
+
+void elasticnode_debugWriteBin4(uint8_t num){
+    debugWriteBin4(num);
+}
+
+void elasticnode_debugWriteBin8(uint8_t num){
+    debugWriteBin8(num);
+}
+
+void elasticnode_debugWriteBin32(uint32_t num){
+    debugWriteBin32(num);
+}
+
+void elasticnode_debugWriteFloat(float num){
+    debugWriteFloat(num);
+}
+
+void elasticnode_debugWriteFloatFull(float num){
+    debugWriteFloatFull(num);
+}
+
+void elasticnode_debugDone(void){
+    debugDone();
+}
+
+void elasticnode_debugReady(void){
+    debugReady();
+}
+
+void elasticnode_debugWaitUntilDone(void){
+    debugWaitUntilDone();
+}
+
+uint8_t elasticnode_debugSending(void){
+    debugSending();
+}
+
+void elasticnode_debugAck(uint8_t c){
+    debugAck(c);
+}
+// --------- DEBUG> ---------
+#endif
+
+
+
+
+/*
+
 void elasticnode_writeByteToUserlogic(uint8_t userlogicAddr, uint8_t data) {
     *(userLogicOffsetAddr + userlogicAddr) = data;
 }
@@ -177,7 +301,6 @@ void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, u
         *(buffer + i) = *(userLogicOffsetAddr + userlogicAddr + i);
     }
 }
-
 
 //void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data) {
 //    *(ptr_xmem_offset + address) = data;
@@ -200,10 +323,4 @@ void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, u
 //    }
 //}
 
-void elasticnode_userlogicReset(void) {
-    //this resets the userlogic
-    elasticnode_setFpgaSoftReset_internal();
-    _delay_ms(RESET_DELAY);
-    elasticnode_clearFpgaSoftReset_internal();
-}
 */

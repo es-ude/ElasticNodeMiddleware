@@ -205,6 +205,7 @@ cc_library(
         "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
     ],
     copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
     deps = [
         "//src:RegisterDefinitionLibHdr",
         "//src:XmemLib",
@@ -215,10 +216,10 @@ cc_library(
 
 exports_files(
     srcs = [
-        "elasticNodeMiddleware/elasticNodeMiddleware.c",
+        "elasticNodeMiddleware/ElasticNodeMiddleware.c",
         "elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
         "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
-        "energyMonitoringInterface/energyMonitoringInterface.c",
+        "energyMonitoringInterface/EnergyMonitoringInterface.c",
         "xmem/xmem.h",
     ],
     visibility = ["//visibility:public"],
