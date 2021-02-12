@@ -47,6 +47,8 @@ With Ubuntu and macOS you can run
     $ ls /dev
 
 before and after you plug in the devices and the newly added device is the needed port.
+The programmer should always be visible, but the elastic node itself only when in debug mode. For more information refer to the debug section in the [WriteOwnProgramGuide](WriteOwnProgramGuide.md#Debug).
+
 In our case the programmer is "ttyACM0" and the elastic node itself is "ttyACM1", this ports will be set as standard in all files.
 
 ### Build your own Program
