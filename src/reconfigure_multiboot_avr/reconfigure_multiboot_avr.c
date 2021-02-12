@@ -23,6 +23,8 @@ void _delay_ms(uint8_t delay);
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
 volatile uint8_t *AddressMultiboot = (uint8_t * )(XMEM_OFFSET + 0x05);
 
+// TODO: Necessary?
+/*
 void reconfigure_initMultiboot(void) {
 
     FPGA_DONE_INT_REG &= ~FPGA_DONE_INT;
@@ -32,6 +34,7 @@ void reconfigure_initMultiboot(void) {
     reconfigure_fpgaMultibootClearComplete_internal();
     fpgaDoneResponse = FPGA_DONE_NOTHING;
 }
+ */
 
 void reconfigure_fpgaMultiboot(uint32_t address) {
 
@@ -46,7 +49,7 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
 
     xmem_disableXmem();
 
-    //enable beabsichtigt?
+    //enable intended?
     interruptManager_setInterrupt();
 }
 
@@ -58,6 +61,7 @@ uint8_t reconfigure_fpgaMultibootComplete(void) {
     return reconfigure_fpgaMultibootComplete_internal();
 }
 
+// TODO: Necessary?
 void reconfigure_interruptSR(void) {
 
     if ((*PIN_FPGA_DONE & (1 << P_FPGA_DONE)) != 0) {

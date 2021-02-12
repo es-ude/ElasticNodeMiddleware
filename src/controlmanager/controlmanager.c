@@ -45,9 +45,12 @@ void userlogic_read_id(void) {
     xmem_disableXmem();
 }
 
+// TODO: Necessary?
+/*
 uint8_t control_isUartIdle(void) {
     return currentUartReceiveMode != UART_IDLE;
 }
+*/
 
 void dummyHandler(uint8_t currentData) {
     //dummy function, to never have the situation of having a function null pointer.
@@ -108,31 +111,6 @@ void control_handleChar(uint8_t currentData) {
                      * */
                     debugAck(currentData + 1);
                     break;
-//
-//                case 'L':
-//                    xmem_enableXmem();
-//                    *(addr_led) = (uint8_t) (0xff);
-//                    *data = *(addr_led);
-//                    debugWriteLine("led_data: ");
-//                    debugWriteHex8(*data);
-//                    debugWriteLine("\r\n");
-//                    break;
-//                case 'l':
-//                    xmem_enableXmem();
-//                    *(addr_led) = (uint8_t) (0x00);
-//                    *data = *(addr_led);
-//                    debugWriteLine("led_data: ");
-//                    debugWriteHex8(*data);
-//                    debugWriteLine("\r\n");
-//                    break;
-//                case 'r':
-//                    reconfigure_fpgaMultiboot(0x0);
-//                    break;
-//                case 'R':
-//                    reconfigure_fpgaMultiboot(0x90001);
-//                    break;
-//                    // indicate readiness
-
             }
             break;
 

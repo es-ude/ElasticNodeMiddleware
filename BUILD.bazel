@@ -22,6 +22,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:BitmanipulationLib",
+        "//src:RegisterDefinitionLibHdr",
         "//src:LedLib",
         "//src:XmemLib",
         "//src:Reconfigure_multiboot_avrLib",
@@ -41,6 +42,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:BitmanipulationLib",
+        "//src:RegisterDefinitionLibHdr",
         "//src:LedLib",
         "//src:XmemLib",
         "//src:ControlmanagerLib",
@@ -53,10 +55,10 @@ cc_library(
 cc_library(
     name = "EnergyMonitoringInterfaceLib",
     srcs = [
-        "//src:energyMonitoringInterface/EnergyMonitoringInterface.c",
+        "//src:elasticNodeMiddlewareMonitoring/ElasticNodeMiddlewareMonitoring.c",
     ],
     hdrs = [
-        "ElasticNodeMiddleware/EnergyMonitoringInterface.h",
+        "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h",
     ],
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],

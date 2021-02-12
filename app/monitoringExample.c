@@ -5,7 +5,7 @@
 #include <compat/twi.h>
 
 #include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
-#include "ElasticNodeMiddleware/EnergyMonitoringInterface.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h"
 
 uint8_t state_of_the_mcu;
 

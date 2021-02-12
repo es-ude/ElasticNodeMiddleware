@@ -1,4 +1,4 @@
-#include "ElasticNodeMiddleware/energyMonitoringInterface.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h"
 
 #include <stdio.h>
 #include <stdint.h>

@@ -94,7 +94,7 @@ void configurationUartFlash(void) {
 }
 
 // not used until now
-// eventually include verification of flash
+// TODO: eventually include verification of flash
 void verifyConfigurationFlash(uint8_t mcuFlash) {
     elasticnode_setFpgaHardReset_internal();
     elasticnode_clearFpgaHardReset_internal();

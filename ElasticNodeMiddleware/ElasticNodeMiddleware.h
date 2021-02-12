@@ -41,8 +41,6 @@ void elasticnode_disableFpgaInterface(void);
 // --------- XMEM> ---------
 
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
-void elasticnode_reconfigure_initMultiboot(void);
-
 void elasticnode_configureFPGA(uint32_t address);
 
 void elasticnode_reconfigure_interruptSR(void);

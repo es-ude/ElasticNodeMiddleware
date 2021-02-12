@@ -111,11 +111,6 @@ void elasticnode_disableFpgaInterface(void) {
 // --------- XMEM> ---------
 
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
-// TODO: Why not used?
-void elasticnode_reconfigure_initMultiboot(void) {
-    reconfigure_initMultiboot();
-}
-
 void elasticnode_configureFPGA(uint32_t address) {
     reconfigure_fpgaMultiboot(address);
     // TODO: Does not finish
@@ -278,10 +273,8 @@ void elasticnode_debugAck(uint8_t c){
 #endif
 
 
-
-
+// TODO: check old code
 /*
-
 void elasticnode_writeByteToUserlogic(uint8_t userlogicAddr, uint8_t data) {
     *(userLogicOffsetAddr + userlogicAddr) = data;
 }
