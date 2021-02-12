@@ -28,6 +28,6 @@ default_embedded_binary(
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
-        "@ElasticNodeMiddleware//:EnergyMonitoringInterfaceLib",
+        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareMonitoringLib",
     ]
 )
