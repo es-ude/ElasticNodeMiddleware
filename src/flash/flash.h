@@ -20,17 +20,31 @@
 #define P_FLASH_SCK PB1
 
 void initFlash(void);
+
 void flashEnableInterface(void);
+
 void flashDisableInterface(void);
+
 void eraseSectorFlash(uint32_t address, uint8_t mcuFlash);
+
 void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mcuFlash);
+
 void flashSetSpeed(uint8_t speed);
+
 void flashResetQueue(void);
+
 void flashResetWriteCount(void);
+
 void writeEnableFlash(uint8_t mcuFlash);
+
 void waitDoneFlash(uint8_t mcuFlash);
+
 uint8_t readStatus(uint8_t mcuFlash);
-uint8_t *readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, void (*readingCallbackFunction)(uint8_t, uint8_t), void (*finishedCallbackFunction)(void));
+
+uint8_t *
+readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, void (*readingCallbackFunction)(uint8_t, uint8_t),
+              void (*finishedCallbackFunction)(void));
+
 void unlockFlash(uint8_t mcuFlash);
 
 #endif //ELASTICNODEMIDDLEWARE_FLASH_H

@@ -5,7 +5,7 @@ For using the elastic node middleware as a library see the [WriteOwnProgramGuide
 ## Set up
 
 We recommend you to use an IDE. We use the IDE CLion for our bazel projects. 
-You can easily [Clone](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository) the ElasticNodeMiddleware repositorie from there
+You can easily [Clone](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository) the ElasticNodeMiddleware repository from there
 by using "Get from Version Control". 
 
 ### Serial ports
@@ -63,6 +63,7 @@ When you create your own C files make sure to include them in the BUILD.bazel, e
 
 ### Libraries
 
+When you include the `ElasticNodeMiddleware.h` you include the libraries as visualised in the [dependency graph](images/dependency_graph_labeld.jpg).
 All the libraries are located in the [lib folder](../src). If you do not plan on modifying them consider to use the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md) instead.
 
 ## Uploading bitfiles

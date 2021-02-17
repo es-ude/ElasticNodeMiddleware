@@ -3,8 +3,8 @@ load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_
 #cc_library(
 #    name = "Library",
 #    srcs = glob([
-#        "src/**/*.c",
-#        "src/**/*.h",
+#        "OLDsrc/**/*.c",
+#        "OLDsrc/**/*.h",
 #    ]),
 #    copts = cpu_frequency_flag(),
 #    visibility = ["//visibility:public"],

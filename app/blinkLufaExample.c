@@ -3,9 +3,7 @@
 #include <stdbool.h>
 #include <util/delay.h>
 
-
-#include "src/debug/debug.h"
-#include "src/led/led_mcu.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 
 int main(void)
 {

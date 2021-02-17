@@ -18,7 +18,7 @@ cc_library(
 
 mock(
     name = "mock_ElasticNodemiddleware",
-    srcs = ["//:ElasticNodeMiddleware/elasticNodeMiddleware.h"],
+    srcs = ["//:ElasticNodeMiddleware/ElasticNodeMiddleware.h"],
     copts = ["-DTEST"],
     deps = ["//:ElasticNodeMiddlewareLibHdr"],
 )

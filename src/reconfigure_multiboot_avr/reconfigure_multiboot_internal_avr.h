@@ -8,7 +8,9 @@
 #define FPGA_DONE_MULTIBOOT 2
 
 void reconfigure_fpgaMultibootClearComplete_internal(void);
+
 void reconfigure_fpgaSetDoneReponse_internal(uint8_t response);
+
 uint8_t reconfigure_fpgaMultibootComplete_internal(void);
 
 

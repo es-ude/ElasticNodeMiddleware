@@ -28,6 +28,4 @@ The installation is described at the [docker website](https://docs.docker.com/ge
 
 ## Github Repository
 
-The elastic node middleware code is uploaded in a [github repository](https://github.com/es-ude/ElasticNodeMiddleware).
-For using the code, you have to clone the repository. 
-
+The elastic node middleware code is uploaded in a [github repository](https://github.com/es-ude/ElasticNodeMiddleware). 

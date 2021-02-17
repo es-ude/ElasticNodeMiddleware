@@ -9,11 +9,11 @@ HEX = False
 ser = serial.Serial(sys.argv[1], sys.argv[2])
 
 try:
-	while True:
-		sys.stdout.write(ser.read(1))
-		sys.stdout.flush()
+    while True:
+        sys.stdout.write(ser.read(1))
+        sys.stdout.flush()
 except KeyboardInterrupt:
-	print("key exc")
+    print("key exc")
 finally:
-	print('done')
-	ser.close()
+    print('done')
+    ser.close()
