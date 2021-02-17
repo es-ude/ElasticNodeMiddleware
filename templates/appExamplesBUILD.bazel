@@ -31,3 +31,16 @@ default_embedded_binary(
         "@ElasticNodeMiddleware//:ElasticNodeMiddlewareMonitoringLib",
     ]
 )
+
+default_embedded_binary(
+    name = "monitoringExample",
+    srcs = ["monitoringExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "@ElasticNodeMiddleware//app/setup:Setup",
+        "@ElasticNodeMiddleware//:DebugLufaLib",
+        "@ElasticNodeMiddleware//:LedLib",
+        "@ElasticNodeMiddleware//:EnergyMonitoringInterfaceLib",
+    ]
+)
