@@ -35,8 +35,7 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "//:DebugLufaLib",
-        "//:ElasticNodeMiddlewareLib",
+        "//:ElasticNodeMiddlewareDEBUGLib",
     ],
 )
 
