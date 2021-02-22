@@ -1,6 +1,8 @@
 #include "unity.h"
+
 #include "src/uart/uart_internal.h"
 #include "src/uart/circularBuffer/MockcircularBuffer.h"
+
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/interruptManager/MockinterruptManager.h"

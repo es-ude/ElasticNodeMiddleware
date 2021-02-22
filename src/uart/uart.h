@@ -5,9 +5,11 @@
 #include <stdio.h>
 
 #ifdef TEST
+
 #else
 
 #define UART_DEBUG
+
 #ifdef UART_DEBUG
 
 #include <util/delay.h>

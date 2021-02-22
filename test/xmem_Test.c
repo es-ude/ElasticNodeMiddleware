@@ -1,7 +1,10 @@
 #include "unity.h"
-#include "src/xmem/xmem.h"
-#include "src/pinDefinition/fpgaPins.h"
+
 #include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
+
+#include "src/xmem/xmem.h"
+
+#include "src/pinDefinition/fpgaPins.h"
 
 uint8_t ddr_xmem_a;
 uint8_t ddr_xmem_ad;
@@ -14,18 +17,18 @@ uint8_t xmcra;
 uint8_t xmcrb;
 
 uint8_t XMEM_ENABLE_REG = 0;
-uint8_t* DDR_XMEM_A = &ddr_xmem_a;
-uint8_t* DDR_XMEM_AD = &ddr_xmem_ad;
-uint8_t* DDR_XMEM_WR = &ddr_xmem_wr;
-uint8_t* DDR_XMEM_RD = &ddr_xmem_rd;
-uint8_t* PORT_XMEM_RD = &port_xmem_rd;
-uint8_t* DDR_XMEM_ALE = &ddr_xmem_ale;
+uint8_t *DDR_XMEM_A = &ddr_xmem_a;
+uint8_t *DDR_XMEM_AD = &ddr_xmem_ad;
+uint8_t *DDR_XMEM_WR = &ddr_xmem_wr;
+uint8_t *DDR_XMEM_RD = &ddr_xmem_rd;
+uint8_t *PORT_XMEM_RD = &port_xmem_rd;
+uint8_t *DDR_XMEM_ALE = &ddr_xmem_ale;
 uint8_t SPCR = 0;
-uint8_t* XMCRA = &xmcra;
-uint8_t* XMCRB = &xmcrb;
+uint8_t *XMCRA = &xmcra;
+uint8_t *XMCRB = &xmcrb;
 
 uint8_t memoryarea[2000];
-const uint8_t* externalMockMemory = &memoryarea;
+const uint8_t *externalMockMemory = &memoryarea;
 
 void initialise_xmem_mockRegister(void) {
     DDR_XMEM_A = &ddr_xmem_a;
@@ -38,14 +41,9 @@ void initialise_xmem_mockRegister(void) {
     XMCRA = &xmcra;
     XMCRB = &xmcrb;
 }
-void test_initXmem(void) {
 
-    initialise_xmem_mockRegister();
 
-    xmem_initXmem();
-}
-
-void test_enableXmem(void){
+void test_enableXmem(void) {
 
     initialise_xmem_mockRegister();
 

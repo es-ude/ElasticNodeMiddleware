@@ -1,6 +1,7 @@
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
 ### <extern ###
+
 cc_library(
     name = "BitmanipulationLib",
     visibility = ["//visibility:public"],
@@ -8,7 +9,10 @@ cc_library(
         "@EmbeddedUtilities//:BitManipulation",
     ],
 )
+
 ### extern> ###
+
+### <Libraries ###
 
 cc_library(
     name = "RegisterDefinitionLibHdr",
@@ -212,6 +216,178 @@ cc_library(
     ],
 )
 
+### Libraries> ###
+
+### <tests ###
+
+cc_library(
+    name = "RegisterDefinitionLibHdrTest",
+    visibility = ["//visibility:public"],
+    copts = ["-DTEST"],
+    hdrs = [
+        "pinDefinition/fpgaPins.h",
+        "pinDefinition/fpgaRegisters.h",
+    ],
+)
+
+# TODO: configuration
+
+# TODO: controlmanager
+
+# TODO: debug
+
+# TODO
+cc_library(
+    name = "ElasticNodeMiddlewareTest",
+    srcs = [
+        "//src:elasticNodeMiddleware/ElasticNodeMiddleware.c",
+    ],
+    hdrs = [
+        "//:ElasticNodeMiddleware/ElasticNodeMiddleware.h",
+        "//src:xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "//src:RegisterDefinitionLibHdr",
+        "//src:LedLib",
+        "//src:XmemLib",
+        "//src:ControlmanagerLib",
+        "//src:Reconfigure_multiboot_avrLib",
+        "//src:ElasticNodeMiddlewareInternalLib",
+        "//src:DebugLufaLib"
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddleware_internalTest",
+    srcs = [
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
+    ],
+    hdrs = [
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+# TODO: ElasticNodeMiddlewareMonitoring
+
+# TODO: flash
+
+# TODO: interruptManager_avr
+
+# TODO: led_mcu
+
+# TODO: reconfigure_multiboot_avr
+
+cc_library(
+    name = "Reconfigure_multiboot_internal_avrTest",
+    srcs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.c",
+    ],
+    hdrs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+# TODO: spi
+
+cc_library(
+    name = "CircularBufferTest",
+    srcs = [
+        "uart/circularBuffer/circularBuffer.c",
+    ],
+    hdrs = [
+        "uart/circularBuffer/circularBuffer.h",
+        "interruptManager/interruptManager.h"
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "UartTest",
+    srcs = [
+        "uart/uart.c",
+    ],
+    hdrs = [
+        "uart/uart.h",
+        "uart/uart_internal.h",
+        "uart/circularBuffer/circularBuffer.h",
+        "interruptManager/interruptManager.h",
+    ],
+    copts = cpu_frequency_flag() + [ "-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Uart_internalTest",
+    srcs = [
+        "uart/uart_internal.c",
+    ],
+    hdrs = [
+        "uart/uart_internal.h",
+        "uart/circularBuffer/circularBuffer.h",
+        "interruptManager/interruptManager.h",
+    ],
+    copts = cpu_frequency_flag() + [ "-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "XmemTest",
+    srcs = [
+        "xmem/xmem.c",
+    ],
+    hdrs = [
+        "xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Interrupt_ManagerTest",
+    srcs = [
+        "interruptManager/interruptManager_avr.c",
+    ],
+    hdrs = [
+        "interruptManager/interruptManager.h",
+        "interruptManager/interruptManager_avr_Mock.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+### tests> ###
+
 exports_files(
     srcs = [
         "elasticNodeMiddleware/ElasticNodeMiddleware.c",
@@ -219,6 +395,10 @@ exports_files(
         "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
         "elasticNodeMiddlewareMonitoring/ElasticNodeMiddlewareMonitoring.c",
         "xmem/xmem.h",
+        "interruptManager/interruptManager.h",
+        "uart/circularBuffer/circularBuffer.h",
+        "uart/uart_internal.h",
+        "interruptManager/interruptManager_avr_Mock.h",
     ],
     visibility = ["//visibility:public"],
 )

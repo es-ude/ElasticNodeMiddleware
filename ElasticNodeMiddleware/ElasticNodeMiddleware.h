@@ -5,6 +5,14 @@
 
 #include "src/xmem/xmem.h"
 
+#ifdef TEST
+
+#else
+
+#include <util/delay.h>
+
+#endif
+
 // --------- <INTERNAL ---------
 void elasticnode_initialise(void);
 
@@ -142,13 +150,7 @@ void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, u
 //for integration testing
 #define FPGA_DONE_MULTIBOOT 2
 
-#ifdef TEST
 
-#else
-
-#include <util/delay.h>
-
-#endif
 */
 
 #endif // ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_H

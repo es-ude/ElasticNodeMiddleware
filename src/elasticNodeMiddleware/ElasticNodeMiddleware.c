@@ -1,5 +1,3 @@
-#include <util/delay.h>
-
 #include "EmbeddedUtilities/BitManipulation.h"
 
 #include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
@@ -9,7 +7,6 @@
 #include "src/pinDefinition/fpgaRegisters.h"
 
 #include "src/led/led_mcu.h"
-#include "src/xmem/xmem.h"
 #include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 
 #ifdef DEBUG

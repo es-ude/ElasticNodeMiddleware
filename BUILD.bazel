@@ -10,6 +10,8 @@ cc_library(
 )
 ### extern> ###
 
+### <Libraries ###
+
 cc_library(
     name = "ElasticNodeMiddlewareLib",
     srcs = [
@@ -64,7 +66,16 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
+### Libraries> ###
+
+### <tests ###
+
+
+
+### tests> ###
+
 ### <python ###
+
 py_library(
     name = "serial_test",
     srcs = ["scripts/serial_test.py"],
@@ -109,4 +120,5 @@ py_library(
         "Configuration",
     ],
 )
+
 ### python> ###

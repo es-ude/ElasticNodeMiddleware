@@ -1,10 +1,13 @@
 #include "unity.h"
-#include "src/uart/circularBuffer/MockcircularBuffer.h"
+
 #include "src/uart/uart.h"
+
+#include "src/uart/circularBuffer/MockcircularBuffer.h"
 #include "src/uart/Mockuart_internal.h"
-#include "src/interruptManager/MockinterruptManager.h"
+
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "src/pinDefinition/fpgaPins.h"
+#include "src/interruptManager/MockinterruptManager.h"
 
 circularBuffer sendingBuf;
 void (*uartReceiveHandler)(uint8_t);
