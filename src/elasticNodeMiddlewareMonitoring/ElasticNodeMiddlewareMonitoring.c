@@ -42,7 +42,7 @@ void IIC_slave_init(uint8_t address) {
     sei();
 }
 
-
+// TODO: in main.c
 ISR(TWI_vect){
         switch (TW_STATUS)
         {

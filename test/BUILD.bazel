@@ -1,5 +1,4 @@
 load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for_every_file", "mock", "unity_test")
-load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
 cc_library(
     name = "BitManipulationHdrForTesting",
@@ -36,12 +35,21 @@ mock(
     ],
 )
 
+cc_library(
+    name = "Uart_internalHdr",
+    hdrs = [
+        "//src:uart/uart_internal.h",
+    ],
+)
 mock(
     name = "mock_Uart_internal",
     srcs = [
         "//src:uart/uart_internal.h",
     ],
-    copts = ["-DTEST"],
+    copts = ["-DTEST",],
+    deps = [
+        "Uart_internalHdr",
+    ],
 )
 
 cc_library(
@@ -113,7 +121,6 @@ unity_test(
 
 # TODO: flash
 
-# TODO: implicit declaration
 unity_test(
     file_name = "interrupt_manager_avr_Test.c",
     cexception = False,
@@ -124,7 +131,15 @@ unity_test(
     ],
 )
 
-# TODO: led_mcu
+unity_test(
+    file_name = "led_mcu_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "//src:led_mcuTest",
+    ],
+)
 
 # TODO: reconfigure_multiboot_avr
 
@@ -139,7 +154,6 @@ unity_test(
 
 # TODO: spi
 
-# TODO: Fails
 unity_test(
     file_name = "circularBuffer_Test.c",
     cexception = False,
@@ -150,11 +164,14 @@ unity_test(
     ],
 )
 
-# TODO: missing frequency flags?
 unity_test(
     file_name = "uart_Test.c",
     cexception = False,
-    copts = cpu_frequency_flag() + [ "-DTEST"],
+    copts = [
+        "-DTEST",
+        "-DF_CPU=1UL",
+        "-DBAUD=1UL",
+    ],
     deps = [
         "mock_InterruptManager",
         "mock_Uart_internal",

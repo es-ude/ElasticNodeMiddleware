@@ -8,12 +8,14 @@
 #include "src/interruptManager/MockinterruptManager.h"
 
 circularBuffer sendingBuf;
+
 void (*uartReceiveHandler)(uint8_t);
+
 uint8_t sendingData;
 uint8_t sendingFlag;
 
 uint8_t udr1;
-uint8_t* UDR1 = &udr1;
+uint8_t *UDR1 = &udr1;
 
 //for not going into endless while loop
 uint8_t UCSR1A = 0xEF;
@@ -22,7 +24,7 @@ void initalise_uart_internal_MockRegister(void) {
     UDR1 = &udr1;
 }
 
-void dummyFunction(uint8_t dummy){}
+void dummyFunction(uint8_t dummy) {}
 
 void test_uart_BufferCount(void) {
     initalise_uart_internal_MockRegister();
@@ -42,7 +44,7 @@ void test_uart_setUartReceiveHandler_internal(void) {
 void test_uart_WriteNext_internal(void) {
     initalise_uart_internal_MockRegister();
 
-    if(!sendingFlag) {
+    if (!sendingFlag) {
         circularBuffer_Pop_ExpectAndReturn(&sendingBuf, &sendingData, 1);
     }
     uart_WriteNext_internal();

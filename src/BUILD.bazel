@@ -283,7 +283,21 @@ cc_library(
 
 # TODO: interruptManager_avr
 
-# TODO: led_mcu
+cc_library(
+    name = "led_mcuTest",
+    srcs = [
+        "led/led_mcu.c",
+    ],
+    hdrs = [
+        "led/led_mcu.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
 
 # TODO: reconfigure_multiboot_avr
 
@@ -331,7 +345,12 @@ cc_library(
         "uart/circularBuffer/circularBuffer.h",
         "interruptManager/interruptManager.h",
     ],
-    copts = cpu_frequency_flag() + [ "-DTEST"],
+    copts = [
+        "-DTEST",
+        "-DF_CPU=1UL",
+        "-DBAUD=1UL",
+    ],
+    #copts = cpu_frequency_flag() + [ "-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
         "RegisterDefinitionLibHdrTest",

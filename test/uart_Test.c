@@ -10,23 +10,25 @@
 #include "src/interruptManager/MockinterruptManager.h"
 
 circularBuffer sendingBuf;
+
 void (*uartReceiveHandler)(uint8_t);
+
 uint8_t sendingFlag;
 volatile uint8_t receivedData;
 uint8_t sendingData;
 
 uint8_t ubrr1h;
-uint8_t* UBRR1H = &ubrr1h;
+uint8_t *UBRR1H = &ubrr1h;
 uint8_t ubrr1l;
-uint8_t* UBRR1L = &ubrr1l;
+uint8_t *UBRR1L = &ubrr1l;
 //for not going into endless while loop
 uint8_t UCSR1A = 0xEF;
 uint8_t ucsr1b;
-uint8_t* UCSR1B = &ucsr1b;
+uint8_t *UCSR1B = &ucsr1b;
 uint8_t ucsr1c;
-uint8_t* UCSR1C = &ucsr1c;
+uint8_t *UCSR1C = &ucsr1c;
 uint8_t udr1;
-uint8_t* UDR1 = &udr1;
+uint8_t *UDR1 = &udr1;
 
 void initalise_uart_mockRegister(void) {
     UBRR1H = &ubrr1h;
@@ -36,8 +38,7 @@ void initalise_uart_mockRegister(void) {
     UDR1 = &udr1;
 }
 
-void dummyFunction(uint8_t dummy){}
-
+void dummyFunction(uint8_t dummy) {}
 
 void test_uart_WaitUntilDone(void) {
     initalise_uart_mockRegister();
@@ -49,7 +50,6 @@ void test_uart_WaitUntilDone(void) {
     uart_WaitUntilDone();
 }
 
-
 void test_uart_init(void) {
     initalise_uart_mockRegister();
 
@@ -57,8 +57,8 @@ void test_uart_init(void) {
 
     //UART_2X is 1
     uint8_t dummy_UCSR1A = UCSR1A | (1 << U2X1);
-    uint8_t* dummy_UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << TXCIE1);
-    uint8_t* dummy_UCSR1C = (1 << USBS1) | (3 << UCSZ10);
+    uint8_t *dummy_UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << TXCIE1);
+    uint8_t *dummy_UCSR1C = (1 << USBS1) | (3 << UCSZ10);
 
     uart_setUartReceiveHandler_internal_Expect(receiveHandler);
     circularBuffer_Init_Expect(&sendingBuf, UART_SENDING_BUFFER);
@@ -70,15 +70,15 @@ void test_uart_init(void) {
     TEST_ASSERT_EQUAL(dummy_UCSR1B, UCSR1B);
     TEST_ASSERT_EQUAL(dummy_UCSR1C, UCSR1C);
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
-    TEST_ASSERT_EQUAL(UBRR1H, (uint8_t) (my_bdr >> 8));
-    TEST_ASSERT_EQUAL(UBRR1L, (uint8_t) (my_bdr));
+    TEST_ASSERT_EQUAL(UBRR1H, (uint8_t)(my_bdr >> 8));
+    TEST_ASSERT_EQUAL(UBRR1L, (uint8_t)(my_bdr));
 
 }
 
 void test_uart_getUartReceiveHandler(void) {
     initalise_uart_mockRegister();
 
-    void* ptr = uart_getUartReceiveHandler();
+    void *ptr = uart_getUartReceiveHandler();
     TEST_ASSERT_EQUAL(ptr, uartReceiveHandler);
 }
 
@@ -150,13 +150,13 @@ void test_uart_ReceiveUint32Blocking(void) {
 
 void test_uart_WriteChar(void) {
     initalise_uart_mockRegister();
-   uint8_t c = 5;
-   //Push successful
-   circularBuffer_Push_ExpectAndReturn(&sendingBuf, c, 1);
-   uart_WriteNext_internal_Expect();
-   uart_WriteChar(c);
+    uint8_t c = 5;
+    //Push successful
+    circularBuffer_Push_ExpectAndReturn(&sendingBuf, c, 1);
+    uart_WriteNext_internal_Expect();
+    uart_WriteChar(c);
 
-   TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x1);
+    TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x1);
 }
 
 void test_uart_ISR_Receive() {
@@ -188,9 +188,9 @@ void test_uart_ISR_Transmit_False() {
 
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
 }
-//NOT TESTET:
-//uart_WriteBin!
 
+// TODO: uart commands
+//uart_WriteBin!
 //uart_NewLine
 //uart_WriteBin4
 //uart_WriteBin8
@@ -204,4 +204,3 @@ void test_uart_ISR_Transmit_False() {
 //uart_WriteHex32
 //uart_WriteFloat
 //uart_Ack
-

@@ -67,12 +67,12 @@ cc_library(
 )
 
 ### Libraries> ###
-
-### <tests ###
-
-
-
-### tests> ###
+exports_files(
+    srcs = [
+        "ElasticNodeMiddleware/ElasticNodeMiddleware.h",
+    ],
+    visibility = ["//visibility:public"],
+)
 
 ### <python ###
 

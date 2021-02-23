@@ -42,6 +42,11 @@
 #define UDRE1 5
 #define RXC1 7
 
+#define P_LED_0 0
+#define P_LED_1 1
+#define P_LED_2 2
+#define P_LED_3 3
+
 #else
 
 #include <avr/io.h>

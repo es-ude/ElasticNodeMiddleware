@@ -26,22 +26,22 @@ uint8_t ddr_fpga_init_b;
 uint8_t port_fpga_done;
 uint8_t ddr_fpga_done;
 
-uint8_t* DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
-uint8_t* PORT_FPGA_PROGRAM_B = &port_fpga_program_b;
+uint8_t *DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
+uint8_t *PORT_FPGA_PROGRAM_B = &port_fpga_program_b;
 
-uint8_t* DDR_FPGA_POWER_SRAM =&ddr_fpga_power_sram;
-uint8_t* PORT_FPGA_POWER_SRAM =&port_fpga_power_sram;
-uint8_t* DDR_FPGA_POWER_AUX = &ddr_fpga_power_aux;
-uint8_t* PORT_FPGA_POWER_AUX = &port_fpga_power_aux;
-uint8_t* DDR_FPGA_POWER_IO = &ddr_fpga_power_io;
-uint8_t* PORT_FPGA_POWER_IO = &port_fpga_power_io;
-uint8_t* DDR_FPGA_POWER_INT = &ddr_fpga_power_int;
-uint8_t* PORT_FPGA_POWER_INT = &port_fpga_power_int;
+uint8_t *DDR_FPGA_POWER_SRAM = &ddr_fpga_power_sram;
+uint8_t *PORT_FPGA_POWER_SRAM = &port_fpga_power_sram;
+uint8_t *DDR_FPGA_POWER_AUX = &ddr_fpga_power_aux;
+uint8_t *PORT_FPGA_POWER_AUX = &port_fpga_power_aux;
+uint8_t *DDR_FPGA_POWER_IO = &ddr_fpga_power_io;
+uint8_t *PORT_FPGA_POWER_IO = &port_fpga_power_io;
+uint8_t *DDR_FPGA_POWER_INT = &ddr_fpga_power_int;
+uint8_t *PORT_FPGA_POWER_INT = &port_fpga_power_int;
 
-uint8_t* DDR_FPGA_CCLK = &ddr_fpga_cclk;
+uint8_t *DDR_FPGA_CCLK = &ddr_fpga_cclk;
 
 uint8_t memoryarea[2000];
-const uint8_t* externalMockMemory = &memoryarea;
+const uint8_t *externalMockMemory = &memoryarea;
 
 extern volatile uint8_t *fpgaResetOffset;
 
@@ -49,8 +49,8 @@ void initialise_mockRegister(void) {
     DDR_FPGA_PROGRAM_B = &ddr_fpga_program_b;
     PORT_FPGA_PROGRAM_B = &port_fpga_program_b;
 
-    DDR_FPGA_POWER_SRAM =&ddr_fpga_power_sram;
-    PORT_FPGA_POWER_SRAM =&port_fpga_power_sram;
+    DDR_FPGA_POWER_SRAM = &ddr_fpga_power_sram;
+    PORT_FPGA_POWER_SRAM = &port_fpga_power_sram;
     DDR_FPGA_POWER_AUX = &ddr_fpga_power_aux;
     PORT_FPGA_POWER_AUX = &port_fpga_power_aux;
     DDR_FPGA_POWER_IO = &ddr_fpga_power_io;

@@ -50,6 +50,9 @@ extern uint8_t* UCSR1C;
 
 extern uint8_t* UDR1;
 
+extern uint8_t* DDR_LED;
+extern uint8_t* PORT_LED;
+
 #else
 
 #include <avr/io.h>

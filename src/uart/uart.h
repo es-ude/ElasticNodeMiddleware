@@ -83,7 +83,6 @@ void uart_ISR_Receive();
 
 void uart_ISR_Transmit();
 
-
 void uart_WriteNext(void);
 
 #endif //ELASTICNODEMIDDLEWARE_UART_H
