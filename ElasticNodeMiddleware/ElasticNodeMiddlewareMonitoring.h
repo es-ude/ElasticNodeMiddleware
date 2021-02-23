@@ -33,10 +33,10 @@ typedef enum {
     FREE_TO_CHANGE2 = 14,
     END_MEASUREMENT = 15,
 
-}mcu_running_state;
+} elasticnode_monitoring_mcu_running_state;
 #endif
 
-typedef enum{
+typedef enum {
     CURRENT_SAMPLE_TIME_2ms5,
     CURRENT_SAMPLE_TIME_5ms,
     CURRENT_SAMPLE_TIME_10ms,
@@ -45,17 +45,20 @@ typedef enum{
     CURRENT_SAMPLE_TIME_80ms,
     CURRENT_SAMPLE_TIME_160ms,
     CURRENT_SAMPLE_TIME_320ms,
-    CURRENT_SAMPLE_TIME_DEFAULT=5
-}sample_rate;
+    CURRENT_SAMPLE_TIME_DEFAULT = 5
+} elasticnode_monitoring_sample_rate;
 
 #if TEMPORAL_ACCELERATOR
-void change_running_state(mcu_running_state new_state);
+
+void elasticnode_monitoring_change_running_state(mcu_running_state new_state);
+
 #else
 
-void change_running_state(uint8_t new_state, uint8_t *state_of_the_mcu);
+void elasticnode_monitoring_change_running_state(uint8_t new_state, uint8_t *state_of_the_mcu);
+
 #endif
 
-void change_sample_rate(sample_rate new_sample_rate);
+void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rate new_sample_rate);
 
 void IIC_slave_init(uint8_t address);
 

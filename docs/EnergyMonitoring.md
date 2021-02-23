@@ -21,14 +21,15 @@ To check if everything works see 'Get results' underneath.
 Everything explained in this section can be found implemented in the [monitoring example](../app/monitoringExample.c).
 
 The code for the main MCU needs the inclusion
+
 ```c
-#include "src/EnergyMonitoringInterfaceLib/EnergyMonitoringInterfaceLib.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h"
 ```
 
 and the dependency in bazel
 
 ```bazel
-"@ElasticNodeMiddleware//:EnergyMonitoringInterfaceLib",
+"@ElasticNodeMiddleware//:ElasticNodeMiddlewareMonitoringLib",
 ```
 
 A slave must be initialized at the beginning of the code:
@@ -55,7 +56,7 @@ typedef enum {
     OWN_STATE_1 = 1,
     //possible states from 2 to 14
     END_MEASUREMENT = 15,
-}mcu_running_state;
+} mcu_running_state;
 ```
 
 When the state is changed to 'SLEEP_MODE' the sending of measurement data is paused until it is changed to another state.
@@ -64,7 +65,7 @@ The 'END_MEASUREMENT' state stops the sending of measurement data completely.
 Now you can change the state to the corresponding state of your experiment:
 
 ```c
-change_running_state(OWN_STATE_1, &state_of_the_mcu);
+elasticnode_monitoring_change_running_state(OWN_STATE_1, &state_of_the_mcu);
 ```
 
 #### Sample rate
@@ -76,10 +77,10 @@ You can define how often a measurement should take place.
 You can change the sample rate like this at any time:
 
 ```c
-change_sample_rate(CURRENT_SAMPLE_TIME_10ms);
+elasticnode_monitoring_change_sample_rate(CURRENT_SAMPLE_TIME_10ms);
 ```
 
-The possible sample rates are defined in [energyMonitoringInterface.h](../src/energyMonitoringInterface/energyMonitoringInterface.h). The default is 80ms.
+The possible sample rates are defined in [energyMonitoringInterface.h](../OLDsrc/energyMonitoringInterface/energyMonitoringInterface.h). The default is 80ms.
 
 ## Monitoring MCU
 

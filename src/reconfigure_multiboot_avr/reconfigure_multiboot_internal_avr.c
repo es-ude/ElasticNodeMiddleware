@@ -10,7 +10,6 @@ void reconfigure_fpgaSetDoneReponse_internal(uint8_t response) {
     fpgaMultibootCompleteState = response;
 }
 
-//wofür?
 uint8_t reconfigure_fpgaMultibootComplete_internal(void) {
     return fpgaMultibootCompleteState;
 }

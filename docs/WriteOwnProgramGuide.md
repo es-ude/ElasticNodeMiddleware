@@ -53,70 +53,32 @@ it should register it when you press 'a'.
 
 ## Your Implementation
 
-Now you can write your own implementation by extending the main.c file, which you upload with:
+Now you can write your own implementation by extending the main.c file, which you upload with
 
     $ bazel run //app:main_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
-When using the run command you automaticly build the file. For just building it use: 
+When using the run command you automatically build the file. For just building it use
 
     $ bazel build //app:main_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
  
-### Libraries
+### Elastic Node Middleware header
 
-You include the needed libraries in your header or source files with
+As you see in the example [main.c](../app/main.c) file, you need to include the middleware header as follows
+
 ```c
-#include "lib/neededLibrary/neededLibrary.h"
+#include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 ```    
-whereby the "neddedLibrary" is replaced with the actual library. 
-For example for including the xmem library your include statement looks as the following:
-```c  
-#include "lib/xmem/xmem.h"
-```
-Notice, that Bitmanipulation and LufaUsart are external libraries. 
-Therefore, you include these libraries as follows:
-```c
-#include "EmbeddedUtilities/BitManipulation.h"
-```
-or
-```c
-#include "PeripheralInterface/LufaUsartImpl.h"
-```
-When you include libaries you have to add them to the deps in the BUILD.bazel file in the app folder.
-The "//app/setup:Setup" should always be a dependency.
-Because of the elastic node middleware as an external dependency, you have to add "@ElasticNodeMiddleware" before every used library of the elastic node middleware.
-If you write own libraries you do not have to add this before the library (refer to the [BUILD.bazel](../BUILD.bazel) of the elastic node middleware).
 
-Here is an example where have all dependencies from the elastic node middleware are used: 
+and the external dependency for the middleware in the [BULD.bazel](../templates/appBUILD.bazel) file
+
 ```bazel
-default_embedded_binary(
-    name = "main",
-    srcs = ["main.c"],
-    copts = cpu_frequency_flag(),
-    uploader = "Avr_dude_upload_script",
-    deps = [
-        "@ElasticNodeMiddleware//:CircularBufferLib",
-        "@ElasticNodeMiddleware//:ConfigurationLib",
-        "@ElasticNodeMiddleware//:ControlmanagerLib",            
-        "@ElasticNodeMiddleware//:DebugLufaLib",
-        "@ElasticNodeMiddleware//:DebugUartLib",
-        "@ElasticNodeMiddleware//:ElasticNodeMiddleware_ConfigureFPGALib",
-        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
-        "@ElasticNodeMiddleware//:FlashLib",
-        "@ElasticNodeMiddleware//:Interrupt_ManagerLib",
-        "@ElasticNodeMiddleware//:LedLib",
-        "@ElasticNodeMiddleware//:Reconfigure_multibootLib",
-        "@ElasticNodeMiddleware//:RegisterDefinitionLibHdr",
-        "@ElasticNodeMiddleware//:SpiLib",
-        "@ElasticNodeMiddleware//:UartLib",
-        "@ElasticNodeMiddleware//:XMemLib",
-        "@ElasticNodeMiddleware//:BitmanipulationLib",
-        "@ElasticNodeMiddleware//:EnergyMonitoringInterfaceLib",
-        "@ElasticNodeMiddleware//app/setup:Setup",
-    ],
-) 
+"@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
 ```
 
-When working with more C files you need to create new cc_libaries in the BUILD.bazel in the app folder, similar to this:
+### Include other source files with bazel
+
+When working with more C files you need to create new cc_libraries in the BUILD.bazel in the app folder, similar to this
+
 ```bazel
 cc_library(
     name = "OtherFile",
@@ -130,25 +92,28 @@ cc_library(
     srcs = ["OtherFile.h"]
 )
 ```
-Wherby you add `:OtherFile` as a deps in the main binary and include all libaries used in the OtherFile as deps for it.
+
+Wherby you add `:OtherFile` as a deps in the main binary and include all libraries used in the OtherFile as deps for it.
 
 ### Debug 
 
-For uploding the main file with the DEBUG macors defined use the mainDEBUG target defined in the [BULD.bazel](../templates/appBUILD.bazel).
+For uploading the main file with the `DEBUG` macros defined use the `mainDEBUG` target defined in the [BULD.bazel](../templates/appBUILD.bazel)
 
     $ bazel run //app:mainDEBUG_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
+This includes the middleware with the `DEBUG` flag set
+
+```bazel
+"@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUGLib",
+```
+
 ## Upload your own bitfiles
 
-Whenever you want to flash bitfiles, upload the main.c with the DEBUG Flag set as exlpained above.
+Whenever you want to flash bitfiles, upload the main.c with the DEBUG Flag set as explained above.
   
 You have to write the name of you bitfile, which you can put in the bitfiles folder, in the bitfileConfigs.py.
 If you want to upload two bitfiles, comment in the definition of the second bitfile.
 Example bitfiles are available in the [bitfiles folder](../bitfiles).
-
-**Important**: the [portConfigs.py](../scripts/portConfigs.py) and [bitfileConfigs.py](../scripts/bitfileConfigs.py) should be defined for your computer. 
-Therefore, it does not make sense to put it in the github repository, if you work with a number of people.
-Please add this file to your [.gitignore](../.gitignore) like explained [here](https://git-scm.com/docs/gitignore) to not upload it to your github repository.
 
 Remember to check for the DIP-Switches like explained in the [Getting Started Guide](GettingStartedGuide.md#DIP-Switches) Hardware section when you have problems while flashing.
 
@@ -156,4 +121,4 @@ Run the upload script with
 
     $ bazel run uploadBitfiles
 
-For other possible actions to do with the bitfile, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts) in generall.
+For other possible actions to perform with the bitfiles, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts) in general.

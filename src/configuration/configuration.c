@@ -1,9 +1,10 @@
 #include "src/configuration/configuration.h"
+
 #include "src/debug/debug.h"
-#include "ElasticNodeMiddleware/elasticNodeMiddleware.h"
 #include "src/flash/flash.h"
 #include "src/interruptManager/interruptManager.h"
 #include "src/led/led_mcu.h"
+#include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
 
 #define BUFFER_SIZE 256
 uint32_t configAddress, configSize, configRemaining;
@@ -28,8 +29,9 @@ void readData(uint8_t *buffer, uint16_t num) {
 
 void configurationUartFlash(void) {
 
-    elasticnode_fpgaPowerOff();
-    elasticnode_fpgaHardReset();
+    elasticnode_fpgaPowerOff_internal();
+    elasticnode_setFpgaHardReset_internal();
+    elasticnode_clearFpgaHardReset_internal();
 //    led_mcu_turnOn(3);
 
     // getting address
@@ -92,9 +94,10 @@ void configurationUartFlash(void) {
 }
 
 // not used until now
-// eventually include verification of flash
+// TODO: eventually include verification of flash
 void verifyConfigurationFlash(uint8_t mcuFlash) {
-    elasticnode_fpgaHardReset();
+    elasticnode_setFpgaHardReset_internal();
+    elasticnode_clearFpgaHardReset_internal();
     flashEnableInterface();
 
     led_mcu_turnOn(0);

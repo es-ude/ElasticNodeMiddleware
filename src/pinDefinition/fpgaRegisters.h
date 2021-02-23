@@ -51,6 +51,7 @@ extern uint8_t* UCSR1C;
 extern uint8_t* UDR1;
 
 #else
+
 #include <avr/io.h>
 
 #define DDR_FPGA_PROGRAM_B &DDRF

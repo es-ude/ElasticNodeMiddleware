@@ -1,8 +1,10 @@
+#include "EmbeddedUtilities/BitManipulation.h"
+
 #include "src/led/led_mcu.h"
+
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/pinDefinition/fpgaRegisters.h"
 
-#include "EmbeddedUtilities/BitManipulation.h"
 
 void led_mcu_init(void) {
     //DDRD = 0xff
@@ -12,9 +14,10 @@ void led_mcu_init(void) {
     BitManipulation_setBit(DDR_LED, P_LED_3);
 
 }
+
 void led_mcu_turnOn(uint8_t lednumber) {
 
-    switch(lednumber) {
+    switch (lednumber) {
         case 0:
             BitManipulation_setBit(PORT_LED, P_LED_0);
             break;
@@ -34,7 +37,7 @@ void led_mcu_turnOn(uint8_t lednumber) {
 
 void led_mcu_turnOff(uint8_t lednumber) {
 
-    switch(lednumber) {
+    switch (lednumber) {
         case 0:
             BitManipulation_clearBit(PORT_LED, P_LED_0);
             break;
