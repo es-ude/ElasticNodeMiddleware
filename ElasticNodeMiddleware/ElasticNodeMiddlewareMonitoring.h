@@ -48,15 +48,15 @@ typedef enum {
     CURRENT_SAMPLE_TIME_DEFAULT = 5
 } elasticnode_monitoring_sample_rate;
 
-#if TEMPORAL_ACCELERATOR
-
-void elasticnode_monitoring_change_running_state(mcu_running_state new_state);
-
-#else
+//#if TEMPORAL_ACCELERATOR
+//
+//void elasticnode_monitoring_change_running_state(mcu_running_state new_state);
+//
+//#else
 
 void elasticnode_monitoring_change_running_state(uint8_t new_state, uint8_t *state_of_the_mcu);
 
-#endif
+//#endif
 
 void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rate new_sample_rate);
 
