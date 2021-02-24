@@ -5,10 +5,10 @@
 
 #include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 
-#ifdef DEBUG
-uint8_t *data;
-volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
-#endif
+//#ifdef DEBUG
+//uint8_t *data;
+//volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
+//#endif
 
 //These are potential ISRs programmers can uncomment to have custom interrupt
 // handling on receiving and sending via UART.
@@ -68,22 +68,22 @@ void handleCharInput(uint8_t currentData) {
         case 't':
             elasticnode_debugWriteString("\nuser mode test. You are a cool dev!\r\n");
             break;
-        case 'L':
-            elasticnode_enableFpgaInterface();
-            *(addr_led) = (uint8_t) (0xff);
-            *data = *(addr_led);
-            elasticnode_debugWriteLine("led_data: ");
-            elasticnode_debugWriteHex8(*data);
-            elasticnode_debugWriteLine("\r\n");
-            break;
-        case 'l':
-            elasticnode_enableFpgaInterface();
-            *(addr_led) = (uint8_t) (0x00);
-            *data = *(addr_led);
-            elasticnode_debugWriteLine("led_data: ");
-            elasticnode_debugWriteHex8(*data);
-            elasticnode_debugWriteLine("\r\n");
-            break;
+//        case 'L':
+//            elasticnode_enableFpgaInterface();
+//            *(addr_led) = (uint8_t) (0xff);
+//            *data = *(addr_led);
+//            elasticnode_debugWriteLine("led_data: ");
+//            elasticnode_debugWriteHex8(*data);
+//            elasticnode_debugWriteLine("\r\n");
+//            break;
+//        case 'l':
+//            elasticnode_enableFpgaInterface();
+//            *(addr_led) = (uint8_t) (0x00);
+//            *data = *(addr_led);
+//            elasticnode_debugWriteLine("led_data: ");
+//            elasticnode_debugWriteHex8(*data);
+//            elasticnode_debugWriteLine("\r\n");
+//            break;
         case 'r':
             elasticnode_configureFPGA(0x0);
             elasticnode_debugWriteLine("reconfigured FPGA to 0x0");

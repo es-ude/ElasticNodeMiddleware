@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#include "src/xmem/xmem.h"
+//#include "src/xmem/xmem.h"
 
 // --------- <INTERNAL ---------
 void elasticnode_initialise(void);
