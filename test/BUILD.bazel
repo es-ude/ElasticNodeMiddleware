@@ -152,7 +152,15 @@ unity_test(
     ],
 )
 
-# TODO: spi
+unity_test(
+    file_name = "spi_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_InterruptManager",
+        "//src:SpiTest",
+    ],
+)
 
 unity_test(
     file_name = "circularBuffer_Test.c",

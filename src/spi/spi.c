@@ -1,3 +1,5 @@
+#include "EmbeddedUtilities/BitManipulation.h"
+
 #include "src/spi/spi.h"
 
 #include "src/pinDefinition/fpgaRegisters.h"
@@ -25,8 +27,10 @@ void spiInit(void) {
 void spiEnable(void) {
 
     // ensure master mode (_SS)
-    DDRB |= _BV(PB0);
-    PORTB |= _BV(PB0);
+    BitManipulation_setBit(&DDRB, PB0);
+    BitManipulation_setBit(&PORTB, PB0);
+    //DDRB |= _BV(PB0);
+    //PORTB |= _BV(PB0);
 
     interruptManager_clearInterrupt();
     SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPR0);
@@ -39,7 +43,8 @@ void spiEnable(void) {
 }
 
 void spiDisable(void) {
-    SPCR &= ~_BV(SPE);
+    BitManipulation_clearBit(&SPCR, SPE);
+    //SPCR &= ~_BV(SPE);
 }
 
 void flashResetCallbacks(void) {
@@ -91,21 +96,26 @@ void selectFlash(uint8_t mcuFlash) {
         xmem_disableXmem();
 
         // many copies of this
-        DDR_FLASH_CS |= _BV(P_FLASH_CS);
-        PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
+        BitManipulation_setBit(&DDR_FLASH_CS, P_FLASH_CS);
+        //DDR_FLASH_CS |= _BV(P_FLASH_CS);
+        //PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
+
     } else {
         spiEnable();
         xmem_disableXmem();
 
-        PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
+        //PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
     }
+    BitManipulation_clearBit(&PORT_FLASH_CS, P_FLASH_CS);
 
 }
 
 // placeholder function
 void deselectWireless(void) {
-    DDR_WIRELESS_CS |= _BV(P_WIRELESS_CS);
-    PORT_WIRELESS_CS |= _BV(P_WIRELESS_CS);
+    BitManipulation_setBit(&DDR_WIRELESS_CS, P_WIRELESS_CS);
+    BitManipulation_setBit(&PORT_WIRELESS_CS, P_WIRELESS_CS);
+    //DDR_WIRELESS_CS |= _BV(P_WIRELESS_CS);
+    //PORT_WIRELESS_CS |= _BV(P_WIRELESS_CS);
 }
 
 void deselectFlash(uint8_t mcuFlash) {
@@ -113,15 +123,16 @@ void deselectFlash(uint8_t mcuFlash) {
         spiEnable();
         xmem_disableXmem();
 
-        DDR_FLASH_CS |= _BV(P_FLASH_CS);
-        PORT_FLASH_CS |= _BV(P_FLASH_CS);
+        BitManipulation_setBit(&DDR_FLASH_CS, P_FLASH_CS);
+        //DDR_FLASH_CS |= _BV(P_FLASH_CS);
+        //PORT_FLASH_CS |= _BV(P_FLASH_CS);
     } else {
         spiEnable();
         xmem_disableXmem();
 
-        PORT_FLASH_CS |= _BV(P_FLASH_CS);
+        //PORT_FLASH_CS |= _BV(P_FLASH_CS);
     }
-
+    BitManipulation_setBit(&PORT_FLASH_CS, P_FLASH_CS);
 }
 
 void fpgaFlashPerformTaskWithCallback(uint16_t numWrite, uint8_t *dataWrite, uint16_t numRead,

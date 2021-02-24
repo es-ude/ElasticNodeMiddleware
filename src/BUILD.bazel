@@ -315,7 +315,23 @@ cc_library(
     ],
 )
 
-# TODO: spi
+cc_library(
+    name = "SpiTest",
+    srcs = [
+        "spi/spi.c",
+    ],
+    hdrs = [
+        "spi/spi.h",
+        "interruptManager/interruptManager.h",
+        "xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
 
 cc_library(
     name = "CircularBufferTest",

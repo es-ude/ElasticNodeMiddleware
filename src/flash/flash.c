@@ -1,3 +1,5 @@
+#include "EmbeddedUtilities/BitManipulation.h"
+
 #include "src/flash/flash.h"
 
 #include "src/pinDefinition/fpgaPins.h"
@@ -33,13 +35,15 @@ void initFlash() {
 
 void flashEnableInterface(void) {
     DDR_FLASH_CS |= _BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK);
-    PORT_FLASH_CS |= _BV(P_FLASH_CS);
+    BitManipulation_setBit(&PORT_FLASH_CS, P_FLASH_CS);
+    //PORT_FLASH_CS |= _BV(P_FLASH_CS);
 }
 
 void flashDisableInterface(void) {
     spiDisable();
     DDR_FLASH_CS &= ~(_BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK));
-    PORT_FLASH_CS |= _BV(P_FLASH_CS);
+    BitManipulation_setBit(&PORT_FLASH_CS, P_FLASH_CS);
+    //PORT_FLASH_CS |= _BV(P_FLASH_CS);
 }
 
 void eraseSectorFlash(uint32_t address, uint8_t mcuFlash) {
@@ -91,13 +95,15 @@ void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mc
 }
 
 void flashSetSpeed(uint8_t speed) {
-    SPCR &= ~_BV(SPR0);
+    BitManipulation_clearBit(&SPCR, SPR0);
+    //SPCR &= ~_BV(SPR0);
     switch (speed) {
         //case FLASH_SPEED_HIGH:
         //break;
         case FLASH_SPEED_LOW:
         default:
-            SPCR |= _BV(SPR0);  // /16
+            BitManipulation_setBit(&SPCR, SPR0);
+            //SPCR |= _BV(SPR0);  // /16
             break;
     }
     SPDR;

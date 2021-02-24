@@ -2,7 +2,14 @@
 #define ELASTICNODEMIDDLEWARE_SPI_H
 
 #include <stdio.h>
+
+#ifdef TEST
+
+#else
+
 #include <avr/io.h>
+
+#endif
 
 void spiInit(void);
 
