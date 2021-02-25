@@ -5,8 +5,13 @@
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/pinDefinition/fpgaRegisters.h"
 
-#include "src/debug/debug.h"
 #include "src/spi/spi.h"
+
+#ifdef TEST
+
+#else
+#include "src/debug/debug.h"
+#endif
 
 uint8_t spi_buffer[SPI_BUFFER_SIZE];
 volatile uint8_t *flashBufPtr;
@@ -15,7 +20,7 @@ uint16_t flashQueueCount;
 uint32_t mcuWriteCount = 0;
 uint32_t fpgaWriteCount = 0;
 
-void initFlash() {
+void initFlash(void) {
     flashEnableInterface();
 
     spiInit();
@@ -34,15 +39,21 @@ void initFlash() {
 }
 
 void flashEnableInterface(void) {
-    DDR_FLASH_CS |= _BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK);
-    BitManipulation_setBit(&PORT_FLASH_CS, P_FLASH_CS);
+    BitManipulation_setBit(DDRB_FLASH, P_FLASH_CS);
+    BitManipulation_setBit(DDRB_FLASH, P_FLASH_MOSI);
+    BitManipulation_setBit(DDRB_FLASH, P_FLASH_SCK);
+    //DDR_FLASH_CS |= _BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK);
+    BitManipulation_setBit(PORTB_FLASH, P_FLASH_CS);
     //PORT_FLASH_CS |= _BV(P_FLASH_CS);
 }
 
 void flashDisableInterface(void) {
     spiDisable();
-    DDR_FLASH_CS &= ~(_BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK));
-    BitManipulation_setBit(&PORT_FLASH_CS, P_FLASH_CS);
+    BitManipulation_clearBit(DDRB_FLASH, P_FLASH_CS);
+    BitManipulation_clearBit(DDRB_FLASH, P_FLASH_MOSI);
+    BitManipulation_clearBit(DDRB_FLASH, P_FLASH_SCK);
+    //DDR_FLASH_CS &= ~(_BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK));
+    BitManipulation_setBit(PORTB_FLASH, P_FLASH_CS);
     //PORT_FLASH_CS |= _BV(P_FLASH_CS);
 }
 
@@ -70,7 +81,9 @@ void eraseSectorFlash(uint32_t address, uint8_t mcuFlash) {
 
 void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mcuFlash) {
     if (length + 4 > SPI_BUFFER_SIZE) {
+#ifdef DEBUG
         debugWriteLine("Cannot write data! Too large for buffer");
+#endif
     } else {
         flashResetCallbacks();
 
@@ -95,18 +108,18 @@ void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mc
 }
 
 void flashSetSpeed(uint8_t speed) {
-    BitManipulation_clearBit(&SPCR, SPR0);
+    BitManipulation_clearBit(SPCR_FLASH, SPR0);
     //SPCR &= ~_BV(SPR0);
     switch (speed) {
         //case FLASH_SPEED_HIGH:
         //break;
         case FLASH_SPEED_LOW:
         default:
-            BitManipulation_setBit(&SPCR, SPR0);
+            BitManipulation_setBit(SPCR_FLASH, SPR0);
             //SPCR |= _BV(SPR0);  // /16
             break;
     }
-    SPDR;
+    //SPDR;
 }
 
 void flashResetQueue(void) {
@@ -137,7 +150,8 @@ void waitDoneFlash(uint8_t mcuFlash) {
 
     uint16_t counter = 0;
     uint8_t status = 0xFF;
-    while (status & _BV(0)) {
+    while (status & (1 << (0))) {
+    //while (status & _BV(0)) {
         counter++;
         status = readStatus(mcuFlash);
         _delay_ms(5);

@@ -230,7 +230,24 @@ cc_library(
     ],
 )
 
-# TODO: configuration
+cc_library(
+    name = "ConfigurationTest",
+    srcs = [
+        "configuration/configuration.c",
+    ],
+    hdrs = [
+        "configuration/configuration.h",
+        "debug/debug.h",
+        "flash/flash.h",
+        "interruptManager/interruptManager.h",
+        "led/led_mcu.h",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
 
 # TODO: controlmanager
 
@@ -251,12 +268,6 @@ cc_library(
     deps = [
         "//test:BitManipulationHdrForTesting",
         "//src:RegisterDefinitionLibHdr",
-        "//src:LedLib",
-        "//src:XmemLib",
-        "//src:ControlmanagerLib",
-        "//src:Reconfigure_multiboot_avrLib",
-        "//src:ElasticNodeMiddlewareInternalLib",
-        "//src:DebugLufaLib"
     ],
 )
 
@@ -279,7 +290,23 @@ cc_library(
 
 # TODO: ElasticNodeMiddlewareMonitoring
 
-# TODO: flash
+cc_library(
+    name = "FlashTest",
+    srcs = [
+        "flash/flash.c",
+    ],
+    hdrs = [
+        "flash/flash.h",
+        "debug/debug.h",
+        "spi/spi.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
 
 # TODO: interruptManager_avr
 
@@ -340,7 +367,7 @@ cc_library(
     ],
     hdrs = [
         "uart/circularBuffer/circularBuffer.h",
-        "interruptManager/interruptManager.h"
+        "interruptManager/interruptManager.h",
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -434,6 +461,11 @@ exports_files(
         "uart/circularBuffer/circularBuffer.h",
         "uart/uart_internal.h",
         "interruptManager/interruptManager_avr_Mock.h",
+        "flash/flash.h",
+        "configuration/configuration.h",
+        "debug/debug.h",
+        "led/led_mcu.h",
+        "spi/spi.h",
     ],
     visibility = ["//visibility:public"],
 )

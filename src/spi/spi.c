@@ -27,23 +27,28 @@ void spiInit(void) {
 void spiEnable(void) {
 
     // ensure master mode (_SS)
-    BitManipulation_setBit(&DDRB, PB0);
-    BitManipulation_setBit(&PORTB, PB0);
+    BitManipulation_setBit(DDR_SPI, P_FPGA_POWER_INT);
+    BitManipulation_setBit(PORTB_SPI, P_FPGA_POWER_INT);
     //DDRB |= _BV(PB0);
     //PORTB |= _BV(PB0);
 
     interruptManager_clearInterrupt();
-    SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPR0);
+    BitManipulation_setBit(SPCR_SPI, SPE);
+    BitManipulation_setBit(SPCR_SPI, MSTR);
+    BitManipulation_setBit(SPCR_SPI, SPR0);
+    //SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPR0);
 
+    // TODO: how to use in tests
     // reset interrupts
-    while (SPSR & _BV(SPIF)) {
-        SPDR;
+    while (*SPSR_SPI & (uint8_t) (1 << (SPIF))) {
+    //while (SPSR & _BV(SPIF)) {
+    //    SPDR;
     }
-    SPDR;
+    //SPDR;
 }
 
 void spiDisable(void) {
-    BitManipulation_clearBit(&SPCR, SPE);
+    BitManipulation_clearBit(SPCR_SPI, SPE);
     //SPCR &= ~_BV(SPE);
 }
 
@@ -80,11 +85,12 @@ void spiWrite(uint8_t data) {
 
 uint8_t SPI(uint8_t data) {
     interruptManager_clearInterrupt();
-    SPDR = data;
-    while (!(SPSR & _BV(SPIF))) {
+    *SPDR_SPI = data;
+    while (!(*SPSR_SPI & (1 << (SPIF)))) {
+    //while (!(SPSR & _BV(SPIF))) {
     }
 
-    return SPDR;
+    return *SPDR_SPI;
 }
 
 //in alwyns code in spiarbritration
@@ -96,7 +102,7 @@ void selectFlash(uint8_t mcuFlash) {
         xmem_disableXmem();
 
         // many copies of this
-        BitManipulation_setBit(&DDR_FLASH_CS, P_FLASH_CS);
+        BitManipulation_setBit(DDR_SPI, P_FLASH_CS);
         //DDR_FLASH_CS |= _BV(P_FLASH_CS);
         //PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
 
@@ -106,24 +112,26 @@ void selectFlash(uint8_t mcuFlash) {
 
         //PORT_FLASH_CS &= ~_BV(P_FLASH_CS);
     }
-    BitManipulation_clearBit(&PORT_FLASH_CS, P_FLASH_CS);
+    BitManipulation_clearBit(PORTB_SPI, P_FLASH_CS);
 
 }
+
 
 // placeholder function
 void deselectWireless(void) {
-    BitManipulation_setBit(&DDR_WIRELESS_CS, P_WIRELESS_CS);
-    BitManipulation_setBit(&PORT_WIRELESS_CS, P_WIRELESS_CS);
+    BitManipulation_setBit(DDRE_SPI, P_WIRELESS_CS);
+    BitManipulation_setBit(PORTE_SPI, P_WIRELESS_CS);
     //DDR_WIRELESS_CS |= _BV(P_WIRELESS_CS);
     //PORT_WIRELESS_CS |= _BV(P_WIRELESS_CS);
 }
+
 
 void deselectFlash(uint8_t mcuFlash) {
     if (mcuFlash) {
         spiEnable();
         xmem_disableXmem();
 
-        BitManipulation_setBit(&DDR_FLASH_CS, P_FLASH_CS);
+        BitManipulation_setBit(DDR_SPI, P_FLASH_CS);
         //DDR_FLASH_CS |= _BV(P_FLASH_CS);
         //PORT_FLASH_CS |= _BV(P_FLASH_CS);
     } else {
@@ -132,7 +140,7 @@ void deselectFlash(uint8_t mcuFlash) {
 
         //PORT_FLASH_CS |= _BV(P_FLASH_CS);
     }
-    BitManipulation_setBit(&PORT_FLASH_CS, P_FLASH_CS);
+    BitManipulation_setBit(PORTB_SPI, P_FLASH_CS);
 }
 
 void fpgaFlashPerformTaskWithCallback(uint16_t numWrite, uint8_t *dataWrite, uint16_t numRead,

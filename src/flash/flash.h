@@ -6,6 +6,9 @@
 
 #ifdef TEST
 
+void _delay_ms(uint8_t delay);
+
+
 #else
 
 #include <util/delay.h>
@@ -16,8 +19,6 @@
 #define SPI_BUFFER_SIZE 300 // page + command
 #define FLASH_BUFFER_SIZE 256
 
-#define P_FLASH_MOSI PB2
-#define P_FLASH_SCK PB1
 
 void initFlash(void);
 

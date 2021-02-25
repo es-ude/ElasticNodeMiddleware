@@ -1,7 +1,6 @@
 #ifndef ELASTICNODEMIDDLEWARE_FPGAPINS_H
 #define ELASTICNODEMIDDLEWARE_FPGAPINS_H
 
-
 #ifdef TEST
 
 #define P_FPGA_PROGRAM_B 2
@@ -47,6 +46,19 @@
 #define P_LED_2 2
 #define P_LED_3 3
 
+// TODO: which values
+//spi
+#define MSTR 1
+#define SPR0 2
+#define SPIF 4
+
+#define P_FLASH_CS 3
+#define P_WIRELESS_CS 3
+
+#define P_FLASH_MOSI 2
+#define P_FLASH_SCK 3
+
+
 #else
 
 #include <avr/io.h>
@@ -83,6 +95,10 @@
 
 #define P_FLASH_CS PB4
 #define P_WIRELESS_CS PE6
+
+#define P_FLASH_MOSI PB2
+#define P_FLASH_SCK PB1
+
 
 //leds
 

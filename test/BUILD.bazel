@@ -36,6 +36,23 @@ mock(
 )
 
 cc_library(
+    name = "SpiHdr",
+    hdrs = [
+        "//src:spi/spi.h",
+    ],
+)
+mock(
+    name = "mock_Spi",
+    srcs = [
+        "//src:spi/spi.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "SpiHdr",
+    ],
+)
+
+cc_library(
     name = "Uart_internalHdr",
     hdrs = [
         "//src:uart/uart_internal.h",
@@ -86,11 +103,90 @@ mock(
     ],
 )
 
+cc_library(
+    name = "XmemHdr",
+    hdrs = [
+        "//src:xmem/xmem.h",
+    ],
+)
+mock(
+    name = "mock_Xmem",
+    srcs = [
+        "//src:xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "XmemHdr",
+    ],
+)
+
+cc_library(
+    name = "FlashHdr",
+    hdrs = [
+        "//src:flash/flash.h",
+    ],
+)
+mock(
+    name = "mock_flash",
+    srcs = [
+        "//src:flash/flash.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "FlashHdr",
+    ],
+)
+
+cc_library(
+    name = "Led_mcuHdr",
+    hdrs = [
+        "//src:led/led_mcu.h",
+    ],
+)
+mock(
+    name = "mock_led_mcu",
+    srcs = [
+        "//src:led/led_mcu.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Led_mcuHdr",
+    ],
+)
+
+cc_library(
+    name = "elasticNodeMiddleware_internalHdr",
+    hdrs = [
+        "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+)
+mock(
+    name = "mock_elasticNodeMiddleware_internal",
+    srcs = [
+        "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "elasticNodeMiddleware_internalHdr",
+    ],
+)
 ### mocks> ###
 
 ### <tests ###
 
-# TODO: configuration
+# TODO: use ceil?
+#unity_test(
+#    file_name = "configuration_Test.c",
+#    cexception = False,
+#    copts = ["-DTEST"],
+#    deps = [
+#        "mock_flash",
+#        "mock_InterruptManager_avr_Mock",
+#        "mock_led_mcu",
+#        "mock_elasticNodeMiddleware_internal",
+#        "//src:ConfigurationTest",
+#    ],
+#)
 
 # TODO: controlmanager
 
@@ -119,7 +215,19 @@ unity_test(
 
 # TODO: ElasticNodeMiddlewareMonitoring
 
-# TODO: flash
+# TODO: finish
+unity_test(
+    file_name = "flash_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_Spi",
+        "mock_InterruptManager_avr_Mock",
+        "mock_elasticNodeMiddleware_internal",
+        "//src:FlashTest",
+    ],
+)
 
 unity_test(
     file_name = "interrupt_manager_avr_Test.c",
@@ -152,12 +260,16 @@ unity_test(
     ],
 )
 
+# TODO: finish
 unity_test(
     file_name = "spi_Test.c",
     cexception = False,
     copts = ["-DTEST"],
     deps = [
         "mock_InterruptManager",
+        "mock_Bitmanipulation",
+        "mock_Xmem",
+#        "mock_Spi",
         "//src:SpiTest",
     ],
 )

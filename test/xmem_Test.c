@@ -12,18 +12,19 @@ uint8_t ddr_xmem_wr;
 uint8_t ddr_xmem_rd;
 uint8_t port_xmem_rd;
 uint8_t ddr_xmem_ale;
-uint8_t sprc;
+uint8_t spcr_xmem;
 uint8_t xmcra;
 uint8_t xmcrb;
+uint8_t spcr_xmem;
 
-uint8_t XMEM_ENABLE_REG = 0;
+uint8_t *XMEM_ENABLE_REG = 0;
 uint8_t *DDR_XMEM_A = &ddr_xmem_a;
 uint8_t *DDR_XMEM_AD = &ddr_xmem_ad;
 uint8_t *DDR_XMEM_WR = &ddr_xmem_wr;
 uint8_t *DDR_XMEM_RD = &ddr_xmem_rd;
 uint8_t *PORT_XMEM_RD = &port_xmem_rd;
 uint8_t *DDR_XMEM_ALE = &ddr_xmem_ale;
-uint8_t SPCR = 0;
+uint8_t *SPCR_XMEM = &spcr_xmem;
 uint8_t *XMCRA = &xmcra;
 uint8_t *XMCRB = &xmcrb;
 
@@ -37,15 +38,16 @@ void initialise_xmem_mockRegister(void) {
     PORT_XMEM_RD = &port_xmem_rd;
     DDR_XMEM_ALE = &ddr_xmem_ale;
     DDR_XMEM_RD = &ddr_xmem_rd;
-    SPCR = &sprc;
+    SPCR_XMEM = &spcr_xmem;
     XMCRA = &xmcra;
     XMCRB = &xmcrb;
 }
 
-
 void test_enableXmem(void) {
 
     initialise_xmem_mockRegister();
+
+    BitManipulation_clearBit_Expect(SPCR_XMEM, SPE);
 
     //spi disable
 
@@ -56,6 +58,8 @@ void test_enableXmem(void) {
     BitManipulation_setBit_Expect(DDR_XMEM_RD, P_XMEM_RD);
     BitManipulation_setBit_Expect(DDR_XMEM_ALE, P_XMEM_ALE);
 
+    BitManipulation_setBit_Expect(XMEM_ENABLE_REG, XMEM_ENABLE_P);
+
     xmem_enableXmem();
 
 }
@@ -63,6 +67,8 @@ void test_enableXmem(void) {
 void test_disableXmem(void) {
 
     initialise_xmem_mockRegister();
+
+    BitManipulation_clearBit_Expect(XMEM_ENABLE_REG, XMEM_ENABLE_P);
 
     *DDR_XMEM_A = 0x00;
     *DDR_XMEM_ALE = 0x00;

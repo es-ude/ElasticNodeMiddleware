@@ -18,7 +18,6 @@ void readValue(uint32_t *destination) {
     debugWriteStringLength((char *) destination, sizeof(uint32_t));
 }
 
-
 void readData(uint8_t *buffer, uint16_t num) {
     uint8_t *ptr = buffer;
     for (uint16_t i = 0; i < num; i++) {
@@ -116,7 +115,6 @@ void verifyConfigurationFlash(uint8_t mcuFlash) {
 
     debugReady();
     debugDone();
-
 
     interruptManager_setInterrupt();
 }
