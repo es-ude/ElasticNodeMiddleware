@@ -19,104 +19,55 @@ mock(
 )
 
 cc_library(
-    name = "CircularBufferHdr",
+    name = "ConfigurationHdr",
     hdrs = [
-        "//src:uart/circularBuffer/circularBuffer.h",
+        "//src:configuration/configuration.h",
     ],
 )
 mock(
-    name = "mock_CircularBuffer",
+    name = "mock_configurationn",
     srcs = [
-        "//src:uart/circularBuffer/circularBuffer.h",
+        "//src:configuration/configuration.h",
     ],
     copts = ["-DTEST"],
     deps = [
-        "CircularBufferHdr",
+        "ConfigurationHdr",
+    ],
+)
+
+# TODO: mock_controlmanager
+
+cc_library(
+    name = "DebugHdr",
+    hdrs = [
+        "//src:debug/debug.h",
+    ],
+)
+mock(
+    name = "mock_debug",
+    srcs = [
+        "//src:debug/debug.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "DebugHdr",
     ],
 )
 
 cc_library(
-    name = "SpiHdr",
+    name = "elasticNodeMiddleware_internalHdr",
     hdrs = [
-        "//src:spi/spi.h",
+        "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
     ],
 )
 mock(
-    name = "mock_Spi",
+    name = "mock_elasticNodeMiddleware_internal",
     srcs = [
-        "//src:spi/spi.h",
+        "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
     ],
     copts = ["-DTEST"],
     deps = [
-        "SpiHdr",
-    ],
-)
-
-cc_library(
-    name = "Uart_internalHdr",
-    hdrs = [
-        "//src:uart/uart_internal.h",
-    ],
-)
-mock(
-    name = "mock_Uart_internal",
-    srcs = [
-        "//src:uart/uart_internal.h",
-    ],
-    copts = ["-DTEST",],
-    deps = [
-        "Uart_internalHdr",
-    ],
-)
-
-cc_library(
-    name = "Interrupt_ManagerHdr",
-    hdrs = [
-        "//src:interruptManager/interruptManager.h",
-    ],
-)
-mock(
-    name = "mock_InterruptManager",
-    srcs = [
-        "//src:interruptManager/interruptManager.h",
-    ],
-    copts = ["-DTEST"],
-    deps = [
-        "Interrupt_ManagerHdr",
-    ],
-)
-
-cc_library(
-    name = "Interrupt_ManagerMockHdr",
-    hdrs = [
-        "//src:interruptManager/interruptManager_avr_Mock.h"
-    ],
-)
-mock(
-    name = "mock_InterruptManager_avr_Mock",
-    srcs = [
-        "//src:interruptManager/interruptManager_avr_Mock.h",
-    ],
-    copts = ["-DTEST"],
-    deps = [
-        "Interrupt_ManagerMockHdr",
-    ],
-)
-
-cc_library(
-    name = "XmemHdr",
-    hdrs = [
-        "//src:xmem/xmem.h",
-    ],
-)
-mock(
-    name = "mock_Xmem",
-    srcs = [
-        "//src:xmem/xmem.h",
-    ],
-    copts = ["-DTEST"],
-    deps = [
-        "XmemHdr",
+        "elasticNodeMiddleware_internalHdr",
     ],
 )
 
@@ -138,6 +89,40 @@ mock(
 )
 
 cc_library(
+    name = "Interrupt_ManagerHdr",
+    hdrs = [
+        "//src:interruptManager/interruptManager.h",
+    ],
+)
+mock(
+    name = "mock_InterruptManager",
+    srcs = [
+        "//src:interruptManager/interruptManager.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Interrupt_ManagerHdr",
+    ],
+)
+
+cc_library(
+    name = "Interrupt_Manager_avr_MockHdr",
+    hdrs = [
+        "//src:interruptManager/interruptManager_avr_Mock.h"
+    ],
+)
+mock(
+    name = "mock_InterruptManager_avr_Mock",
+    srcs = [
+        "//src:interruptManager/interruptManager_avr_Mock.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Interrupt_Manager_avr_MockHdr",
+    ],
+)
+
+cc_library(
     name = "Led_mcuHdr",
     hdrs = [
         "//src:led/led_mcu.h",
@@ -155,21 +140,90 @@ mock(
 )
 
 cc_library(
-    name = "elasticNodeMiddleware_internalHdr",
+    name = "reconfigure_multiboot_internal_avrHdr",
     hdrs = [
-        "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "//src:reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
     ],
 )
 mock(
-    name = "mock_elasticNodeMiddleware_internal",
+    name = "mock_reconfigure_internal_multiboot_avr",
     srcs = [
-        "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "//src:reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
     ],
     copts = ["-DTEST"],
     deps = [
-        "elasticNodeMiddleware_internalHdr",
+        "reconfigure_multiboot_internal_avrHdr",
     ],
 )
+
+cc_library(
+    name = "SpiHdr",
+    hdrs = [
+        "//src:spi/spi.h",
+    ],
+)
+mock(
+    name = "mock_Spi",
+    srcs = [
+        "//src:spi/spi.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "SpiHdr",
+    ],
+)
+
+cc_library(
+    name = "CircularBufferHdr",
+    hdrs = [
+        "//src:uart/circularBuffer/circularBuffer.h",
+    ],
+)
+mock(
+    name = "mock_CircularBuffer",
+    srcs = [
+        "//src:uart/circularBuffer/circularBuffer.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "CircularBufferHdr",
+    ],
+)
+
+cc_library(
+    name = "Uart_internalHdr",
+    hdrs = [
+        "//src:uart/uart_internal.h",
+    ],
+)
+mock(
+    name = "mock_Uart_internal",
+    srcs = [
+        "//src:uart/uart_internal.h",
+    ],
+    copts = ["-DTEST",],
+    deps = [
+        "Uart_internalHdr",
+    ],
+)
+
+cc_library(
+    name = "XmemHdr",
+    hdrs = [
+        "//src:xmem/xmem.h",
+    ],
+)
+mock(
+    name = "mock_Xmem",
+    srcs = [
+        "//src:xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "XmemHdr",
+    ],
+)
+
 ### mocks> ###
 
 ### <tests ###
@@ -181,18 +235,31 @@ mock(
 #    copts = ["-DTEST"],
 #    deps = [
 #        "mock_flash",
-#        "mock_InterruptManager_avr_Mock",
+#        "mock_InterruptManager",
 #        "mock_led_mcu",
 #        "mock_elasticNodeMiddleware_internal",
 #        "//src:ConfigurationTest",
 #    ],
 #)
 
-# TODO: controlmanager
+unity_test(
+    file_name = "controlmanager_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_configurationn",
+        "mock_debug",
+        "mock_Xmem",
+        "mock_flash",
+        "//src:ControlmanagerTest",
+    ],
+)
 
 # TODO: debug
 
-# TODO: finish:
+# TODO: debug_Usb
+
+# TODO: finish implementationa
 #unity_test(
 #    file_name = "ElasticNodeMiddleware_Test.c",
 #    cexception = False,
@@ -213,9 +280,19 @@ unity_test(
     ],
 )
 
-# TODO: ElasticNodeMiddlewareMonitoring
+# TODO: finish tests
+unity_test(
+    file_name = "ElasticNodeMiddlewareMonitoring_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_InterruptManager",
+        "//src:ElasticNodeMiddlewareMonitoringTest",
+    ],
+)
 
-# TODO: finish
+# TODO: finish tests
 unity_test(
     file_name = "flash_Test.c",
     cexception = False,
@@ -223,7 +300,7 @@ unity_test(
     deps = [
         "mock_Bitmanipulation",
         "mock_Spi",
-        "mock_InterruptManager_avr_Mock",
+        "mock_InterruptManager",
         "mock_elasticNodeMiddleware_internal",
         "//src:FlashTest",
     ],
@@ -249,7 +326,20 @@ unity_test(
     ],
 )
 
-# TODO: reconfigure_multiboot_avr
+# TODO: finish tests
+unity_test(
+    file_name = "reconfigure_multiboot_avr_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_Xmem",
+        "mock_InterruptManager",
+        "mock_reconfigure_internal_multiboot_avr",
+        "mock_elasticNodeMiddleware_internal",
+        "//src:Reconfigure_multiboot_avrTest",
+    ],
+)
 
 unity_test(
     file_name = "reconfigure_multiboot_internal_avr_Test.c",
@@ -260,7 +350,7 @@ unity_test(
     ],
 )
 
-# TODO: finish
+# TODO: finish tests
 unity_test(
     file_name = "spi_Test.c",
     cexception = False,

@@ -62,6 +62,7 @@ cc_library(
         "interruptManager/interruptManager.h",
         "interruptManager/interruptManager_avr_Mock.h",
     ],
+    visibility = ["//visibility:public"],
 )
 
 cc_library(
@@ -249,7 +250,23 @@ cc_library(
     ],
 )
 
-# TODO: controlmanager
+cc_library(
+    name = "ControlmanagerTest",
+    srcs = [
+        "controlmanager/controlmanager.c",
+    ],
+    hdrs = [
+        "controlmanager/controlmanager.h",
+        "configuration/configuration.h",
+        "xmem/xmem.h",
+        "debug/debug.h",
+        "flash/flash.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
 
 # TODO: debug
 
@@ -288,7 +305,25 @@ cc_library(
     ],
 )
 
-# TODO: ElasticNodeMiddlewareMonitoring
+cc_library(
+    name = "ElasticNodeMiddlewareMonitoringTest",
+    srcs = [
+        "elasticNodeMiddlewareMonitoring/ElasticNodeMiddlewareMonitoring.c",
+    ],
+    hdrs = [
+        "//:ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h",
+        "flash/flash.h",
+        "debug/debug.h",
+        "spi/spi.h",
+        "interruptManager/interruptManager.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
 
 cc_library(
     name = "FlashTest",
@@ -308,7 +343,20 @@ cc_library(
     ],
 )
 
-# TODO: interruptManager_avr
+cc_library(
+    name = "Interrupt_ManagerTest",
+    srcs = [
+        "interruptManager/interruptManager_avr.c",
+    ],
+    hdrs = [
+        "interruptManager/interruptManager.h",
+        "interruptManager/interruptManager_avr_Mock.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
 
 cc_library(
     name = "led_mcuTest",
@@ -326,7 +374,25 @@ cc_library(
     ],
 )
 
-# TODO: reconfigure_multiboot_avr
+cc_library(
+    name = "Reconfigure_multiboot_avrTest",
+    srcs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
+        "xmem/xmem.h",
+        "interruptManager/interruptManager.h",
+        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+    hdrs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
 
 cc_library(
     name = "Reconfigure_multiboot_internal_avrTest",
@@ -433,20 +499,6 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "Interrupt_ManagerTest",
-    srcs = [
-        "interruptManager/interruptManager_avr.c",
-    ],
-    hdrs = [
-        "interruptManager/interruptManager.h",
-        "interruptManager/interruptManager_avr_Mock.h",
-    ],
-    copts = ["-DTEST"],
-    visibility = ["//visibility:public"],
-    deps = [
-    ],
-)
 
 ### tests> ###
 
@@ -457,6 +509,7 @@ exports_files(
         "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
         "elasticNodeMiddlewareMonitoring/ElasticNodeMiddlewareMonitoring.c",
         "xmem/xmem.h",
+        # for tests:
         "interruptManager/interruptManager.h",
         "uart/circularBuffer/circularBuffer.h",
         "uart/uart_internal.h",
@@ -466,6 +519,8 @@ exports_files(
         "debug/debug.h",
         "led/led_mcu.h",
         "spi/spi.h",
+        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
+        "controlmanager/controlmanager.h",
     ],
     visibility = ["//visibility:public"],
 )

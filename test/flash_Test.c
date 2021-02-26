@@ -8,7 +8,7 @@
 #include "src/pinDefinition/fpgaPins.h"
 
 //#include "src/flash/Mockflash.h"
-#include "src/interruptManager/MockinterruptManager_avr_Mock.h"
+#include "src/interruptManager/MockinterruptManager.h"
 #include "src/elasticNodeMiddleware/MockelasticNodeMiddleware_internal.h"
 #include "src/spi/Mockspi.h"
 

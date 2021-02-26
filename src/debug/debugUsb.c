@@ -18,6 +18,7 @@
  *    //Stuff when transmission done
  * }
  ****/
+
 #include <util/delay.h>
 
 #include "PeripheralInterface/LufaUsartImpl.h"

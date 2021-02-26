@@ -14,26 +14,36 @@
 //uint8_t state_of_the_mcu;
 //uint8_t sample_rate;
 
-#if TEMPORAL_ACCELERATOR
-typedef enum {
-    SLEEP_MODE = 0,
-    RECONFIG_1 = 1,
-    SEND_INPUT_1 = 2,
-    EXECUTION_1 = 3,
-    RECEIVE_RES_1 = 4,
-    RECONFIG_2 = 5,
-    SEND_INPUT_2 = 6,
-    EXECUTION_2 = 7,
-    RECEIVE_RES_2 = 8,
-    RECONFIG_3 = 9,
-    SEND_INPUT_3 = 10,
-    EXECUTION_3 = 11,
-    RECEIVE_RES_3 = 12,
-    FREE_TO_CHANGE1 = 13,
-    FREE_TO_CHANGE2 = 14,
-    END_MEASUREMENT = 15,
+#ifdef TEST
+extern uint8_t* TWAR_MON;
+extern uint8_t* TWCR_MON;
+extern uint8_t* TWDR_MON;
 
-} elasticnode_monitoring_mcu_running_state;
+#define TW_STATUS_MON 5
+
+#define TWIE_MON 1
+#define TWEA_MON 2
+#define TWINT_MON 3
+#define TWEN_MON 4
+
+#define TW_ST_SLA_ACK_MON 5
+#define TW_ST_DATA_ACK_MON 5
+
+#else
+
+#define TWAR_MON &TWAR
+#define TWCR_MON &TWCR
+#define TWDR_MON &TWDR
+#define TW_STATUS_MON TW_STATUS
+
+#define TWIE_MON TWIE
+#define TWEA_MON TWEA
+#define TWINT_MON TWINT
+#define TWEN_MON TWEN
+
+#define TW_ST_SLA_ACK_MON TW_ST_SLA_ACK
+#define TW_ST_DATA_ACK_MON TW_ST_DATA_ACK
+
 #endif
 
 typedef enum {
@@ -48,18 +58,12 @@ typedef enum {
     CURRENT_SAMPLE_TIME_DEFAULT = 5
 } elasticnode_monitoring_sample_rate;
 
-#if TEMPORAL_ACCELERATOR
-
-void elasticnode_monitoring_change_running_state(mcu_running_state new_state);
-
-#else
-
 void elasticnode_monitoring_change_running_state(uint8_t new_state, uint8_t *state_of_the_mcu);
-
-#endif
 
 void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rate new_sample_rate);
 
 void IIC_slave_init(uint8_t address);
+
+void elasticnode_monitoring_ISR(void);
 
 #endif

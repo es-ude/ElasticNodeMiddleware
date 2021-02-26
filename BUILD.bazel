@@ -64,12 +64,17 @@ cc_library(
     ],
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
+    deps = [
+        "//src:InterruptManagerLib",
+        "//:BitmanipulationLib",
+    ]
 )
 
 ### Libraries> ###
 exports_files(
     srcs = [
         "ElasticNodeMiddleware/ElasticNodeMiddleware.h",
+        "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h",
     ],
     visibility = ["//visibility:public"],
 )
@@ -92,17 +97,6 @@ py_library(
     deps = [],
 )
 
-py_binary(
-    name = "uploadMultiConfigS15",
-    srcs = ["scripts/uploadMultiConfigS15.py"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "bitfileConfigs",
-        "portConfigs",
-        "serial_test",
-    ],
-)
-
 py_library(
     name = "portConfigs",
     srcs = ["scripts/portConfigs.py"],
@@ -118,6 +112,21 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         "Configuration",
+    ],
+)
+
+#load("@my_deps//:requirements.bzl", "requirement")
+
+py_binary(
+    name = "uploadMultiConfigS15",
+    srcs = ["scripts/uploadMultiConfigS15.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "bitfileConfigs",
+        "portConfigs",
+        "serial_test",
+#        requirement("serial"),
+#        requirement("numpy"),
     ],
 )
 

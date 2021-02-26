@@ -60,3 +60,7 @@ int main(void) {
 
     return 0;
 }
+
+ISR(TWI_vect) {
+        elasticnode_monitoring_ISR();
+}

@@ -1,31 +1,27 @@
+#include "EmbeddedUtilities/BitManipulation.h"
+
 #include "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h"
 
-#include <stdio.h>
-#include <stdint.h>
+#include "src/interruptManager/interruptManager.h"
+
+//#include <stdio.h>
+//#include <stdint.h>
+
+#ifdef TEST
+#else
 #include <compat/twi.h>
 #include <avr/interrupt.h>
+#endif
 
 uint8_t state_of_the_mcu;
 
-#if TEMPORAL_ACCELERATOR
-void elasticnode_monitoring_change_running_state(mcu_running_state new_state){
-    //to ensure that only values from 0 to 16 are allowed and otherwise the sample rate isnt ruined
-
-    uint8_t tmp_samplerate = state_of_the_mcu >> 4;
-    state_of_the_mcu = (new_state & 0b00001111);
-    state_of_the_mcu |= tmp_samplerate << 4;
-}
-#else
-
 void elasticnode_monitoring_change_running_state(uint8_t new_state, uint8_t *state_of_the_mcu) {
-    //to ensure that only values from 0 to 16 are allowed and otherwise the sample rate isnt ruined
+    //to ensure that only values from 0 to 16 are allowed and otherwise the sample rate is not ruined
 
     uint8_t tmp_samplerate = *state_of_the_mcu >> 4;
     *state_of_the_mcu = (new_state & 0b00001111);
     *state_of_the_mcu |= tmp_samplerate << 4;
 }
-
-#endif
 
 void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rate new_sample_rate) {
 
@@ -35,35 +31,48 @@ void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rat
 }
 
 void IIC_slave_init(uint8_t address) {
-    cli();
+    interruptManager_clearInterrupt();
+    //cli();
+
     //load address into TWI address register
-    TWAR = address;
-    TWCR = (1 << TWIE) | (1 << TWEA) | (1 << TWINT) | (1 << TWEN);
-    sei();
+    *TWAR_MON  = address;
+    //TWAR = address;
+
+    BitManipulation_setBit(TWCR_MON, TWIE_MON);
+    BitManipulation_setBit(TWCR_MON, TWEA_MON);
+    BitManipulation_setBit(TWCR_MON, TWINT_MON);
+    BitManipulation_setBit(TWCR_MON, TWEN_MON);
+    //TWCR = (1 << TWIE) | (1 << TWEA) | (1 << TWINT) | (1 << TWEN);
+
+    interruptManager_setInterrupt();
+    //sei();
 }
 
-// TODO: in main.c
-ISR(TWI_vect){
-        switch (TW_STATUS)
-        {
-            case TW_SR_SLA_ACK:
-            case TW_SR_DATA_ACK:
-                /*
-                        We have received data. This is now contained in the TWI
-                        data register (TWDR)
-                    */
-                //          i2cEventReceived(TWDR);
-                break;
-            case TW_ST_SLA_ACK:
-            case TW_ST_DATA_ACK:
-                /*
-                            Either slave selected (SLA_ACK) and data requested or data transmitted, ACK received
-                            and next data requested
-                */
-                TWDR = state_of_the_mcu;
+void elasticnode_monitoring_ISR(void) {
+
+    /*switch (TW_STATUS) {
+        case TW_SR_SLA_ACK:
+        case TW_SR_DATA_ACK:
+            // We have received data. This is now contained in the TWI data register (TWDR)
+            // i2cEventReceived(TWDR);
             break;
-            default:
-                break;
-        }
-        TWCR = (1<<TWIE) | (1<<TWEA) | (1<<TWINT) | (1<<TWEN);
+        case TW_ST_SLA_ACK:
+        case TW_ST_DATA_ACK:
+            // Either slave selected (SLA_ACK) and data requested or data transmitted, ACK received and next data requested
+            *TWDR_MON = state_of_the_mcu;
+            break;
+        default:
+            break;
+
+    }*/
+
+    if (TW_STATUS_MON == TW_ST_SLA_ACK_MON || TW_STATUS_MON == TW_ST_DATA_ACK_MON) {
+        *TWDR_MON = state_of_the_mcu;
+    }
+
+    BitManipulation_setBit(TWCR_MON, TWIE_MON);
+    BitManipulation_setBit(TWCR_MON, TWEA_MON);
+    BitManipulation_setBit(TWCR_MON, TWINT_MON);
+    BitManipulation_setBit(TWCR_MON, TWEN_MON);
+    //TWCR = (1 << TWIE) | (1 << TWEA) | (1 << TWINT) | (1 << TWEN);
 }
