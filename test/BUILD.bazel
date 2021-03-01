@@ -7,6 +7,13 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
+cc_library(
+    name = "LufaUsartImplHdrForTesting",
+    hdrs = ["header_replacements/PeripheralInterface/LufaUsartImpl.h"],
+    strip_include_prefix = "header_replacements",
+    visibility = ["//visibility:public"],
+)
+
 ### <mocks ###
 
 mock(
@@ -18,6 +25,15 @@ mock(
     ],
 )
 
+mock(
+    name = "mock_LufaUsartImpl",
+    srcs = ["//test:header_replacements/PeripheralInterface/LufaUsartImpl.h"],
+    copts = ["-DTEST"],
+    deps = [
+        ":LufaUsartImplHdrForTesting",
+    ],
+)
+
 cc_library(
     name = "ConfigurationHdr",
     hdrs = [
@@ -25,7 +41,7 @@ cc_library(
     ],
 )
 mock(
-    name = "mock_configurationn",
+    name = "mock_configuration",
     srcs = [
         "//src:configuration/configuration.h",
     ],
@@ -35,7 +51,22 @@ mock(
     ],
 )
 
-# TODO: mock_controlmanager
+cc_library(
+    name = "ControlmanagerHdr",
+    hdrs = [
+        "//src:controlmanager/controlmanager.h",
+    ],
+)
+mock(
+    name = "mock_controlmanager",
+    srcs = [
+        "//src:controlmanager/controlmanager.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "ControlmanagerHdr",
+    ],
+)
 
 cc_library(
     name = "DebugHdr",
@@ -140,6 +171,23 @@ mock(
 )
 
 cc_library(
+    name = "reconfigure_multiboot_avrHdr",
+    hdrs = [
+        "//src:reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+    ],
+)
+mock(
+    name = "mock_reconfigure_multiboot_avr",
+    srcs = [
+        "//src:reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "reconfigure_multiboot_avrHdr",
+    ],
+)
+
+cc_library(
     name = "reconfigure_multiboot_internal_avrHdr",
     hdrs = [
         "//src:reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
@@ -187,6 +235,23 @@ mock(
     copts = ["-DTEST"],
     deps = [
         "CircularBufferHdr",
+    ],
+)
+
+cc_library(
+    name = "UartHdr",
+    hdrs = [
+        "//src:uart/uart.h",
+    ],
+)
+mock(
+    name = "mock_Uart",
+    srcs = [
+        "//src:uart/uart.h",
+    ],
+    copts = ["-DTEST",],
+    deps = [
+        "UartHdr",
     ],
 )
 
@@ -247,7 +312,7 @@ unity_test(
     cexception = False,
     copts = ["-DTEST"],
     deps = [
-        "mock_configurationn",
+        "mock_configuration",
         "mock_debug",
         "mock_Xmem",
         "mock_flash",
@@ -255,20 +320,45 @@ unity_test(
     ],
 )
 
-# TODO: debug
+# TODO: finish tests
+unity_test(
+    file_name = "debug_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Uart_internal",
+        "mock_Uart",
+        "//src:DebugTest",
+    ],
+)
 
-# TODO: debug_Usb
+# TODO: finish tests
+unity_test(
+    file_name = "debugUsb_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_LufaUsartImpl",
+        "//src:DebugUsbTest",
+    ],
+)
 
-# TODO: finish implementationa
-#unity_test(
-#    file_name = "ElasticNodeMiddleware_Test.c",
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    deps = [
-#        "mock_Bitmanipulation",
-#        "//src:ElasticNodeMiddlewareTest",
-#    ],
-#)
+# TODO: finish implementation
+unity_test(
+    file_name = "ElasticNodeMiddleware_Test.c",
+    cexception = False,
+    copts = ["-DTEST"] + ["-DDEBUG"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_elasticNodeMiddleware_internal",
+        "mock_reconfigure_multiboot_avr",
+        "mock_Xmem",
+        "mock_led_mcu",
+        "mock_controlmanager",
+        "mock_debug",
+        "//src:ElasticNodeMiddlewareTest",
+    ],
+)
 
 unity_test(
     file_name = "ElasticNodeMiddleware_internal_Test.c",

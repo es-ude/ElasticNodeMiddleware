@@ -8,13 +8,8 @@
 uartReceiveMode currentUartReceiveMode = UART_IDLE;
 //loadingMode currentLoadingMode = LOADING_IDLE;
 
-//uint8_t *data;
-
-//volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
-
-
-volatile uint8_t *userlogic_reset_addr = (uint8_t * )(XMEM_OFFSET + 0x04);
-volatile uint8_t *userlogic_id_addr = (uint8_t * )(XMEM_USERLOGIC_OFFSET + 1500);
+volatile uint8_t *userlogic_reset_addr = (uint8_t *) (XMEM_OFFSET + 0x04);
+volatile uint8_t *userlogic_id_addr = (uint8_t *) (XMEM_USERLOGIC_OFFSET + 1500);
 
 void dummyHandler(uint8_t currentData);
 
@@ -36,12 +31,13 @@ void userlogic_enable(void) {
  * */
 void userlogic_read_id(void) {
     uint8_t id;
-
     xmem_enableXmem();
     id = *userlogic_id_addr;
+#if !defined TEST
     debugWriteLine("User_logic_ID: ");
     debugWriteHex8(id);
     debugWriteLine("\r\n");
+#endif
     xmem_disableXmem();
 }
 
@@ -56,7 +52,9 @@ void dummyHandler(uint8_t currentData) {
     //dummy function, to never have the situation of having a function null pointer.
     // (unless the user wants to make his or her life miserable. Who am I to deny you that)
     //tbf, if the control manager is enabled, performance isn't really what we are looking for.
+#if !defined TEST
     debugWriteString("Control Manager User mode handler has not been set. Please check your code.\r\n");
+#endif
 }
 
 void control_setUserHandle(void (*userHandler)(uint8_t)) {
@@ -70,20 +68,26 @@ void control_handleChar(uint8_t currentData) {
             switch (currentData) {
                 case 'u':
                     debugAck('u');
+#if !defined TEST
                     debugWriteString("\n\rEntering user mode. To exit press letter \"e\"\r\n");
+#endif
 //                    _delay_ms(1000);
                     uint8_t userModeActive = 1;
                     while (userModeActive) {
                         if (debugReadCharAvailable()) {
                             char userModeData = debugGetChar();
                             if (userModeData == 'e') {
+#if !defined TEST
                                 debugWriteString("exiting user mode\r\n");
+#endif
                                 userModeActive = 0;
                             } else {
                                 (*userDefinedHandler)(userModeData);
                             }
                         }
+#if !defined TEST
                         debugTask();
+#endif
                     }
                     break;
                 case 'F':

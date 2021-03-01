@@ -19,14 +19,21 @@
  * }
  ****/
 
-#include <util/delay.h>
-
 #include "PeripheralInterface/LufaUsartImpl.h"
 
 #include "src/debug/debug.h"
 
-void debugWriteBin(uint32_t num, uint8_t length);
+#ifdef TEST
 
+void _delay_ms(uint8_t delay);
+
+#else
+
+#include <util/delay.h>
+
+#endif
+
+void debugWriteBin(uint32_t num, uint8_t length);
 
 void debugTask(void) {
     lufaTask();
@@ -42,10 +49,6 @@ void debugInit(void (*receiveHandler)(uint8_t)) {
         _delay_ms(100);
     }
 }
-
-void setDebugReceiveHandler(void (*receiveHandler)(uint8_t)) {
-}
-
 
 void debugNewLine(void) {
     debugWriteCharBlock('\r');
@@ -87,10 +90,6 @@ uint8_t debugReadCharAvailable(void) {
     return lufaReadAvailable();
 }
 
-void debugReadCharProcessed(void) {
-    // not needed for usb
-}
-
 uint8_t debugReadCharBlock(void) {
     return lufaReadByteBlocking();
 }
@@ -115,7 +114,7 @@ void debugWriteHex16(uint16_t num) {
 
 void debugWriteHex32(uint32_t num) {
     char *buf = (char *) malloc(10);
-    sprintf(buf, "%08lX", num);
+    sprintf(buf, "%08lX", (unsigned long) num);
     debugWriteString(buf);
     free(buf);
 }
@@ -137,7 +136,7 @@ void debugWriteDec16(uint16_t num) {
 //unsigned long
 void debugWriteDec32(uint32_t num) {
     char *buf = (char *) malloc(10);
-    sprintf(buf, "%lu", num);
+    sprintf(buf, "%lu", (unsigned long) num);
     debugWriteString(buf);
     free(buf);
 }
@@ -145,7 +144,7 @@ void debugWriteDec32(uint32_t num) {
 //signed long
 void debugWriteDec32S(int32_t num) {
     char *buf = (char *) malloc(10);
-    sprintf(buf, "%ld", num);
+    sprintf(buf, "%ld", (long) num);
     debugWriteString(buf);
     free(buf);
 }
@@ -201,9 +200,15 @@ void debugWaitUntilDone(void) {
 }
 
 uint8_t debugSending(void) {
-#warning "lufa not waiting for finished"
+//#warning "lufa not waiting for finished"
+return 0;
 }
 
 void debugAck(uint8_t c) {
     debugWriteCharBlock(c);
 }
+
+// not needed
+void debugReadCharProcessed(void){}
+
+void setDebugReceiveHandler(void (*receiveHandler)(uint8_t)) {}

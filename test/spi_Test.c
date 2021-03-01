@@ -7,9 +7,6 @@
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "src/pinDefinition/fpgaPins.h"
 
-// TODO: own mock?
-//#include "src/spi/Mockspi.h"
-
 #include "src/interruptManager/MockinterruptManager.h"
 #include "src/xmem/Mockxmem.h"
 

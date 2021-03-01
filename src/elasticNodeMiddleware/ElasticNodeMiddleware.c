@@ -19,16 +19,20 @@
 #define USERLOGIC_RESET_VALUE 0x0
 
 // volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
-volatile uint8_t *xmemOffset = (uint8_t * )(XMEM_OFFSET);
-volatile uint8_t *userLogicOffsetAddr = (uint8_t * )(XMEM_USERLOGIC_OFFSET);
+volatile uint8_t *xmemOffset = (uint8_t *) (XMEM_OFFSET);
+volatile uint8_t *userLogicOffsetAddr = (uint8_t *) (XMEM_USERLOGIC_OFFSET);
 
 // --------- <INTERNAL ---------
 void elasticnode_initialise(void) {
     // disable r2f chip for start up
-    DDRE |= 0x40; // wireless_cs low
-    PORTE |= 0x40;
-    DDRB |= 0x20; // wireless_reset low
-    PORTB &= ~0x20;
+    BitManipulation_setBit(DDR_FPGA_POWER_SRAM, 6); // wireless_cs low
+    BitManipulation_setBit(PORT_FPGA_POWER_SRAM, 6);
+    BitManipulation_setBit(DDR_FPGA_POWER_INT, 5); // wireless_reset low
+    BitManipulation_clearBit(PORT_FPGA_DONE, 5);
+    //DDRE |= 0x40; // wireless_cs low
+    //PORTE |= 0x40;
+    //DDRB |= 0x20; // wireless_reset low
+    //PORTB &= ~0x20;
 
     // initalise fpga
     elasticnode_fpgaPowerOn_internal();
@@ -110,7 +114,8 @@ void elasticnode_disableFpgaInterface(void) {
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
 void elasticnode_configureFPGA(uint32_t address) {
     reconfigure_fpgaMultiboot(address);
-    // TODO: Does not finish
+    // TODO: use complete instead of delay
+    _delay_ms(3000);
     //while(!reconfigure_fpgaMultibootComplete());
 }
 
@@ -118,7 +123,7 @@ void elasticnode_reconfigure_interruptSR(void) {
     reconfigure_interruptSR();
 }
 
-uint32_t elasticnode_getLoadedConfigurationAddress(void){
+uint32_t elasticnode_getLoadedConfigurationAddress(void) {
     return reconfigure_getMultibootAddress();
 }
 
@@ -144,7 +149,7 @@ void  elasticnode_debugTask(void){
 }
 
 uint16_t  elasticnode_debugNumInputAvailable(void){
-    debugNumInputAvailable();
+    return debugNumInputAvailable();
 }
 
 void elasticnode_debugInit(void (*receiveHandler)(uint8_t)){
@@ -184,19 +189,19 @@ void elasticnode_debugWriteCharBlock(uint8_t c){
 };
 
 uint8_t elasticnode_debugReadCharAvailable(void){
-    debugReadCharAvailable();
+    return debugReadCharAvailable();
 }
 
 void elasticnode_debugReadCharProcessed(void){
-    debugReadCharProcessed();
+    return debugReadCharProcessed();
 }
 
 uint8_t elasticnode_debugReadCharBlock(void){
-    debugReadCharBlock();
+    return debugReadCharBlock();
 }
 
 uint8_t elasticnode_debugGetChar(void){
-    debugGetChar();
+    return debugGetChar();
 }
 
 void elasticnode_debugWriteHex8(uint8_t num){
@@ -260,7 +265,7 @@ void elasticnode_debugWaitUntilDone(void){
 }
 
 uint8_t elasticnode_debugSending(void){
-    debugSending();
+    return debugSending();
 }
 
 void elasticnode_debugAck(uint8_t c){

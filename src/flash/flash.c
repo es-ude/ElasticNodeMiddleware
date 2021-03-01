@@ -7,9 +7,7 @@
 
 #include "src/spi/spi.h"
 
-#ifdef TEST
-
-#else
+#if !defined TEST
 #include "src/debug/debug.h"
 #endif
 
@@ -65,9 +63,9 @@ void eraseSectorFlash(uint32_t address, uint8_t mcuFlash) {
     selectFlash(mcuFlash);
 
     spi_buffer[0] = 0x20;
-    spi_buffer[1] = (uint8_t)(address >> 16);
-    spi_buffer[2] = (uint8_t)(address >> 8);
-    spi_buffer[3] = (uint8_t)(address >> 0);
+    spi_buffer[1] = (uint8_t) (address >> 16);
+    spi_buffer[2] = (uint8_t) (address >> 8);
+    spi_buffer[3] = (uint8_t) (address >> 0);
 
     spiPerformTaskBlocking(4, spi_buffer, 0, NULL);
 
@@ -81,7 +79,7 @@ void eraseSectorFlash(uint32_t address, uint8_t mcuFlash) {
 
 void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mcuFlash) {
     if (length + 4 > SPI_BUFFER_SIZE) {
-#ifdef DEBUG
+#if !defined TEST
         debugWriteLine("Cannot write data! Too large for buffer");
 #endif
     } else {
@@ -93,9 +91,9 @@ void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mc
 
         // put instructions in buffer
         spi_buffer[0] = 0x02;
-        spi_buffer[1] = (uint8_t)(address >> 16);
-        spi_buffer[2] = (uint8_t)(address >> 8);
-        spi_buffer[3] = (uint8_t)(address >> 0);
+        spi_buffer[1] = (uint8_t) (address >> 16);
+        spi_buffer[2] = (uint8_t) (address >> 8);
+        spi_buffer[3] = (uint8_t) (address >> 0);
 
         memcpy(spi_buffer + 4, data, length);
 
@@ -151,7 +149,7 @@ void waitDoneFlash(uint8_t mcuFlash) {
     uint16_t counter = 0;
     uint8_t status = 0xFF;
     while (status & (1 << (0))) {
-    //while (status & _BV(0)) {
+        //while (status & _BV(0)) {
         counter++;
         status = readStatus(mcuFlash);
         _delay_ms(5);
@@ -180,9 +178,9 @@ readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, void (*read
 
     // put instructions backward in buffer
     spi_buffer[0] = 0x03;
-    spi_buffer[1] = (uint8_t)(address >> 16);
-    spi_buffer[2] = (uint8_t)(address >> 8);
-    spi_buffer[3] = (uint8_t)(address >> 0);
+    spi_buffer[1] = (uint8_t) (address >> 16);
+    spi_buffer[2] = (uint8_t) (address >> 8);
+    spi_buffer[3] = (uint8_t) (address >> 0);
 
     if (mcuFlash) {
         // send commmand
@@ -211,7 +209,7 @@ readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, void (*read
 // performs global block-protection unlock
 void unlockFlash(uint8_t mcuFlash) {
 
-    flashResetCallbacks();
+    //flashResetCallbacks();
     writeEnableFlash(mcuFlash);
 
     selectFlash(mcuFlash);

@@ -268,7 +268,36 @@ cc_library(
     ],
 )
 
-# TODO: debug
+cc_library(
+    name = "DebugTest",
+    srcs = [
+        "debug/debug.c",
+    ],
+    hdrs = [
+        "debug/debug.h",
+        "uart/uart.h",
+        "uart/uart_internal.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "DebugUsbTest",
+    srcs = [
+        "debug/debugUsb.c",
+    ],
+    hdrs = [
+        "debug/debug.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:LufaUsartImplHdrForTesting",
+    ],
+)
 
 # TODO
 cc_library(
@@ -278,9 +307,14 @@ cc_library(
     ],
     hdrs = [
         "//:ElasticNodeMiddleware/ElasticNodeMiddleware.h",
-        "//src:xmem/xmem.h",
+        "xmem/xmem.h",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "led/led_mcu.h",
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+        "controlmanager/controlmanager.h",
+        "debug/debug.h",
     ],
-    copts = ["-DTEST"],
+    copts = ["-DTEST"] + ["-DDEBUG"],
     visibility = ["//visibility:public"],
     deps = [
         "//test:BitManipulationHdrForTesting",
@@ -499,7 +533,6 @@ cc_library(
     ],
 )
 
-
 ### tests> ###
 
 exports_files(
@@ -512,6 +545,7 @@ exports_files(
         # for tests:
         "interruptManager/interruptManager.h",
         "uart/circularBuffer/circularBuffer.h",
+        "uart/uart.h",
         "uart/uart_internal.h",
         "interruptManager/interruptManager_avr_Mock.h",
         "flash/flash.h",
@@ -519,6 +553,7 @@ exports_files(
         "debug/debug.h",
         "led/led_mcu.h",
         "spi/spi.h",
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "controlmanager/controlmanager.h",
     ],

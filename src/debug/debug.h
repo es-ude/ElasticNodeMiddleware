@@ -62,7 +62,6 @@ void debugWriteFloat(float num);
 
 void debugWriteFloatFull(float num);
 
-
 void debugDone(void);
 
 void debugReady(void);

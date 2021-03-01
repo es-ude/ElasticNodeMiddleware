@@ -4,9 +4,6 @@
 
 #include "src/interruptManager/interruptManager.h"
 
-//#include <stdio.h>
-//#include <stdint.h>
-
 #ifdef TEST
 #else
 #include <compat/twi.h>
@@ -35,7 +32,7 @@ void IIC_slave_init(uint8_t address) {
     //cli();
 
     //load address into TWI address register
-    *TWAR_MON  = address;
+    *TWAR_MON = address;
     //TWAR = address;
 
     BitManipulation_setBit(TWCR_MON, TWIE_MON);
