@@ -4,12 +4,15 @@
 #include "src/interruptManager/interruptManager.h"
 #include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
 
-#if defined TEST
 #include <math.h>
+
+#if defined TEST
 #include <stdlib.h>
 #else
+
 #include "src/led/led_mcu.h"
 #include "src/debug/debug.h"
+
 #endif
 
 #define BUFFER_SIZE 256

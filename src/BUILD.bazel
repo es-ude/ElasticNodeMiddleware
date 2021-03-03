@@ -145,6 +145,15 @@ cc_library(
 )
 
 cc_library(
+    name = "DelayLibHdr",
+    hdrs = [
+        "delay/delay.h",
+    ],
+    copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
     name = "FlashLib",
     srcs = [
         "flash/flash.c",
@@ -155,6 +164,7 @@ cc_library(
     copts = cpu_frequency_flag(),
     deps = [
         "//:BitmanipulationLib",
+        "//src:DelayLibHdr",
         "//src:SpiLib",
         "//src:DebugLufaLib",
         "//src:RegisterDefinitionLibHdr",
