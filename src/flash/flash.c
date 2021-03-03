@@ -7,6 +7,8 @@
 
 #include "src/spi/spi.h"
 
+#include "src/delay/delay.h"
+
 #if !defined TEST
 #include "src/debug/debug.h"
 #endif

@@ -313,6 +313,7 @@ cc_library(
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "controlmanager/controlmanager.h",
         "debug/debug.h",
+        "delay/delay.h",
     ],
     copts = ["-DTEST"] + ["-DDEBUG"],
     visibility = ["//visibility:public"],
@@ -368,6 +369,7 @@ cc_library(
         "flash/flash.h",
         "debug/debug.h",
         "spi/spi.h",
+        "delay/delay.h"
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -556,6 +558,7 @@ exports_files(
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "controlmanager/controlmanager.h",
+        "delay/delay.h",
     ],
     visibility = ["//visibility:public"],
 )

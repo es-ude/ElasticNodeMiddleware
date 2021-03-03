@@ -11,12 +11,8 @@
 #include "src/led/Mockled_mcu.h"
 #include "src/controlmanager/Mockcontrolmanager.h"
 #include "src/debug/Mockdebug.h"
-
-//TODO: I don't entirely get why the test only builds if I include the mock xmem header
 #include "src/xmem/Mockxmem.h"
-
-// TODO: The middleware API has been renamed and especially the read/write functions are different.
-// TODO: Tests likely need to be rewritten. Pls fix.
+#include "src/delay/Mockdelay.h"
 
 uint8_t port_fpga_program_b;
 uint8_t ddr_fpga_program_b;
@@ -88,10 +84,10 @@ void initialise_mockRegister(void) {
 void test_elasticnode_initialise(void) {
     initialise_mockRegister();
 
-    BitManipulation_setBit_Expect(DDR_FPGA_POWER_SRAM, 0x40);
-    BitManipulation_setBit_Expect(PORT_FPGA_POWER_SRAM, 0x40);
-    BitManipulation_setBit_Expect(DDR_FPGA_POWER_INT, 0x20);
-    BitManipulation_clearBit_Expect(PORT_FPGA_DONE, 0x20);
+    BitManipulation_setBit_Expect(DDR_FPGA_POWER_SRAM, 6);
+    BitManipulation_setBit_Expect(PORT_FPGA_POWER_SRAM, 6);
+    BitManipulation_setBit_Expect(DDR_FPGA_POWER_INT, 5);
+    BitManipulation_clearBit_Expect(PORT_FPGA_DONE, 5);
 
     //fpgaPowerOn
     elasticnode_fpgaPowerOn_internal_Expect();
@@ -99,19 +95,19 @@ void test_elasticnode_initialise(void) {
     //single control --> register do not exist
 
     //enable interface
-    BitManipulation_setBit_Expect(&ddr_fpga_cclk, P_FPGA_CCLK);
+    BitManipulation_setBit_Expect(DDR_FPGA_CCLK, P_FPGA_CCLK);
 
     // inputs that only get setup once
-    BitManipulation_setBit_Expect(&port_fpga_init_b, P_FPGA_INIT_B);
-    BitManipulation_clearBit_Expect(&ddr_fpga_init_b, P_FPGA_INIT_B);
-    BitManipulation_setBit_Expect(&port_fpga_init_b, P_FPGA_INIT_B);
+    BitManipulation_setBit_Expect(PORT_FPGA_INIT_B, P_FPGA_INIT_B);
+    BitManipulation_clearBit_Expect(DDR_FPGA_INIT_B, P_FPGA_INIT_B);
+    BitManipulation_setBit_Expect(PORT_FPGA_INIT_B, P_FPGA_INIT_B);
 
-    BitManipulation_clearBit_Expect(&ddr_fpga_done, P_FPGA_DONE);
-    BitManipulation_setBit_Expect(&port_fpga_done, P_FPGA_DONE);
+    BitManipulation_clearBit_Expect(DDR_FPGA_DONE, P_FPGA_DONE);
+    BitManipulation_setBit_Expect(PORT_FPGA_DONE, P_FPGA_DONE);
 
-    BitManipulation_setBit_Expect(&port_fpga_program_b, P_FPGA_PROGRAM_B);
-    BitManipulation_clearBit_Expect(&ddr_fpga_program_b, P_FPGA_PROGRAM_B);
-    BitManipulation_setBit_Expect(&port_fpga_program_b, P_FPGA_PROGRAM_B);
+    BitManipulation_setBit_Expect(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+    BitManipulation_clearBit_Expect(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
+    BitManipulation_setBit_Expect(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B);
 
     elasticnode_initialise();
 }
@@ -149,6 +145,7 @@ void test_elasticnode_led_mcu_init(void) {
     led_mcu_init();
 }
 
+// TODO: random numbers
 void test_elasticnode_led_mcu_turnOn(void) {
     uint8_t lednumber = 0;
     led_mcu_turnOn_Expect(lednumber);

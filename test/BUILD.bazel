@@ -86,6 +86,23 @@ mock(
 )
 
 cc_library(
+    name = "DelayHdr",
+    hdrs = [
+        "//src:delay/delay.h",
+    ],
+)
+mock(
+    name = "mock_delay",
+    srcs = [
+        "//src:delay/delay.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "DelayHdr",
+    ],
+)
+
+cc_library(
     name = "elasticNodeMiddleware_internalHdr",
     hdrs = [
         "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
@@ -293,19 +310,20 @@ mock(
 
 ### <tests ###
 
-# TODO: use ceil?
-#unity_test(
-#    file_name = "configuration_Test.c",
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    deps = [
-#        "mock_flash",
-#        "mock_InterruptManager",
-#        "mock_led_mcu",
-#        "mock_elasticNodeMiddleware_internal",
-#        "//src:ConfigurationTest",
-#    ],
-#)
+# TODO: finish tests
+unity_test(
+    file_name = "configuration_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_flash",
+        "mock_InterruptManager",
+        "mock_led_mcu",
+        "mock_elasticNodeMiddleware_internal",
+        "mock_delay",
+        "//src:ConfigurationTest",
+    ],
+)
 
 unity_test(
     file_name = "controlmanager_Test.c",
@@ -343,7 +361,6 @@ unity_test(
     ],
 )
 
-# TODO: finish implementation
 unity_test(
     file_name = "ElasticNodeMiddleware_Test.c",
     cexception = False,
@@ -356,6 +373,7 @@ unity_test(
         "mock_led_mcu",
         "mock_controlmanager",
         "mock_debug",
+        "mock_delay",
         "//src:ElasticNodeMiddlewareTest",
     ],
 )
@@ -370,7 +388,6 @@ unity_test(
     ],
 )
 
-# TODO: finish tests
 unity_test(
     file_name = "ElasticNodeMiddlewareMonitoring_Test.c",
     cexception = False,
@@ -416,12 +433,12 @@ unity_test(
     ],
 )
 
-# TODO: finish tests
 unity_test(
     file_name = "reconfigure_multiboot_avr_Test.c",
     cexception = False,
     copts = ["-DTEST"],
     deps = [
+        "mock_delay",
         "mock_Bitmanipulation",
         "mock_Xmem",
         "mock_InterruptManager",

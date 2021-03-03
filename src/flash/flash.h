@@ -4,16 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef TEST
-
-void _delay_ms(uint8_t delay);
-
-#else
-
-#include <util/delay.h>
-
-#endif
-
 #define FLASH_SPEED_LOW 1
 #define SPI_BUFFER_SIZE 300 // page + command
 #define FLASH_BUFFER_SIZE 256

@@ -7,8 +7,6 @@
 #include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 #include "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h"
 
-uint8_t state_of_the_mcu;
-
 typedef enum {
     SLEEP_MODE = 0,
     LED_0 = 1,
@@ -21,7 +19,7 @@ typedef enum {
 int main(void) {
     IIC_slave_init(MY_IIC_ADDRESS);
 
-    elasticnode_monitoring_change_running_state(SLEEP_MODE, &state_of_the_mcu);
+    elasticnode_monitoring_change_running_state(SLEEP_MODE);
 
     elasticnode_led_mcu_init();
 
@@ -33,30 +31,30 @@ int main(void) {
         elasticnode_monitoring_change_sample_rate(CURRENT_SAMPLE_TIME_40ms);
 
         elasticnode_led_mcu_turnOn(0);
-        elasticnode_monitoring_change_running_state(LED_0, &state_of_the_mcu);
+        elasticnode_monitoring_change_running_state(LED_0);
         _delay_ms(1000);
 
         elasticnode_led_mcu_turnOn(1);
-        elasticnode_monitoring_change_running_state(LED_0_1, &state_of_the_mcu);
+        elasticnode_monitoring_change_running_state(LED_0_1);
         _delay_ms(1000);
 
         elasticnode_monitoring_change_sample_rate(CURRENT_SAMPLE_TIME_10ms);
 
         elasticnode_led_mcu_turnOn(2);
-        elasticnode_monitoring_change_running_state(LED_0_1_2, &state_of_the_mcu);
+        elasticnode_monitoring_change_running_state(LED_0_1_2);
         _delay_ms(1000);
 
         elasticnode_led_mcu_turnOn(3);
-        elasticnode_monitoring_change_running_state(LED_0_1_2_3, &state_of_the_mcu);
+        elasticnode_monitoring_change_running_state(LED_0_1_2_3);
         _delay_ms(1000);
 
         elasticnode_led_mcu_turnOffAll();
-        elasticnode_monitoring_change_running_state(SLEEP_MODE, &state_of_the_mcu);
+        elasticnode_monitoring_change_running_state(SLEEP_MODE);
         elasticnode_monitoring_change_sample_rate(CURRENT_SAMPLE_TIME_5ms);
 
     }
 
-    elasticnode_monitoring_change_running_state(END_MEASUREMENT, &state_of_the_mcu);
+    elasticnode_monitoring_change_running_state(END_MEASUREMENT);
 
     return 0;
 }

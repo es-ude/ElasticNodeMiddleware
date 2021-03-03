@@ -4,27 +4,31 @@
 
 #include "src/interruptManager/interruptManager.h"
 
-#ifdef TEST
-#else
+#if !defined TEST
 #include <compat/twi.h>
 #include <avr/interrupt.h>
 #endif
 
-uint8_t state_of_the_mcu;
+void elasticnode_monitoring_change_running_state(uint8_t new_state) {
 
-void elasticnode_monitoring_change_running_state(uint8_t new_state, uint8_t *state_of_the_mcu) {
-    //to ensure that only values from 0 to 16 are allowed and otherwise the sample rate is not ruined
+    if (new_state <= 15) {
+        BitManipulation_setByte(STATE_AND_SAMPLE_RATE_OF_THE_MCU, 0b00001111, new_state);
+    }
 
-    uint8_t tmp_samplerate = *state_of_the_mcu >> 4;
-    *state_of_the_mcu = (new_state & 0b00001111);
-    *state_of_the_mcu |= tmp_samplerate << 4;
+    //uint8_t tmp_samplerate = *state_of_the_mcu >> 4;
+    //*state_of_the_mcu = (new_state & 0b00001111);
+    //*state_of_the_mcu |= tmp_samplerate << 4;
 }
 
 void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rate new_sample_rate) {
 
-    uint8_t tmp_state = state_of_the_mcu << 4;
-    state_of_the_mcu = ((new_sample_rate << 4) & 0b11110000);
-    state_of_the_mcu |= tmp_state >> 4;
+    if (new_sample_rate <= 15) {
+        BitManipulation_setByte(STATE_AND_SAMPLE_RATE_OF_THE_MCU, 0b11110000, new_sample_rate);
+    }
+
+    //uint8_t tmp_state = state_of_the_mcu << 4;
+    //state_of_the_mcu = ((new_sample_rate << 4) & 0b11110000);
+    //state_of_the_mcu |= tmp_state >> 4;
 }
 
 void IIC_slave_init(uint8_t address) {
@@ -64,7 +68,7 @@ void elasticnode_monitoring_ISR(void) {
     }*/
 
     if (TW_STATUS_MON == TW_ST_SLA_ACK_MON || TW_STATUS_MON == TW_ST_DATA_ACK_MON) {
-        *TWDR_MON = state_of_the_mcu;
+        *TWDR_MON = *STATE_AND_SAMPLE_RATE_OF_THE_MCU;
     }
 
     BitManipulation_setBit(TWCR_MON, TWIE_MON);

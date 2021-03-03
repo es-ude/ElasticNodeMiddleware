@@ -18,12 +18,4 @@ void elasticnode_setFpgaHardReset_internal(void);
 
 void elasticnode_clearFpgaHardReset_internal(void);
 
-#ifdef TEST
-
-void _delay_ms(uint8_t delay);
-
-#else
-
-#endif
-
 #endif //ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_INTERNAL_H

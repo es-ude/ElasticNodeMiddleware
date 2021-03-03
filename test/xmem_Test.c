@@ -29,7 +29,7 @@ uint8_t *XMCRA = &xmcra;
 uint8_t *XMCRB = &xmcrb;
 
 uint8_t memoryarea[2000];
-const uint8_t *externalMockMemory = &memoryarea;
+const uint8_t *externalMockMemory = (const uint8_t *) &memoryarea;
 
 void initialise_xmem_mockRegister(void) {
     DDR_XMEM_A = &ddr_xmem_a;

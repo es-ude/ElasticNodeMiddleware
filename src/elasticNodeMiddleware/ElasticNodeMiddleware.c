@@ -9,6 +9,8 @@
 #include "src/led/led_mcu.h"
 #include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
 
+#include "src/delay/delay.h"
+
 #ifdef DEBUG
 #include "src/controlmanager/controlmanager.h"
 #include "src/debug/debug.h"
@@ -115,7 +117,9 @@ void elasticnode_disableFpgaInterface(void) {
 void elasticnode_configureFPGA(uint32_t address) {
     reconfigure_fpgaMultiboot(address);
     // TODO: use complete instead of delay
+#if !defined TEST
     _delay_ms(3000);
+#endif
     //while(!reconfigure_fpgaMultibootComplete());
 }
 

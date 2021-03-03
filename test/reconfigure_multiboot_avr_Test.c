@@ -10,7 +10,7 @@
 #include "src/xmem/Mockxmem.h"
 #include "src/interruptManager/MockinterruptManager.h"
 #include "src/elasticNodeMiddleware/MockelasticNodeMiddleware_internal.h"
-
+#include "src/delay/Mockdelay.h"
 
 uint8_t pin_fpga_done;
 
@@ -54,7 +54,7 @@ void test_reconfigure_fpgaMultiboot(void) {
 
     reconfigure_fpgaMultiboot(address);
 
-    // for what ??
+    // for what ?? TODO
     //test for-loop in new function
     //writeMultiboot(address);
 }
@@ -89,7 +89,7 @@ void test_interruptSR_case1(void) {
 
     reconfigure_interruptSR();
 }
-/*
+
 void test_interruptSR_case2(void) {
     initalise_reconfigure_multiboot_mockRegister();
 
@@ -99,23 +99,21 @@ void test_interruptSR_case2(void) {
     reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_MULTIBOOT;
-    elasticnode_fpgaSoftReset_Expect();
 
-    //here:reconfigure_fpgaMultiboot(0);
+    elasticnode_setFpgaSoftReset_internal_Expect();
+    _delay_ms_Expect(RESET_DELAY);
+    elasticnode_clearFpgaSoftReset_internal_Expect();
+
+    //TODO
+    //here: reconfigure_fpgaMultiboot(0);
     uint32_t address = 0;
-
-    elasticnode_fpgaPowerOn_Expect();
-
+    elasticnode_fpgaPowerOn_internal_Expect();
     //xmem mock with test flag!
     xmem_enableXmem_Expect();
-
     reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
     reconfigure_fpgaMultibootClearComplete_internal_Expect();
-
     xmem_disableXmem_Expect();
-
     interruptManager_setInterrupt_Expect();
-
     //till here
 
     interruptManager_setInterrupt_Expect();
@@ -123,9 +121,9 @@ void test_interruptSR_case2(void) {
     reconfigure_interruptSR();
 
     //test for-loop in new function
-    writeMultiboot(address);
+    //writeMultiboot(address);
 }
-*/
+
 
 void test_interruptSR_case3(void) {
     initalise_reconfigure_multiboot_mockRegister();

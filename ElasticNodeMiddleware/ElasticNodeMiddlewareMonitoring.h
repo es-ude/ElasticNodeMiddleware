@@ -11,13 +11,11 @@
 
 #include <stdint.h>
 
-//uint8_t state_of_the_mcu;
-//uint8_t sample_rate;
-
 #ifdef TEST
 extern uint8_t* TWAR_MON;
 extern uint8_t* TWCR_MON;
 extern uint8_t* TWDR_MON;
+extern uint8_t* STATE_AND_SAMPLE_RATE_OF_THE_MCU;
 
 #define TW_STATUS_MON 5
 
@@ -31,6 +29,8 @@ extern uint8_t* TWDR_MON;
 
 #else
 
+uint8_t state_and_sample_rate_of_the_mcu;
+
 #define TWAR_MON &TWAR
 #define TWCR_MON &TWCR
 #define TWDR_MON &TWDR
@@ -43,6 +43,8 @@ extern uint8_t* TWDR_MON;
 
 #define TW_ST_SLA_ACK_MON TW_ST_SLA_ACK
 #define TW_ST_DATA_ACK_MON TW_ST_DATA_ACK
+
+#define STATE_AND_SAMPLE_RATE_OF_THE_MCU &state_and_sample_rate_of_the_mcu
 
 #endif
 
@@ -58,7 +60,7 @@ typedef enum {
     CURRENT_SAMPLE_TIME_DEFAULT = 5
 } elasticnode_monitoring_sample_rate;
 
-void elasticnode_monitoring_change_running_state(uint8_t new_state, uint8_t *state_of_the_mcu);
+void elasticnode_monitoring_change_running_state(uint8_t new_state);
 
 void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rate new_sample_rate);
 

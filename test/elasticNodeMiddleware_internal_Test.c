@@ -41,7 +41,7 @@ uint8_t *PORT_FPGA_POWER_INT = &port_fpga_power_int;
 uint8_t *DDR_FPGA_CCLK = &ddr_fpga_cclk;
 
 uint8_t memoryarea[2000];
-const uint8_t *externalMockMemory = &memoryarea;
+const uint8_t *externalMockMemory = (const uint8_t *) &memoryarea;
 
 extern volatile uint8_t *fpgaResetOffset;
 
