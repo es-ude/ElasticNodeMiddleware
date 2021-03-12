@@ -7,6 +7,7 @@
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "src/pinDefinition/fpgaPins.h"
 
+#include "src/spi/Mockspi_internal.h"
 #include "src/interruptManager/MockinterruptManager.h"
 #include "src/xmem/Mockxmem.h"
 
@@ -36,38 +37,18 @@ void test_spi_init(void) {
     SPDR_SPI = &spdr_spi;
 }
 
-/*
 void test_spiInit(void) {
-
     test_spi_init();
 
     interruptManager_clearInterrupt_Expect();
 
-    spiEnable_Expect();
+    spiEnable_internal_Expect();
 
-    flashResetCallbacks_Expect();
+    flashResetCallbacks_internal_Expect();
 
     interruptManager_setInterrupt_Expect();
 
-    spiInit_Expect();
-
     spiInit();
-}
-*/
-
-void test_spiEnable(void) {
-
-    test_spi_init();
-
-    BitManipulation_setBit_Expect(DDR_SPI, P_FPGA_POWER_INT);
-    BitManipulation_setBit_Expect(PORTB_SPI, P_FPGA_POWER_INT);
-
-    interruptManager_clearInterrupt_Expect();
-    BitManipulation_setBit_Expect(SPCR_SPI, SPE);
-    BitManipulation_setBit_Expect(SPCR_SPI, MSTR);
-    BitManipulation_setBit_Expect(SPCR_SPI, SPR0);
-
-    spiEnable();
 }
 
 void test_spiDisable(void) {
@@ -79,34 +60,25 @@ void test_spiDisable(void) {
     spiDisable();
 }
 
-void test_flashResetCallbacks(void) {
-
-
-}
-
 void test_spiPerformTaskBlocking(void) {
+    uint8_t command = 0;
+    uint32_t numRead = 0;
+    uint8_t *dataRead = 0;
+    spiPerformTaskBlocking_internal_Expect(1, &command, numRead, dataRead);
 
-
+    spiPerformSimpleTaskBlocking(command, numRead, dataRead);
 }
 
 void test_spiRead(void) {
-
-
+    SPI_internal_ExpectAndReturn(0, 0);
+    TEST_ASSERT_EQUAL(0, spiRead());
 }
 
-void test_SPI(void) {
-
-
-}
-
-// TODO: use own mock?
-/*
 void test_selectFlash(void) {
-
     test_spi_init();
 
-    //deselectWireless_Expect();
-    //spiEnable_Expect();
+    deselectWireless_internal_Expect();
+    spiEnable_internal_Expect();
     xmem_disableXmem_Expect();
 
     // many copies of this
@@ -114,33 +86,37 @@ void test_selectFlash(void) {
     BitManipulation_clearBit_Expect(PORTB_SPI, P_FLASH_CS);
     selectFlash(1);
 
-    //spiEnable_Expect();
+    spiEnable_internal_Expect();
     xmem_disableXmem_Expect();
     BitManipulation_clearBit_Expect(PORTB_SPI, P_FLASH_CS);
     selectFlash(0);
-
 }
-*/
 
-void test_deselectWireless(void) {
-
-    BitManipulation_setBit_Expect(DDRE_SPI, P_WIRELESS_CS);
-    BitManipulation_setBit_Expect(PORTE_SPI, P_WIRELESS_CS);
-
-    deselectWireless();
-}
 
 void test_deselectFlash(void) {
+    spiEnable_internal_Expect();
+    xmem_disableXmem_Expect();
+    BitManipulation_setBit_Expect(DDR_SPI, P_FLASH_CS);
+    BitManipulation_setBit_Expect(PORTB_SPI, P_FLASH_CS);
 
+    deselectFlash(1);
 
+    spiEnable_internal_Expect();
+    xmem_disableXmem_Expect();
+    BitManipulation_setBit_Expect(PORTB_SPI, P_FLASH_CS);
+
+    deselectFlash(0);
 }
 
 void test_fpgaFlashPerformTaskWithCallback(void) {
+    uint16_t numWrite = 0;
+    uint8_t *dataWrite = 0;
+    uint16_t numRead = 0;
+    void (*readingCallback)(uint8_t, uint8_t) = 0;
+    void (*finishedCallback)(void) = 0;
 
+    spiPerformTaskBlockingWithCallback_internal_Expect(numWrite, dataWrite, numRead, readingCallback, finishedCallback);
 
+    fpgaFlashPerformTaskWithCallback(numWrite, dataWrite, numRead, readingCallback, finishedCallback);
 }
 
-void test_spiPerformTaskBlockingWithCallback(void) {
-
-
-}

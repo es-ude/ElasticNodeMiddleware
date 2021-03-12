@@ -201,7 +201,7 @@ void debugWaitUntilDone(void) {
 
 uint8_t debugSending(void) {
 //#warning "lufa not waiting for finished"
-return 0;
+    return 0;
 }
 
 void debugAck(uint8_t c) {
@@ -209,6 +209,6 @@ void debugAck(uint8_t c) {
 }
 
 // not needed
-void debugReadCharProcessed(void){}
+void debugReadCharProcessed(void) {}
 
 void setDebugReceiveHandler(void (*receiveHandler)(uint8_t)) {}

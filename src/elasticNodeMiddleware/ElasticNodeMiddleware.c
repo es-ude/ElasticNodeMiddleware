@@ -117,7 +117,7 @@ void elasticnode_disableFpgaInterface(void) {
 void elasticnode_configureFPGA(uint32_t address) {
     reconfigure_fpgaMultiboot(address);
     // TODO: use complete instead of delay
-#if !defined TEST
+#ifndef TEST
     _delay_ms(3000);
 #endif
     //while(!reconfigure_fpgaMultibootComplete());
@@ -301,25 +301,26 @@ void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, u
     }
 }
 
-//void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data) {
-//    *(ptr_xmem_offset + address) = data;
-//}
-//void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data) {
-//    uint8_t *targetAddress = ptr_xmem_offset + address;
-//    for (uint8_t k = 0; k < size; k++) {
-//        *(targetAddress + k) = *(ptr_data + k);
-//    }
-//}
-//
-//uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address) {
-//    return *(ptr_xmem_offset + address);
-//}
-//
-//void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return) {
-//    ptr_xmem_offset = ptr_xmem_offset + address;
-//    for (uint8_t i = 0; i < size; i++) {
-//        *(ptr_return + i) = *(ptr_xmem_offset + i);
-//    }
-//}
+void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data) {
+    *(ptr_xmem_offset + address) = data;
+}
+
+void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data) {
+    uint8_t *targetAddress = ptr_xmem_offset + address;
+    for (uint8_t k = 0; k < size; k++) {
+        *(targetAddress + k) = *(ptr_data + k);
+    }
+}
+
+uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address) {
+    return *(ptr_xmem_offset + address);
+}
+
+void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return) {
+    ptr_xmem_offset = ptr_xmem_offset + address;
+    for (uint8_t i = 0; i < size; i++) {
+        *(ptr_return + i) = *(ptr_xmem_offset + i);
+    }
+}
 
 */

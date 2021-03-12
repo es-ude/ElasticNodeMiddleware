@@ -4,9 +4,11 @@
 
 #include "src/interruptManager/interruptManager.h"
 
-#if !defined TEST
+#ifndef TEST
+
 #include <compat/twi.h>
 #include <avr/interrupt.h>
+
 #endif
 
 void elasticnode_monitoring_change_running_state(uint8_t new_state) {

@@ -4,6 +4,8 @@
 
 #include "src/interruptManager/interruptManager.h"
 
+#include "src/delay/delay.h"
+
 void circularBuffer_Init(circularBuffer *c, uint16_t size) {
 
     // allocate buffer

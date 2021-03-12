@@ -4,6 +4,8 @@
 
 #include "src/debug/debug.h"
 
+// TODO: finish tests
+
 void test_debugTask(void) {
 
     lufaTask_Expect();

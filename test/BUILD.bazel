@@ -52,6 +52,23 @@ mock(
 )
 
 cc_library(
+    name = "Configuration_internalHdr",
+    hdrs = [
+        "//src:configuration/configuration_internal.h",
+    ],
+)
+mock(
+    name = "mock_configuration_internal",
+    srcs = [
+        "//src:configuration/configuration_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Configuration_internalHdr",
+    ],
+)
+
+cc_library(
     name = "ControlmanagerHdr",
     hdrs = [
         "//src:controlmanager/controlmanager.h",
@@ -65,6 +82,23 @@ mock(
     copts = ["-DTEST"],
     deps = [
         "ControlmanagerHdr",
+    ],
+)
+
+cc_library(
+    name = "Controlmanager_internalHdr",
+    hdrs = [
+        "//src:controlmanager/controlmanager_internal.h",
+    ],
+)
+mock(
+    name = "mock_controlmanager_internal",
+    srcs = [
+        "//src:controlmanager/controlmanager_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Controlmanager_internalHdr",
     ],
 )
 
@@ -133,6 +167,23 @@ mock(
     copts = ["-DTEST"],
     deps = [
         "FlashHdr",
+    ],
+)
+
+cc_library(
+    name = "Flash_internalHdr",
+    hdrs = [
+        "//src:flash/flash_internal.h",
+    ],
+)
+mock(
+    name = "mock_flash_internal",
+    srcs = [
+        "//src:flash/flash_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Flash_internalHdr",
     ],
 )
 
@@ -239,6 +290,23 @@ mock(
 )
 
 cc_library(
+    name = "Spi_internalHdr",
+    hdrs = [
+        "//src:spi/spi_internal.h",
+    ],
+)
+mock(
+    name = "mock_Spi_internal",
+    srcs = [
+        "//src:spi/spi_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Spi_internalHdr",
+    ],
+)
+
+cc_library(
     name = "CircularBufferHdr",
     hdrs = [
         "//src:uart/circularBuffer/circularBuffer.h",
@@ -310,7 +378,6 @@ mock(
 
 ### <tests ###
 
-# TODO: finish tests
 unity_test(
     file_name = "configuration_Test.c",
     cexception = False,
@@ -321,7 +388,17 @@ unity_test(
         "mock_led_mcu",
         "mock_elasticNodeMiddleware_internal",
         "mock_delay",
+        "mock_configuration_internal",
         "//src:ConfigurationTest",
+    ],
+)
+
+unity_test(
+    file_name = "configuration_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "//src:Configuration_internalTest",
     ],
 )
 
@@ -332,13 +409,22 @@ unity_test(
     deps = [
         "mock_configuration",
         "mock_debug",
-        "mock_Xmem",
         "mock_flash",
+        "mock_controlmanager_internal",
         "//src:ControlmanagerTest",
     ],
 )
 
-# TODO: finish tests
+unity_test(
+    file_name = "controlmanager_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Xmem",
+        "//src:Controlmanager_internalTest",
+    ],
+)
+
 unity_test(
     file_name = "debug_Test.c",
     cexception = False,
@@ -350,7 +436,6 @@ unity_test(
     ],
 )
 
-# TODO: finish tests
 unity_test(
     file_name = "debugUsb_Test.c",
     cexception = False,
@@ -399,7 +484,6 @@ unity_test(
     ],
 )
 
-# TODO: finish tests
 unity_test(
     file_name = "flash_Test.c",
     cexception = False,
@@ -407,9 +491,21 @@ unity_test(
     deps = [
         "mock_Bitmanipulation",
         "mock_Spi",
-        "mock_InterruptManager",
-        "mock_elasticNodeMiddleware_internal",
+        "mock_Spi_internal",
+        "mock_flash_internal",
         "//src:FlashTest",
+    ],
+)
+
+unity_test(
+    file_name = "flash_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_Spi",
+        "mock_Spi_internal",
+        "//src:Flash_internalTest",
     ],
 )
 
@@ -457,7 +553,6 @@ unity_test(
     ],
 )
 
-# TODO: finish tests
 unity_test(
     file_name = "spi_Test.c",
     cexception = False,
@@ -466,8 +561,19 @@ unity_test(
         "mock_InterruptManager",
         "mock_Bitmanipulation",
         "mock_Xmem",
-#        "mock_Spi",
+        "mock_Spi_internal",
         "//src:SpiTest",
+    ],
+)
+
+unity_test(
+    file_name = "spi_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_InterruptManager",
+        "mock_Bitmanipulation",
+        "//src:Spi_internalTest",
     ],
 )
 
@@ -490,6 +596,8 @@ unity_test(
         "-DBAUD=1UL",
     ],
     deps = [
+        "mock_delay",
+        "mock_Bitmanipulation",
         "mock_InterruptManager",
         "mock_Uart_internal",
         "mock_CircularBuffer",
@@ -502,6 +610,7 @@ unity_test(
     cexception = False,
     copts = ["-DTEST"],
     deps = [
+        "mock_delay",
         "mock_CircularBuffer",
         "mock_InterruptManager",
         "//src:Uart_internalTest",

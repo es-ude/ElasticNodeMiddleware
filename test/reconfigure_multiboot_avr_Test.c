@@ -16,26 +16,25 @@ uint8_t pin_fpga_done;
 
 uint8_t FPGA_DONE_INT_REG = 0;
 uint8_t FPGA_DONE_INT_CONTROL_REG = 0;
-uint8_t* PIN_FPGA_DONE = &pin_fpga_done;
+uint8_t *PIN_FPGA_DONE = &pin_fpga_done;
 uint8_t memoryarea[2000];
-const uint8_t* externalMockMemory = memoryarea;
+const uint8_t *externalMockMemory = memoryarea;
 
 extern volatile uint8_t fpgaDoneResponse;
-extern volatile uint8_t *AddressMultibnoot;
+extern volatile uint8_t *AddressMultiboot;
 
 void initalise_reconfigure_multiboot_mockRegister(void) {
     PIN_FPGA_DONE = &pin_fpga_done;
+}
 
-    /*
+void writeMultiboot(uint32_t address) {
     //32 address
     TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (0 * 8))));
 
     TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (1 * 8))));
 
     TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (2 * 8))));
-*/
 }
-
 
 void test_reconfigure_fpgaMultiboot(void) {
     uint32_t address = 0;
@@ -54,18 +53,15 @@ void test_reconfigure_fpgaMultiboot(void) {
 
     reconfigure_fpgaMultiboot(address);
 
-    // for what ?? TODO
-    //test for-loop in new function
-    //writeMultiboot(address);
+    writeMultiboot(address);
 }
 
-/*
-void test_getMultibootAddress(void){
 
-    uint32_t address = (uint32_t) (*(AddressMultiboot) + *(AddressMultiboot+1) + *(AddressMultiboot+2));
+void test_getMultibootAddress(void) {
+    uint32_t address = (uint32_t) (*(AddressMultiboot) + *(AddressMultiboot + 1) + *(AddressMultiboot + 2));
     TEST_ASSERT_EQUAL_UINT32(address, reconfigure_getMultibootAddress());
 }
-*/
+
 
 void test_reconfigure_fpgaMultibootComplete(void) {
     //random number?
@@ -104,7 +100,7 @@ void test_interruptSR_case2(void) {
     _delay_ms_Expect(RESET_DELAY);
     elasticnode_clearFpgaSoftReset_internal_Expect();
 
-    //TODO
+    // TODO: better option to tests this?
     //here: reconfigure_fpgaMultiboot(0);
     uint32_t address = 0;
     elasticnode_fpgaPowerOn_internal_Expect();
@@ -120,10 +116,8 @@ void test_interruptSR_case2(void) {
 
     reconfigure_interruptSR();
 
-    //test for-loop in new function
-    //writeMultiboot(address);
+    writeMultiboot(address);
 }
-
 
 void test_interruptSR_case3(void) {
     initalise_reconfigure_multiboot_mockRegister();

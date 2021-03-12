@@ -60,7 +60,7 @@ void test_IIC_slave_init(void) {
 
 void test_elasticnode_monitoring_ISR(void) {
 
-    // TODO: if
+    // TODO: test if
 
     BitManipulation_setBit_Expect(TWCR_MON, TWIE_MON);
     BitManipulation_setBit_Expect(TWCR_MON, TWEA_MON);

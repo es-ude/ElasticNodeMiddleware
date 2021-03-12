@@ -1,0 +1,8 @@
+#ifndef ELASTICNODEMIDDLEWARE_CONTROLMANAGER_INTERNAL_H
+#define ELASTICNODEMIDDLEWARE_CONTROLMANAGER_INTERNAL_H
+
+void userlogic_enable_internal(void);
+
+void userlogic_read_id_internal(void);
+
+#endif //ELASTICNODEMIDDLEWARE_CONTROLMANAGER_INTERNAL_H

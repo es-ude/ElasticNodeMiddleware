@@ -8,20 +8,10 @@
 #include "src/interruptManager/interruptManager.h"
 
 #include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
-
-#ifdef TEST
-
-void _delay_ms(uint8_t delay);
-
-#else
-
-#include <util/delay.h>
-
-#endif
-
+#include "src/delay/delay.h"
 
 volatile uint8_t fpgaDoneResponse = FPGA_DONE_NOTHING;
-volatile uint8_t *AddressMultiboot = (uint8_t * )(XMEM_OFFSET + 0x05);
+volatile uint8_t *AddressMultiboot = (uint8_t *) (XMEM_OFFSET + 0x05);
 
 // TODO: Necessary?
 /*
@@ -44,7 +34,7 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
     reconfigure_fpgaMultibootClearComplete_internal();
 
     for (uint8_t i = 0; i < 3; i++) {
-        *(AddressMultiboot + i) = (uint8_t)(0xff & (address >> (i * 8)));
+        *(AddressMultiboot + i) = (uint8_t) (0xff & (address >> (i * 8)));
     }
 
     xmem_disableXmem();
@@ -54,7 +44,7 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
 }
 
 uint32_t reconfigure_getMultibootAddress(void) {
-    return (uint32_t)(*(AddressMultiboot) + *(AddressMultiboot + 1) + *(AddressMultiboot + 2));
+    return (uint32_t) (*(AddressMultiboot) + *(AddressMultiboot + 1) + *(AddressMultiboot + 2));
 }
 
 uint8_t reconfigure_fpgaMultibootComplete(void) {

@@ -4,20 +4,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#ifdef TEST
-
-#else
-
-#define UART_DEBUG
-
-#ifdef UART_DEBUG
-
-#include <util/delay.h>
-
-#endif
-
-#endif
-
 #define UART_SENDING_BUFFER 128
 
 // #define baud 9600 // 250000
@@ -27,6 +13,21 @@
 #define my_bdr ((F_CPU / 8 / (BAUD)) - 1)
 #else
 #define my_bdr ((F_CPU / 16 / (BAUD)) - 1)
+#endif
+
+
+#if defined TEST
+
+extern uint8_t* UART_UCSR1A;
+extern uint8_t* UART_UCSR1B;
+extern uint8_t* UART_UCSR1C;
+
+#else
+
+#define UART_UCSR1A &UCSR1A
+#define UART_UCSR1B &UCSR1B
+#define UART_UCSR1C &UCSR1C
+
 #endif
 
 void uart_WaitUntilDone(void);

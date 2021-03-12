@@ -201,10 +201,12 @@ void test_elasticnode_reconfigure_fpgaMultibootComplete(void) {
     TEST_ASSERT_EQUAL(elasticnode_reconfigure_fpgaMultibootComplete(), complete);
 }
 
-//void test_elasticnode_control_setUserHandle(void){
-//    control_setUserHandle_Expect(userHandler);
-//    elasticnode_control_setUserHandle(&handleCharInput);
-//}
+void test_elasticnode_control_setUserHandle(void){
+    void *test_handleCharInput;
+    void (*userHandler)(uint8_t) = (void (*)(uint8_t)) &test_handleCharInput;
+    control_setUserHandle_Expect(userHandler);
+    elasticnode_control_setUserHandle((void (*)(uint8_t)) &test_handleCharInput);
+}
 
 void test_elasticnode_control_handleChar(void) {
     uint8_t currentData = 123;
@@ -397,25 +399,8 @@ void test_elasticnode_debugAck(void) {
     elasticnode_debugAck(c);
 }
 
+// TODO: check old tests
 /*
-void test_elasticnode_enableFpgaInterface(void) {
-    TEST_FAIL_MESSAGE("Implement me");
-}
-
-void test_elasticnode_disableFpgaInterface(void) {
-    TEST_FAIL_MESSAGE("Implement me");
-}
-
-void test_elasticnodemiddlewareticnode_FPGAPowerOn(void) {
-    elasticnode_fpgaPowerOn_internal_Expect();
-    elasticnode_fpgaPowerOn();
-}
-
-void test_elasticnode_FPGAPowerOff(void) {
-    elasticnode_fpgaPowerOff_internal_Expect();
-    elasticnode_fpgaPowerOff();
-}
-
 //block until it has written all of the data to the file
 void test_elasticnode_writeByteToUserlogic(void) {
     TEST_FAIL_MESSAGE("This test cannot be correct. Should be reconsidered");
@@ -479,45 +464,4 @@ void test_elasticnode_readDataBlockingFromFpga(void) {
     TEST_ASSERT_EQUAL_UINT8((*ptr_return + 2), (*ptr_xmem_offset + 2));
 }
 
-void test_fpgaSoftReset(void) {
-    initialise_mockRegister();
-    elasticnode_setFpgaSoftReset_internal_Expect();
-
-    //in internal for testing
-    _delay_ms_Expect(RESET_DELAY);
-
-    elasticnode_clearFpgaSoftReset_internal_Expect();
-
-    elasticnode_userlogicReset();
-}
-
-void test_fpgaHardReset(void) {
-    initialise_mockRegister();
-
-    //xmem_disableXmem_Expect();
-
-    elasticnode_setFpgaHardReset_internal_Expect();
-
-    //_delay_ms_Expect(RESET_DELAY);
-
-    elasticnode_clearFpgaHardReset_internal_Expect();
-
-    elasticnode_fpgaHardReset();
-}
-
-void test_elasticnode_configureFrom(void) {
-    uint32_t address = 0x23409;
-
-    reconfigure_fpgaMultiboot_Expect(address);
-    reconfigure_fpgaMultibootComplete_ExpectAndReturn(1);
-    elasticnode_configureFPGA(address);
-}
-
-void test_elasticnode_getConfiguration(void) {
-    //beliebige Zahl?
-    uint32_t expectedAddress = 0x23409;
-    reconfigure_getMultibootAddress_ExpectAndReturn(expectedAddress);
-    uint32_t result = elasticnode_getLoadedConfigurationAddress();
-    TEST_ASSERT_EQUAL_UINT32(expectedAddress, result);
-}
 */

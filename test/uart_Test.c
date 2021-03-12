@@ -2,12 +2,16 @@
 
 #include "src/uart/uart.h"
 
+#include "test/header_replacements/EmbeddedUtilities/MockBitManipulation.h"
+
 #include "src/uart/circularBuffer/MockcircularBuffer.h"
 #include "src/uart/Mockuart_internal.h"
 
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "src/pinDefinition/fpgaPins.h"
+
 #include "src/interruptManager/MockinterruptManager.h"
+#include "src/delay/Mockdelay.h"
 
 circularBuffer sendingBuf;
 
@@ -22,19 +26,22 @@ uint8_t *UBRR1H = &ubrr1h;
 uint8_t ubrr1l;
 uint8_t *UBRR1L = &ubrr1l;
 //for not going into endless while loop
-uint8_t UCSR1A = 0xEF;
-uint8_t ucsr1b;
-uint8_t *UCSR1B = &ucsr1b;
-uint8_t ucsr1c;
-uint8_t *UCSR1C = &ucsr1c;
+//uint8_t UCSR1A = 0xEF;
+uint8_t uart_ucsr1a;
+uint8_t *UART_UCSR1A = &uart_ucsr1a;
+uint8_t uart_ucsr1b;
+uint8_t *UART_UCSR1B = &uart_ucsr1b;
+uint8_t uart_ucsr1c;
+uint8_t *UART_UCSR1C = &uart_ucsr1c;
 uint8_t udr1;
 uint8_t *UDR1 = &udr1;
 
 void initalise_uart_mockRegister(void) {
     UBRR1H = &ubrr1h;
     UBRR1L = &ubrr1l;
-    UCSR1B = &ucsr1b;
-    UCSR1C = &ucsr1c;
+    UART_UCSR1A = &uart_ucsr1a;
+    UART_UCSR1B = &uart_ucsr1b;
+    UART_UCSR1C = &uart_ucsr1c;
     UDR1 = &udr1;
 }
 
@@ -56,9 +63,15 @@ void test_uart_init(void) {
     void (*receiveHandler)(uint8_t) = &dummyFunction;
 
     //UART_2X is 1
-    uint8_t dummy_UCSR1A = UCSR1A | (1 << U2X1);
-    uint8_t *dummy_UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << TXCIE1);
-    uint8_t *dummy_UCSR1C = (1 << USBS1) | (3 << UCSZ10);
+    BitManipulation_setBit_Expect(UART_UCSR1A, U2X1);
+
+    BitManipulation_setBit_Expect(UART_UCSR1B, RXEN1);
+    BitManipulation_setBit_Expect(UART_UCSR1B, TXEN1);
+    BitManipulation_setBit_Expect(UART_UCSR1B, RXCIE1);
+    BitManipulation_setBit_Expect(UART_UCSR1B, TXCIE1);
+
+    BitManipulation_setBit_Expect(UART_UCSR1C, USBS1);
+    BitManipulation_setBit_Expect(UART_UCSR1C, UCSZ10);
 
     uart_setUartReceiveHandler_internal_Expect(receiveHandler);
     circularBuffer_Init_Expect(&sendingBuf, UART_SENDING_BUFFER);
@@ -66,12 +79,9 @@ void test_uart_init(void) {
 
     uart_Init(receiveHandler);
 
-    TEST_ASSERT_EQUAL_UINT8(dummy_UCSR1A, UCSR1A);
-    TEST_ASSERT_EQUAL(dummy_UCSR1B, UCSR1B);
-    TEST_ASSERT_EQUAL(dummy_UCSR1C, UCSR1C);
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
-    TEST_ASSERT_EQUAL(UBRR1H, (uint8_t)(my_bdr >> 8));
-    TEST_ASSERT_EQUAL(UBRR1L, (uint8_t)(my_bdr));
+    TEST_ASSERT_EQUAL(UBRR1H, (uint8_t) (my_bdr >> 8));
+    TEST_ASSERT_EQUAL(UBRR1L, (uint8_t) (my_bdr));
 
 }
 
@@ -86,6 +96,14 @@ void test_uart_Sending(void) {
     initalise_uart_mockRegister();
 
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, uart_Sending());
+}
+
+void test_uart_NewLine(void) {
+    //TODO
+}
+
+void test_uart_WriteLine(char *s) {
+    //TODO
 }
 
 void test_uart_WriteString_EmptyString(void) {
@@ -159,6 +177,22 @@ void test_uart_WriteChar(void) {
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x1);
 }
 
+
+// TODO: remaining uart commands
+//uart_WriteBin
+//uart_WriteBin4
+//uart_WriteBin8
+//uart_WriteBin32
+//uart_WriteDec8
+//uart_WriteDec16
+//uart_WriteDec32
+//uart_WriteDec32S
+//uart_WriteHex8
+//uart_WriteHex16
+//uart_WriteHex32
+//uart_WriteFloat
+//uart_Ack
+
 void test_uart_ISR_Receive() {
     initalise_uart_mockRegister();
     interruptManager_clearInterrupt_Expect();
@@ -189,18 +223,3 @@ void test_uart_ISR_Transmit_False() {
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
 }
 
-// TODO: uart commands
-//uart_WriteBin!
-//uart_NewLine
-//uart_WriteBin4
-//uart_WriteBin8
-//uart_WriteBin32
-//uart_WriteDec8
-//uart_WriteDec16
-//uart_WriteDec32
-//uart_WriteDec32S
-//uart_WriteHex8
-//uart_WriteHex16
-//uart_WriteHex32
-//uart_WriteFloat
-//uart_Ack

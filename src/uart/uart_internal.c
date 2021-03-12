@@ -5,6 +5,7 @@
 #include "src/pinDefinition/fpgaRegisters.h"
 
 #include "src/interruptManager/interruptManager.h"
+#include "src/delay/delay.h"
 
 circularBuffer sendingBuf;
 

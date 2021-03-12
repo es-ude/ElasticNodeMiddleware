@@ -84,9 +84,11 @@ cc_library(
     name = "SpiLib",
     srcs = [
         "spi/spi.c",
+        "spi/spi_internal.c",
     ],
     hdrs = [
         "spi/spi.h",
+        "spi/spi_internal.h",
     ],
     deps = [
         "//:BitmanipulationLib",
@@ -109,6 +111,8 @@ cc_library(
     ],
     copts = cpu_frequency_flag(),
     deps = [
+        "//src:BitmanipulationLib",
+        "//src:DelayLibHdr",
         "//src:InterruptManagerLib",
         "//src:RegisterDefinitionLibHdr",
     ],
@@ -157,9 +161,11 @@ cc_library(
     name = "FlashLib",
     srcs = [
         "flash/flash.c",
+        "flash/flash_internal.c",
     ],
     hdrs = [
         "flash/flash.h",
+        "flash/flash_internal.h"
     ],
     copts = cpu_frequency_flag(),
     deps = [
@@ -175,9 +181,11 @@ cc_library(
     name = "ConfigurationLib",
     srcs = [
         "configuration/configuration.c",
+        "configuration/configuration_internal.c",
     ],
     hdrs = [
         "configuration/configuration.h",
+        "configuration/configuration_internal.h",
     ],
     copts = cpu_frequency_flag(),
     deps = [
@@ -193,9 +201,11 @@ cc_library(
     name = "ControlmanagerLib",
     srcs = [
         "controlmanager/controlmanager.c",
+        "controlmanager/controlmanager_internal.c",
     ],
     hdrs = [
         "controlmanager/controlmanager.h",
+        "controlmanager/controlmanager_internal.h",
     ],
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
@@ -220,6 +230,7 @@ cc_library(
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
     deps = [
+        "//src:DelayLibHdr",
         "//src:RegisterDefinitionLibHdr",
         "//src:XmemLib",
         "//src:InterruptManagerLib",
@@ -248,6 +259,26 @@ cc_library(
     ],
     hdrs = [
         "configuration/configuration.h",
+        "configuration/configuration_internal.h",
+        "debug/debug.h",
+        "flash/flash.h",
+        "interruptManager/interruptManager.h",
+        "led/led_mcu.h",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "Configuration_internalTest",
+    srcs = [
+        "configuration/configuration_internal.c",
+    ],
+    hdrs = [
+        "configuration/configuration_internal.h",
         "debug/debug.h",
         "flash/flash.h",
         "interruptManager/interruptManager.h",
@@ -267,10 +298,27 @@ cc_library(
     ],
     hdrs = [
         "controlmanager/controlmanager.h",
+        "controlmanager/controlmanager_internal.h",
         "configuration/configuration.h",
         "xmem/xmem.h",
         "debug/debug.h",
         "flash/flash.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "Controlmanager_internalTest",
+    srcs = [
+        "controlmanager/controlmanager_internal.c",
+    ],
+    hdrs = [
+        "xmem/xmem.h",
+        "debug/debug.h",
+        "controlmanager/controlmanager_internal.h",
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -309,7 +357,6 @@ cc_library(
     ],
 )
 
-# TODO
 cc_library(
     name = "ElasticNodeMiddlewareTest",
     srcs = [
@@ -377,8 +424,29 @@ cc_library(
     ],
     hdrs = [
         "flash/flash.h",
+        "flash/flash_internal.h",
         "debug/debug.h",
         "spi/spi.h",
+        "spi/spi_internal.h",
+        "delay/delay.h"
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Flash_internalTest",
+    srcs = [
+        "flash/flash_internal.c",
+    ],
+    hdrs = [
+        "flash/flash_internal.h",
+        "spi/spi.h",
+        "spi/spi_internal.h",
         "delay/delay.h"
     ],
     copts = ["-DTEST"],
@@ -424,13 +492,14 @@ cc_library(
     name = "Reconfigure_multiboot_avrTest",
     srcs = [
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
+    ],
+    hdrs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "xmem/xmem.h",
         "interruptManager/interruptManager.h",
         "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
-    ],
-    hdrs = [
-        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+        "delay/delay.h",
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -447,6 +516,7 @@ cc_library(
     ],
     hdrs = [
         "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
+        "delay/delay.h",
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -461,8 +531,28 @@ cc_library(
     ],
     hdrs = [
         "spi/spi.h",
+        "spi/spi_internal.h",
         "interruptManager/interruptManager.h",
         "xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Spi_internalTest",
+    srcs = [
+        "spi/spi_internal.c",
+    ],
+    hdrs = [
+        "spi/spi.h",
+        "spi/spi_internal.h",
+        "xmem/xmem.h",
+        "interruptManager/interruptManager.h",
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -480,6 +570,7 @@ cc_library(
     hdrs = [
         "uart/circularBuffer/circularBuffer.h",
         "interruptManager/interruptManager.h",
+        "delay/delay.h",
     ],
     copts = ["-DTEST"],
     visibility = ["//visibility:public"],
@@ -499,6 +590,7 @@ cc_library(
         "uart/uart_internal.h",
         "uart/circularBuffer/circularBuffer.h",
         "interruptManager/interruptManager.h",
+        "delay/delay.h",
     ],
     copts = [
         "-DTEST",
@@ -508,6 +600,7 @@ cc_library(
     #copts = cpu_frequency_flag() + [ "-DTEST"],
     visibility = ["//visibility:public"],
     deps = [
+        "//test:BitManipulationHdrForTesting",
         "RegisterDefinitionLibHdrTest",
     ],
 )
@@ -521,6 +614,7 @@ cc_library(
         "uart/uart_internal.h",
         "uart/circularBuffer/circularBuffer.h",
         "interruptManager/interruptManager.h",
+        "delay/delay.h",
     ],
     copts = cpu_frequency_flag() + [ "-DTEST"],
     visibility = ["//visibility:public"],
@@ -562,6 +656,7 @@ exports_files(
         "interruptManager/interruptManager_avr_Mock.h",
         "flash/flash.h",
         "configuration/configuration.h",
+        "configuration/configuration_internal.h",
         "debug/debug.h",
         "led/led_mcu.h",
         "spi/spi.h",
@@ -569,6 +664,9 @@ exports_files(
         "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "controlmanager/controlmanager.h",
         "delay/delay.h",
+        "spi/spi_internal.h",
+        "controlmanager/controlmanager_internal.h",
+        "flash/flash_internal.h",
     ],
     visibility = ["//visibility:public"],
 )

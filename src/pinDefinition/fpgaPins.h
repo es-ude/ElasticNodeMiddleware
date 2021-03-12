@@ -58,11 +58,9 @@
 #define P_FLASH_MOSI 2
 #define P_FLASH_SCK 3
 
-
 #else
 
 #include <avr/io.h>
-
 
 #define P_FPGA_PROGRAM_B PF2
 
