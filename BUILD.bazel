@@ -83,8 +83,8 @@ exports_files(
 ### <python ###
 
 py_library(
-    name = "serial_test",
-    srcs = ["scripts/serial_test.py"],
+    name = "flashBitfiles",
+    srcs = ["scripts/flashBitfiles.py"],
     visibility = ["//visibility:public"],
     deps = [
         "Configuration",
@@ -119,13 +119,13 @@ py_library(
 #load("@my_deps//:requirements.bzl", "requirement")
 
 py_binary(
-    name = "uploadMultiConfigS15",
-    srcs = ["scripts/uploadMultiConfigS15.py"],
+    name = "uploadBitfiles",
+    srcs = ["scripts/uploadBitfiles.py"],
     visibility = ["//visibility:public"],
     deps = [
         "bitfileConfigs",
         "portConfigs",
-        "serial_test",
+        "flashBitfiles",
 #        requirement("serial"),
 #        requirement("numpy"),
     ],

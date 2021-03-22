@@ -48,6 +48,8 @@ DUMMY_ADDRESS = 0x0
 SKIP = None  # (538844 - 256) # 4096 * 5
 
 cpuName = "at90usb1287"
+
+# TODO: templates ?
 en4_serial_template = None
 # en4_serial_template = "/dev/ttyACM1"
 en3_serial_template = "/dev/tty.usbserial-EN*"
@@ -694,12 +696,13 @@ class SerialTest:
             elif selectmap:
                 self.writeCommand(b'M')  # also broken somehow
             elif flash:
-                self.writeCommand(b'F')
+                for com in "FlashFPGA":
+                    self.writeCommand(com.encode('utf-8'))
                 # print('[chao_debug] command F sent.')
             elif fpgaflash:
                 self.writeCommand(b'p')
             else:
-                print(("No idea how to send config!!"))
+                print("No idea how to send config!!")
 
             # sending bitfile
             bit = open(config.filename, "rb")
@@ -1137,6 +1140,7 @@ class SerialTest:
             sys.exit(0)
 
     def writeCommand(self, command):
+        print("Sending", command)
         # backup current busy state
         bk = self.busy
         self.busy = True

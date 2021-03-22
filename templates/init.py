@@ -17,7 +17,7 @@ def replace_ports(port_to):
         while port_configs_content[end] != '"':
             end += 1
 
-        current_port = port_configs_content[start+1:end]
+        current_port = port_configs_content[start + 1:end]
 
         new_port = input("Port to " + port_to + " (current/default: '" + current_port + "'): ") or current_port
 
@@ -50,7 +50,6 @@ def replace_ports(port_to):
 
 
 def create_files(directory, file_name):
-
     if directory != "":
         directory = directory + "/"
 

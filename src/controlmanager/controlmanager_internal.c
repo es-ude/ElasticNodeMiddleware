@@ -32,3 +32,24 @@ void userlogic_read_id_internal(void) {
 #endif
     xmem_disableXmem();
 }
+
+uint8_t check_for_acks_internal(char c) {
+
+    uint8_t synced = 0;
+    uint8_t iter = 1;
+
+    while (iter) {
+        debugTask();
+
+        if (debugReadCharAvailable()) {
+            uint8_t data = debugGetChar();
+            debugAck(data);
+            if (data == c) {
+                synced = 1;
+            }
+            iter = 0;
+        }
+    }
+
+    return synced;
+}

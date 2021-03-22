@@ -76,7 +76,7 @@ Change the path to them or your own bitfiles in the [bitfileConfigs.py](../scrip
 
 For uploading the bitfiles run:
 
-    $ bazel run uploadMultiConfigS15
+    $ bazel run uploadBitfiles
     
 After processing the last output should be "ready to proceed with uart".
 

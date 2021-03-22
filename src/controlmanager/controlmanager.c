@@ -76,9 +76,21 @@ void control_handleChar(uint8_t currentData) {
                     // acknowledge when ready to receive again
                     debugAck(currentData);
                     // For configure the FLASH chip
-                    initFlash(); // SPI interface init and ..? Todo
-                    unlockFlash(0); // To write data on FLASH, must unlock the flash
-                    configurationUartFlash();
+                    char st[] = "lashFPGA!";
+                    uint8_t synced = 1;
+                    uint8_t i = 0;
+                    while (synced) {
+                        if (st[i] == '!') {
+                            break;
+                        }
+                        synced = check_for_acks_internal(st[i]);
+                        i++;
+                    }
+                    if (synced) {
+                        initFlash(); // SPI interface init and ..? Todo
+                        unlockFlash(0); // To write data on FLASH, must unlock the flash
+                        configurationUartFlash();
+                    }
                     break;
                 case 'i':
                     userlogic_enable_internal();
