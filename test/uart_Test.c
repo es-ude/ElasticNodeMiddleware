@@ -82,7 +82,6 @@ void test_uart_init(void) {
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
     TEST_ASSERT_EQUAL(UBRR1H, (uint8_t) (my_bdr >> 8));
     TEST_ASSERT_EQUAL(UBRR1L, (uint8_t) (my_bdr));
-
 }
 
 void test_uart_getUartReceiveHandler(void) {
@@ -96,14 +95,6 @@ void test_uart_Sending(void) {
     initalise_uart_mockRegister();
 
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, uart_Sending());
-}
-
-void test_uart_NewLine(void) {
-    //TODO
-}
-
-void test_uart_WriteLine(char *s) {
-    //TODO
 }
 
 void test_uart_WriteString_EmptyString(void) {
@@ -177,22 +168,6 @@ void test_uart_WriteChar(void) {
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x1);
 }
 
-
-// TODO: remaining uart commands
-//uart_WriteBin
-//uart_WriteBin4
-//uart_WriteBin8
-//uart_WriteBin32
-//uart_WriteDec8
-//uart_WriteDec16
-//uart_WriteDec32
-//uart_WriteDec32S
-//uart_WriteHex8
-//uart_WriteHex16
-//uart_WriteHex32
-//uart_WriteFloat
-//uart_Ack
-
 void test_uart_ISR_Receive() {
     initalise_uart_mockRegister();
     interruptManager_clearInterrupt_Expect();
@@ -222,4 +197,3 @@ void test_uart_ISR_Transmit_False() {
 
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
 }
-

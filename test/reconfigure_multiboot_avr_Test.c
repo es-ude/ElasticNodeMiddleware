@@ -100,7 +100,6 @@ void test_interruptSR_case2(void) {
     _delay_ms_Expect(RESET_DELAY);
     elasticnode_clearFpgaSoftReset_internal_Expect();
 
-    // TODO: better option to tests this?
     //here: reconfigure_fpgaMultiboot(0);
     uint32_t address = 0;
     elasticnode_fpgaPowerOn_internal_Expect();

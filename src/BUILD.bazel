@@ -110,6 +110,7 @@ cc_library(
         "uart/circularBuffer/circularBuffer.h",
     ],
     copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
     deps = [
         "//src:BitmanipulationLib",
         "//src:DelayLibHdr",
@@ -119,14 +120,14 @@ cc_library(
 )
 
 cc_library(
-    name = "DebugUartLib",
+    name = "DebugUARTLib",
     srcs = [
         "debug/debug.c"
     ],
     hdrs = [
         "debug/debug.h",
     ],
-    copts = cpu_frequency_flag(),
+    copts = cpu_frequency_flag() + ["-DUART"],
     visibility = ["//visibility:public"],
     deps = [
         "//src:UartLib",
@@ -134,14 +135,14 @@ cc_library(
 )
 
 cc_library(
-    name = "DebugLufaLib",
+    name = "DebugLUFALib",
     srcs = [
-        "debug/debugUsb.c"
+        "debug/debug.c"
     ],
     hdrs = [
         "debug/debug.h",
     ],
-    copts = cpu_frequency_flag(),
+    copts = cpu_frequency_flag() + ["-DLUFA"],
     visibility = ["//visibility:public"],
     deps = [
         "@PeripheralInterface//:LufaUsart",
@@ -158,7 +159,7 @@ cc_library(
 )
 
 cc_library(
-    name = "FlashLib",
+    name = "FlashLUFALib",
     srcs = [
         "flash/flash.c",
         "flash/flash_internal.c",
@@ -172,13 +173,33 @@ cc_library(
         "//:BitmanipulationLib",
         "//src:DelayLibHdr",
         "//src:SpiLib",
-        "//src:DebugLufaLib",
+        "//src:DebugLUFALib",
         "//src:RegisterDefinitionLibHdr",
     ],
 )
 
 cc_library(
-    name = "ConfigurationLib",
+    name = "FlashUARTLib",
+    srcs = [
+        "flash/flash.c",
+        "flash/flash_internal.c",
+    ],
+    hdrs = [
+        "flash/flash.h",
+        "flash/flash_internal.h"
+    ],
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:DelayLibHdr",
+        "//src:SpiLib",
+        "//src:DebugUARTLib",
+        "//src:RegisterDefinitionLibHdr",
+    ],
+)
+
+cc_library(
+    name = "ConfigurationLUFALib",
     srcs = [
         "configuration/configuration.c",
         "configuration/configuration_internal.c",
@@ -190,15 +211,35 @@ cc_library(
     copts = cpu_frequency_flag(),
     deps = [
         "//src:LedLib",
-        "//src:DebugLufaLib",
-        "//src:FlashLib",
+        "//src:DebugLUFALib",
+        "//src:FlashLUFALib",
         "//src:InterruptManagerLib",
         "//src:ElasticNodeMiddlewareInternalLib",
     ],
 )
 
 cc_library(
-    name = "ControlmanagerLib",
+    name = "ConfigurationUARTLib",
+    srcs = [
+        "configuration/configuration.c",
+        "configuration/configuration_internal.c",
+    ],
+    hdrs = [
+        "configuration/configuration.h",
+        "configuration/configuration_internal.h",
+    ],
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//src:LedLib",
+        "//src:DebugUARTLib",
+        "//src:FlashUARTLib",
+        "//src:InterruptManagerLib",
+        "//src:ElasticNodeMiddlewareInternalLib",
+    ],
+)
+
+cc_library(
+    name = "ControlmanagerLUFALib",
     srcs = [
         "controlmanager/controlmanager.c",
         "controlmanager/controlmanager_internal.c",
@@ -207,13 +248,33 @@ cc_library(
         "controlmanager/controlmanager.h",
         "controlmanager/controlmanager_internal.h",
     ],
-    copts = cpu_frequency_flag(),
+    copts = cpu_frequency_flag() + ["-DLUFA"],
     visibility = ["//visibility:public"],
     deps = [
         "//src:XmemLib",
-        "//src:FlashLib",
-        "//src:DebugLufaLib",
-        "//src:ConfigurationLib",
+        "//src:FlashLUFALib",
+        "//src:DebugLUFALib",
+        "//src:ConfigurationLUFALib",
+    ],
+)
+
+cc_library(
+    name = "ControlmanagerUARTLib",
+    srcs = [
+        "controlmanager/controlmanager.c",
+        "controlmanager/controlmanager_internal.c",
+    ],
+    hdrs = [
+        "controlmanager/controlmanager.h",
+        "controlmanager/controlmanager_internal.h",
+    ],
+    copts = cpu_frequency_flag() + ["-DUART"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src:XmemLib",
+        "//src:FlashUARTLib",
+        "//src:DebugUARTLib",
+        "//src:ConfigurationUARTLib",
     ],
 )
 
@@ -327,7 +388,7 @@ cc_library(
 )
 
 cc_library(
-    name = "DebugTest",
+    name = "DebugUARTTest",
     srcs = [
         "debug/debug.c",
     ],
@@ -336,21 +397,21 @@ cc_library(
         "uart/uart.h",
         "uart/uart_internal.h",
     ],
-    copts = ["-DTEST"],
+    copts = ["-DTEST"] + ["-DUART"],
     visibility = ["//visibility:public"],
     deps = [
     ],
 )
 
 cc_library(
-    name = "DebugUsbTest",
+    name = "DebugLUFATest",
     srcs = [
-        "debug/debugUsb.c",
+        "debug/debug.c",
     ],
     hdrs = [
         "debug/debug.h",
     ],
-    copts = ["-DTEST"],
+    copts = ["-DTEST"] + ["-DLUFA"],
     visibility = ["//visibility:public"],
     deps = [
         "//test:LufaUsartImplHdrForTesting",
@@ -372,7 +433,7 @@ cc_library(
         "debug/debug.h",
         "delay/delay.h",
     ],
-    copts = ["-DTEST"] + ["-DDEBUG"],
+    copts = ["-DTEST"] + ["-DDEBUG"] + ["-DLUFA"] + ["-DUART"],
     visibility = ["//visibility:public"],
     deps = [
         "//test:BitManipulationHdrForTesting",

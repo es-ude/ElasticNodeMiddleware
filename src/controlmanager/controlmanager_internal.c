@@ -39,8 +39,9 @@ uint8_t check_for_acks_internal(char c) {
     uint8_t iter = 1;
 
     while (iter) {
+#ifdef LUFA
         debugTask();
-
+#endif
         if (debugReadCharAvailable()) {
             uint8_t data = debugGetChar();
             debugAck(data);

@@ -24,6 +24,7 @@ uint8_t ddr_fpga_power_aux;
 uint8_t port_fpga_power_io;
 uint8_t ddr_fpga_power_io;
 uint8_t port_fpga_power_int;
+uint8_t port_fpga_power_int;
 uint8_t ddr_fpga_power_int;
 
 uint8_t ddr_fpga_cclk;

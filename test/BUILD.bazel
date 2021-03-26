@@ -426,23 +426,24 @@ unity_test(
 )
 
 unity_test(
-    file_name = "debug_Test.c",
+    file_name = "debugUART_Test.c",
     cexception = False,
-    copts = ["-DTEST"],
+    copts = ["-DTEST"] + ["-DUART"],
     deps = [
         "mock_Uart_internal",
         "mock_Uart",
-        "//src:DebugTest",
+        "//src:DebugUARTTest",
     ],
 )
 
 unity_test(
-    file_name = "debugUsb_Test.c",
+    file_name = "debugLUFA_Test.c",
     cexception = False,
-    copts = ["-DTEST"],
+    copts = ["-DTEST"] + ["-DLUFA"],
     deps = [
         "mock_LufaUsartImpl",
-        "//src:DebugUsbTest",
+        "mock_delay",
+        "//src:DebugLUFATest",
     ],
 )
 

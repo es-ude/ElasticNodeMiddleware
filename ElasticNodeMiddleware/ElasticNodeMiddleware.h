@@ -5,9 +5,7 @@
 
 #include "src/xmem/xmem.h"
 
-#ifdef TEST
-
-#else
+#ifndef TEST
 
 #include <util/delay.h>
 
@@ -129,6 +127,10 @@ void elasticnode_debugWaitUntilDone(void);
 uint8_t elasticnode_debugSending(void);
 
 void elasticnode_debugAck(uint8_t c);
+
+void elasticnode_uart_ISR_Receive();
+
+void elasticnode_uart_ISR_Transmit();
 // --------- DEBUG> ---------
 #endif
 

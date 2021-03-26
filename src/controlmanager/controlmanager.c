@@ -63,7 +63,9 @@ void control_handleChar(uint8_t currentData) {
 
                         }
 #ifndef TEST
+#ifdef LUFA
                         debugTask();
+#endif
 #endif
                     }
                     break;

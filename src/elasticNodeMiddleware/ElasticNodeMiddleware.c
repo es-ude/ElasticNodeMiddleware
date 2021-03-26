@@ -14,6 +14,10 @@
 #ifdef DEBUG
 #include "src/controlmanager/controlmanager.h"
 #include "src/debug/debug.h"
+
+#ifdef UART
+#include "src/uart/uart.h"
+#endif
 #endif
 
 //TODO: Put these magic number offset values to somewhere more meaningful
@@ -29,7 +33,7 @@ void elasticnode_initialise(void) {
     // disable r2f chip for start up
     BitManipulation_setBit(DDR_FPGA_POWER_SRAM, 6); // wireless_cs low
     BitManipulation_setBit(PORT_FPGA_POWER_SRAM, 6);
-    BitManipulation_setBit(DDR_FPGA_POWER_INT, 5); // wireless_reset low
+    BitManipulation_setBit(DDR_FPGA_POWER_INT, 5); // wireless_reset lows
     BitManipulation_clearBit(PORT_FPGA_DONE, 5);
     //DDRE |= 0x40; // wireless_cs low
     //PORTE |= 0x40;
@@ -148,6 +152,7 @@ void elasticnode_control_handleChar(uint8_t currentData){
 // --------- CONTROLMANAGER> ---------
 
 // --------- <DEBUG ---------
+#ifdef LUFA
 void  elasticnode_debugTask(void){
     debugTask();
 }
@@ -155,14 +160,17 @@ void  elasticnode_debugTask(void){
 uint16_t  elasticnode_debugNumInputAvailable(void){
     return debugNumInputAvailable();
 }
+#endif
 
 void elasticnode_debugInit(void (*receiveHandler)(uint8_t)){
     debugInit(receiveHandler);
 }
 
+#ifdef UART
 void elasticnode_setDebugReceiveHandler(void (*receiveHandler)(uint8_t)){
     setDebugReceiveHandler(receiveHandler);
 }
+#endif
 
 void elasticnode_debugNewLine(void){
     debugNewLine();
@@ -196,9 +204,11 @@ uint8_t elasticnode_debugReadCharAvailable(void){
     return debugReadCharAvailable();
 }
 
+#ifdef UART
 void elasticnode_debugReadCharProcessed(void){
     return debugReadCharProcessed();
 }
+#endif
 
 uint8_t elasticnode_debugReadCharBlock(void){
     return debugReadCharBlock();
@@ -268,13 +278,25 @@ void elasticnode_debugWaitUntilDone(void){
     debugWaitUntilDone();
 }
 
+#ifdef UART
 uint8_t elasticnode_debugSending(void){
     return debugSending();
 }
+#endif
 
 void elasticnode_debugAck(uint8_t c){
     debugAck(c);
 }
+
+#ifdef UART
+void elasticnode_uart_ISR_Receive(){
+    uart_ISR_Receive();
+}
+
+void elasticnode_uart_ISR_Transmit(){
+    uart_ISR_Transmit();
+}
+#endif
 // --------- DEBUG> ---------
 #endif
 

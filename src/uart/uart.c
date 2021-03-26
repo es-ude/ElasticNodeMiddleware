@@ -26,8 +26,8 @@ void uart_WaitUntilDone(void) {
 }
 
 void uart_Init(void (*receiveHandler)(uint8_t)) {
-    UBRR1H = (uint8_t)(my_bdr >> 8);
-    UBRR1L = (uint8_t)(my_bdr);
+    UBRR1H = (uint8_t) (my_bdr >> 8);
+    UBRR1L = (uint8_t) (my_bdr);
 
 #if UART_2X
     BitManipulation_setBit(UART_UCSR1A, U2X1);
@@ -55,16 +55,6 @@ void *uart_getUartReceiveHandler(void) {
 
 uint8_t uart_Sending(void) {
     return sendingFlag;
-}
-
-void uart_NewLine(void) {
-    uart_WriteChar('\r');
-    uart_WriteChar('\n');
-}
-
-void uart_WriteLine(char *s) {
-    uart_WriteString(s);
-    uart_NewLine();
 }
 
 void uart_WriteString(char *s) {
@@ -107,7 +97,6 @@ void uart_ReceiveUint32Blocking(uint32_t *output) {
     interruptManager_setInterrupt();
 }
 
-
 void uart_WriteChar(uint8_t c) {
     if (circularBuffer_Push(&sendingBuf, c)) {
         // check if sending already
@@ -120,6 +109,28 @@ void uart_WriteChar(uint8_t c) {
     }
 }
 
+void uart_ISR_Receive() {
+    interruptManager_clearInterrupt();
+    receivedData = UDR1;
+    if (uartReceiveHandler != NULL) {
+        uartReceiveHandler(receivedData);
+    }
+    interruptManager_setInterrupt();
+}
+
+void uart_ISR_Transmit() {
+    interruptManager_clearInterrupt();
+    // check if more data to send
+    if (circularBuffer_Pop(&sendingBuf, &sendingData)) {
+        // if avail, send it
+        UDR1 = sendingData;
+    } else {
+        sendingFlag = 0x0;
+    }
+    interruptManager_setInterrupt();
+}
+
+/*
 void uart_WriteBin(uint32_t num, uint8_t length) {
     uart_WriteString("0b");
     uint32_t number = num;
@@ -131,6 +142,11 @@ void uart_WriteBin(uint32_t num, uint8_t length) {
             // number >>= 1;
         }
     }
+}
+
+void uart_NewLine(void) {
+    uart_WriteChar('\r');
+    uart_WriteChar('\n');
 }
 
 void uart_WriteBin4(uint8_t num) {
@@ -197,24 +213,4 @@ void uart_WriteFloat(float num) {
 void uart_Ack(uint8_t c) {
     uart_WriteChar(c);
 }
-
-void uart_ISR_Receive() {
-    interruptManager_clearInterrupt();
-    receivedData = UDR1;
-    if (uartReceiveHandler != NULL) {
-        uartReceiveHandler(receivedData);
-    }
-    interruptManager_setInterrupt();
-}
-
-void uart_ISR_Transmit() {
-    interruptManager_clearInterrupt();
-    // check if more data to send
-    if (circularBuffer_Pop(&sendingBuf, &sendingData)) {
-        // if avail, send it
-        UDR1 = sendingData;
-    } else {
-        sendingFlag = 0x0;
-    }
-    interruptManager_setInterrupt();
-}
+ */
