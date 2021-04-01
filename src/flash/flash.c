@@ -110,14 +110,23 @@ readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, void (*read
     spi_buffer[2] = (uint8_t) (address >> 8);
     spi_buffer[3] = (uint8_t) (address >> 0);
 
-    if (mcuFlash) {
+
+    if (readingCallbackFunction == NULL) {
+        spiPerformTaskBlocking_internal(4, spi_buffer, numBytes, spi_buffer + 4);
+        deselectFlash(mcuFlash);
+    } else {
+        spiPerformTaskBlockingWithCallback_internal(4, spi_buffer, numBytes, readingCallbackFunction,
+                                                    finishedCallbackFunction);
+    }
+
+/*    if (mcuFlash) {
         // send commmand
         if (readingCallbackFunction == NULL) {
             spiPerformTaskBlocking_internal(4, spi_buffer, numBytes, spi_buffer + 4);
             deselectFlash(mcuFlash);
         } else {
             spiPerformTaskBlockingWithCallback_internal(4, spi_buffer, numBytes, readingCallbackFunction,
-                                               finishedCallbackFunction);
+                                                        finishedCallbackFunction);
 
         }
     } else {
@@ -130,7 +139,7 @@ readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, void (*read
                                              finishedCallbackFunction);
         }
     }
-
+*/
     return spi_buffer + 4;
 }
 

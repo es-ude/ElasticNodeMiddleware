@@ -75,7 +75,8 @@ void deselectFlash(uint8_t mcuFlash) {
     BitManipulation_setBit(PORTB_SPI, P_FLASH_CS);
 }
 
-void fpgaFlashPerformTaskWithCallback(uint16_t numWrite, uint8_t *dataWrite, uint16_t numRead,
+/*void fpgaFlashPerformTaskWithCallback(uint16_t numWrite, uint8_t *dataWrite, uint16_t numRead,
                                       void (*readingCallback)(uint8_t, uint8_t), void (*finishedCallback)(void)) {
     spiPerformTaskBlockingWithCallback_internal(numWrite, dataWrite, numRead, readingCallback, finishedCallback);
 }
+*/

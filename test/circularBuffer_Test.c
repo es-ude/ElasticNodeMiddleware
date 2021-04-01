@@ -52,7 +52,7 @@ void test_circularBuffer_CountObjects(void) {
 }
 
 void test_circularBuffer_push(void) {
-    // TODO
+    // TODO: *c->head = data; Fails
 /*
     circularBuffer sendingBuf;
     circularBuffer *c = &sendingBuf;
@@ -83,7 +83,7 @@ void test_circularBuffer_push(void) {
 }
 
 void test_circularBuffer_pop(void) {
-    // TODO
+    // TODO: *data = *c->tail; Fails
 /*
     circularBuffer sendingBuf;
     circularBuffer *c = &sendingBuf;

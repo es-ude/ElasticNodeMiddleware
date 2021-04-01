@@ -74,10 +74,14 @@ void test_SPI_internal(void) {
     interruptManager_clearInterrupt_Expect();
 
     TEST_ASSERT_EQUAL(data, SPI_internal(data));
-
     TEST_ASSERT_EQUAL(*SPSR_SPI, data);
 }
 
+// TODO: call internal functions
 void test_spiPerformTaskBlockingWithCallback_internal(void) {
-    // TODO
+    uint16_t numWrite = 0;
+    uint8_t *dataWrite = 0;
+    uint16_t numRead = 0;
+
+    spiPerformTaskBlockingWithCallback_internal(numWrite, dataWrite, numRead, readingCallback, finishedCallback);
 }

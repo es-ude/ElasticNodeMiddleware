@@ -108,6 +108,8 @@ void test_deselectFlash(void) {
     deselectFlash(0);
 }
 
+// Not needed anymore
+/*
 void test_fpgaFlashPerformTaskWithCallback(void) {
     uint16_t numWrite = 0;
     uint8_t *dataWrite = 0;
@@ -119,4 +121,4 @@ void test_fpgaFlashPerformTaskWithCallback(void) {
 
     fpgaFlashPerformTaskWithCallback(numWrite, dataWrite, numRead, readingCallback, finishedCallback);
 }
-
+*/

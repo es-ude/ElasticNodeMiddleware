@@ -86,6 +86,9 @@ void control_handleChar(uint8_t currentData) {
                     // calculate what blocks need to be erased
                     // acknowledge when ready to receive again
                     debugAck(currentData);
+#ifdef UART
+                    debugReadCharProcessed();
+#endif
                     // For configure the FLASH chip
                     char st[] = "lashFPGA!";
                     uint8_t synced = 1;

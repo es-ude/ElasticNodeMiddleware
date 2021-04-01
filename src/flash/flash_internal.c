@@ -68,27 +68,34 @@ void writeEnableFlash_internal(uint8_t mcuFlash) {
 }
 
 // perform RDSR
-uint8_t readStatus_internal(uint8_t mcuFlash) {
+/* uint8_t readStatus_internal(uint8_t mcuFlash) {
     flashResetCallbacks_internal();
 
     selectFlash(mcuFlash);
     uint8_t status;
 
     spiPerformSimpleTaskBlocking(0x05, 1, &status);
-
     deselectFlash(mcuFlash);
 
     return status;
 }
+*/
 
 void waitDoneFlash_internal(uint8_t mcuFlash) {
-
     uint16_t counter = 0;
     uint8_t status = 0xFF;
+#ifndef TEST
     while (status & (1 << (0))) {
+#endif
         //while (status & _BV(0)) {
         counter++;
-        status = readStatus_internal(mcuFlash);
+        flashResetCallbacks_internal();
+        selectFlash(mcuFlash);
+        spiPerformSimpleTaskBlocking(0x05, 1, &status);
+        deselectFlash(mcuFlash);
+
         _delay_ms(5);
+#ifndef TEST
     }
+#endif
 }

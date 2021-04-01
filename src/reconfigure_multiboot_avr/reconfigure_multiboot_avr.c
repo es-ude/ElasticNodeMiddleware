@@ -27,11 +27,9 @@ void reconfigure_initMultiboot(void) {
  */
 
 void reconfigure_fpgaMultiboot(uint32_t address) {
-
     elasticnode_fpgaPowerOn_internal();
     xmem_enableXmem();
     reconfigure_fpgaSetDoneReponse_internal(FPGA_DONE_PRINT);
-    reconfigure_fpgaMultibootClearComplete_internal();
 
     for (uint8_t i = 0; i < 3; i++) {
         *(AddressMultiboot + i) = (uint8_t) (0xff & (address >> (i * 8)));
@@ -41,6 +39,8 @@ void reconfigure_fpgaMultiboot(uint32_t address) {
 
     //enable intended?
     interruptManager_setInterrupt();
+
+    reconfigure_fpgaMultibootClearComplete_internal();
 }
 
 uint32_t reconfigure_getMultibootAddress(void) {

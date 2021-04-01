@@ -10,6 +10,8 @@
 #include "src/spi/Mockspi.h"
 #include "src/spi/Mockspi_internal.h"
 
+#include "src/delay/Mockdelay.h"
+
 uint8_t ddrb_flash;
 uint8_t portb_flash;
 uint8_t spcr_flash;
@@ -17,6 +19,12 @@ uint8_t spcr_flash;
 uint8_t *DDRB_FLASH = &ddrb_flash;
 uint8_t *PORTB_FLASH = &portb_flash;
 uint8_t *SPCR_FLASH = &spcr_flash;
+
+extern uint32_t mcuWriteCount;
+extern uint32_t fpgaWriteCount;
+extern volatile uint8_t *flashBufPtr;
+extern uint8_t flashWriteBuf[FLASH_BUFFER_SIZE];
+extern uint16_t flashQueueCount;
 
 void test_flashEnableInterface_internal(void) {
     BitManipulation_setBit_Expect(DDRB_FLASH, P_FLASH_CS);
@@ -34,11 +42,22 @@ void test_flashSetSpeed_internal(void) {
 }
 
 void test_flashResetQueue_internal(void) {
-    // TODO
+    volatile uint8_t *flashBufPtr_test;
+    flashBufPtr_test = flashWriteBuf;
+    *flashBufPtr_test++ = 0x02;
+    flashBufPtr_test += 3;
+
+    flashResetQueue_internal();
+
+    TEST_ASSERT_EQUAL(flashWriteBuf + 4, flashBufPtr_test);
+    TEST_ASSERT_EQUAL(0, flashQueueCount);
 }
 
 void test_flashResetWriteCount_internal(void) {
-    // TODO
+    flashResetWriteCount_internal();
+
+    TEST_ASSERT_EQUAL(0, mcuWriteCount);
+    TEST_ASSERT_EQUAL(0, fpgaWriteCount);
 }
 
 void test_writeEnableFlash_internal(void) {
@@ -52,18 +71,17 @@ void test_writeEnableFlash_internal(void) {
     writeEnableFlash_internal(mcuFlash);
 }
 
-void test_readStatus_internal(void) {
-    uint8_t mcuFlash = 0;
+void test_waitDoneFlash_internal(void) {
+    uint8_t mcuFlash = 1;
+    uint8_t status = 0xFF;
 
+    // TODO: while loop
     flashResetCallbacks_internal_Expect();
     selectFlash_Expect(mcuFlash);
-    uint8_t status;
     spiPerformSimpleTaskBlocking_Expect(0x05, 1, &status);
     deselectFlash_Expect(mcuFlash);
+    _delay_ms_Expect(5);
 
-    TEST_ASSERT_EQUAL(status, readStatus_internal(mcuFlash));
+    waitDoneFlash_internal(mcuFlash);
 }
 
-void test_waitDoneFlash_internal(void) {
-    // TODO
-}

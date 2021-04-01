@@ -506,6 +506,7 @@ unity_test(
         "mock_Bitmanipulation",
         "mock_Spi",
         "mock_Spi_internal",
+        "mock_delay",
         "//src:Flash_internalTest",
     ],
 )

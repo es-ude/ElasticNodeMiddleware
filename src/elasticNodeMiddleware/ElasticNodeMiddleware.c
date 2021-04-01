@@ -121,6 +121,7 @@ void elasticnode_disableFpgaInterface(void) {
 void elasticnode_configureFPGA(uint32_t address) {
     reconfigure_fpgaMultiboot(address);
     // TODO: use complete instead of delay
+
 #ifndef TEST
     _delay_ms(3000);
 #endif

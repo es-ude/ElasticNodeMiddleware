@@ -3,7 +3,7 @@
 
 #ifdef TEST
 
-void _delay_ms(uint8_t delay);
+void _delay_ms(long delay);
 
 #else
 

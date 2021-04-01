@@ -5,27 +5,32 @@
 #include "src/uart/Mockuart.h"
 #include "src/uart/Mockuart_internal.h"
 
-/* TODO
-void test_debugInit(void) {
-    void (*receiveHandler)(uint8_t) = 0;
+void debugReceiveCharHandler(uint8_t received);
 
-    //uartFlag = 0x0;
+extern volatile int uartFlag;
+extern volatile int uartData;
+
+void test_debugInit(void) {
 
     uart_Init_Expect(&debugReceiveCharHandler);
     uart_WriteStringBlock_Expect("\r\n\nStarting debug...");
     uart_WriteCharBlock_internal_Expect('\r');
     uart_WriteCharBlock_internal_Expect('\n');
 
-    debugInit(receiveHandler);
-}
-*/
+    debugInit(NULL);
 
-/* TODO
-void test_debugReceiveCharHandler(uint8_t received) {
-    uartData = received;
-    uartFlag = 1;
+    TEST_ASSERT_EQUAL(0x0, uartFlag);
 }
-*/
+
+void test_debugReceiveCharHandler(void) {
+    uint8_t received = 34;
+
+    debugReceiveCharHandler(received);
+
+    TEST_ASSERT_EQUAL(received, uartData);
+    TEST_ASSERT_EQUAL(1, uartFlag);
+}
+
 
 void test_setDebugReceiveHandler(void) {
     void (*receiveHandler)(uint8_t) = 0x0;
@@ -92,17 +97,15 @@ void test_debugWriteCharBlock(void) {
     debugWriteCharBlock(c);
 }
 
-/* TODO
 void test_debugReadCharAvailable(void) {
-    return uartFlag;
+    TEST_ASSERT_EQUAL(uartFlag,  debugReadCharAvailable());
 }
-*/
 
-/* TODO
 void test_debugReadCharProcessed(void) {
-    uartFlag = 0;
+    debugReadCharProcessed();
+
+    TEST_ASSERT_EQUAL(0, uartFlag);
 }
-*/
 
 void test_debugReadCharBlock(void) {
     uart_ReceiveCharBlocking_internal_ExpectAndReturn(0);
@@ -110,11 +113,9 @@ void test_debugReadCharBlock(void) {
     TEST_ASSERT_EQUAL(0, debugReadCharBlock());
 }
 
-/* TODO
 void test_debugGetChar(void) {
-    return uartData;
+    TEST_ASSERT_EQUAL(uartData, debugGetChar());
 }
-*/
 
 void test_debugWriteHex8(void) {
     uint8_t num = 0x12;

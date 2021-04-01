@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+#define BUFFER_SIZE 256
+
 void configurationUartFlash(void);
 
 void verifyConfigurationFlash(uint8_t mcuFlash);

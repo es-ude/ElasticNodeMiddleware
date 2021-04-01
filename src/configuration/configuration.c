@@ -18,7 +18,6 @@
 
 #endif
 
-#define BUFFER_SIZE 256
 uint32_t configAddress, configSize, configRemaining;
 uint8_t *buffer;
 
@@ -58,9 +57,6 @@ void configurationUartFlash(void) {
         eraseSectorFlash(blockAddress, 1);
     }
 
-
-//    led_mcu_turnOff(2);
-//    led_mcu_turnOff(3);
     uint32_t currentAddress = configAddress;
     configRemaining = configSize;
 #ifndef TEST
@@ -70,7 +66,6 @@ void configurationUartFlash(void) {
         if (configRemaining < BUFFER_SIZE) {
             blockSize = configRemaining;
         }
-//        led_mcu_turnOn(1);
         readData_internal(buffer, blockSize);
 #ifndef TEST
         led_mcu_turnOn(0);

@@ -42,6 +42,7 @@ uint8_t check_for_acks_internal(char c) {
 #ifdef LUFA
         debugTask();
 #endif
+
         if (debugReadCharAvailable()) {
             uint8_t data = debugGetChar();
             debugAck(data);
@@ -49,7 +50,11 @@ uint8_t check_for_acks_internal(char c) {
                 synced = 1;
             }
             iter = 0;
+#ifdef UART
+            debugReadCharProcessed();
+#endif
         }
+
     }
 
     return synced;
