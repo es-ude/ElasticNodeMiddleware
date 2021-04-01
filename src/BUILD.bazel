@@ -432,6 +432,7 @@ cc_library(
         "controlmanager/controlmanager.h",
         "debug/debug.h",
         "delay/delay.h",
+        "uart/uart.h",
     ],
     copts = ["-DTEST"] + ["-DDEBUG"] + ["-DLUFA"] + ["-DUART"],
     visibility = ["//visibility:public"],

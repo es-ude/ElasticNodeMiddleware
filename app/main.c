@@ -10,16 +10,19 @@ uint8_t *data;
 volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
 #endif
 
-//These are potential ISRs programmers can uncomment to have custom interrupt
+// These are potential ISRs, programmers can uncomment to have custom interrupt
 // handling on receiving and sending via UART.
-//ISR(USART1_RX_vect) {
-//    uart_ISR_Receive();
-//}
-//
-//ISR(USART1_TX_vect) {
-//    uart_ISR_Transmit();
-//}
-//
+//#define UART
+#ifdef UART
+ISR(USART1_RX_vect) {
+        elasticnode_uart_ISR_Receive();
+}
+
+ISR(USART1_TX_vect) {
+        elasticnode_uart_ISR_Transmit();
+}
+#endif
+
 // Uncomment this, when requiring a custom interrupt handler on a reconfiguration complete.
 // Don't forget to enable the corresponding ISR settings.
 //ISR(FPGA_DONE_INT_VECTOR) {
@@ -54,8 +57,13 @@ int main(void) {
         if (elasticnode_debugReadCharAvailable()) {
             uint8_t data = elasticnode_debugGetChar();
             elasticnode_control_handleChar(data);
+#ifdef UART
+            elasticnode_debugReadCharProcessed();
+#endif
         }
+#ifndef UART
         elasticnode_debugTask(); // This only prints a part of the transmit buffer. Beware when sending a lot of strings
+#endif
 #endif
     }
     return 0;
@@ -96,6 +104,8 @@ void handleCharInput(uint8_t currentData) {
             elasticnode_debugWriteString("unknown mode command received\r\n");
             break;
     }
+#ifndef UART
     elasticnode_debugTask();
+#endif
 }
 #endif

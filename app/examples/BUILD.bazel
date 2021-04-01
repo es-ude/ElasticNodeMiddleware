@@ -1,4 +1,4 @@
-load("@AvrToolchain//:helpers.bzl", "default_embedded_binary")
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries", "default_embedded_binary")
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
 default_embedded_binary(
@@ -7,18 +7,18 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
+        "//:ElasticNodeMiddlewareLib",
     ],
 )
 
 default_embedded_binary(
     name = "blinkLufaExample",
     srcs = ["blinkLufaExample.c"],
-    copts = cpu_frequency_flag() + ["-DDEBUG"],
+    copts = cpu_frequency_flag()+ ["-DDEBUG"],
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUGLib",
-    ]
+        "//:ElasticNodeMiddlewareDEBUGLib",
+    ],
 )
 
 default_embedded_binary(
@@ -37,7 +37,7 @@ default_embedded_binary(
     copts = cpu_frequency_flag(),
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
-        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareMonitoringLib",
-    ]
+        "//:ElasticNodeMiddlewareLib",
+        "//:ElasticNodeMiddlewareMonitoringLib",
+    ],
 )

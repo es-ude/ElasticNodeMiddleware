@@ -56,7 +56,7 @@ cc_library(
 )
 
 cc_library(
-    name = "ElasticNodeMiddlewareDEBUGUARTLib",
+    name = "ElasticNodeMiddlewareDEBUG_UARTLib",
     srcs = [
         "//src:elasticNodeMiddleware/ElasticNodeMiddleware.c",
     ],

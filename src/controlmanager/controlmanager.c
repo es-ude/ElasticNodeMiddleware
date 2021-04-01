@@ -36,6 +36,11 @@ void control_setUserHandle(void (*userHandler)(uint8_t)) {
 }
 
 void control_handleChar(uint8_t currentData) {
+#ifndef TEST
+#ifdef UART
+    debugReadCharProcessed();
+#endif
+#endif
     switch (currentUartReceiveMode) {
         case UART_IDLE:
         default:
@@ -60,7 +65,11 @@ void control_handleChar(uint8_t currentData) {
                                 (*userDefinedHandler)(userModeData);
 #endif
                             }
-
+#ifndef TEST
+#ifdef UART
+                            debugReadCharProcessed();
+#endif
+#endif
                         }
 #ifndef TEST
 #ifdef LUFA

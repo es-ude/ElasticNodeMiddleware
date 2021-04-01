@@ -7,7 +7,7 @@ You should be familiar with the the [WriteOwnProgramGuide](WriteOwnProgramGuide.
 
 ### Example
 
-In the [monitoring example](../app/monitoringExample.c) each second one led more blinks. After that all turn off and the experiment starts again.
+In the [monitoring example](../app/examples/monitoringExample.c) each second one led more blinks. After that all turn off and the experiment starts again.
 This happens 3 times and than the experiment is stopped.
 
 You can upload the code for the main MCU as usual with
@@ -18,7 +18,7 @@ To check if everything works see 'Get results' underneath.
 
 ### Inclusion in own code
 
-Everything explained in this section can be found implemented in the [monitoring example](../app/monitoringExample.c).
+Everything explained in this section can be found implemented in the [monitoring example](../app/examples/monitoringExample.c).
 
 The code for the main MCU needs the inclusion
 
@@ -80,7 +80,7 @@ You can change the sample rate like this at any time:
 elasticnode_monitoring_change_sample_rate(CURRENT_SAMPLE_TIME_10ms);
 ```
 
-The possible sample rates are defined in [energyMonitoringInterface.h](../OLDsrc/energyMonitoringInterface/energyMonitoringInterface.h). The default is 80ms.
+The possible sample rates are defined in [ElasticNodeMiddlewareMonitoring.h](../ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h). The default is 80ms.
 
 ## Monitoring MCU
 
