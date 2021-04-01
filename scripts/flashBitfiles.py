@@ -697,7 +697,8 @@ class SerialTest:
                 self.writeCommand(b'M')  # also broken somehow
             elif flash:
                 for com in "FlashFPGA":
-                    self.writeCommand(com.encode('utf-8'))
+                    if not self.writeCommand(com.encode('utf-8')):
+                        sys.exit("Wrong acknowledgement, exit!")
                 # print('[chao_debug] command F sent.')
             elif fpgaflash:
                 self.writeCommand(b'p')
