@@ -27,7 +27,7 @@ default_embedded_binary(
     copts = cpu_frequency_flag()+ ["-DDEBUG"],
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
-        "//:ElasticNodeMiddlewareDEBUG_UARTLib",
+        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUG_UARTLib",
     ],
 )
 
