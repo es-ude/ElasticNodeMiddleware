@@ -18,28 +18,26 @@ uint8_t *TWDR_MON = &twdr_mon;
 uint8_t *STATE_AND_SAMPLE_RATE_OF_THE_MCU = &state_and_sample_rate_of_the_mcu;
 
 void test_elasticnode_monitoring_change_running_state(void) {
-    uint8_t new_state = 4;
-    BitManipulation_setByte_Expect(STATE_AND_SAMPLE_RATE_OF_THE_MCU, 0b00001111, new_state);
-
-    elasticnode_monitoring_change_running_state(new_state);
-
-    new_state = 16;
-    elasticnode_monitoring_change_running_state(new_state);
-
+    for (uint8_t new_state=0; new_state<16; new_state++){
+        BitManipulation_setByte_Expect(STATE_AND_SAMPLE_RATE_OF_THE_MCU, 0b00001111, new_state);
+        elasticnode_monitoring_change_running_state(new_state);
+    }
+    for (uint8_t new_state=16; new_state<255; new_state++){
+        elasticnode_monitoring_change_running_state(new_state);
+    }
 }
 
 void test_elasticnode_monitoring_change_sample_rate(void) {
-    uint8_t new_sample_rate = 4;
-    BitManipulation_setByte_Expect(STATE_AND_SAMPLE_RATE_OF_THE_MCU, 0b11110000, new_sample_rate);
-
-    elasticnode_monitoring_change_sample_rate(new_sample_rate);
-
-    new_sample_rate = 16;
-    elasticnode_monitoring_change_sample_rate(new_sample_rate);
+    for (uint8_t new_sample_rate=0; new_sample_rate<16; new_sample_rate++){
+        BitManipulation_setByte_Expect(STATE_AND_SAMPLE_RATE_OF_THE_MCU, 0b11110000, new_sample_rate);
+        elasticnode_monitoring_change_sample_rate(new_sample_rate);
+    }
+    for (uint8_t new_sample_rate=16; new_sample_rate<255; new_sample_rate++){
+        elasticnode_monitoring_change_sample_rate(new_sample_rate);
+    }
 }
 
 void test_IIC_slave_init(void) {
-
     uint8_t address = 12;
 
     interruptManager_clearInterrupt_Expect();

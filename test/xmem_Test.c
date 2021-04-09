@@ -44,13 +44,11 @@ void initialise_xmem_mockRegister(void) {
 }
 
 void test_enableXmem(void) {
-
     initialise_xmem_mockRegister();
 
     BitManipulation_clearBit_Expect(SPCR_XMEM, SPE);
 
     //spi disable
-
     *DDR_XMEM_A = XMEM_A_MASK;
     *DDR_XMEM_ALE = XMEM_AD_MASK;
 
@@ -65,7 +63,6 @@ void test_enableXmem(void) {
 }
 
 void test_disableXmem(void) {
-
     initialise_xmem_mockRegister();
 
     BitManipulation_clearBit_Expect(XMEM_ENABLE_REG, XMEM_ENABLE_P);

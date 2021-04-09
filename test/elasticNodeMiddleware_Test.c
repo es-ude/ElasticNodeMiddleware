@@ -146,17 +146,18 @@ void test_elasticnode_led_mcu_init(void) {
     led_mcu_init();
 }
 
-// TODO: random numbers
 void test_elasticnode_led_mcu_turnOn(void) {
-    uint8_t lednumber = 0;
-    led_mcu_turnOn_Expect(lednumber);
-    elasticnode_led_mcu_turnOn(lednumber);
+    for (uint8_t lednumber = 0; lednumber < 255; ++lednumber) {
+        led_mcu_turnOn_Expect(lednumber);
+        elasticnode_led_mcu_turnOn(lednumber);
+    }
 }
 
 void test_elasticnode_led_mcu_turnOff(void) {
-    uint8_t lednumber = 0;
-    led_mcu_turnOff_Expect(lednumber);
-    elasticnode_led_mcu_turnOff(lednumber);
+    for (uint8_t lednumber = 0; lednumber < 255; ++lednumber) {
+        led_mcu_turnOff_Expect(lednumber);
+        elasticnode_led_mcu_turnOff(lednumber);
+    }
 }
 
 void test_elasticnode_led_mcu_turnOnAll(void) {
@@ -202,7 +203,7 @@ void test_elasticnode_reconfigure_fpgaMultibootComplete(void) {
     TEST_ASSERT_EQUAL(elasticnode_reconfigure_fpgaMultibootComplete(), complete);
 }
 
-void test_elasticnode_control_setUserHandle(void){
+void test_elasticnode_control_setUserHandle(void) {
     void *test_handleCharInput;
     void (*userHandler)(uint8_t) = (void (*)(uint8_t)) &test_handleCharInput;
     control_setUserHandle_Expect(userHandler);
@@ -268,19 +269,19 @@ void test_elasticnode_debugWriteStringLength(void) {
 }
 
 void test_elasticnode_debugWriteChar(void) {
-    uint8_t c = 1;
+    uint8_t c = 'T';
     debugWriteChar_Expect(c);
     elasticnode_debugWriteChar(c);
 }
 
 void test_elasticnode_debugWriteCharBlock(void) {
-    uint8_t c = 43;
+    uint8_t c = 'T';
     debugWriteCharBlock_Expect(c);
     elasticnode_debugWriteCharBlock(c);
 }
 
 void test_elasticnode_debugReadCharAvailable(void) {
-    uint8_t c = 1;
+    uint8_t c = 'T';
     debugReadCharAvailable_ExpectAndReturn(c);
     TEST_ASSERT_EQUAL(elasticnode_debugReadCharAvailable(), c);
 }
@@ -291,13 +292,13 @@ void test_elasticnode_debugReadCharProcessed(void) {
 }
 
 void test_elasticnode_debugReadCharBlock(void) {
-    uint8_t c = 1;
+    uint8_t c = 'T';
     debugReadCharBlock_ExpectAndReturn(c);
     TEST_ASSERT_EQUAL(elasticnode_debugReadCharBlock(), c);
 }
 
 void test_elasticnode_debugGetChar(void) {
-    uint8_t c = 1;
+    uint8_t c = 'T';
     debugGetChar_ExpectAndReturn(c);
     TEST_ASSERT_EQUAL(elasticnode_debugGetChar(), c);
 }
@@ -363,13 +364,13 @@ void test_elasticnode_debugWriteBin32(void) {
 }
 
 void test_elasticnode_debugWriteFloat(void) {
-    float num = 1.0;
+    float num = 1.23f;
     debugWriteFloat_Expect(num);
     elasticnode_debugWriteFloat(num);
 }
 
 void test_elasticnode_debugWriteFloatFull(void) {
-    float num = 1.0;
+    float num = 1.23f;
     debugWriteFloatFull_Expect(num);
     elasticnode_debugWriteFloatFull(num);
 }
@@ -395,7 +396,7 @@ void test_elasticnode_debugSending(void) {
 }
 
 void test_elasticnode_debugAck(void) {
-    uint8_t c = 1;
+    uint8_t c = 'T';
     debugAck_Expect(c);
     elasticnode_debugAck(c);
 }

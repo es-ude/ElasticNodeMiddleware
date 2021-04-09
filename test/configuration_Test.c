@@ -72,5 +72,4 @@ void test_verifyConfigurationFlash(void) {
     interruptManager_setInterrupt_Expect();
 
     verifyConfigurationFlash(mcuFlash);
-
 }
