@@ -23,7 +23,6 @@ void uart_setUartReceiveHandler_internal(void (*receiveHandler)(uint8_t)) {
     uartReceiveHandler = receiveHandler;
 }
 
-
 void uart_WriteNext_internal(void) {
     if (!sendingFlag) {
         /* Wait for empty transmit buffer */

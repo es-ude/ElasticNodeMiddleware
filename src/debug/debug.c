@@ -1,24 +1,3 @@
-/*****
- * Software Half-duplex UART Driver
- * Henry Chan (hc352 @cornell.edu)
- * Based on AVR304
- *
- * Sample Usage:
- * RECEIVING
- * sw_uart_receive_byte();
- * // Other instructions while receiving
- * if (sw_uart_state == IDLE) {
- *    x = sw_uart_rxdata;
- * }
- *
- * TRANSMITTING
- * sw_uart_send_byte(c);
- * // Other instructions while transmitting
- * if (sw_uart_state == IDLE) {
- *    //Stuff when transmission done
- * }
- ****/
-
 #ifndef LUFA
 #ifndef UART
 #error "LUFA or UART must be defined for debugging"
@@ -209,14 +188,14 @@ void debugWriteHex32(uint32_t num) {
 
 void debugWriteDec8(uint8_t num) {
     char *buf = (char *) malloc(10);
-    sprintf(buf, "%2d", num);
+    sprintf(buf, "%03d", num);
     debugWriteString(buf);
     free(buf);
 }
 
 void debugWriteDec16(uint16_t num) {
     char *buf = (char *) malloc(10);
-    sprintf(buf, "%u", num);
+    sprintf(buf, "%05u", num);
     debugWriteString(buf);
     free(buf);
 }

@@ -282,11 +282,9 @@ cc_library(
     name = "Reconfigure_multiboot_avrLib",
     srcs = [
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
-        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.c",
     ],
     hdrs = [
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
-        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
     ],
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
@@ -559,7 +557,6 @@ cc_library(
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
         "xmem/xmem.h",
         "interruptManager/interruptManager.h",
-        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
         "delay/delay.h",
     ],
@@ -568,21 +565,6 @@ cc_library(
     deps = [
         "//test:BitManipulationHdrForTesting",
         "RegisterDefinitionLibHdrTest",
-    ],
-)
-
-cc_library(
-    name = "Reconfigure_multiboot_internal_avrTest",
-    srcs = [
-        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.c",
-    ],
-    hdrs = [
-        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
-        "delay/delay.h",
-    ],
-    copts = ["-DTEST"],
-    visibility = ["//visibility:public"],
-    deps = [
     ],
 )
 
@@ -723,7 +705,6 @@ exports_files(
         "led/led_mcu.h",
         "spi/spi.h",
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
-        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
         "controlmanager/controlmanager.h",
         "delay/delay.h",
         "spi/spi_internal.h",

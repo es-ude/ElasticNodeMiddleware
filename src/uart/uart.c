@@ -1,3 +1,24 @@
+/*****
+ * Software Half-duplex UART Driver
+ * Henry Chan (hc352 @cornell.edu)
+ * Based on AVR304
+ *
+ * Sample Usage:
+ * RECEIVING
+ * sw_uart_receive_byte();
+ * // Other instructions while receiving
+ * if (sw_uart_state == IDLE) {
+ *    x = sw_uart_rxdata;
+ * }
+ *
+ * TRANSMITTING
+ * sw_uart_send_byte(c);
+ * // Other instructions while transmitting
+ * if (sw_uart_state == IDLE) {
+ *    //Stuff when transmission done
+ * }
+ ****/
+
 #include "EmbeddedUtilities/BitManipulation.h"
 
 #include "src/uart/uart.h"

@@ -11,6 +11,8 @@
 
 #include "src/delay/delay.h"
 
+#include "src/xmem/xmem.h"
+
 #ifdef DEBUG
 #include "src/controlmanager/controlmanager.h"
 #include "src/debug/debug.h"
@@ -108,6 +110,10 @@ void elasticnode_led_mcu_turnOffAll(void) {
 // --------- LED> ---------
 
 // --------- <XMEM ---------
+uint16_t elasticnode_xmem_offset(void) {
+    return xmem_offset();
+}
+
 void elasticnode_enableFpgaInterface(void) {
     xmem_enableXmem();
 }
@@ -120,12 +126,13 @@ void elasticnode_disableFpgaInterface(void) {
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
 void elasticnode_configureFPGA(uint32_t address) {
     reconfigure_fpgaMultiboot(address);
-    // TODO: use complete instead of delay
+}
 
-#ifndef TEST
-    _delay_ms(3000);
-#endif
-    //while(!reconfigure_fpgaMultibootComplete());
+void elasticnode_configureFPGA_wait_for_finish(uint32_t address) {
+    reconfigure_fpgaMultiboot(address);
+    while(!reconfigure_fpgaMultibootComplete());
+
+    _delay_ms(25);
 }
 
 void elasticnode_reconfigure_interruptSR(void) {
@@ -137,6 +144,7 @@ uint32_t elasticnode_getLoadedConfigurationAddress(void) {
 }
 
 uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void) {
+    _delay_ms(25);
     return reconfigure_fpgaMultibootComplete();
 }
 // --------- RECONFIGURE_MULTIBOOT_AVR> ---------

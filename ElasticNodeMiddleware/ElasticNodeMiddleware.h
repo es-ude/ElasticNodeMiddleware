@@ -3,8 +3,6 @@
 
 #include <stddef.h>
 
-#include "src/xmem/xmem.h"
-
 #ifndef TEST
 
 #include <util/delay.h>
@@ -40,14 +38,17 @@ void elasticnode_led_mcu_turnOffAll(void);
 // --------- LED> ---------
 
 // --------- <XMEM ---------
+uint16_t elasticnode_xmem_offset(void);
+
 void elasticnode_enableFpgaInterface(void);
 
 void elasticnode_disableFpgaInterface(void);
-
 // --------- XMEM> ---------
 
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
 void elasticnode_configureFPGA(uint32_t address);
+
+void elasticnode_configureFPGA_wait_for_finish(uint32_t address);
 
 void elasticnode_reconfigure_interruptSR(void);
 

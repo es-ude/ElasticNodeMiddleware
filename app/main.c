@@ -6,13 +6,14 @@
 #include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 
 #ifdef DEBUG
+/// Needed for the custom led commands using the example bitfiles ///
 uint8_t *data;
-volatile uint8_t *addr_led = (uint8_t *) (XMEM_OFFSET + 0x03);
+volatile uint8_t *addr_led;
+/// Needed for the custom led commands using the example bitfiles ///
 #endif
 
 // These are potential ISRs, programmers can uncomment to have custom interrupt
 // handling on receiving and sending via UART.
-//#define UART
 #ifdef UART
 ISR(USART1_RX_vect) {
         elasticnode_uart_ISR_Receive();
@@ -36,21 +37,26 @@ int main(void) {
 #ifdef DEBUG
     elasticnode_debugInit(NULL);
     elasticnode_control_setUserHandle(&handleCharInput);
+    // Needed for the custom led commands using the example bitfiles
+    addr_led = (uint8_t *) (elasticnode_xmem_offset() + 0x03);
+
     // TODO: Does not work in some enviroments
     //elasticnode_debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
 #endif
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
-    elasticnode_led_mcu_turnOn(0); // Gives everything time to initialise properly.
-    _delay_ms(3000);
-    elasticnode_led_mcu_turnOff(0);
+    elasticnode_led_mcu_turnOn(1);
+    elasticnode_led_mcu_turnOn(0);
+    _delay_ms(3000); // Gives everything time to initialise properly.
+    elasticnode_led_mcu_turnOff(1);
     elasticnode_fpgaPowerOn();
     _delay_ms(1500);
-    elasticnode_configureFPGA(0x0); // Configures to address 0x0 at start up
+    elasticnode_configureFPGA_wait_for_finish(0x0); // Configures to address 0x0 at start up
+    elasticnode_led_mcu_turnOff(0);
 
     while (true) {
-        //TODO: your implementation goes here
 
+        //TODO: your implementation goes shere
 
 #ifdef DEBUG
         // have after each cycle a moment to see if we have a user interaction
@@ -71,11 +77,13 @@ int main(void) {
 
 #ifdef DEBUG
 void handleCharInput(uint8_t currentData) {
-    //TODO: Please fill this with custom command handling where necessary
+    // TODO: Please fill this with custom command handling where necessary
     switch (currentData) {
         case 't':
             elasticnode_debugWriteString("\nuser mode test. You are a cool dev!\r\n");
             break;
+
+        /// Custom led commands for the example bitfiles ///
         case 'L':
             elasticnode_enableFpgaInterface();
             *(addr_led) = (uint8_t) (0xff);
@@ -92,17 +100,23 @@ void handleCharInput(uint8_t currentData) {
             elasticnode_debugWriteHex8(*data);
             elasticnode_debugWriteLine("\r\n");
             break;
+        /// Custom led commands for the example bitfiles ///
+
+        /// Manually change the configuration of the FPGA ///
         case 'r':
-            elasticnode_configureFPGA(0x0);
+            elasticnode_configureFPGA_wait_for_finish(0x0);
             elasticnode_debugWriteLine("reconfigured FPGA to 0x0");
             break;
         case 'R':
             elasticnode_configureFPGA(0x90000);
+            // check if reconfigure is complete manually
+            while(!elasticnode_reconfigure_fpgaMultibootComplete());
             elasticnode_debugWriteLine("reconfigured FPGA to 0x90000");
             break;
         default:
             elasticnode_debugWriteString("unknown mode command received\r\n");
             break;
+        /// Manually change the configuration of the FPGA ///
     }
 #ifndef UART
     elasticnode_debugTask();

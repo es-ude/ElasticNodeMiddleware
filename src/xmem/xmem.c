@@ -17,6 +17,10 @@ void xmem_initXmem(void) {
 }
 */
 
+uint16_t xmem_offset(void) {
+    return (uint16_t) XMEM_OFFSET;
+}
+
 void xmem_enableXmem(void) {
 
     //spi disable

@@ -6,10 +6,9 @@
 
 #define UART_SENDING_BUFFER 128
 
-// #define baud 9600 // 250000
 #ifndef BAUD
 // TODO: Baud rate?
-#define BAUD 9600
+#define BAUD 38400
 #endif
 #define UART_2X 1
 
