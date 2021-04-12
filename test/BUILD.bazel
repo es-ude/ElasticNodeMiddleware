@@ -256,23 +256,6 @@ mock(
 )
 
 cc_library(
-    name = "reconfigure_multiboot_internal_avrHdr",
-    hdrs = [
-        "//src:reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
-    ],
-)
-mock(
-    name = "mock_reconfigure_internal_multiboot_avr",
-    srcs = [
-        "//src:reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
-    ],
-    copts = ["-DTEST"],
-    deps = [
-        "reconfigure_multiboot_internal_avrHdr",
-    ],
-)
-
-cc_library(
     name = "SpiHdr",
     hdrs = [
         "//src:spi/spi.h",
@@ -540,18 +523,8 @@ unity_test(
         "mock_Bitmanipulation",
         "mock_Xmem",
         "mock_InterruptManager",
-        "mock_reconfigure_internal_multiboot_avr",
         "mock_elasticNodeMiddleware_internal",
         "//src:Reconfigure_multiboot_avrTest",
-    ],
-)
-
-unity_test(
-    file_name = "reconfigure_multiboot_internal_avr_Test.c",
-    cexception = False,
-    copts = ["-DTEST"],
-    deps = [
-        "//src:Reconfigure_multiboot_internal_avrTest",
     ],
 )
 

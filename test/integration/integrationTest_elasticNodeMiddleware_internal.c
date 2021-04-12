@@ -2,15 +2,16 @@
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "EmbeddedUtilities/BitManipulation.h"
-#include "src/uart/uart.h"
 #include <avr/interrupt.h>
+
+#include "src/debug/debug.h"
+
 //test if Bits are set
 //4th, 5th, 6th and 7th LED on
 int main() {
-    uart_Init(NULL);
+    debugInit(NULL);
     DDRD = 0xff;
-    uart_WriteLine("integration test elasticNodeMiddleware_internal");
-    uart_WaitUntilDone();
+    debugWriteLine("integration test elasticNodeMiddleware_internal");
 
     elasticnode_fpgaPowerOn_internal();
     if (BitManipulation_bitIsSetOnArray(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B) &&
@@ -27,10 +28,10 @@ int main() {
         BitManipulation_bitIsSetOnArray(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B)) {
 
         BitManipulation_setBit(&PORTD, PD4);
-        uart_WriteLine("elasticnode_fpgaPowerOn_internal() successful");
-        uart_WaitUntilDone();
+        debugWriteLine("elasticnode_fpgaPowerOn_internal() successful");
+    } else {
+        debugWriteLine("elasticnode_fpgaPowerOn_internal() NOT successful");
     }
-
 
     elasticnode_fpgaPowerOff_internal();
     if (BitManipulation_bitIsSetOnArray(DDR_FPGA_CCLK, P_FPGA_CCLK) &&
@@ -47,32 +48,28 @@ int main() {
 
         //clearBit PORT_FPGA_PROGRAM_B not important, because after that the Port is set
         BitManipulation_setBit(&PORTD, PD5);
-        uart_WriteLine("elasticnode_fpgaPowerOff_internal() successful");
-        uart_WaitUntilDone();
+        debugWriteLine("elasticnode_fpgaPowerOff_internal() successful");
+    } else {
+        debugWriteLine("elasticnode_fpgaPowerOff_internal() NOT successful");
     }
 
     elasticnode_setFpgaHardReset_internal();
-    if(BitManipulation_bitIsSetOnArray(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B) &&
-    !BitManipulation_bitIsSetOnArray(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B)) {
+    if (BitManipulation_bitIsSetOnArray(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B) &&
+        !BitManipulation_bitIsSetOnArray(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B)) {
         BitManipulation_setBit(&PORTD, PD6);
-        uart_WriteLine("elasticnode_setFpgaHardReset_internal() successful");
-        uart_WaitUntilDone();
+        debugWriteLine("elasticnode_setFpgaHardReset_internal() successful");
+    } else {
+        debugWriteLine("elasticnode_setFpgaHardReset_internal() NOT successful");
     }
 
     elasticnode_clearFpgaHardReset_internal();
-    if(BitManipulation_bitIsSetOnArray(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B) &&
-       !BitManipulation_bitIsSetOnArray(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B)) {
+    if (BitManipulation_bitIsSetOnArray(PORT_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B) &&
+        !BitManipulation_bitIsSetOnArray(DDR_FPGA_PROGRAM_B, P_FPGA_PROGRAM_B)) {
         BitManipulation_setBit(&PORTD, PD7);
-        uart_WriteLine("elasticnode_clearFpgaHardReset_internal() successful");
-        uart_WaitUntilDone();
+        debugWriteLine("elasticnode_clearFpgaHardReset_internal() successful");
+    } else {
+        debugWriteLine("elasticnode_clearFpgaHardReset_internal() NOT successful");
     }
-}
 
-
-ISR(USART1_RX_vect) {
-        uart_ISR_Receive();
-}
-
-ISR(USART1_TX_vect) {
-        uart_ISR_Transmit();
+    debugWriteLine("integration test elasticNodeMiddleware_internal finished");
 }

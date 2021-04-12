@@ -6,7 +6,7 @@
 
 #include "src/pinDefinition/fpgaPins.h"
 
-#include "src/reconfigure_multiboot_avr/Mockreconfigure_multiboot_internal_avr.h"
+//#include "src/reconfigure_multiboot_avr/Mockreconfigure_multiboot_internal_avr.h"
 #include "src/xmem/Mockxmem.h"
 #include "src/interruptManager/MockinterruptManager.h"
 #include "src/elasticNodeMiddleware/MockelasticNodeMiddleware_internal.h"
@@ -44,8 +44,8 @@ void test_reconfigure_fpgaMultiboot(void) {
     //xmem mock with test flag!
     xmem_enableXmem_Expect();
 
-    reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
-    reconfigure_fpgaMultibootClearComplete_internal_Expect();
+    //reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
+    //reconfigure_fpgaMultibootClearComplete_internal_Expect();
 
     xmem_disableXmem_Expect();
 
@@ -56,19 +56,15 @@ void test_reconfigure_fpgaMultiboot(void) {
     writeMultiboot(address);
 }
 
-
 void test_getMultibootAddress(void) {
     uint32_t address = (uint32_t) (*(AddressMultiboot) + *(AddressMultiboot + 1) + *(AddressMultiboot + 2));
     TEST_ASSERT_EQUAL_UINT32(address, reconfigure_getMultibootAddress());
 }
 
-
 void test_reconfigure_fpgaMultibootComplete(void) {
-    //random number?
-    reconfigure_fpgaMultibootComplete_internal_ExpectAndReturn(0);
-    reconfigure_fpgaMultibootComplete();
+    //reconfigure_fpgaMultibootComplete_internal_ExpectAndReturn(0);
+    TEST_ASSERT_EQUAL(((*PIN_FPGA_DONE & (1 << P_FPGA_DONE)) != 0), reconfigure_fpgaMultibootComplete());
 }
-
 
 void test_interruptSR_case1(void) {
     initalise_reconfigure_multiboot_mockRegister();
@@ -76,7 +72,7 @@ void test_interruptSR_case1(void) {
     //make if condition successful
     *(PIN_FPGA_DONE) |= (1 << P_FPGA_DONE);
 
-    reconfigure_fpgaSetDoneReponse_internal_Expect(1);
+    //reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     //BEFORE: fpgaDoneResponse = FPGA_DONE_NOTHING
     fpgaDoneResponse = FPGA_DONE_PRINT;
@@ -92,7 +88,7 @@ void test_interruptSR_case2(void) {
     //make if condition successful
     *(PIN_FPGA_DONE) |= (1 << P_FPGA_DONE);
 
-    reconfigure_fpgaSetDoneReponse_internal_Expect(1);
+    //reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_MULTIBOOT;
 
@@ -105,8 +101,8 @@ void test_interruptSR_case2(void) {
     elasticnode_fpgaPowerOn_internal_Expect();
     //xmem mock with test flag!
     xmem_enableXmem_Expect();
-    reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
-    reconfigure_fpgaMultibootClearComplete_internal_Expect();
+    //reconfigure_fpgaSetDoneReponse_internal_Expect(FPGA_DONE_PRINT);
+    //reconfigure_fpgaMultibootClearComplete_internal_Expect();
     xmem_disableXmem_Expect();
     interruptManager_setInterrupt_Expect();
     //till here
@@ -124,7 +120,7 @@ void test_interruptSR_case3(void) {
     //make if condition successful
     *(PIN_FPGA_DONE) |= (1 << P_FPGA_DONE);
 
-    reconfigure_fpgaSetDoneReponse_internal_Expect(1);
+    //reconfigure_fpgaSetDoneReponse_internal_Expect(1);
 
     fpgaDoneResponse = FPGA_DONE_NOTHING;
     interruptManager_setInterrupt_Expect();

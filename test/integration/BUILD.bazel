@@ -1,78 +1,71 @@
-#load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries", "default_embedded_binary")
-#load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
-#
-#default_embedded_binary(
-#    name = "test_xmem",
-#    srcs = ["integrationTest_xmem.c"],
-#    copts = cpu_frequency_flag(),
-#    uploader = "@AvrToolchain//:avrdude_upload_script",
-#    deps = [
-#        "//:UartLib",
-#        "//:XMemLib",
-#        "//app/setup:Setup",
-#    ],
-#)
-#
-#default_embedded_binary(
-#    name = "test_elasticNodeMiddleware_internal",
-#    srcs = ["integrationTest_elasticNodeMiddleware_internal.c"],
-#    copts = cpu_frequency_flag(),
-#    uploader = "@AvrToolchain//:avrdude_upload_script",
-#    deps = [
-#        "//:ElasticNodeMiddlewareLib",
-#        "//:UartLib",
-#        "//app/setup:Setup",
-#    ],
-#)
-#
-#default_embedded_binary(
-#    name = "test_elasticNodeMiddleware",
-#    srcs = ["integrationTest_elasticNodeMiddleware.c"],
-#    copts = cpu_frequency_flag(),
-#    uploader = "@AvrToolchain//:avrdude_upload_script",
-#    deps = [
-#        "//:ElasticNodeMiddlewareLib",
-#        "//:Reconfigure_multibootLib",
-#        "//:UartLib",
-#        "//app/setup:Setup",
-#    ],
-#)
-#
-#default_embedded_binary(
-#    name = "test_reconfigure_multiboot_avr",
-#    srcs = ["integrationTest_reconfigure_multiboot_avr.c"],
-#    copts = cpu_frequency_flag(),
-#    uploader = "@AvrToolchain//:avrdude_upload_script",
-#    deps = [
-#        "//:ElasticNodeMiddlewareLib",
-#        "//:Reconfigure_multibootLib",
-#        "//:UartLib",
-#        "//app/setup:Setup",
-#    ],
-#)
-#
-#default_embedded_binary(
-#    name = "test_coldBoot",
-#    srcs = ["integrationTest_coldBoot.c"],
-#    copts = cpu_frequency_flag(),
-#    uploader = "@AvrToolchain//:avrdude_upload_script",
-#    deps = [
-#        "//:ElasticNodeMiddlewareLib",
-#        "//:Reconfigure_multibootLib",
-#        "//:UartLib",
-#        "//app/setup:Setup",
-#    ],
-#)
-#
-#default_embedded_binary(
-#    name = "test_fpgaPowerTest",
-#    srcs = ["integrationTest_fpgaPowerTest.c"],
-#    copts = cpu_frequency_flag(),
-#    uploader = "@AvrToolchain//:avrdude_upload_script",
-#    deps = [
-#        "//:ElasticNodeMiddlewareLib",
-#        "//:Reconfigure_multibootLib",
-#        "//:UartLib",
-#        "//app/setup:Setup",
-#    ],
-#)
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries", "default_embedded_binary")
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+default_embedded_binary(
+    name = "test_xmem",
+    srcs = ["integrationTest_xmem.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//src:DebugLUFALib",
+        "//src:XmemLib",
+    ],
+)
+
+default_embedded_binary(
+    name = "test_elasticNodeMiddleware_internal",
+    srcs = ["integrationTest_elasticNodeMiddleware_internal.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareLib",
+        "//src:DebugLUFALib",
+    ],
+)
+
+default_embedded_binary(
+    name = "test_elasticNodeMiddleware",
+    srcs = ["integrationTest_elasticNodeMiddleware.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareLib",
+        "//src:Reconfigure_multiboot_avrLib",
+        "//src:DebugLUFALib",
+    ],
+)
+
+default_embedded_binary(
+    name = "test_reconfigure_multiboot_avr",
+    srcs = ["integrationTest_reconfigure_multiboot_avr.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//src:Reconfigure_multiboot_avrLib",
+        "//src:DebugLUFALib",
+    ],
+)
+
+default_embedded_binary(
+    name = "test_coldBoot",
+    srcs = ["integrationTest_coldBoot.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareLib",
+        "//src:Reconfigure_multiboot_avrLib",
+        "//src:DebugLUFALib",
+    ],
+)
+
+default_embedded_binary(
+    name = "test_fpgaPowerTest",
+    srcs = ["integrationTest_fpgaPowerTest.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//src:ElasticNodeMiddlewareInternalLib",
+        "//src:Reconfigure_multiboot_avrLib",
+        "//src:DebugLUFALib",
+    ],
+)

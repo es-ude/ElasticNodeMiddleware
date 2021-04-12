@@ -186,6 +186,16 @@ void test_elasticnode_configureFPGA(void) {
     elasticnode_configureFPGA(address);
 }
 
+void test_elasticnode_configureFPGA_wait_for_finish(void) {
+    uint32_t address = 123;
+    reconfigure_fpgaMultiboot_Expect(address);
+    reconfigure_fpgaMultibootComplete_ExpectAndReturn(0);
+    reconfigure_fpgaMultibootComplete_ExpectAndReturn(1);
+    _delay_ms_Expect(10);
+
+    elasticnode_configureFPGA_wait_for_finish(address);
+}
+
 void test_elasticnode_reconfigure_interruptSR(void) {
     reconfigure_interruptSR_Expect();
     elasticnode_reconfigure_interruptSR();
@@ -199,6 +209,7 @@ void test_elasticnode_getLoadedConfigurationAddress(void) {
 
 void test_elasticnode_reconfigure_fpgaMultibootComplete(void) {
     uint32_t complete = 0;
+    _delay_ms_Expect(10);
     reconfigure_fpgaMultibootComplete_ExpectAndReturn(complete);
     TEST_ASSERT_EQUAL(elasticnode_reconfigure_fpgaMultibootComplete(), complete);
 }

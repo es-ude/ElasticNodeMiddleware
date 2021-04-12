@@ -86,22 +86,16 @@ See Debug section in the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md#Debug
 
 ## Tests
 
-We wrote some tests for checking the functionalities of our code. 
-If you want to run a test of the code (here for example the xmem_Test), you have to run:
+Unit test for all components and integration tests for some are available
+
+A Unit tests can be run (here for example the xmem_Test):
 
     $ bazel test test:xmem_Test
 
-If you want to run all tests:
+For running all unit tests:
 
     $ bazel test test:all
     
-If you want to run the integration test you have to use the build and uploads commands as written above.
-For example for building the integration test for xmem:
+For running the integration test, they need to be uploaded and than checked using screen:
 
-    $ bazel build //test/integration:test_xmem --platforms=@AvrToolchain//platforms:ElasticNode_v4 
-
-and for uploading this integration test
-
-    $ bazel run //test/integration:_test_xmemUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
-
-The structure of these commands is the same like explained above. 
+    $ bazel run //test/integration:test_elasticNodeMiddleware_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
