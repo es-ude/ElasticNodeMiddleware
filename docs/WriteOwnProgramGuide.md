@@ -117,7 +117,7 @@ A UART example similar to the LUFA example is provided, you can upload it with
 
 For using UART in the [main.c](../app/main.c) the build target in the [BUILD.bazel](../app/BUILD.bazel) needs to be changed from 
 "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUGLib" to "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUG_UARTLib". 
-Also the both interrupts at the beginning of the file needs to be included.
+Also the both interrupts at the beginning of the file needs to be included, this can be done defining UART with " ["-DUART"] " as with DEBUG.
 
 #### Debug commands
 
@@ -144,6 +144,8 @@ If a example bitfile is one of your uploaded bitfiles and you selected the corre
 - default: unknown mode command received
 
 ## Upload your own bitfiles
+
+***Importent:*** Uploading the bitfiles via UART is currently not supported.
 
 Whenever you want to flash bitfiles, upload the main.c with the DEBUG Flag set as explained above.
   
