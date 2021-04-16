@@ -40,8 +40,7 @@ int main(void) {
     // Needed for the custom led commands using the example bitfiles
     addr_led = (uint8_t *) (elasticnode_xmem_offset() + 0x03);
 
-    // TODO: Does not work in some enviroments
-    //elasticnode_debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
+    elasticnode_debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
 #endif
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
@@ -51,10 +50,9 @@ int main(void) {
     elasticnode_led_mcu_turnOff(1);
     elasticnode_xmem_initXmem();
     elasticnode_fpgaPowerOn();
-    //while(!elasticnode_reconfigure_fpgaMultibootComplete());
     _delay_ms(1500);
     // Configures to address 0x0 at start up
-    if (!elasticnode_configureFPGA_wait_for_finish(0x0)){
+    if (!elasticnode_configureFPGA_wait_for_finish(0x0)) {
 #ifdef DEBUG
         elasticnode_debugWriteLine("init configuration of FPGA failed!");
 #endif
