@@ -38,6 +38,8 @@ void elasticnode_led_mcu_turnOffAll(void);
 // --------- LED> ---------
 
 // --------- <XMEM ---------
+void elasticnode_xmem_initXmem(void);
+
 uint16_t elasticnode_xmem_offset(void);
 
 void elasticnode_enableFpgaInterface(void);
@@ -48,7 +50,7 @@ void elasticnode_disableFpgaInterface(void);
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
 void elasticnode_configureFPGA(uint32_t address);
 
-void elasticnode_configureFPGA_wait_for_finish(uint32_t address);
+uint8_t elasticnode_configureFPGA_wait_for_finish(uint32_t address);
 
 void elasticnode_reconfigure_interruptSR(void);
 

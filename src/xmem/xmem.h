@@ -1,7 +1,7 @@
 #ifndef ELASTICNODEMIDDLEWARE_XMEM_H
 #define ELASTICNODEMIDDLEWARE_XMEM_H
 
-//void xmem_initXmem(void);
+void xmem_initXmem(void);
 
 uint16_t xmem_offset(void);
 

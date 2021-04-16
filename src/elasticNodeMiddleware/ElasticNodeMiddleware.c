@@ -110,6 +110,10 @@ void elasticnode_led_mcu_turnOffAll(void) {
 // --------- LED> ---------
 
 // --------- <XMEM ---------
+void elasticnode_xmem_initXmem(void) {
+    xmem_initXmem();
+}
+
 uint16_t elasticnode_xmem_offset(void) {
     return xmem_offset();
 }
@@ -128,11 +132,33 @@ void elasticnode_configureFPGA(uint32_t address) {
     reconfigure_fpgaMultiboot(address);
 }
 
-void elasticnode_configureFPGA_wait_for_finish(uint32_t address) {
+uint8_t elasticnode_configureFPGA_wait_for_finish(uint32_t address) {
+    elasticnode_fpgaPowerOn_internal();
+    uint16_t count = 0;
+    while (!reconfigure_fpgaMultibootComplete()) {
+        if (count > 300) {
+            break;
+        }
+        count++;
+        _delay_ms(10);
+    }
     reconfigure_fpgaMultiboot(address);
-    while(!reconfigure_fpgaMultibootComplete());
+    count = 0;
+    while (!reconfigure_fpgaMultibootComplete()) {
+        if (count > 300) {
+#ifdef DEBUG
+            debugWriteString("Something went wrong with configurating the FGPA to ");
+            debugWriteHex32(address);
+            debugWriteLine("!");
+#endif
+            return 0;
+        }
+        count++;
+        _delay_ms(10);
+    }
 
-    _delay_ms(25);
+    _delay_ms(10);
+    return 1;
 }
 
 void elasticnode_reconfigure_interruptSR(void) {
@@ -144,8 +170,9 @@ uint32_t elasticnode_getLoadedConfigurationAddress(void) {
 }
 
 uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void) {
-    _delay_ms(25);
-    return reconfigure_fpgaMultibootComplete();
+    uint8_t rec = reconfigure_fpgaMultibootComplete();
+    _delay_ms(10);
+    return rec;
 }
 // --------- RECONFIGURE_MULTIBOOT_AVR> ---------
 

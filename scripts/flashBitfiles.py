@@ -199,26 +199,31 @@ class SerialTest:
 
             self.ser.timeout = 2.5  # * 10
 
-            expectedResponse = 'x'
-            while ord(response) != ord(expectedResponse):
-                self.ser.reset_input_buffer()
 
-                expectedResponse = chr(ord(request) + 1)
-                self.ser.write(request.encode())
-                response = self.ser.read(1)
+            while self.ser.in_waiting:
+                print("Wait", self.ser.read(1))
+            self.ser.reset_input_buffer()
 
-                if len(response) > 0:
-                    # print('request:', ord(request), 'response:', ord(response), 'expected:', ord(expectedResponse))
-                    continue
-                else:
-                    print('nothing received')
-                    response = 'x'
+            for _ in range(5):
+                expectedResponse = 'x'
+                while ord(response) != ord(expectedResponse):
+                    self.ser.reset_input_buffer()
 
-                # set up next request:
-                request = expectedResponse
-                if ord(request) > ord('9'): request = '0'
-            # self.ser.reset_input_buffer()
-            # self.ser.timeout = None
+                    expectedResponse = chr(ord(request) + 1)
+                    self.ser.write(request.encode())
+                    response = self.ser.read(1)
+
+                    if len(response) > 0:
+                        #print('request:', ord(request), 'response:', ord(response), 'expected:', ord(expectedResponse))
+                        pass
+                    else:
+                        print('nothing received')
+                        response = 'x'
+
+                    # set up next request:
+                    request = expectedResponse
+                    if ord(request) > ord('9'):
+                        request = '0'
 
             print('Serial available')
         except KeyboardInterrupt:

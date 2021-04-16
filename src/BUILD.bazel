@@ -46,10 +46,12 @@ cc_library(
     hdrs = [
         "xmem/xmem.h",
     ],
+    copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
     deps = [
         "//:BitmanipulationLib",
         "//src:RegisterDefinitionLibHdr",
+        "//src:DelayLibHdr",
     ],
 )
 
