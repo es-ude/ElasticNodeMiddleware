@@ -13,6 +13,15 @@ cc_library(
 ### <Libraries ###
 
 cc_library(
+    name = "ElasticNodeMiddlewareLibHdr",
+    hdrs = [
+        "ElasticNodeMiddleware/ElasticNodeMiddleware.h",
+        "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
     name = "ElasticNodeMiddlewareLib",
     srcs = [
         "//src:elasticNodeMiddleware/ElasticNodeMiddleware.c",
