@@ -1,31 +1,25 @@
 #include "src/configuration/configuration.h"
+#include "src/configuration/configuration_internal.h"
 
-#include "src/debug/debug.h"
 #include "src/flash/flash.h"
 #include "src/interruptManager/interruptManager.h"
-#include "src/led/led_mcu.h"
 #include "src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"
 
-#define BUFFER_SIZE 256
+#include <math.h>
+
+#if defined TEST
+
+#include <stdlib.h>
+
+#else
+
+#include "src/led/led_mcu.h"
+#include "src/debug/debug.h"
+
+#endif
+
 uint32_t configAddress, configSize, configRemaining;
 uint8_t *buffer;
-
-void readData(uint8_t *buffer, uint16_t num);
-
-void readValue(uint32_t *destination) {
-    readData((uint8_t *) destination, sizeof(uint32_t));
-
-    debugWriteStringLength((char *) destination, sizeof(uint32_t));
-}
-
-
-void readData(uint8_t *buffer, uint16_t num) {
-    uint8_t *ptr = buffer;
-    for (uint16_t i = 0; i < num; i++) {
-        *ptr++ = (uint8_t) debugReadCharBlock();
-    }
-
-}
 
 void configurationUartFlash(void) {
 
@@ -35,9 +29,9 @@ void configurationUartFlash(void) {
 //    led_mcu_turnOn(3);
 
     // getting address
-    readValue(&configAddress);
+    readValue_internal(&configAddress);
     // getting size
-    readValue(&configSize);
+    readValue_internal(&configSize);
 
     buffer = (uint8_t *) malloc(BUFFER_SIZE);
 
@@ -46,50 +40,51 @@ void configurationUartFlash(void) {
     uint16_t blockSize = BUFFER_SIZE;
 
 //    led_mcu_turnOn(2);
-
+#ifndef TEST
     debugWriteString("Erasing flash... ");
-    uint16_t numBlocks4K = ceil((float) (configSize) / 0x1000);
+#endif
+    uint16_t numBlocks4K = ceilf((float) (configSize) / 0x1000);
+    //uint16_t numBlocks4K = ceil((float) (configSize) / 0x1000);
+#ifndef TEST
     debugWriteDec16(numBlocks4K);
     debugWriteString(" ");
     debugWriteDec32(configSize);
     debugNewLine();
+#endif
     uint32_t blockAddress;
     for (uint16_t blockCounter = 0; blockCounter < numBlocks4K; blockCounter++) {
         blockAddress = configAddress + ((uint32_t) blockCounter) * 0x1000;
         eraseSectorFlash(blockAddress, 1);
     }
 
-
-//    led_mcu_turnOff(2);
-//    led_mcu_turnOff(3);
     uint32_t currentAddress = configAddress;
     configRemaining = configSize;
-
+#ifndef TEST
     debugReady();
+#endif
     while (configRemaining > 0) {
         if (configRemaining < BUFFER_SIZE) {
             blockSize = configRemaining;
         }
-//        led_mcu_turnOn(1);
-        readData(buffer, blockSize);
+        readData_internal(buffer, blockSize);
+#ifndef TEST
         led_mcu_turnOn(0);
-
+#endif
         writeDataFlash(currentAddress, buffer, blockSize, 1);
+#ifndef TEST
         debugAck(buffer[blockSize - 1]);
-//
-//        led_mcu_turnOff(0);
-//        led_mcu_turnOff(1);
-
+#endif
         currentAddress += blockSize;
         configRemaining -= blockSize;
 
-
+#ifndef TEST
         debugDone();
+#endif
     }
     free(buffer);
-
+#ifndef TEST
     debugDone();
-
+#endif
     interruptManager_setInterrupt();
 }
 
@@ -100,23 +95,27 @@ void verifyConfigurationFlash(uint8_t mcuFlash) {
     elasticnode_clearFpgaHardReset_internal();
     flashEnableInterface();
 
+#ifndef TEST
     led_mcu_turnOn(0);
-    readValue(&configAddress);  // getting address
+#endif
+    readValue_internal(&configAddress);  // getting address
+#ifndef TEST
     led_mcu_turnOn(1);
-    readValue(&configSize);     // getting size
+#endif
+    readValue_internal(&configSize);     // getting size
+#ifndef TEST
     led_mcu_turnOff(0);
     led_mcu_turnOff(1);
-
     led_mcu_turnOn(2);
+#endif
     buffer = readDataFlash(configAddress, configSize, mcuFlash, NULL, NULL);
+#ifndef TEST
     led_mcu_turnOn(3);
     debugWriteStringLength(buffer, configSize);
     led_mcu_turnOff(3);
     led_mcu_turnOff(2);
-
     debugReady();
     debugDone();
-
-
+#endif
     interruptManager_setInterrupt();
 }

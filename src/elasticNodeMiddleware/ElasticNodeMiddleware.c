@@ -1,5 +1,3 @@
-#include <util/delay.h>
-
 #include "EmbeddedUtilities/BitManipulation.h"
 
 #include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
@@ -9,12 +7,19 @@
 #include "src/pinDefinition/fpgaRegisters.h"
 
 #include "src/led/led_mcu.h"
-#include "src/xmem/xmem.h"
 #include "src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"
+
+#include "src/delay/delay.h"
+
+#include "src/xmem/xmem.h"
 
 #ifdef DEBUG
 #include "src/controlmanager/controlmanager.h"
 #include "src/debug/debug.h"
+
+#ifdef UART
+#include "src/uart/uart.h"
+#endif
 #endif
 
 //TODO: Put these magic number offset values to somewhere more meaningful
@@ -22,16 +27,20 @@
 #define USERLOGIC_RESET_VALUE 0x0
 
 // volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
-volatile uint8_t *xmemOffset = (uint8_t * )(XMEM_OFFSET);
-volatile uint8_t *userLogicOffsetAddr = (uint8_t * )(XMEM_USERLOGIC_OFFSET);
+volatile uint8_t *xmemOffset = (uint8_t *) (XMEM_OFFSET);
+volatile uint8_t *userLogicOffsetAddr = (uint8_t *) (XMEM_USERLOGIC_OFFSET);
 
 // --------- <INTERNAL ---------
 void elasticnode_initialise(void) {
     // disable r2f chip for start up
-    DDRE |= 0x40; // wireless_cs low
-    PORTE |= 0x40;
-    DDRB |= 0x20; // wireless_reset low
-    PORTB &= ~0x20;
+    BitManipulation_setBit(DDR_FPGA_POWER_SRAM, 6); // wireless_cs low
+    BitManipulation_setBit(PORT_FPGA_POWER_SRAM, 6);
+    BitManipulation_setBit(DDR_FPGA_POWER_INT, 5); // wireless_reset lows
+    BitManipulation_clearBit(PORT_FPGA_DONE, 5);
+    //DDRE |= 0x40; // wireless_cs low
+    //PORTE |= 0x40;
+    //DDRB |= 0x20; // wireless_reset low
+    //PORTB &= ~0x20;
 
     // initalise fpga
     elasticnode_fpgaPowerOn_internal();
@@ -101,6 +110,10 @@ void elasticnode_led_mcu_turnOffAll(void) {
 // --------- LED> ---------
 
 // --------- <XMEM ---------
+uint16_t elasticnode_xmem_offset(void) {
+    return xmem_offset();
+}
+
 void elasticnode_enableFpgaInterface(void) {
     xmem_enableXmem();
 }
@@ -113,19 +126,25 @@ void elasticnode_disableFpgaInterface(void) {
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
 void elasticnode_configureFPGA(uint32_t address) {
     reconfigure_fpgaMultiboot(address);
-    // TODO: Does not finish
-    //while(!reconfigure_fpgaMultibootComplete());
+}
+
+void elasticnode_configureFPGA_wait_for_finish(uint32_t address) {
+    reconfigure_fpgaMultiboot(address);
+    while(!reconfigure_fpgaMultibootComplete());
+
+    _delay_ms(25);
 }
 
 void elasticnode_reconfigure_interruptSR(void) {
     reconfigure_interruptSR();
 }
 
-uint32_t elasticnode_getLoadedConfigurationAddress(void){
+uint32_t elasticnode_getLoadedConfigurationAddress(void) {
     return reconfigure_getMultibootAddress();
 }
 
 uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void) {
+    _delay_ms(25);
     return reconfigure_fpgaMultibootComplete();
 }
 // --------- RECONFIGURE_MULTIBOOT_AVR> ---------
@@ -142,21 +161,25 @@ void elasticnode_control_handleChar(uint8_t currentData){
 // --------- CONTROLMANAGER> ---------
 
 // --------- <DEBUG ---------
+#ifdef LUFA
 void  elasticnode_debugTask(void){
     debugTask();
 }
 
 uint16_t  elasticnode_debugNumInputAvailable(void){
-    debugNumInputAvailable();
+    return debugNumInputAvailable();
 }
+#endif
 
 void elasticnode_debugInit(void (*receiveHandler)(uint8_t)){
     debugInit(receiveHandler);
 }
 
+#ifdef UART
 void elasticnode_setDebugReceiveHandler(void (*receiveHandler)(uint8_t)){
     setDebugReceiveHandler(receiveHandler);
 }
+#endif
 
 void elasticnode_debugNewLine(void){
     debugNewLine();
@@ -187,19 +210,21 @@ void elasticnode_debugWriteCharBlock(uint8_t c){
 };
 
 uint8_t elasticnode_debugReadCharAvailable(void){
-    debugReadCharAvailable();
+    return debugReadCharAvailable();
 }
 
+#ifdef UART
 void elasticnode_debugReadCharProcessed(void){
-    debugReadCharProcessed();
+    return debugReadCharProcessed();
 }
+#endif
 
 uint8_t elasticnode_debugReadCharBlock(void){
-    debugReadCharBlock();
+    return debugReadCharBlock();
 }
 
 uint8_t elasticnode_debugGetChar(void){
-    debugGetChar();
+    return debugGetChar();
 }
 
 void elasticnode_debugWriteHex8(uint8_t num){
@@ -262,13 +287,25 @@ void elasticnode_debugWaitUntilDone(void){
     debugWaitUntilDone();
 }
 
+#ifdef UART
 uint8_t elasticnode_debugSending(void){
-    debugSending();
+    return debugSending();
 }
+#endif
 
 void elasticnode_debugAck(uint8_t c){
     debugAck(c);
 }
+
+#ifdef UART
+void elasticnode_uart_ISR_Receive(){
+    uart_ISR_Receive();
+}
+
+void elasticnode_uart_ISR_Transmit(){
+    uart_ISR_Transmit();
+}
+#endif
 // --------- DEBUG> ---------
 #endif
 
@@ -295,25 +332,26 @@ void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, u
     }
 }
 
-//void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data) {
-//    *(ptr_xmem_offset + address) = data;
-//}
-//void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data) {
-//    uint8_t *targetAddress = ptr_xmem_offset + address;
-//    for (uint8_t k = 0; k < size; k++) {
-//        *(targetAddress + k) = *(ptr_data + k);
-//    }
-//}
-//
-//uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address) {
-//    return *(ptr_xmem_offset + address);
-//}
-//
-//void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return) {
-//    ptr_xmem_offset = ptr_xmem_offset + address;
-//    for (uint8_t i = 0; i < size; i++) {
-//        *(ptr_return + i) = *(ptr_xmem_offset + i);
-//    }
-//}
+void elasticnode_writeOneByteBlockingFromFpga(uint8_t address, uint8_t data) {
+    *(ptr_xmem_offset + address) = data;
+}
+
+void elasticnode_writeDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_data) {
+    uint8_t *targetAddress = ptr_xmem_offset + address;
+    for (uint8_t k = 0; k < size; k++) {
+        *(targetAddress + k) = *(ptr_data + k);
+    }
+}
+
+uint8_t elasticnode_readOneByteBlockingFromFpga(uint8_t address) {
+    return *(ptr_xmem_offset + address);
+}
+
+void elasticnode_readDataBlockingFromFpga(uint8_t address, uint8_t size, uint8_t *ptr_return) {
+    ptr_xmem_offset = ptr_xmem_offset + address;
+    for (uint8_t i = 0; i < size; i++) {
+        *(ptr_return + i) = *(ptr_xmem_offset + i);
+    }
+}
 
 */

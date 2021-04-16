@@ -1,7 +1,8 @@
 #ifndef ELASTICNODEMIDDLEWARE_CONFIGURATION_H
-#define ELASTICNODEMIDDLEWARE_CONFIGURATION_H
 
 #include <stdint.h>
+
+#define BUFFER_SIZE 256
 
 void configurationUartFlash(void);
 

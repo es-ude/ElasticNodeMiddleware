@@ -10,6 +10,8 @@ cc_library(
 )
 ### extern> ###
 
+### <Libraries ###
+
 cc_library(
     name = "ElasticNodeMiddlewareLibHdr",
     hdrs = [
@@ -31,6 +33,7 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
         "//:BitmanipulationLib",
+        "//src:DelayLibHdr",
         "//src:RegisterDefinitionLibHdr",
         "//src:LedLib",
         "//src:XmemLib",
@@ -47,17 +50,40 @@ cc_library(
     hdrs = [
         "ElasticNodeMiddleware/ElasticNodeMiddleware.h",
     ],
-    copts = cpu_frequency_flag() + ["-DDEBUG"],
+    copts = cpu_frequency_flag() + ["-DDEBUG"] + ["-DLUFA"],
     visibility = ["//visibility:public"],
     deps = [
         "//:BitmanipulationLib",
         "//src:RegisterDefinitionLibHdr",
         "//src:LedLib",
         "//src:XmemLib",
-        "//src:ControlmanagerLib",
+        "//src:ControlmanagerLUFALib",
         "//src:Reconfigure_multiboot_avrLib",
         "//src:ElasticNodeMiddlewareInternalLib",
-        "//src:DebugLufaLib"
+        "//src:DebugLUFALib"
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddlewareDEBUG_UARTLib",
+    srcs = [
+        "//src:elasticNodeMiddleware/ElasticNodeMiddleware.c",
+    ],
+    hdrs = [
+        "ElasticNodeMiddleware/ElasticNodeMiddleware.h",
+    ],
+    copts = cpu_frequency_flag() + ["-DDEBUG"] + ["-DUART"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:RegisterDefinitionLibHdr",
+        "//src:LedLib",
+        "//src:XmemLib",
+        "//src:ControlmanagerUARTLib",
+        "//src:Reconfigure_multiboot_avrLib",
+        "//src:ElasticNodeMiddlewareInternalLib",
+        "//src:DebugUARTLib",
+        "//src:UartLib",
     ],
 )
 
@@ -71,12 +97,26 @@ cc_library(
     ],
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
+    deps = [
+        "//src:InterruptManagerLib",
+        "//:BitmanipulationLib",
+    ]
+)
+
+### Libraries> ###
+exports_files(
+    srcs = [
+        "ElasticNodeMiddleware/ElasticNodeMiddleware.h",
+        "ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 ### <python ###
+
 py_library(
-    name = "serial_test",
-    srcs = ["scripts/serial_test.py"],
+    name = "flashBitfiles",
+    srcs = ["scripts/flashBitfiles.py"],
     visibility = ["//visibility:public"],
     deps = [
         "Configuration",
@@ -88,17 +128,6 @@ py_library(
     srcs = ["scripts/Configuration.py"],
     visibility = ["//visibility:public"],
     deps = [],
-)
-
-py_binary(
-    name = "uploadMultiConfigS15",
-    srcs = ["scripts/uploadMultiConfigS15.py"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "bitfileConfigs",
-        "portConfigs",
-        "serial_test",
-    ],
 )
 
 py_library(
@@ -118,4 +147,20 @@ py_library(
         "Configuration",
     ],
 )
+
+#load("@my_deps//:requirements.bzl", "requirement")
+
+py_binary(
+    name = "uploadBitfiles",
+    srcs = ["scripts/uploadBitfiles.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "bitfileConfigs",
+        "portConfigs",
+        "flashBitfiles",
+#        requirement("serial"),
+#        requirement("numpy"),
+    ],
+)
+
 ### python> ###

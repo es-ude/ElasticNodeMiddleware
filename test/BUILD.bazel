@@ -1,191 +1,605 @@
-#load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for_every_file", "mock", "unity_test")
+load("@EmbeddedSystemsBuildScripts//Unity:unity.bzl", "generate_a_unity_test_for_every_file", "mock", "unity_test")
 
-##generate_a_unity_test_for_every_file(
-##    cexception = False,
-##    file_list = glob(["*_Test.c"]),
-##    deps = [
-##        "//:Library",
-##        "//:HdrOnlyLib",
-##    ],
-##)
+cc_library(
+    name = "BitManipulationHdrForTesting",
+    hdrs = ["header_replacements/EmbeddedUtilities/BitManipulation.h"],
+    strip_include_prefix = "header_replacements",
+    visibility = ["//visibility:public"],
+)
 
-#cc_library(
-#    name = "BitManipulationHdrForTesting",
-#    hdrs = ["header_replacements/EmbeddedUtilities/BitManipulation.h"],
-#    strip_include_prefix = "header_replacements",
-#    visibility = ["//:__pkg__"],
-#)
+cc_library(
+    name = "LufaUsartImplHdrForTesting",
+    hdrs = ["header_replacements/PeripheralInterface/LufaUsartImpl.h"],
+    strip_include_prefix = "header_replacements",
+    visibility = ["//visibility:public"],
+)
 
-#mock(
-#    name = "mock_ElasticNodemiddleware",
-#    srcs = ["//:ElasticNodeMiddleware/ElasticNodeMiddleware.h"],
-#    copts = ["-DTEST"],
-#    deps = ["//:ElasticNodeMiddlewareLibHdr"],
-#)
+### <mocks ###
 
-#mock(
-#    name = "mock_ElasticNodeMiddleware_Internal",
-#    srcs = ["//:src/elasticNodeMiddleware/elasticNodeMiddleware_internal.h"],
-#    copts = ["-DTEST"],
-#    deps = ["//:ElasticNodeMiddlewareLibHdr"],
-#)
+mock(
+    name = "mock_Bitmanipulation",
+    srcs = ["//test:header_replacements/EmbeddedUtilities/BitManipulation.h"],
+    copts = ["-DTEST"],
+    deps = [
+        ":BitManipulationHdrForTesting",
+    ],
+)
 
-#mock(
-#    name = "mock_Reconfigure_Multiboot",
-#    srcs = ["//:src/reconfigure_multiboot_avr/reconfigure_multiboot_avr.h"],
-#    copts = ["-DTEST"],
-#    deps = ["//:Reconfigure_MultibootLibHdr"],
-#)
+mock(
+    name = "mock_LufaUsartImpl",
+    srcs = ["//test:header_replacements/PeripheralInterface/LufaUsartImpl.h"],
+    copts = ["-DTEST"],
+    deps = [
+        ":LufaUsartImplHdrForTesting",
+    ],
+)
 
-#mock(
-#    name = "mock_Reconfigure_Multiboot_Internal",
-#    srcs = ["//:src/reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h"],
-#    copts = ["-DTEST"],
-#   deps = ["//:Reconfigure_MultibootLibHdr"],
-#)
+cc_library(
+    name = "ConfigurationHdr",
+    hdrs = [
+        "//src:configuration/configuration.h",
+    ],
+)
+mock(
+    name = "mock_configuration",
+    srcs = [
+        "//src:configuration/configuration.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "ConfigurationHdr",
+    ],
+)
 
-#mock(
-#    name = "mock_Xmem",
-#    srcs = ["//:src/xmem/xmem.h"],
-#    copts = ["-DTEST"],
-#    deps = ["//:XMemLibHdr"],
-#)
+cc_library(
+    name = "Configuration_internalHdr",
+    hdrs = [
+        "//src:configuration/configuration_internal.h",
+    ],
+)
+mock(
+    name = "mock_configuration_internal",
+    srcs = [
+        "//src:configuration/configuration_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Configuration_internalHdr",
+    ],
+)
 
-#mock(
-#    name = "mock_Bitmanipulation",
-#    srcs = ["//test:header_replacements/EmbeddedUtilities/BitManipulation.h"],
-#    copts = ["-DTEST"],
-#    deps = [":BitManipulationHdrForTesting"],
-#)
+cc_library(
+    name = "ControlmanagerHdr",
+    hdrs = [
+        "//src:controlmanager/controlmanager.h",
+    ],
+)
+mock(
+    name = "mock_controlmanager",
+    srcs = [
+        "//src:controlmanager/controlmanager.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "ControlmanagerHdr",
+    ],
+)
 
-#mock(
-#    name = "mock_InterruptManager",
-#    srcs = ["//:src/interruptManager/interruptManager.h"],
-#    copts = ["-DTEST"],
-#    deps = ["//:Interrupt_ManagerLibHdr"],
-#)
+cc_library(
+    name = "Controlmanager_internalHdr",
+    hdrs = [
+        "//src:controlmanager/controlmanager_internal.h",
+    ],
+)
+mock(
+    name = "mock_controlmanager_internal",
+    srcs = [
+        "//src:controlmanager/controlmanager_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Controlmanager_internalHdr",
+    ],
+)
 
-#mock(
-#    name = "mock_InterruptManager_avr_Mock",
-#    srcs = ["//:src/interruptManager/interruptManager_avr_Mock.h"],
-#    copts = ["-DTEST"],
-#    deps = ["//:Interrupt_ManagerLibHdr"],
-#)
+cc_library(
+    name = "DebugHdr",
+    hdrs = [
+        "//src:debug/debug.h",
+    ],
+)
+mock(
+    name = "mock_debug",
+    srcs = [
+        "//src:debug/debug.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "DebugHdr",
+    ],
+)
 
-#mock(
-#    name = "mock_circularBuffer",
-#    srcs = ["//:src/uart/circularBuffer/circularBuffer.h"],
-#    copts = ["-DTEST"],
-#    deps = ["//:CircularBufferLibHdr"],
-#)
+cc_library(
+    name = "DelayHdr",
+    hdrs = [
+        "//src:delay/delay.h",
+    ],
+)
+mock(
+    name = "mock_delay",
+    srcs = [
+        "//src:delay/delay.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "DelayHdr",
+    ],
+)
 
-#mock(
-#    name = "mock_Uart_internal",
-#    srcs = ["//:src/uart/uart_internal.h"],
-#    copts = ["-DTEST"],
-#    deps = ["//:UartLibHdr"],
-#)
+cc_library(
+    name = "elasticNodeMiddleware_internalHdr",
+    hdrs = [
+        "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+)
+mock(
+    name = "mock_elasticNodeMiddleware_internal",
+    srcs = [
+        "//src:elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "elasticNodeMiddleware_internalHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "elasticNodeMiddleware_Test.c",
-#    deps = [
-#        "mock_Bitmanipulation",
-#        "mock_ElasticNodeMiddleware_Internal",
-#        "mock_Reconfigure_Multiboot",
-#        "mock_Xmem",
-#        "//:ElasticNodeMiddlewareLibTest",
-#    ],
-#)
+cc_library(
+    name = "FlashHdr",
+    hdrs = [
+        "//src:flash/flash.h",
+    ],
+)
+mock(
+    name = "mock_flash",
+    srcs = [
+        "//src:flash/flash.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "FlashHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "elasticNodeMiddleware_internal_Test.c",
-#    deps = [
-#        "mock_Bitmanipulation",
-#        "//:ElasticNodeMiddlewareLibTest",
-#    ],
-#)
+cc_library(
+    name = "Flash_internalHdr",
+    hdrs = [
+        "//src:flash/flash_internal.h",
+    ],
+)
+mock(
+    name = "mock_flash_internal",
+    srcs = [
+        "//src:flash/flash_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Flash_internalHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "reconfigure_multiboot_avr_Test.c",
-#    deps = [
-#        "mock_Bitmanipulation",
-#        "mock_ElasticNodemiddleware",
-#        "mock_InterruptManager",
-#        "mock_Reconfigure_Multiboot_Internal",
-#        "mock_Xmem",
-#        "//:Reconfigure_multibootLibTest",
-#    ],
-#)
+cc_library(
+    name = "Interrupt_ManagerHdr",
+    hdrs = [
+        "//src:interruptManager/interruptManager.h",
+    ],
+)
+mock(
+    name = "mock_InterruptManager",
+    srcs = [
+        "//src:interruptManager/interruptManager.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Interrupt_ManagerHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "reconfigure_multiboot_internal_avr_Test.c",
-#    deps = [
-#        "//:Reconfigure_multibootLibTest",
-#    ],
-#)
+cc_library(
+    name = "Interrupt_Manager_avr_MockHdr",
+    hdrs = [
+        "//src:interruptManager/interruptManager_avr_Mock.h"
+    ],
+)
+mock(
+    name = "mock_InterruptManager_avr_Mock",
+    srcs = [
+        "//src:interruptManager/interruptManager_avr_Mock.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Interrupt_Manager_avr_MockHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "uart_internal_Test.c",
-#    deps = [
-#        "mock_InterruptManager",
-#        "mock_circularBuffer",
-#        "//:UartLibTest",
-#    ],
-#)
+cc_library(
+    name = "Led_mcuHdr",
+    hdrs = [
+        "//src:led/led_mcu.h",
+    ],
+)
+mock(
+    name = "mock_led_mcu",
+    srcs = [
+        "//src:led/led_mcu.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Led_mcuHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "interrupt_manager_avr_Test.c",
-#    deps = [
-#        "mock_InterruptManager_avr_Mock",
-#        "//:Interrupt_ManagerLibTest",
-#    ],
-#)
+cc_library(
+    name = "reconfigure_multiboot_avrHdr",
+    hdrs = [
+        "//src:reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+    ],
+)
+mock(
+    name = "mock_reconfigure_multiboot_avr",
+    srcs = [
+        "//src:reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "reconfigure_multiboot_avrHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "circularBuffer_Test.c",
-#    deps = [
-#        "mock_Bitmanipulation",
-#        "mock_InterruptManager",
-#        "//:CircularBufferLibTest",
-#    ],
-#)
+cc_library(
+    name = "SpiHdr",
+    hdrs = [
+        "//src:spi/spi.h",
+    ],
+)
+mock(
+    name = "mock_Spi",
+    srcs = [
+        "//src:spi/spi.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "SpiHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = [
-#        "-DTEST",
-#        "-DF_CPU=8000000UL",
-#        "-DBAUD=9600UL",
-#    ],
-#    file_name = "uart_Test.c",
-#    deps = [
-#        "mock_InterruptManager",
-#        "mock_Uart_internal",
-#        "mock_circularBuffer",
-#        "//:UartLibTest",
-#    ],
-#)
+cc_library(
+    name = "Spi_internalHdr",
+    hdrs = [
+        "//src:spi/spi_internal.h",
+    ],
+)
+mock(
+    name = "mock_Spi_internal",
+    srcs = [
+        "//src:spi/spi_internal.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "Spi_internalHdr",
+    ],
+)
 
-#unity_test(
-#    cexception = False,
-#    copts = ["-DTEST"],
-#    file_name = "xmem_Test.c",
-#    deps = [
-#        "mock_Bitmanipulation",
-#        "//:XMemLibTest",
-#    ],
-#)
+cc_library(
+    name = "CircularBufferHdr",
+    hdrs = [
+        "//src:uart/circularBuffer/circularBuffer.h",
+    ],
+)
+mock(
+    name = "mock_CircularBuffer",
+    srcs = [
+        "//src:uart/circularBuffer/circularBuffer.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "CircularBufferHdr",
+    ],
+)
+
+cc_library(
+    name = "UartHdr",
+    hdrs = [
+        "//src:uart/uart.h",
+    ],
+)
+mock(
+    name = "mock_Uart",
+    srcs = [
+        "//src:uart/uart.h",
+    ],
+    copts = ["-DTEST",],
+    deps = [
+        "UartHdr",
+    ],
+)
+
+cc_library(
+    name = "Uart_internalHdr",
+    hdrs = [
+        "//src:uart/uart_internal.h",
+    ],
+)
+mock(
+    name = "mock_Uart_internal",
+    srcs = [
+        "//src:uart/uart_internal.h",
+    ],
+    copts = ["-DTEST",],
+    deps = [
+        "Uart_internalHdr",
+    ],
+)
+
+cc_library(
+    name = "XmemHdr",
+    hdrs = [
+        "//src:xmem/xmem.h",
+    ],
+)
+mock(
+    name = "mock_Xmem",
+    srcs = [
+        "//src:xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    deps = [
+        "XmemHdr",
+    ],
+)
+
+### mocks> ###
+
+### <tests ###
+
+unity_test(
+    file_name = "configuration_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_flash",
+        "mock_InterruptManager",
+        "mock_led_mcu",
+        "mock_elasticNodeMiddleware_internal",
+        "mock_delay",
+        "mock_configuration_internal",
+        "//src:ConfigurationTest",
+    ],
+)
+
+unity_test(
+    file_name = "configuration_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "//src:Configuration_internalTest",
+    ],
+)
+
+unity_test(
+    file_name = "controlmanager_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_configuration",
+        "mock_debug",
+        "mock_flash",
+        "mock_controlmanager_internal",
+        "//src:ControlmanagerTest",
+    ],
+)
+
+unity_test(
+    file_name = "controlmanager_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Xmem",
+        "//src:Controlmanager_internalTest",
+    ],
+)
+
+unity_test(
+    file_name = "debugUART_Test.c",
+    cexception = False,
+    copts = ["-DTEST"] + ["-DUART"],
+    deps = [
+        "mock_Uart_internal",
+        "mock_Uart",
+        "//src:DebugUARTTest",
+    ],
+)
+
+unity_test(
+    file_name = "debugLUFA_Test.c",
+    cexception = False,
+    copts = ["-DTEST"] + ["-DLUFA"],
+    deps = [
+        "mock_LufaUsartImpl",
+        "mock_delay",
+        "//src:DebugLUFATest",
+    ],
+)
+
+unity_test(
+    file_name = "ElasticNodeMiddleware_Test.c",
+    cexception = False,
+    copts = ["-DTEST"] + ["-DDEBUG"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_elasticNodeMiddleware_internal",
+        "mock_reconfigure_multiboot_avr",
+        "mock_Xmem",
+        "mock_led_mcu",
+        "mock_controlmanager",
+        "mock_debug",
+        "mock_delay",
+        "//src:ElasticNodeMiddlewareTest",
+    ],
+)
+
+unity_test(
+    file_name = "ElasticNodeMiddleware_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "//src:ElasticNodeMiddleware_internalTest",
+    ],
+)
+
+unity_test(
+    file_name = "ElasticNodeMiddlewareMonitoring_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_InterruptManager",
+        "//src:ElasticNodeMiddlewareMonitoringTest",
+    ],
+)
+
+unity_test(
+    file_name = "flash_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_Spi",
+        "mock_Spi_internal",
+        "mock_flash_internal",
+        "//src:FlashTest",
+    ],
+)
+
+unity_test(
+    file_name = "flash_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "mock_Spi",
+        "mock_Spi_internal",
+        "mock_delay",
+        "//src:Flash_internalTest",
+    ],
+)
+
+unity_test(
+    file_name = "interrupt_manager_avr_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_InterruptManager_avr_Mock",
+        "//src:Interrupt_ManagerTest",
+    ],
+)
+
+unity_test(
+    file_name = "led_mcu_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "//src:led_mcuTest",
+    ],
+)
+
+unity_test(
+    file_name = "reconfigure_multiboot_avr_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_delay",
+        "mock_Bitmanipulation",
+        "mock_Xmem",
+        "mock_InterruptManager",
+        "mock_elasticNodeMiddleware_internal",
+        "//src:Reconfigure_multiboot_avrTest",
+    ],
+)
+
+unity_test(
+    file_name = "spi_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_InterruptManager",
+        "mock_Bitmanipulation",
+        "mock_Xmem",
+        "mock_Spi_internal",
+        "//src:SpiTest",
+    ],
+)
+
+unity_test(
+    file_name = "spi_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_InterruptManager",
+        "mock_Bitmanipulation",
+        "//src:Spi_internalTest",
+    ],
+)
+
+unity_test(
+    file_name = "circularBuffer_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_InterruptManager",
+        "//src:CircularBufferTest",
+    ],
+)
+
+unity_test(
+    file_name = "uart_Test.c",
+    cexception = False,
+    copts = [
+        "-DTEST",
+        "-DF_CPU=1UL",
+        "-DBAUD=1UL",
+    ],
+    deps = [
+        "mock_delay",
+        "mock_Bitmanipulation",
+        "mock_InterruptManager",
+        "mock_Uart_internal",
+        "mock_CircularBuffer",
+        "//src:UartTest",
+    ],
+)
+
+unity_test(
+    file_name = "uart_internal_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_delay",
+        "mock_CircularBuffer",
+        "mock_InterruptManager",
+        "//src:Uart_internalTest",
+    ],
+)
+
+unity_test(
+    file_name = "xmem_Test.c",
+    cexception = False,
+    copts = ["-DTEST"],
+    deps = [
+        "mock_Bitmanipulation",
+        "//src:XmemTest",
+    ],
+)
+
+### tests> ###

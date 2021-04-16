@@ -5,6 +5,7 @@ from warnings import warn
 
 MINI_FILE = 0x1000
 
+
 class Configuration:
     filename = None
     address = None
@@ -19,7 +20,6 @@ class Configuration:
         this.destination = dest
         this.special = special
         this.mini = mini
-
 
     # fetch size and skip
     def loadFile(this):
@@ -49,7 +49,6 @@ class Configuration:
                     if len(datasave) > 16:
                         if (np.array(datasave[-16:]) == 255).all(): savedata = False
 
-
                 size += 1
 
         # don't skip if binfile
@@ -71,30 +70,30 @@ class Configuration:
 
         # b
         # print(text[4+lengtha])
-        if data[5+lengtha] != 0:
+        if data[5 + lengtha] != 0:
             print('Bitfile error 3')
             sys.exit(0)
-        lengthb = data[6+lengtha]
+        lengthb = data[6 + lengtha]
 
         # c
         # print(text[7+lengtha+lengthb])
-        if data[8+lengtha+lengthb] != 0:
+        if data[8 + lengtha + lengthb] != 0:
             print('Bitfile error 4')
             sys.exit(0)
-        lengthc = data[9+lengtha+lengthb]
+        lengthc = data[9 + lengtha + lengthb]
 
         # d
         # print(text[10+lengtha+lengthb+lengthc])
-        if data[11+lengtha+lengthb+lengthc] != 0:
+        if data[11 + lengtha + lengthb + lengthc] != 0:
             print('Bitfile error 5')
             sys.exit(0)
-        lengthd = data[12+lengtha+lengthb+lengthc]
+        lengthd = data[12 + lengtha + lengthb + lengthc]
 
         # e
         lengthe = 0
         for i in range(4):
-            lengthe += 256**(3-i) * data[14+lengtha+lengthb+lengthc+lengthd + i]
-        skip = (12+14+lengtha+lengthb+lengthc+lengthd+4)
+            lengthe += 256 ** (3 - i) * data[14 + lengtha + lengthb + lengthc + lengthd + i]
+        skip = (12 + 14 + lengtha + lengthb + lengthc + lengthd + 4)
 
         bit.close()
 
@@ -111,9 +110,3 @@ class Configuration:
             print('got size for', this.filename, lengthe, skip, size)
             this.size = lengthe
             this.skip = skip
-
-
-
-
-
-

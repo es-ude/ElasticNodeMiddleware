@@ -1,3 +1,26 @@
+/*****
+ * Software Half-duplex UART Driver
+ * Henry Chan (hc352 @cornell.edu)
+ * Based on AVR304
+ *
+ * Sample Usage:
+ * RECEIVING
+ * sw_uart_receive_byte();
+ * // Other instructions while receiving
+ * if (sw_uart_state == IDLE) {
+ *    x = sw_uart_rxdata;
+ * }
+ *
+ * TRANSMITTING
+ * sw_uart_send_byte(c);
+ * // Other instructions while transmitting
+ * if (sw_uart_state == IDLE) {
+ *    //Stuff when transmission done
+ * }
+ ****/
+
+#include "EmbeddedUtilities/BitManipulation.h"
+
 #include "src/uart/uart.h"
 
 #include "src/uart/uart_internal.h"
@@ -7,6 +30,7 @@
 #include "src/pinDefinition/fpgaPins.h"
 
 #include "src/interruptManager/interruptManager.h"
+#include "src/delay/delay.h"
 
 circularBuffer sendingBuf;
 
@@ -23,14 +47,22 @@ void uart_WaitUntilDone(void) {
 }
 
 void uart_Init(void (*receiveHandler)(uint8_t)) {
-    UBRR1H = (uint8_t)(my_bdr >> 8);
-    UBRR1L = (uint8_t)(my_bdr);
+    UBRR1H = (uint8_t) (my_bdr >> 8);
+    UBRR1L = (uint8_t) (my_bdr);
 
 #if UART_2X
-    UCSR1A |= (1 << U2X1);
+    BitManipulation_setBit(UART_UCSR1A, U2X1);
+    //UCSR1A |= (1 << U2X1);
 #endif
-    UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << TXCIE1);
-    UCSR1C = (1 << USBS1) | (3 << UCSZ10);
+    BitManipulation_setBit(UART_UCSR1B, RXEN1);
+    BitManipulation_setBit(UART_UCSR1B, TXEN1);
+    BitManipulation_setBit(UART_UCSR1B, RXCIE1);
+    BitManipulation_setBit(UART_UCSR1B, TXCIE1);
+
+    BitManipulation_setBit(UART_UCSR1C, USBS1);
+    BitManipulation_setBit(UART_UCSR1C, UCSZ10);
+    //UCSR1B = (1 << RXEN1) | (1 << TXEN1) | (1 << RXCIE1) | (1 << TXCIE1);
+    //UCSR1C = (1 << USBS1) | (3 << UCSZ10);
 
     uart_setUartReceiveHandler_internal(receiveHandler);
     sendingFlag = 0x0;
@@ -44,16 +76,6 @@ void *uart_getUartReceiveHandler(void) {
 
 uint8_t uart_Sending(void) {
     return sendingFlag;
-}
-
-void uart_NewLine(void) {
-    uart_WriteChar('\r');
-    uart_WriteChar('\n');
-}
-
-void uart_WriteLine(char *s) {
-    uart_WriteString(s);
-    uart_NewLine();
 }
 
 void uart_WriteString(char *s) {
@@ -96,7 +118,6 @@ void uart_ReceiveUint32Blocking(uint32_t *output) {
     interruptManager_setInterrupt();
 }
 
-
 void uart_WriteChar(uint8_t c) {
     if (circularBuffer_Push(&sendingBuf, c)) {
         // check if sending already
@@ -109,6 +130,28 @@ void uart_WriteChar(uint8_t c) {
     }
 }
 
+void uart_ISR_Receive() {
+    interruptManager_clearInterrupt();
+    receivedData = UDR1;
+    if (uartReceiveHandler != NULL) {
+        uartReceiveHandler(receivedData);
+    }
+    interruptManager_setInterrupt();
+}
+
+void uart_ISR_Transmit() {
+    interruptManager_clearInterrupt();
+    // check if more data to send
+    if (circularBuffer_Pop(&sendingBuf, &sendingData)) {
+        // if avail, send it
+        UDR1 = sendingData;
+    } else {
+        sendingFlag = 0x0;
+    }
+    interruptManager_setInterrupt();
+}
+
+/*
 void uart_WriteBin(uint32_t num, uint8_t length) {
     uart_WriteString("0b");
     uint32_t number = num;
@@ -120,6 +163,11 @@ void uart_WriteBin(uint32_t num, uint8_t length) {
             // number >>= 1;
         }
     }
+}
+
+void uart_NewLine(void) {
+    uart_WriteChar('\r');
+    uart_WriteChar('\n');
 }
 
 void uart_WriteBin4(uint8_t num) {
@@ -186,24 +234,4 @@ void uart_WriteFloat(float num) {
 void uart_Ack(uint8_t c) {
     uart_WriteChar(c);
 }
-
-void uart_ISR_Receive() {
-    interruptManager_clearInterrupt();
-    receivedData = UDR1;
-    if (uartReceiveHandler != NULL) {
-        uartReceiveHandler(receivedData);
-    }
-    interruptManager_setInterrupt();
-}
-
-void uart_ISR_Transmit() {
-    interruptManager_clearInterrupt();
-    // check if more data to send
-    if (circularBuffer_Pop(&sendingBuf, &sendingData)) {
-        // if avail, send it
-        UDR1 = sendingData;
-    } else {
-        sendingFlag = 0x0;
-    }
-    interruptManager_setInterrupt();
-}
+ */

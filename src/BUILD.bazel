@@ -1,6 +1,7 @@
 load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
 
 ### <extern ###
+
 cc_library(
     name = "BitmanipulationLib",
     visibility = ["//visibility:public"],
@@ -8,7 +9,10 @@ cc_library(
         "@EmbeddedUtilities//:BitManipulation",
     ],
 )
+
 ### extern> ###
+
+### <Libraries ###
 
 cc_library(
     name = "RegisterDefinitionLibHdr",
@@ -58,6 +62,7 @@ cc_library(
         "interruptManager/interruptManager.h",
         "interruptManager/interruptManager_avr_Mock.h",
     ],
+    visibility = ["//visibility:public"],
 )
 
 cc_library(
@@ -79,9 +84,11 @@ cc_library(
     name = "SpiLib",
     srcs = [
         "spi/spi.c",
+        "spi/spi_internal.c",
     ],
     hdrs = [
         "spi/spi.h",
+        "spi/spi_internal.h",
     ],
     deps = [
         "//:BitmanipulationLib",
@@ -103,21 +110,24 @@ cc_library(
         "uart/circularBuffer/circularBuffer.h",
     ],
     copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
     deps = [
+        "//src:BitmanipulationLib",
+        "//src:DelayLibHdr",
         "//src:InterruptManagerLib",
         "//src:RegisterDefinitionLibHdr",
     ],
 )
 
 cc_library(
-    name = "DebugUartLib",
+    name = "DebugUARTLib",
     srcs = [
         "debug/debug.c"
     ],
     hdrs = [
         "debug/debug.h",
     ],
-    copts = cpu_frequency_flag(),
+    copts = cpu_frequency_flag() + ["-DUART"],
     visibility = ["//visibility:public"],
     deps = [
         "//src:UartLib",
@@ -125,14 +135,14 @@ cc_library(
 )
 
 cc_library(
-    name = "DebugLufaLib",
+    name = "DebugLUFALib",
     srcs = [
-        "debug/debugUsb.c"
+        "debug/debug.c"
     ],
     hdrs = [
         "debug/debug.h",
     ],
-    copts = cpu_frequency_flag(),
+    copts = cpu_frequency_flag() + ["-DLUFA"],
     visibility = ["//visibility:public"],
     deps = [
         "@PeripheralInterface//:LufaUsart",
@@ -140,55 +150,131 @@ cc_library(
 )
 
 cc_library(
-    name = "FlashLib",
+    name = "DelayLibHdr",
+    hdrs = [
+        "delay/delay.h",
+    ],
+    copts = cpu_frequency_flag(),
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "FlashLUFALib",
     srcs = [
         "flash/flash.c",
+        "flash/flash_internal.c",
     ],
     hdrs = [
         "flash/flash.h",
+        "flash/flash_internal.h"
     ],
     copts = cpu_frequency_flag(),
     deps = [
         "//:BitmanipulationLib",
+        "//src:DelayLibHdr",
         "//src:SpiLib",
-        "//src:DebugLufaLib",
+        "//src:DebugLUFALib",
         "//src:RegisterDefinitionLibHdr",
     ],
 )
 
 cc_library(
-    name = "ConfigurationLib",
+    name = "FlashUARTLib",
+    srcs = [
+        "flash/flash.c",
+        "flash/flash_internal.c",
+    ],
+    hdrs = [
+        "flash/flash.h",
+        "flash/flash_internal.h"
+    ],
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//:BitmanipulationLib",
+        "//src:DelayLibHdr",
+        "//src:SpiLib",
+        "//src:DebugUARTLib",
+        "//src:RegisterDefinitionLibHdr",
+    ],
+)
+
+cc_library(
+    name = "ConfigurationLUFALib",
     srcs = [
         "configuration/configuration.c",
+        "configuration/configuration_internal.c",
     ],
     hdrs = [
         "configuration/configuration.h",
+        "configuration/configuration_internal.h",
     ],
     copts = cpu_frequency_flag(),
     deps = [
         "//src:LedLib",
-        "//src:DebugLufaLib",
-        "//src:FlashLib",
+        "//src:DebugLUFALib",
+        "//src:FlashLUFALib",
         "//src:InterruptManagerLib",
         "//src:ElasticNodeMiddlewareInternalLib",
     ],
 )
 
 cc_library(
-    name = "ControlmanagerLib",
+    name = "ConfigurationUARTLib",
+    srcs = [
+        "configuration/configuration.c",
+        "configuration/configuration_internal.c",
+    ],
+    hdrs = [
+        "configuration/configuration.h",
+        "configuration/configuration_internal.h",
+    ],
+    copts = cpu_frequency_flag(),
+    deps = [
+        "//src:LedLib",
+        "//src:DebugUARTLib",
+        "//src:FlashUARTLib",
+        "//src:InterruptManagerLib",
+        "//src:ElasticNodeMiddlewareInternalLib",
+    ],
+)
+
+cc_library(
+    name = "ControlmanagerLUFALib",
     srcs = [
         "controlmanager/controlmanager.c",
+        "controlmanager/controlmanager_internal.c",
     ],
     hdrs = [
         "controlmanager/controlmanager.h",
+        "controlmanager/controlmanager_internal.h",
     ],
-    copts = cpu_frequency_flag(),
+    copts = cpu_frequency_flag() + ["-DLUFA"],
     visibility = ["//visibility:public"],
     deps = [
         "//src:XmemLib",
-        "//src:FlashLib",
-        "//src:DebugLufaLib",
-        "//src:ConfigurationLib",
+        "//src:FlashLUFALib",
+        "//src:DebugLUFALib",
+        "//src:ConfigurationLUFALib",
+    ],
+)
+
+cc_library(
+    name = "ControlmanagerUARTLib",
+    srcs = [
+        "controlmanager/controlmanager.c",
+        "controlmanager/controlmanager_internal.c",
+    ],
+    hdrs = [
+        "controlmanager/controlmanager.h",
+        "controlmanager/controlmanager_internal.h",
+    ],
+    copts = cpu_frequency_flag() + ["-DUART"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//src:XmemLib",
+        "//src:FlashUARTLib",
+        "//src:DebugUARTLib",
+        "//src:ConfigurationUARTLib",
     ],
 )
 
@@ -196,21 +282,408 @@ cc_library(
     name = "Reconfigure_multiboot_avrLib",
     srcs = [
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
-        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.c",
     ],
     hdrs = [
         "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
-        "reconfigure_multiboot_avr/reconfigure_multiboot_internal_avr.h",
     ],
     copts = cpu_frequency_flag(),
     visibility = ["//visibility:public"],
     deps = [
+        "//src:DelayLibHdr",
         "//src:RegisterDefinitionLibHdr",
         "//src:XmemLib",
         "//src:InterruptManagerLib",
         "//src:ElasticNodeMiddlewareInternalLib"
     ],
 )
+
+### Libraries> ###
+
+### <tests ###
+
+cc_library(
+    name = "RegisterDefinitionLibHdrTest",
+    visibility = ["//visibility:public"],
+    copts = ["-DTEST"],
+    hdrs = [
+        "pinDefinition/fpgaPins.h",
+        "pinDefinition/fpgaRegisters.h",
+    ],
+)
+
+cc_library(
+    name = "ConfigurationTest",
+    srcs = [
+        "configuration/configuration.c",
+    ],
+    hdrs = [
+        "configuration/configuration.h",
+        "configuration/configuration_internal.h",
+        "debug/debug.h",
+        "flash/flash.h",
+        "interruptManager/interruptManager.h",
+        "led/led_mcu.h",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "Configuration_internalTest",
+    srcs = [
+        "configuration/configuration_internal.c",
+    ],
+    hdrs = [
+        "configuration/configuration_internal.h",
+        "debug/debug.h",
+        "flash/flash.h",
+        "interruptManager/interruptManager.h",
+        "led/led_mcu.h",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "ControlmanagerTest",
+    srcs = [
+        "controlmanager/controlmanager.c",
+    ],
+    hdrs = [
+        "controlmanager/controlmanager.h",
+        "controlmanager/controlmanager_internal.h",
+        "configuration/configuration.h",
+        "xmem/xmem.h",
+        "debug/debug.h",
+        "flash/flash.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "Controlmanager_internalTest",
+    srcs = [
+        "controlmanager/controlmanager_internal.c",
+    ],
+    hdrs = [
+        "xmem/xmem.h",
+        "debug/debug.h",
+        "controlmanager/controlmanager_internal.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "DebugUARTTest",
+    srcs = [
+        "debug/debug.c",
+    ],
+    hdrs = [
+        "debug/debug.h",
+        "uart/uart.h",
+        "uart/uart_internal.h",
+    ],
+    copts = ["-DTEST"] + ["-DUART"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "DebugLUFATest",
+    srcs = [
+        "debug/debug.c",
+    ],
+    hdrs = [
+        "debug/debug.h",
+    ],
+    copts = ["-DTEST"] + ["-DLUFA"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:LufaUsartImplHdrForTesting",
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddlewareTest",
+    srcs = [
+        "//src:elasticNodeMiddleware/ElasticNodeMiddleware.c",
+    ],
+    hdrs = [
+        "//:ElasticNodeMiddleware/ElasticNodeMiddleware.h",
+        "xmem/xmem.h",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "led/led_mcu.h",
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+        "controlmanager/controlmanager.h",
+        "debug/debug.h",
+        "delay/delay.h",
+        "uart/uart.h",
+    ],
+    copts = ["-DTEST"] + ["-DDEBUG"] + ["-DLUFA"] + ["-DUART"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "//src:RegisterDefinitionLibHdr",
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddleware_internalTest",
+    srcs = [
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.c",
+    ],
+    hdrs = [
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "ElasticNodeMiddlewareMonitoringTest",
+    srcs = [
+        "elasticNodeMiddlewareMonitoring/ElasticNodeMiddlewareMonitoring.c",
+    ],
+    hdrs = [
+        "//:ElasticNodeMiddleware/ElasticNodeMiddlewareMonitoring.h",
+        "flash/flash.h",
+        "debug/debug.h",
+        "spi/spi.h",
+        "interruptManager/interruptManager.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "FlashTest",
+    srcs = [
+        "flash/flash.c",
+    ],
+    hdrs = [
+        "flash/flash.h",
+        "flash/flash_internal.h",
+        "debug/debug.h",
+        "spi/spi.h",
+        "spi/spi_internal.h",
+        "delay/delay.h"
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Flash_internalTest",
+    srcs = [
+        "flash/flash_internal.c",
+    ],
+    hdrs = [
+        "flash/flash_internal.h",
+        "spi/spi.h",
+        "spi/spi_internal.h",
+        "delay/delay.h"
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Interrupt_ManagerTest",
+    srcs = [
+        "interruptManager/interruptManager_avr.c",
+    ],
+    hdrs = [
+        "interruptManager/interruptManager.h",
+        "interruptManager/interruptManager_avr_Mock.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "led_mcuTest",
+    srcs = [
+        "led/led_mcu.c",
+    ],
+    hdrs = [
+        "led/led_mcu.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Reconfigure_multiboot_avrTest",
+    srcs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.c",
+    ],
+    hdrs = [
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+        "xmem/xmem.h",
+        "interruptManager/interruptManager.h",
+        "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
+        "delay/delay.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "SpiTest",
+    srcs = [
+        "spi/spi.c",
+    ],
+    hdrs = [
+        "spi/spi.h",
+        "spi/spi_internal.h",
+        "interruptManager/interruptManager.h",
+        "xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Spi_internalTest",
+    srcs = [
+        "spi/spi_internal.c",
+    ],
+    hdrs = [
+        "spi/spi.h",
+        "spi/spi_internal.h",
+        "xmem/xmem.h",
+        "interruptManager/interruptManager.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "CircularBufferTest",
+    srcs = [
+        "uart/circularBuffer/circularBuffer.c",
+    ],
+    hdrs = [
+        "uart/circularBuffer/circularBuffer.h",
+        "interruptManager/interruptManager.h",
+        "delay/delay.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "UartTest",
+    srcs = [
+        "uart/uart.c",
+    ],
+    hdrs = [
+        "uart/uart.h",
+        "uart/uart_internal.h",
+        "uart/circularBuffer/circularBuffer.h",
+        "interruptManager/interruptManager.h",
+        "delay/delay.h",
+    ],
+    copts = [
+        "-DTEST",
+        "-DF_CPU=1UL",
+        "-DBAUD=1UL",
+    ],
+    #copts = cpu_frequency_flag() + [ "-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "Uart_internalTest",
+    srcs = [
+        "uart/uart_internal.c",
+    ],
+    hdrs = [
+        "uart/uart_internal.h",
+        "uart/circularBuffer/circularBuffer.h",
+        "interruptManager/interruptManager.h",
+        "delay/delay.h",
+    ],
+    copts = cpu_frequency_flag() + [ "-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+cc_library(
+    name = "XmemTest",
+    srcs = [
+        "xmem/xmem.c",
+    ],
+    hdrs = [
+        "xmem/xmem.h",
+    ],
+    copts = ["-DTEST"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//test:BitManipulationHdrForTesting",
+        "RegisterDefinitionLibHdrTest",
+    ],
+)
+
+### tests> ###
 
 exports_files(
     srcs = [
@@ -219,6 +692,24 @@ exports_files(
         "elasticNodeMiddleware/elasticNodeMiddleware_internal.h",
         "elasticNodeMiddlewareMonitoring/ElasticNodeMiddlewareMonitoring.c",
         "xmem/xmem.h",
+        # for tests:
+        "interruptManager/interruptManager.h",
+        "uart/circularBuffer/circularBuffer.h",
+        "uart/uart.h",
+        "uart/uart_internal.h",
+        "interruptManager/interruptManager_avr_Mock.h",
+        "flash/flash.h",
+        "configuration/configuration.h",
+        "configuration/configuration_internal.h",
+        "debug/debug.h",
+        "led/led_mcu.h",
+        "spi/spi.h",
+        "reconfigure_multiboot_avr/reconfigure_multiboot_avr.h",
+        "controlmanager/controlmanager.h",
+        "delay/delay.h",
+        "spi/spi_internal.h",
+        "controlmanager/controlmanager_internal.h",
+        "flash/flash_internal.h",
     ],
     visibility = ["//visibility:public"],
 )

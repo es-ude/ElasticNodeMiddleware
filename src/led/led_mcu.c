@@ -5,7 +5,6 @@
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/pinDefinition/fpgaRegisters.h"
 
-
 void led_mcu_init(void) {
     //DDRD = 0xff
     BitManipulation_setBit(DDR_LED, P_LED_0);
