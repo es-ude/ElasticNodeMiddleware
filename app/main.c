@@ -48,7 +48,7 @@ int main(void) {
     elasticnode_led_mcu_turnOn(0);
     _delay_ms(3000); // Gives everything time to initialise properly.
     elasticnode_led_mcu_turnOff(1);
-    elasticnode_xmem_initXmem();
+    elasticnode_initFpgaInterface();
     elasticnode_fpgaPowerOn();
     _delay_ms(1500);
     // Configures to address 0x0 at start up

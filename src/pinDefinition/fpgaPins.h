@@ -58,6 +58,12 @@
 #define P_FLASH_MOSI 2
 #define P_FLASH_SCK 3
 
+// xmem
+#define XMEM_SRW11 0
+#define XMEM_SRW10 1
+#define XMEM_XMBK 2
+#define XMEM_XMM1 3
+
 #else
 
 #include <avr/io.h>
@@ -104,6 +110,13 @@
 #define P_LED_1 PD6
 #define P_LED_2 PD5
 #define P_LED_3 PD4
+
+// xmem
+
+#define XMEM_SRW11 SRW11
+#define XMEM_SRW10 SRW10
+#define XMEM_XMBK XMBK
+#define XMEM_XMM1 XMM1
 
 #endif
 

@@ -38,7 +38,7 @@ void elasticnode_led_mcu_turnOffAll(void);
 // --------- LED> ---------
 
 // --------- <XMEM ---------
-void elasticnode_xmem_initXmem(void);
+void elasticnode_initFpgaInterface(void);
 
 uint16_t elasticnode_xmem_offset(void);
 

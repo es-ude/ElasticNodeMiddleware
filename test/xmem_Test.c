@@ -6,6 +6,9 @@
 
 #include "src/pinDefinition/fpgaPins.h"
 
+uint8_t xmem_xmcra;
+uint8_t xmem_xmcrb;
+uint8_t ddr_xmem_ad;
 uint8_t ddr_xmem_a;
 uint8_t ddr_xmem_ad;
 uint8_t ddr_xmem_wr;
@@ -18,6 +21,8 @@ uint8_t xmcrb;
 uint8_t spcr_xmem;
 
 uint8_t *XMEM_ENABLE_REG = 0;
+uint8_t *XMEM_XMCRA = &xmem_xmcra;
+uint8_t *XMEM_XMCRB = &xmem_xmcrb;
 uint8_t *DDR_XMEM_A = &ddr_xmem_a;
 uint8_t *DDR_XMEM_AD = &ddr_xmem_ad;
 uint8_t *DDR_XMEM_WR = &ddr_xmem_wr;
@@ -32,6 +37,8 @@ uint8_t memoryarea[2000];
 const uint8_t *externalMockMemory = (const uint8_t *) &memoryarea;
 
 void initialise_xmem_mockRegister(void) {
+    XMEM_XMCRA = &xmem_xmcra;
+    XMEM_XMCRB = &xmem_xmcrb;
     DDR_XMEM_A = &ddr_xmem_a;
     DDR_XMEM_AD = &ddr_xmem_ad;
     DDR_XMEM_WR = &ddr_xmem_wr;
@@ -41,6 +48,15 @@ void initialise_xmem_mockRegister(void) {
     SPCR_XMEM = &spcr_xmem;
     XMCRA = &xmcra;
     XMCRB = &xmcrb;
+}
+
+void test_xmem_initXmem(void) {
+
+}
+
+void test_xmem_offset(void) {
+    // TODO
+    // TEST_ASSERT_EQUAL(XMEM_OFFSET, (uint16_t) xmem_offset());
 }
 
 void test_enableXmem(void) {

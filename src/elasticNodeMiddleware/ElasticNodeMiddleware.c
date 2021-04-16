@@ -27,8 +27,8 @@
 #define USERLOGIC_RESET_VALUE 0x0
 
 // volatile uint8_t* ptr_xmem_offset = (uint8_t* )(XMEM_OFFSET);
-volatile uint8_t *xmemOffset = (uint8_t *) (XMEM_OFFSET);
-volatile uint8_t *userLogicOffsetAddr = (uint8_t *) (XMEM_USERLOGIC_OFFSET);
+//volatile uint8_t *xmemOffset = (uint8_t *) (XMEM_OFFSET);
+//volatile uint8_t *userLogicOffsetAddr = (uint8_t *) (XMEM_USERLOGIC_OFFSET);
 
 // --------- <INTERNAL ---------
 void elasticnode_initialise(void) {
@@ -110,8 +110,11 @@ void elasticnode_led_mcu_turnOffAll(void) {
 // --------- LED> ---------
 
 // --------- <XMEM ---------
-void elasticnode_xmem_initXmem(void) {
+void elasticnode_initFpgaInterface(void) {
     xmem_initXmem();
+    xmem_enableXmem();
+    xmem_disableXmem();
+    _delay_ms(10);
 }
 
 uint16_t elasticnode_xmem_offset(void) {
