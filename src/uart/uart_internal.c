@@ -5,6 +5,7 @@
 #include "src/pinDefinition/fpgaRegisters.h"
 
 #include "src/interruptManager/interruptManager.h"
+#include "src/delay/delay.h"
 
 circularBuffer sendingBuf;
 
@@ -21,7 +22,6 @@ uint16_t uart_BufferCount_internal(void) {
 void uart_setUartReceiveHandler_internal(void (*receiveHandler)(uint8_t)) {
     uartReceiveHandler = receiveHandler;
 }
-
 
 void uart_WriteNext_internal(void) {
     if (!sendingFlag) {

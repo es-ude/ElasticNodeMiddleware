@@ -3,14 +3,6 @@
 
 #include <stdint.h>
 
-#ifdef TEST
-
-#else
-
-#include <util/delay.h>
-
-#endif
-
 #define MAX_QUEUE_RETRIES 10
 
 uint16_t uart_BufferCount_internal(void);

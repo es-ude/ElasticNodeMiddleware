@@ -32,10 +32,10 @@ extern uint8_t* PORT_XMEM_RD;
 extern uint8_t* DDR_XMEM_ALE;
 
 extern uint8_t* DDR_XMEM_RD;
-extern uint8_t SPCR;
+extern uint8_t *SPCR_SPI;
 
-extern uint8_t* XMCRA;
-extern uint8_t* XMCRB;
+extern uint8_t* XMEM_XMCRA;
+extern uint8_t* XMEM_XMCRB;
 
 extern uint8_t FPGA_DONE_INT_REG;
 extern uint8_t FPGA_DONE_INT_CONTROL_REG;
@@ -49,6 +49,27 @@ extern uint8_t* UCSR1B;
 extern uint8_t* UCSR1C;
 
 extern uint8_t* UDR1;
+
+extern uint8_t* DDR_LED;
+extern uint8_t* PORT_LED;
+
+// spi
+extern uint8_t* DDR_SPI;
+extern uint8_t* PORTB_SPI;
+extern uint8_t* DDRE_SPI;
+extern uint8_t* PORTE_SPI;
+
+extern uint8_t* SPSR_SPI;
+extern uint8_t* SPDR_SPI;
+
+extern uint8_t* SPCR_XMEM;
+
+//flash
+extern uint8_t* DDR_FLASH_CS;
+extern uint8_t* PORT_FLASH_CS;
+extern uint8_t* SPCR_FLASH;
+extern uint8_t* DDRB_FLASH;
+extern uint8_t* PORTB_FLASH;
 
 #else
 
@@ -82,6 +103,22 @@ extern uint8_t* UDR1;
 #define PORT_XMEM_RD &PORTE
 #define DDR_XMEM_ALE &DDRE
 
+// spi
+#define DDR_SPI &DDRB
+#define PORTB_SPI &PORTB
+#define SPCR_SPI &SPCR
+#define DDRE_SPI &DDRE
+#define PORTE_SPI &PORTE
+#define SPSR_SPI &SPSR
+#define SPDR_SPI &SPDR
+
+#define SPCR_XMEM &SPCR
+
+//flash
+#define SPCR_FLASH &SPCR
+#define DDRB_FLASH &DDRB
+#define PORTB_FLASH &PORTB
+
 #define FPGA_DONE_INT_REG PCMSK0
 #define FPGA_DONE_INT_CONTROL_REG PCICR
 
@@ -96,6 +133,10 @@ extern uint8_t* UDR1;
 //leds
 #define DDR_LED &DDRD
 #define PORT_LED &PORTD
+
+// xmem
+#define XMEM_XMCRA &XMCRA
+#define XMEM_XMCRB &XMCRB
 
 #endif
 

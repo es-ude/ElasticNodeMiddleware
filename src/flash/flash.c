@@ -1,156 +1,102 @@
+#include "EmbeddedUtilities/BitManipulation.h"
+
 #include "src/flash/flash.h"
+#include "src/flash/flash_internal.h"
 
 #include "src/pinDefinition/fpgaPins.h"
 #include "src/pinDefinition/fpgaRegisters.h"
 
-#include "src/debug/debug.h"
 #include "src/spi/spi.h"
+#include "src/spi/spi_internal.h"
+
+#include "src/delay/delay.h"
+
+#ifndef TEST
+
+#include "src/debug/debug.h"
+
+#endif
 
 uint8_t spi_buffer[SPI_BUFFER_SIZE];
-volatile uint8_t *flashBufPtr;
-uint8_t flashWriteBuf[FLASH_BUFFER_SIZE];
-uint16_t flashQueueCount;
-uint32_t mcuWriteCount = 0;
-uint32_t fpgaWriteCount = 0;
 
-void initFlash() {
-    flashEnableInterface();
+void initFlash(void) {
+    flashEnableInterface_internal();
 
     spiInit();
 
-    flashSetSpeed(FLASH_SPEED_LOW);
+    flashSetSpeed_internal(FLASH_SPEED_LOW);
 
     spi_buffer[0] = 0x00;
 
-    flashResetQueue();
-    flashResetCallbacks();
+    flashResetQueue_internal();
+    flashResetCallbacks_internal();
 
-    flashResetWriteCount();
+    flashResetWriteCount_internal();
 
     deselectFlash(1);
     deselectFlash(0);
 }
 
 void flashEnableInterface(void) {
-    DDR_FLASH_CS |= _BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK);
-    PORT_FLASH_CS |= _BV(P_FLASH_CS);
+    flashEnableInterface_internal();
 }
 
 void flashDisableInterface(void) {
     spiDisable();
-    DDR_FLASH_CS &= ~(_BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK));
-    PORT_FLASH_CS |= _BV(P_FLASH_CS);
+    BitManipulation_clearBit(DDRB_FLASH, P_FLASH_CS);
+    BitManipulation_clearBit(DDRB_FLASH, P_FLASH_MOSI);
+    BitManipulation_clearBit(DDRB_FLASH, P_FLASH_SCK);
+    //DDR_FLASH_CS &= ~(_BV(P_FLASH_CS) | _BV(P_FLASH_MOSI) | _BV(P_FLASH_SCK));
+    BitManipulation_setBit(PORTB_FLASH, P_FLASH_CS);
+    //PORT_FLASH_CS |= _BV(P_FLASH_CS);
 }
 
 void eraseSectorFlash(uint32_t address, uint8_t mcuFlash) {
-    flashResetCallbacks();
+    flashResetCallbacks_internal();
 
-    writeEnableFlash(mcuFlash);
+    writeEnableFlash_internal(mcuFlash);
 
     selectFlash(mcuFlash);
 
     spi_buffer[0] = 0x20;
-    spi_buffer[1] = (uint8_t)(address >> 16);
-    spi_buffer[2] = (uint8_t)(address >> 8);
-    spi_buffer[3] = (uint8_t)(address >> 0);
+    spi_buffer[1] = (uint8_t) (address >> 16);
+    spi_buffer[2] = (uint8_t) (address >> 8);
+    spi_buffer[3] = (uint8_t) (address >> 0);
 
-    spiPerformTaskBlocking(4, spi_buffer, 0, NULL);
+    spiPerformTaskBlocking_internal(4, spi_buffer, 0, NULL);
 
     deselectFlash(mcuFlash);
 
     // wait until done
-    waitDoneFlash(mcuFlash);
-
+    waitDoneFlash_internal(mcuFlash);
 }
-
 
 void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mcuFlash) {
     if (length + 4 > SPI_BUFFER_SIZE) {
+#ifndef TEST
         debugWriteLine("Cannot write data! Too large for buffer");
+#endif
     } else {
-        flashResetCallbacks();
+        flashResetCallbacks_internal();
 
-        writeEnableFlash(mcuFlash);
+        writeEnableFlash_internal(mcuFlash);
 
         selectFlash(mcuFlash);
 
         // put instructions in buffer
         spi_buffer[0] = 0x02;
-        spi_buffer[1] = (uint8_t)(address >> 16);
-        spi_buffer[2] = (uint8_t)(address >> 8);
-        spi_buffer[3] = (uint8_t)(address >> 0);
+        spi_buffer[1] = (uint8_t) (address >> 16);
+        spi_buffer[2] = (uint8_t) (address >> 8);
+        spi_buffer[3] = (uint8_t) (address >> 0);
 
         memcpy(spi_buffer + 4, data, length);
 
-        spiPerformTaskBlocking(4 + length, spi_buffer, 0, NULL);
+        spiPerformTaskBlocking_internal(4 + length, spi_buffer, 0, NULL);
 
         deselectFlash(mcuFlash);
         // wait until done?
-        waitDoneFlash(mcuFlash);
+        waitDoneFlash_internal(mcuFlash);
     }
-}
-
-void flashSetSpeed(uint8_t speed) {
-    SPCR &= ~_BV(SPR0);
-    switch (speed) {
-        //case FLASH_SPEED_HIGH:
-        //break;
-        case FLASH_SPEED_LOW:
-        default:
-            SPCR |= _BV(SPR0);  // /16
-            break;
-    }
-    SPDR;
-}
-
-void flashResetQueue(void) {
-    flashBufPtr = flashWriteBuf;
-    flashQueueCount = 0;
-    // create header
-    *flashBufPtr++ = 0x02;
-    // next three are address
-    flashBufPtr += 3;
-    // data gets buffered from here
-}
-
-void flashResetWriteCount(void) {
-    mcuWriteCount = 0;
-    fpgaWriteCount = 0;
-}
-
-void writeEnableFlash(uint8_t mcuFlash) {
-    flashResetCallbacks();
-    selectFlash(mcuFlash);
-
-    spiPerformSimpleTaskBlocking(0x06, 0, NULL);
-
-    deselectFlash(mcuFlash);
-}
-
-void waitDoneFlash(uint8_t mcuFlash) {
-
-    uint16_t counter = 0;
-    uint8_t status = 0xFF;
-    while (status & _BV(0)) {
-        counter++;
-        status = readStatus(mcuFlash);
-        _delay_ms(5);
-    }
-}
-
-
-// perform RDSR
-uint8_t readStatus(uint8_t mcuFlash) {
-    flashResetCallbacks();
-
-    selectFlash(mcuFlash);
-    uint8_t status;
-
-    spiPerformSimpleTaskBlocking(0x05, 1, &status);
-
-    deselectFlash(mcuFlash);
-
-    return status;
 }
 
 uint8_t *
@@ -160,39 +106,48 @@ readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, void (*read
 
     // put instructions backward in buffer
     spi_buffer[0] = 0x03;
-    spi_buffer[1] = (uint8_t)(address >> 16);
-    spi_buffer[2] = (uint8_t)(address >> 8);
-    spi_buffer[3] = (uint8_t)(address >> 0);
+    spi_buffer[1] = (uint8_t) (address >> 16);
+    spi_buffer[2] = (uint8_t) (address >> 8);
+    spi_buffer[3] = (uint8_t) (address >> 0);
 
-    if (mcuFlash) {
+
+    if (readingCallbackFunction == NULL) {
+        spiPerformTaskBlocking_internal(4, spi_buffer, numBytes, spi_buffer + 4);
+        deselectFlash(mcuFlash);
+    } else {
+        spiPerformTaskBlockingWithCallback_internal(4, spi_buffer, numBytes, readingCallbackFunction,
+                                                    finishedCallbackFunction);
+    }
+
+/*    if (mcuFlash) {
         // send commmand
         if (readingCallbackFunction == NULL) {
-            spiPerformTaskBlocking(4, spi_buffer, numBytes, spi_buffer + 4);
+            spiPerformTaskBlocking_internal(4, spi_buffer, numBytes, spi_buffer + 4);
             deselectFlash(mcuFlash);
         } else {
-            spiPerformTaskBlockingWithCallback(4, spi_buffer, numBytes, readingCallbackFunction,
-                                               finishedCallbackFunction);
+            spiPerformTaskBlockingWithCallback_internal(4, spi_buffer, numBytes, readingCallbackFunction,
+                                                        finishedCallbackFunction);
 
         }
     } else {
         // send commmand
         if (readingCallbackFunction == NULL) {
-            spiPerformTaskBlocking(4, spi_buffer, numBytes, spi_buffer + 4);
+            spiPerformTaskBlocking_internal(4, spi_buffer, numBytes, spi_buffer + 4);
             deselectFlash(mcuFlash);
         } else {
             fpgaFlashPerformTaskWithCallback(4, spi_buffer, numBytes, readingCallbackFunction,
                                              finishedCallbackFunction);
         }
     }
-
+*/
     return spi_buffer + 4;
 }
 
 // performs global block-protection unlock
 void unlockFlash(uint8_t mcuFlash) {
 
-    flashResetCallbacks();
-    writeEnableFlash(mcuFlash);
+    //flashResetCallbacks();
+    writeEnableFlash_internal(mcuFlash);
 
     selectFlash(mcuFlash);
 

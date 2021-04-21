@@ -45,11 +45,13 @@ VDP_ADDRESS = 0x120000
 SMALL_ADDRESS = 0x0
 DUMMY_ADDRESS = 0x0
 
-SKIP = None # (538844 - 256) # 4096 * 5
+SKIP = None  # (538844 - 256) # 4096 * 5
 
 cpuName = "at90usb1287"
+
+# TODO: templates ?
 en4_serial_template = None
-#en4_serial_template = "/dev/ttyACM1"
+# en4_serial_template = "/dev/ttyACM1"
 en3_serial_template = "/dev/tty.usbserial-EN*"
 # serial_template = "/dev/ttyS256*"
 if 'posix' not in os.name:
@@ -57,9 +59,9 @@ if 'posix' not in os.name:
 else:
     serial_default = None
 program_template = None
-#program_template = "/dev/ttyACM0"
+# program_template = "/dev/ttyACM0"
 if 'posix' not in os.name:
-    program_default = "/dev/ttys3" # "/dev/ttyS5" # "COM5"
+    program_default = "/dev/ttys3"  # "/dev/ttyS5" # "COM5"
 else:
     program_default = None
 # serial_template = "/dev/tty.usbserial-AL03E2KG"
@@ -70,6 +72,8 @@ flash = False
 plot = True
 baudrate = None
 
+UART = False
+
 class SerialTest:
     ser = None
     monitoring = False
@@ -77,10 +81,9 @@ class SerialTest:
     monitoringThread = None
     debug = False
     # selectmap = /False
-    busy = False # dont request current because interface in use
+    busy = False  # dont request current because interface in use
     debugQ = None
     programPort = None
-
 
     baud, port, bitFile, testFile, bscanFile, size, testsize, bscansize = None, None, None, None, None, None, None, None
     skip, testskip, bscanskip = None, None, None
@@ -100,7 +103,10 @@ class SerialTest:
 
         if self.elasticNodeVersion == 4:
             # change to 500000
-            baudrate = 500000
+            if UART:
+                baudrate = 38400
+            else:
+                baudrate = 500000
         else:
             baudrate = 115200
 
@@ -120,7 +126,7 @@ class SerialTest:
         self.annConfig = Configuration("ann.bit", ANN_ADDRESS, ANN_ADDRESS)
 
         # now is made in own config!
-        
+
         try:
             # if plot:
             # 	self.plotter = SerialPlotter()
@@ -176,8 +182,8 @@ class SerialTest:
                     time.sleep(0.5)
                     print("waiting for port...")
 
-            self.ser = serial.Serial(self.port, self.baud,)
-            self.remainingMonitor = 0;
+            self.ser = serial.Serial(self.port, self.baud, )
+            self.remainingMonitor = 0
 
             self.ser.read(self.ser.inWaiting())
             # print("FLUSHING")
@@ -185,43 +191,44 @@ class SerialTest:
             # print("DONE")
             self.ser.reset_input_buffer()
             response = '0'
-            self.ser.timeout = 0.5#  * 10
+            self.ser.timeout = 0.5  # * 10
             request = '0'
 
-
-
             # read any old data
-            self.ser.read(1000) # self will always cause a timeout delay
+            self.ser.read(1000)  # self will always cause a timeout delay
+
+            self.ser.timeout = 2.5  # * 10
 
 
-            self.ser.timeout = 2.5#  * 10
+            while self.ser.in_waiting:
+                print("Wait", self.ser.read(1))
+            self.ser.reset_input_buffer()
 
-            expectedResponse = 'x'
-            while ord(response) != ord(expectedResponse):
-                self.ser.reset_input_buffer();
+            for _ in range(5):
+                expectedResponse = 'x'
+                while ord(response) != ord(expectedResponse):
+                    self.ser.reset_input_buffer()
 
-                expectedResponse = chr(ord(request) + 1)
-                self.ser.write(request.encode())
-                response = self.ser.read(1)
+                    expectedResponse = chr(ord(request) + 1)
+                    self.ser.write(request.encode())
+                    response = self.ser.read(1)
 
-                if len(response) > 0:
-                    # print('request:', ord(request), 'response:', ord(response), 'expected:', ord(expectedResponse))
-                    continue
-                else:
-                    print('nothing received')
-                    response = 'x'
+                    if len(response) > 0:
+                        #print('request:', ord(request), 'response:', ord(response), 'expected:', ord(expectedResponse))
+                        pass
+                    else:
+                        print('nothing received')
+                        response = 'x'
 
-                # set up next request:
-                request = expectedResponse
-                if ord(request) > ord('9'): request = '0'
-            # self.ser.reset_input_buffer();
-            # self.ser.timeout = None
+                    # set up next request:
+                    request = expectedResponse
+                    if ord(request) > ord('9'):
+                        request = '0'
 
             print('Serial available')
         except KeyboardInterrupt:
             print('Interrupted initialisation')
             sys.exit(0)
-
 
     # @staticmethod
     def resetMcu(self, stk=True):
@@ -246,10 +253,10 @@ class SerialTest:
         else:
             print("other programmers not implemented")
 
-
     # @staticmethod
     def fetchBit(self, configName):
         warn("fetching disabled!")
+
     # print("Fetching", configName)
     # cmd = "./scripts/fetch-bitfile.sh %d %s" % (self.elasticNodeVersion, configName)
     # print("cmd", cmd)
@@ -277,6 +284,7 @@ class SerialTest:
         readData = self.ser.read(number)
         self.ser.timeout = bk
         return readData
+
     # print("serialblocking", number)
     # readData = self.ser.read(max(self.ser.in_waiting,number)) # read at least number bytes
     # remaining = self.filterDebug(readData, number)
@@ -284,7 +292,7 @@ class SerialTest:
     # # limit number of results
     # if len(remaining):
     # 	warn("Too many bytes received")
-    # 	remaining = remaining[:number];
+    # 	remaining = remaining[:number]
     # return remaining
 
     def filterDebug(self, data, number=None):
@@ -349,8 +357,6 @@ class SerialTest:
         # 				time.sleep(.01)
         # 				remaining = self.filterDebug(remaining)
 
-
-
         # 		if waitForMore:
         # 			self.debugOpen = True
         # 			if DEBUG:
@@ -381,12 +387,12 @@ class SerialTest:
         # print('reading line')
         data = ""
         incoming = 0x00
-        get_line_ended_flag=False
-        while get_line_ended_flag==False:
+        get_line_ended_flag = False
+        while get_line_ended_flag == False:
             incoming = self.ser.read(1)
             # print('incoming', incoming, ord(incoming))
             data = data + str(incoming, encoding='utf-8')
-            get_line_ended_flag = (ord(incoming)== ord('\n'))
+            get_line_ended_flag = (ord(incoming) == ord('\n'))
             # print('[chao_debug] readSerialLine, incoming: ', incoming, "str so far get: ", data, 'flag: ',flag )
         if data[-1] == '\n':
             data = data[:-1]
@@ -394,6 +400,7 @@ class SerialTest:
             if data[-1] == '\r':
                 data = data[:-1]
         return data
+
     # data = ""
     # while not data.endswith('\n'):
     # 	data = self.readSerial()
@@ -459,7 +466,6 @@ class SerialTest:
 
     # print("READY")
 
-
     def sendzero(self, num):
         # send zeros
         ba = bytearray([0, num & 0xff, (num >> 8) & 0xff, (num >> 16) & 0xff, (num >> 24) & 0xff])
@@ -471,6 +477,7 @@ class SerialTest:
         # print('confirming...', num)
 
         self.confirmCommand(0x00)
+
     # print('done')
 
     def receiveData(self):
@@ -478,10 +485,11 @@ class SerialTest:
         try:
             print('receiving for %d s' % TIME_TOTAL)
             while (time.time() - t0 < TIME_TOTAL or self.remainingMonitor > 0):
-                if (self.ser.in_waiting > 0): #if incoming bytes are waiting to be read from the serial input buffer
+                if (self.ser.in_waiting > 0):  # if incoming bytes are waiting to be read from the serial input buffer
                     data_in = self.ser.read(self.ser.inWaiting())
-                    data_str = data_in.decode('ascii') #read the bytes and convert from binary array to ASCII
-                    sys.stdout.write(data_str), #print(the incoming string without putting a new-line ('\n') automatically after every print())
+                    data_str = data_in.decode('ascii')  # read the bytes and convert from binary array to ASCII
+                    sys.stdout.write(
+                        data_str),  # print(the incoming string without putting a new-line ('\n') automatically after every print())
                     sys.stdout.flush()
 
                     # if data_str[:2] == "#M":
@@ -489,7 +497,7 @@ class SerialTest:
                     # 	print('Remaining:', self.remainingMonitor)
 
                     t0 = time.time()
-        #Put the rest of your code you want here
+        # Put the rest of your code you want here
         except UnicodeDecodeError:
             print(data_in)
         finally:
@@ -502,7 +510,6 @@ class SerialTest:
 
         for i in range(4):
             self.ser.write([ba[i]])
-
 
         print('done writing %s' % name)
 
@@ -606,7 +613,6 @@ class SerialTest:
             else:
                 block = remaining
 
-
             # print('\tVerifying:', position, block)
             # time.sleep(1)
             if mcuFlash:
@@ -640,8 +646,8 @@ class SerialTest:
                     r = ord(read[i])
                     br = ord(b[i])
                     if r != br:
-                        print(('READBACK FAIL %d %X expected: %d received: %d %s %s' % (i, position + i, br, r, b[i], read[i])))
-
+                        print(('READBACK FAIL %d %X expected: %d received: %d %s %s' % (
+                            i, position + i, br, r, b[i], read[i])))
 
                 continue
 
@@ -649,7 +655,8 @@ class SerialTest:
                 r = ord(read[i])
                 br = ord(b[i])
                 if r != br:
-                    errorLines.append('READBACK FAIL %d %X expected: %d received: %d %s %s' % (i, position + i, br, r, b[i], read[i]))
+                    errorLines.append(
+                        'READBACK FAIL %d %X expected: %d received: %d %s %s' % (i, position + i, br, r, b[i], read[i]))
             # else:
             # errorLines.append('READBACK FINE %d %X expected: %d received: %d %s %s' % (i, position + i, br, r, b[i], read[i]))
 
@@ -681,7 +688,6 @@ class SerialTest:
         print('\nVerify complete...')
         return ret
 
-
     def sendConfig(self, config, selectmap=False, jtag=False, flash=False, fpgaflash=False):
 
         config.loadFile()
@@ -694,13 +700,19 @@ class SerialTest:
             sendcount = 0
             print('waiting for ack...')
 
-            if jtag: self.writeCommand(b'J')
-            elif selectmap: self.writeCommand(b'M') # also broken somehow
+            if jtag:
+                self.writeCommand(b'J')
+            elif selectmap:
+                self.writeCommand(b'M')  # also broken somehow
             elif flash:
-                self.writeCommand(b'F')
+                for com in "FlashFPGA":
+                    if not self.writeCommand(com.encode('utf-8')):
+                        sys.exit("Wrong acknowledgement, exit!")
                 # print('[chao_debug] command F sent.')
-            elif fpgaflash: self.writeCommand(b'p')
-            else: print(("No idea how to send config!!"))
+            elif fpgaflash:
+                self.writeCommand(b'p')
+            else:
+                print("No idea how to send config!!")
 
             # sending bitfile
             bit = open(config.filename, "rb")
@@ -724,19 +736,18 @@ class SerialTest:
                 self.writeValue(config.destination, "destination")
             # sending size
             # print('[chao_debug] config_size is ', config.size)
-            self.writeValue(config.size, "size");
+            self.writeValue(config.size, "size")
 
             # print('[chao_debug] wainting for flash erase finished\r\n')
             # give device time for some debug
             self.waitSerialReady(quiet=False)
             print('sending data')
 
-            oldperc = -1;
+            oldperc = -1
 
             # self.ser.timeout = None
             blockSize = 256
             currentAddress = 0
-
 
             while currentAddress < config.size:
                 # print('[chao_debug] in sending loop..\r\n')
@@ -756,7 +767,6 @@ class SerialTest:
                 elif (config.size - currentAddress) == blockSize:
                     print("Last full block!")
 
-
                 # self.ser.flushInput()# might can be delete
                 # self.ser.flushOutput()# might can be delete
                 sending = bytearray(bit.read(blockSize))
@@ -766,14 +776,11 @@ class SerialTest:
                 # time.sleep(0.01) # might can be delete
                 # print('[chao_debug] a block is read out from bit file, type is',type(sending),',its size is:', len(sending))
                 # print('[chao_debug] data content', sending)
-                
 
                 bytes_has_written = self.ser.write(sending)
                 self.ser.flush()
                 # or
                 # self.serial_send_block(sending, blockSize)
-
-
 
                 # print('[chao_debug] data block written finished. ')
 
@@ -799,29 +806,31 @@ class SerialTest:
                 bit.close()
 
         return ret
-    # 	self.ser.close();
+
+    # 	self.ser.close()
 
     def serial_send_block(self, block_data, len):
         print("block to send:", block_data)
         cnt = 0
-        while(cnt<len):
+        while (cnt < len):
             # if ord(block_data[cnt:cnt+1])==255:
             #     self.ser.write(block_data[cnt:cnt+1])
             #     self.ser.flush()
-            self.ser.write(block_data[cnt:cnt+1])
+            self.ser.write(block_data[cnt:cnt + 1])
             self.ser.flush()
             self.ser.flushOutput()
             # time.sleep(0.002)
-            print("cnt:", cnt ,block_data[cnt:cnt+1])
-            cnt=cnt+1
+            print("cnt:", cnt, block_data[cnt:cnt + 1])
+            cnt = cnt + 1
+
     def findCurrentSensors(self):
         self.writeCommand('s')
 
     def controlFpga(self, newvalue):
         if newvalue:
-            self.writeCommand("C");
+            self.writeCommand("C")
         else:
-            self.writeCommand("c");
+            self.writeCommand("c")
         self.waitSerialDone()
 
     def controlLed(self, newvalue):
@@ -830,14 +839,12 @@ class SerialTest:
         else:
             self.writeCommand("l")
 
-
     def controlDebug(self, newvalue):
         self.debug = newvalue
         if newvalue:
             self.writeCommand("D")
         else:
             self.writeCommand("d")
-
 
     # def startMonitor(self):
     # 	# send command to start monitoring
@@ -848,13 +855,12 @@ class SerialTest:
     # 	threading.Thread(target=self.waitWhileMonitoring, args=[]).start()
     # 	# self.remainingMonitor = length
 
-
     # def endMonitor(self):
     # 	# send command to start monitoring
     # 	self.writeCommand(b'm')
 
     # 	# flush out the last results
-    # 	# self.printAllMeasurements();
+    # 	# self.printAllMeasurements()
 
     # 	# print("Values:",)
     # 	# print(self.ser.readline())
@@ -868,7 +874,7 @@ class SerialTest:
 
     def resetFPGA(self):
         self.writeCommand(b'R')
-        return self.waitSerialDone();
+        return self.waitSerialDone()
 
     def setFpgaFlashInterface(self, enabled):
         if enabled:
@@ -900,21 +906,20 @@ class SerialTest:
     def testWireless(self):
         self.writeCommand(b'T')
         self.writeCommand(b'W')
-        self.waitSerialDone();
+        self.waitSerialDone()
 
     def testFlash(self):
         self.writeCommand(b'T')
         self.writeCommand(b'F')
-        self.waitSerialDone();
+        self.waitSerialDone()
 
     def learnWireless(self):
         self.writeCommand(b'T')
         self.writeCommand(b'l')
-        self.waitSerialDone();
+        self.waitSerialDone()
 
     def wirelessBlock(self):
         self.beginExperiment()
-
 
         self.writeCommand(b'T')
         self.writeCommand(b'w')
@@ -994,9 +999,8 @@ class SerialTest:
 
         self.writeValue(address, "address", quiet=True)
 
-
         result = self.ser.read(120)
-        self.ser.readline() # indicates it's done
+        self.ser.readline()  # indicates it's done
 
         np.set_printoptions(precision=3)
         np.set_printoptions(suppress=True)
@@ -1024,11 +1028,11 @@ class SerialTest:
 
     def mmMcu(self):
         self.writeCommand(0x13)
-        return self.readMatrix(4,5)
+        return self.readMatrix(4, 5)
 
     def mmFpga(self):
         self.writeCommand(0x14)
-        return self.readMatrix(4,5)
+        return self.readMatrix(4, 5)
 
     def readMatrix(self, columns, rows):
         self.ser.timeout = None
@@ -1050,9 +1054,8 @@ class SerialTest:
         # perform experiments with matrix multiplication
 
         # matrixA = np.zeros((4, 3), dtype=np.uint32)
-        matrixA = np.reshape(np.arange(1, 13, dtype=np.uint32), (4,3))
-        matrixB = np.reshape(np.arange(1, 16, dtype=np.uint32), (3,5))
-
+        matrixA = np.reshape(np.arange(1, 13, dtype=np.uint32), (4, 3))
+        matrixB = np.reshape(np.arange(1, 16, dtype=np.uint32), (3, 5))
 
         local = np.dot(matrixA, matrixB)
 
@@ -1078,9 +1081,9 @@ class SerialTest:
 
         print('done')
 
-
     def testXor(self):
         self.writeCommand(b'o')
+
     # self.writeCommand(num)
 
     def printIdCode(self):
@@ -1120,7 +1123,7 @@ class SerialTest:
             # print(ba[i])
             self.ser.write([ba[i]])
 
-        # self.waitSerialReady();
+        # self.waitSerialReady()
 
         # self.ser.flush()
         if not quiet:
@@ -1146,8 +1149,8 @@ class SerialTest:
 
             sys.exit(0)
 
-
     def writeCommand(self, command):
+        print("Sending", command)
         # backup current busy state
         bk = self.busy
         self.busy = True
@@ -1195,9 +1198,11 @@ class SerialTest:
             else:
                 try:
                     hex(response)
-                    print("Received incorrect ack! Command", command, "response ", charResponse, " '", response, "' (", hex(response), ")")
+                    print("Received incorrect ack! Command", command, "response ", charResponse, " '", response, "' (",
+                          hex(response), ")")
                 except:
-                    print("Received incorrect ack! Command", command, "response ", charResponse, " '", response, "' (cannot hex)")
+                    print("Received incorrect ack! Command", command, "response ", charResponse, " '", response,
+                          "' (cannot hex)")
             if response == 12:
                 print('RESET DETECTED')
                 self.ser.close()
@@ -1205,6 +1210,7 @@ class SerialTest:
             # time.sleep(10)
             return False
         return True
+
     # sys.exit(0)
 
     def timer(self):
@@ -1216,6 +1222,7 @@ class SerialTest:
         print('beginning experiments')
         self.writeCommand(b'E')
         self.ser.readline()
+
     def endExperiment(self):
         print('ending experiments')
         self.writeCommand(b'e')
@@ -1292,13 +1299,13 @@ class SerialTest:
             jtag = False
             self.readConfig(self.firConfig, selectmap=selectmap, jtag=jtag)
         # wait for it to finish
-        # self.ser.readline();
+        # self.ser.readline()
         elif target == "loadfir":
             selectmap = True
             jtag = False
             self.readConfig(self.firConfig, selectmap=selectmap, jtag=jtag)
             # wait for it to finish
-            self.ser.readline();
+            self.ser.readline()
         elif target == "fir":
             self.testFIR()
         elif target == "bootfir":
@@ -1320,13 +1327,13 @@ class SerialTest:
             jtag = False
             self.readConfig(self.mmConfig, selectmap=selectmap, jtag=jtag)
         # wait for it to finish
-        # self.ser.readline();
+        # self.ser.readline()
         elif target == "loadmm":
             selectmap = True
             jtag = False
             self.readConfig(self.firConfig, selectmap=selectmap, jtag=jtag)
             # wait for it to finish
-            self.ser.readline();
+            self.ser.readline()
         # elif target == "fir":
         # 	self.writeCommand(b'T')
         # 	self.writeCommand(b'f')
@@ -1343,7 +1350,7 @@ class SerialTest:
         elif target == "verifyannfpga":
             self.verify(self.annConfig, mcuFlash=False)
         elif target == "ann":
-            self.testANNsmall();
+            self.testANNsmall()
         elif target == "learnann":
             self.writeCommand(b'T')
             self.writeCommand(b'm')
@@ -1373,15 +1380,15 @@ class SerialTest:
             self.verify(self.bscanConfig, mcuFlash=True)
 
         elif target == "softreset":
-            self.resetUL();
+            self.resetUL()
         elif target == "hardreset":
             self.resetFPGA()
         elif target == "current":
-            self.printCurrent() #self.fetchCurrent());
+            self.printCurrent()  # self.fetchCurrent())
         elif target == "fetchcurrent":
-            self.printAllMeasurements();
+            self.printAllMeasurements()
         elif target == "xor":
-            self.testXor();
+            self.testXor()
         elif target == "startmonitor":
             self.startMonitor()
         elif target == "endmonitor":
@@ -1409,7 +1416,7 @@ class SerialTest:
             # self.getAllSizes()
             self.readConfig(self.testConfig, selectmap=selectmap, jtag=jtag)
             # wait for it to finish
-            self.ser.readline();
+            self.ser.readline()
 
 
         elif target == "writebscan":
@@ -1422,13 +1429,13 @@ class SerialTest:
             jtag = False
             self.readConfig(self.bscanConfig, selectmap=selectmap, jtag=jtag)
             # wait for it to finish
-            self.ser.readline();
+            self.ser.readline()
         elif target == "loadflash":
             selectmap = False
             jtag = False
             self.readConfig(self.annConfig, selectmap=selectmap, jtag=jtag, destination=0x0)
             # wait for it to finish
-            self.ser.readline();
+            self.ser.readline()
 
         elif target == "storeweights":
             self.storeWeights(ANN_WEIGHTS_ADDRESS)
@@ -1436,9 +1443,9 @@ class SerialTest:
         # elif target == "storeweightsoff":
         # 	self.writeCommand(b'A')
         elif target == "readweights":
-            self.readWeights(ANN_WEIGHTS_ADDRESS);
+            self.readWeights(ANN_WEIGHTS_ADDRESS)
         elif target == "loadweights":
-            self.loadWeights(ANN_WEIGHTS_ADDRESS);
+            self.loadWeights(ANN_WEIGHTS_ADDRESS)
 
         elif target == "ledon":
             self.controlLed(True)
@@ -1453,15 +1460,15 @@ class SerialTest:
             self.controlFpga(False)
 
         elif target == "fpgapowertest":
-            self.testFpgaPower();
+            self.testFpgaPower()
 
         elif target == "debugon":
-            self.controlDebug(True);
+            self.controlDebug(True)
         elif target == "debugoff":
-            self.controlDebug(False);
+            self.controlDebug(False)
 
         elif target == "demo":
-            self.demo();
+            self.demo()
 
         elif target == "multiboot":
             self.multiboot(0x60000)
@@ -1520,7 +1527,7 @@ class SerialTest:
             self.waitSerialDone()
 
         elif target == "flashtest":
-            self.testFlash();
+            self.testFlash()
 
         elif target == "resetweights":
             self.writeCommand(b'y')
@@ -1531,7 +1538,6 @@ class SerialTest:
 
 if __name__ == '__main__':
 
-
     serialTest = SerialTest(backgroundDebug=True)
     # self.startMonitor()
     # time.sleep(2)
@@ -1539,7 +1545,6 @@ if __name__ == '__main__':
     flash = True
     selectmap = False
     ADDRESS = 0
-
 
     if len(sys.argv) > 1:
 
@@ -1556,7 +1561,6 @@ if __name__ == '__main__':
 
             serialTest.runTarget(target)
 
-
     while serialTest.monitoring:
         try:
             time.sleep(0.1)
@@ -1565,5 +1569,4 @@ if __name__ == '__main__':
             serialTest.monitoring = False
         # self.endMonitor()
 
-    serialTest.ser.close();
-
+    serialTest.ser.close()

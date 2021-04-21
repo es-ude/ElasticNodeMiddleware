@@ -23,7 +23,7 @@ Both files are included in the [.gitignore](../.gitignore), because the ports sh
 The upload script is specified in the [BUILD.bazel](../app/BUILD.bazel) in the app folder. 
 For running the upload script you have to run: 
 
-	$ bazel run //app:blinkExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+	$ bazel run //app/examples:blinkExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 The four LEDs on your elastic node should blink in sequence.
 
@@ -32,7 +32,7 @@ The four LEDs on your elastic node should blink in sequence.
 For building and running the blink Lufa Example you have to use the same command like above but exchange "blinkExample" with "blinkLufaExample".
 So, the commands look like this:
 
-	$ bazel run //app:blinkLufaExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+	$ bazel run //app/examples:blinkLufaExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
 We use screen for showing the communication and open screen with the port of the elastic node. 
 For printing the communication we use:
@@ -76,46 +76,26 @@ Change the path to them or your own bitfiles in the [bitfileConfigs.py](../scrip
 
 For uploading the bitfiles run:
 
-    $ bazel run uploadMultiConfigS15
+    $ bazel run uploadBitfiles
     
 After processing the last output should be "ready to proceed with uart".
 
-### Controlmanager
+### Debug
 
-When the controlmanager is included in the code uploaded to the MCU, you can run
-    
-    $ sudo screen /dev/ttyACM1
-
-exactly like in the section "Blink Lufa Example". 
-Then you can write in the terminal your needed char for your specific function you want to use.
-
-- i: see current FPGA user id
-- r: reconfigurate the FPGA to user id D1
-- R: reconfigurate the FPGA to user id D2
-- F: start flashing (used when uploading bitfiles)
-
-If a s15 bitfile is one of your uploaded bitfiles and you selected the corresponding user id:
-- L: turn on LED
-- l: turn of LED 
+See Debug section in the [WriteOwnProgramGuide.md](WriteOwnProgramGuide.md#Debug).
 
 ## Tests
 
-We wrote some tests for checking the functionalities of our code. 
-If you want to run a test of the code (here for example the xmem_Test), you have to run:
+Unit test for all components and integration tests for some are available
+
+A Unit tests can be run (here for example the xmem_Test):
 
     $ bazel test test:xmem_Test
 
-If you want to run all tests:
+For running all unit tests:
 
     $ bazel test test:all
     
-If you want to run the integration test you have to use the build and uploads commands as written above.
-For example for building the integration test for xmem:
+For running the integration test, they need to be uploaded and than checked using screen:
 
-    $ bazel build //test/integration:test_xmem --platforms=@AvrToolchain//platforms:ElasticNode_v4 
-
-and for uploading this integration test
-
-    $ bazel run //test/integration:_test_xmemUpload --platforms=@AvrToolchain//platforms:ElasticNode_v4
-
-The structure of these commands is the same like explained above. 
+    $ bazel run //test/integration:test_elasticNodeMiddleware_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4

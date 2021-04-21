@@ -1,0 +1,43 @@
+load("@AvrToolchain//:helpers.bzl", "default_embedded_binaries", "default_embedded_binary")
+load("@AvrToolchain//platforms/cpu_frequency:cpu_frequency.bzl", "cpu_frequency_flag")
+
+default_embedded_binary(
+    name = "blinkExample",
+    srcs = ["blinkExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareLib",
+    ],
+)
+
+default_embedded_binary(
+    name = "blinkLufaExample",
+    srcs = ["blinkLufaExample.c"],
+    copts = cpu_frequency_flag()+ ["-DDEBUG"],
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareDEBUGLib",
+    ],
+)
+
+default_embedded_binary(
+    name = "blinkUartExample",
+    srcs = ["blinkUartExample.c"],
+    copts = cpu_frequency_flag()+ ["-DDEBUG"],
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareDEBUG_UARTLib",
+    ],
+)
+
+default_embedded_binary(
+    name = "monitoringExample",
+    srcs = ["monitoringExample.c"],
+    copts = cpu_frequency_flag(),
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "//:ElasticNodeMiddlewareLib",
+        "//:ElasticNodeMiddlewareMonitoringLib",
+    ],
+)

@@ -3,7 +3,11 @@
 
 #include <stddef.h>
 
-//#include "src/xmem/xmem.h"
+#ifndef TEST
+
+#include <util/delay.h>
+
+#endif
 
 // --------- <INTERNAL ---------
 void elasticnode_initialise(void);
@@ -34,14 +38,19 @@ void elasticnode_led_mcu_turnOffAll(void);
 // --------- LED> ---------
 
 // --------- <XMEM ---------
+void elasticnode_initFpgaInterface(void);
+
+uint16_t elasticnode_xmem_offset(void);
+
 void elasticnode_enableFpgaInterface(void);
 
 void elasticnode_disableFpgaInterface(void);
-
 // --------- XMEM> ---------
 
 // --------- <RECONFIGURE_MULTIBOOT_AVR ---------
 void elasticnode_configureFPGA(uint32_t address);
+
+uint8_t elasticnode_configureFPGA_wait_for_finish(uint32_t address);
 
 void elasticnode_reconfigure_interruptSR(void);
 
@@ -121,6 +130,10 @@ void elasticnode_debugWaitUntilDone(void);
 uint8_t elasticnode_debugSending(void);
 
 void elasticnode_debugAck(uint8_t c);
+
+void elasticnode_uart_ISR_Receive();
+
+void elasticnode_uart_ISR_Transmit();
 // --------- DEBUG> ---------
 #endif
 
@@ -142,13 +155,7 @@ void elasticnode_readBufferFromUserlogic(uint8_t userlogicAddr, uint16_t size, u
 //for integration testing
 #define FPGA_DONE_MULTIBOOT 2
 
-#ifdef TEST
 
-#else
-
-#include <util/delay.h>
-
-#endif
 */
 
 #endif // ELASTICNODEMIDDLEWARE_ELASTICNODEMIDDLEWARE_H

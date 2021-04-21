@@ -28,34 +28,3 @@ default_embedded_binary(
         "//:ElasticNodeMiddlewareDEBUGLib",
     ],
 )
-
-default_embedded_binary(
-    name = "blinkLufaExample",
-    srcs = ["blinkLufaExample.c"],
-    copts = cpu_frequency_flag()+ ["-DDEBUG"],
-    uploader = "@AvrToolchain//:avrdude_upload_script",
-    deps = [
-        "//:ElasticNodeMiddlewareDEBUGLib",
-    ],
-)
-
-default_embedded_binary(
-    name = "blinkExample",
-    srcs = ["blinkExample.c"],
-    copts = cpu_frequency_flag(),
-    uploader = "@AvrToolchain//:avrdude_upload_script",
-    deps = [
-        "//:ElasticNodeMiddlewareLib",
-    ],
-)
-
-default_embedded_binary(
-    name = "monitoringExample",
-    srcs = ["monitoringExample.c"],
-    copts = cpu_frequency_flag(),
-    uploader = "@AvrToolchain//:avrdude_upload_script",
-    deps = [
-        "//:ElasticNodeMiddlewareLib",
-        "//:ElasticNodeMiddlewareMonitoringLib",
-    ],
-)

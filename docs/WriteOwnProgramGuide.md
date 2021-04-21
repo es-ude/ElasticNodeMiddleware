@@ -39,13 +39,13 @@ First you can try to upload a blink example to the elastic node with:
     
 The four LEDs on your elastic node should blink in sequence.
 
-### Blink Lufa Example
+### Blink LUFA Example
 
-For testing Lufa first uplade the Lufa example:
+For testing LUFA first uplade the LUFA example:
 
     $ bazel run //app/examples:blinkLufaExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
     
-The fourth LED should blink and when using Lufa with
+The fourth LED should blink and when using LUFA with
     
     $ sudo screen /dev/ttyACM1
 
@@ -69,7 +69,7 @@ As you see in the example [main.c](../app/main.c) file, you need to include the 
 #include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 ```    
 
-and the external dependency for the middleware in the [BULD.bazel](../templates/appBUILD.bazel) file
+and the external dependency for the middleware in the [BUILD.bazel](../templates/appBUILD.bazel) file
 
 ```bazel
 "@ElasticNodeMiddleware//:ElasticNodeMiddlewareLib",
@@ -93,11 +93,12 @@ cc_library(
 )
 ```
 
-Wherby you add `:OtherFile` as a deps in the main binary and include all libraries used in the OtherFile as deps for it.
+Whereby you add `:OtherFile` as a deps in the main binary and include all libraries used in the OtherFile as deps for it.
 
 ### Debug 
 
-For uploading the main file with the `DEBUG` macros defined use the `mainDEBUG` target defined in the [BULD.bazel](../templates/appBUILD.bazel)
+The standard debugging is performed using LUFA.
+For uploading the main file with the `DEBUG` macros defined use the `mainDEBUG` target defined in the [BUILD.bazel](../templates/appBUILD.bazel)
 
     $ bazel run //app:mainDEBUG_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
 
@@ -107,7 +108,44 @@ This includes the middleware with the `DEBUG` flag set
 "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUGLib",
 ```
 
+#### Debug with UART
+
+For debugging with UART a FTDI-adapter is needed. See the [Getting Started Guide](GettingStartedGuide.md#Hardware) for more information.
+A UART example similar to the LUFA example is provided, you can upload it with
+
+    $ bazel run //app/examples:blinkUartExample_upload --platforms=@AvrToolchain//platforms:ElasticNode_v4
+
+For using UART in the [main.c](../app/main.c) the build target in the [BUILD.bazel](../app/BUILD.bazel) needs to be changed from 
+"@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUGLib" to "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUG_UARTLib". 
+Also the both interrupts at the beginning of the file needs to be included, this can be done defining UART with " ["-DUART"] " as with DEBUG.
+
+#### Debug commands
+
+When the mainDEBUG is uploaded to the MCU, you can run
+    
+    $ sudo screen /dev/ttyACM1
+
+exactly like in the section "Blink LUFA Example". 
+Then you can write in the terminal your needed char for your specific function you want to use.
+
+- i: see current FPGA user id
+- u: goes into user mode if not already in it
+- e: exits user mode if in it
+- FlashFPGA: start flashing (used when uploading bitfiles)
+- default: given char + 1 is returned
+
+In the example main following custom commands are included when in user mode
+- t: output's test string
+- r: reconfigures the FPGA to user id D1
+- R: reconfigures the FPGA to user id D2
+If a example bitfile is one of your uploaded bitfiles and you selected the corresponding user id:
+- L: turn on LED
+- l: turn of LED
+- default: unknown mode command received
+
 ## Upload your own bitfiles
+
+***Importent:*** Uploading the bitfiles via UART is currently not supported.
 
 Whenever you want to flash bitfiles, upload the main.c with the DEBUG Flag set as explained above.
   
@@ -121,4 +159,6 @@ Run the upload script with
 
     $ bazel run uploadBitfiles
 
-For other possible actions to perform with the bitfiles, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadMultiConfigS15.py) and the [scripts folder](../scripts) in general.
+After the flashing restart the MCU.
+
+For other possible actions to perform with the bitfiles, like verifying, take a look in the [uploadMultiConfigS15.py](../scripts/uploadBitfiles.py) and the [scripts folder](../scripts) in general.

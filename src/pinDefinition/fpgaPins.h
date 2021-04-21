@@ -1,7 +1,6 @@
 #ifndef ELASTICNODEMIDDLEWARE_FPGAPINS_H
 #define ELASTICNODEMIDDLEWARE_FPGAPINS_H
 
-
 #ifdef TEST
 
 #define P_FPGA_PROGRAM_B 2
@@ -42,10 +41,32 @@
 #define UDRE1 5
 #define RXC1 7
 
+#define P_LED_0 0
+#define P_LED_1 1
+#define P_LED_2 2
+#define P_LED_3 3
+
+// TODO: which values
+//spi
+#define MSTR 1
+#define SPR0 2
+#define SPIF 4
+
+#define P_FLASH_CS 3
+#define P_WIRELESS_CS 3
+
+#define P_FLASH_MOSI 2
+#define P_FLASH_SCK 3
+
+// xmem
+#define XMEM_SRW11 0
+#define XMEM_SRW10 1
+#define XMEM_XMBK 2
+#define XMEM_XMM1 3
+
 #else
 
 #include <avr/io.h>
-
 
 #define P_FPGA_PROGRAM_B PF2
 
@@ -79,12 +100,23 @@
 #define P_FLASH_CS PB4
 #define P_WIRELESS_CS PE6
 
+#define P_FLASH_MOSI PB2
+#define P_FLASH_SCK PB1
+
+
 //leds
 
 #define P_LED_0 PD7
 #define P_LED_1 PD6
 #define P_LED_2 PD5
 #define P_LED_3 PD4
+
+// xmem
+
+#define XMEM_SRW11 SRW11
+#define XMEM_SRW10 SRW10
+#define XMEM_XMBK XMBK
+#define XMEM_XMM1 XMM1
 
 #endif
 

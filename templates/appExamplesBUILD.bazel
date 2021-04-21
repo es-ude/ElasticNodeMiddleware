@@ -14,11 +14,21 @@ default_embedded_binary(
 default_embedded_binary(
     name = "blinkLufaExample",
     srcs = ["blinkLufaExample.c"],
-    copts = cpu_frequency_flag(),
+    copts = cpu_frequency_flag() + ["-DDEBUG"],
     uploader = "@AvrToolchain//:avrdude_upload_script",
     deps = [
         "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUGLib",
     ]
+)
+
+default_embedded_binary(
+    name = "blinkUartExample",
+    srcs = ["blinkUartExample.c"],
+    copts = cpu_frequency_flag()+ ["-DDEBUG"],
+    uploader = "@AvrToolchain//:avrdude_upload_script",
+    deps = [
+        "@ElasticNodeMiddleware//:ElasticNodeMiddlewareDEBUG_UARTLib",
+    ],
 )
 
 default_embedded_binary(
