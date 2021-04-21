@@ -170,6 +170,19 @@ void test_elasticnode_led_mcu_turnOffAll(void) {
     elasticnode_led_mcu_turnOffAll();
 }
 
+void test_elasticnode_initFpgaInterface(void) {
+    xmem_initXmem_Expect();
+    xmem_enableXmem_Expect();
+    xmem_disableXmem_Expect();
+    _delay_ms_Expect(10);
+    elasticnode_initFpgaInterface();
+}
+
+void test_elasticnode_xmem_offset(void) {
+    xmem_offset_ExpectAndReturn(45);
+    TEST_ASSERT_EQUAL(45, elasticnode_xmem_offset());
+}
+
 void test_elasticnode_enableFpgaInterface(void) {
     xmem_enableXmem_Expect();
     elasticnode_enableFpgaInterface();
@@ -182,14 +195,20 @@ void test_elasticnode_disableFpgaInterface(void) {
 
 void test_elasticnode_configureFPGA(void) {
     uint32_t address = 123;
+
     reconfigure_fpgaMultiboot_Expect(address);
     elasticnode_configureFPGA(address);
 }
 
 void test_elasticnode_configureFPGA_wait_for_finish(void) {
     uint32_t address = 123;
+    elasticnode_fpgaPowerOn_internal_Expect();
     reconfigure_fpgaMultiboot_Expect(address);
     reconfigure_fpgaMultibootComplete_ExpectAndReturn(0);
+    _delay_ms_Expect(10);
+    reconfigure_fpgaMultibootComplete_ExpectAndReturn(1);
+    reconfigure_fpgaMultibootComplete_ExpectAndReturn(0);
+    _delay_ms_Expect(10);
     reconfigure_fpgaMultibootComplete_ExpectAndReturn(1);
     _delay_ms_Expect(10);
 

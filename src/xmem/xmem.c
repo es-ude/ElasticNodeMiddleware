@@ -5,17 +5,23 @@
 #include "src/pinDefinition/fpgaRegisters.h"
 #include "src/pinDefinition/fpgaPins.h"
 
-// TODO: Necessary?
-/*
-void xmem_initXmem(void) {
+#include "src/delay/delay.h"
 
+// TODO: Necessary?
+
+void xmem_initXmem(void) {
     //SRW10 in MCUCR
 
-    XMCRA = (1 << SRW11) | (1 << SRW10);
-    XMCRB = (1 << XMBK) | (1 << XMM1);
+    BitManipulation_setBit(XMEM_XMCRA, XMEM_SRW11);
+    BitManipulation_setBit(XMEM_XMCRA, XMEM_SRW10);
 
+    BitManipulation_setBit(XMEM_XMCRB, XMEM_XMBK);
+    BitManipulation_setBit(XMEM_XMCRB, XMEM_XMM1);
+
+    //XMCRA = (1 << SRW11) | (1 << SRW10);
+    //XMCRB = (1 << XMBK) | (1 << XMM1);
 }
-*/
+
 
 uint16_t xmem_offset(void) {
     return (uint16_t) XMEM_OFFSET;

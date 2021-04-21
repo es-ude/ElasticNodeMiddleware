@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <stdbool.h>
 #include <util/delay.h>
-
+#include "stdint.h"
 #include "ElasticNodeMiddleware/ElasticNodeMiddleware.h"
 
 #ifdef DEBUG
@@ -40,8 +40,7 @@ int main(void) {
     // Needed for the custom led commands using the example bitfiles
     addr_led = (uint8_t *) (elasticnode_xmem_offset() + 0x03);
 
-    // TODO: Does not work in some enviroments
-    //elasticnode_debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
+    elasticnode_debugWriteString("Welcome to the development. To enter user mode commands, press 'u'\r\n");
 #endif
     elasticnode_initialise();
     elasticnode_fpgaPowerOff();
@@ -49,11 +48,16 @@ int main(void) {
     elasticnode_led_mcu_turnOn(0);
     _delay_ms(3000); // Gives everything time to initialise properly.
     elasticnode_led_mcu_turnOff(1);
+    elasticnode_initFpgaInterface();
     elasticnode_fpgaPowerOn();
     _delay_ms(1500);
-    elasticnode_configureFPGA_wait_for_finish(0x0); // Configures to address 0x0 at start up
+    // Configures to address 0x0 at start up
+    if (!elasticnode_configureFPGA_wait_for_finish(0x0)) {
+#ifdef DEBUG
+        elasticnode_debugWriteLine("init configuration of FPGA failed!");
+#endif
+    }
     elasticnode_led_mcu_turnOff(0);
-
     while (true) {
 
         //TODO: your implementation goes shere
@@ -104,14 +108,17 @@ void handleCharInput(uint8_t currentData) {
 
         /// Manually change the configuration of the FPGA ///
         case 'r':
-            elasticnode_configureFPGA_wait_for_finish(0x0);
-            elasticnode_debugWriteLine("reconfigured FPGA to 0x0");
+            if (elasticnode_configureFPGA_wait_for_finish(0x0)) {
+                elasticnode_debugWriteLine("reconfigured FPGA to 0x0");
+            }
             break;
         case 'R':
-            elasticnode_configureFPGA(0x90000);
-            // check if reconfigure is complete manually
-            while(!elasticnode_reconfigure_fpgaMultibootComplete());
-            elasticnode_debugWriteLine("reconfigured FPGA to 0x90000");
+            // elasticnode_configureFPGA(0x90000); // alternative, does not check if succeeds
+            // while(!elasticnode_reconfigure_fpgaMultibootComplete());  // check if reconfigure is complete manually
+            if (elasticnode_configureFPGA_wait_for_finish(0x90000)) {
+                elasticnode_debugWriteLine("reconfigured FPGA to 0x90000");
+            }
+
             break;
         default:
             elasticnode_debugWriteString("unknown mode command received\r\n");
