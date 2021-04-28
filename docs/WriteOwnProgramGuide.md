@@ -54,7 +54,7 @@ The fourth LED should blink and when using LUFA with
     
     $ sudo screen /dev/ttyACM1
 
-it should register it when 'a' is pressed.
+it should register it when 'a' is pressed. (`/dev/ttyACM1 being the serial port to the elastic node)
 
 ## Your Implementation
 
@@ -91,7 +91,6 @@ cc_library(
     hdrs = ["OtherFile.h"],
     deps = ["//app/setup:Setup"]
 )
-
 ```
 
 `:OtherFile` could for example be added to the deps of the main and/or mainDEBUG targets and then `OtherFile.h` included.
@@ -142,11 +141,11 @@ In the example main following custom commands are included when in user mode
     - default: unknown mode command received
     
     If an example bitfile is one of the uploaded bitfiles on the FPGA 
-    and the corresponding user id is selected:
+    and it is configured to the corresponding adress:
     - L: turn on LED
     - l: turn of LED
 
-## Uploading bitfiles
+## Uploading bitfiles to the FPGA
 
 ***Importent:*** Uploading the bitfiles via UART is currently not supported.
 

@@ -55,7 +55,7 @@ To use it, a variable is defined at a specific memory location and the data valu
 The FPGA detects this and reacts accordingly.
 The interconnection between MCU and FPGA starts at the internal memory address 0x2000 of the MCU.
 
-## Bitfile
+## Bitfiles
 
 A FPGA is a type of integrated circuit which is able to instantiate circuits at runtime.
 A bitfile stores a specific circuit for the FPGA.
@@ -74,11 +74,11 @@ All function can be found in the [ElasticNodeMiddleware.h](ElasticNodeMiddleware
 
 ### Always included
 
-### Led 
+#### Led 
 
 The Led library can be used for turning the MCU-LEDs at the elastic node on and off. 
 
-### Xmem
+#### Xmem
 
 The xmem library initializes, enables and disables the external memory interface. 
 The external memory is used to interconnect between the MCU and the FPGA.
@@ -86,7 +86,7 @@ The external memory is used to interconnect between the MCU and the FPGA.
 In the header file of the xmem library we define the offset of the external memory.
 By using the elastic node, the offset is 0x2000.
 
-### Reconfigure Multiboot Avr
+#### Reconfigure Multiboot Avr
 
 The Reconfigure Multiboot Avr library handles the reconfiguration of the FPGA.
 For now the library is specialised for avr, because we use an avr-microcontroller up to the elastic node version 4.
@@ -95,27 +95,27 @@ Using multiboot means that we select one configuration
 and provide the address of the next configuration 
 to the internal configuration access port (ICAP) interface of the FPGA.
 
-### Interrupt Manager
+#### Interrupt Manager
 
 The Interrupt manager library clears and sets interrupts.
 
-### Pin Definitions
+#### Pin Definitions
 
 The Pin definition library defines all pin and register definitions. 
 Therefore, all pin and register definitions are at one point in the code. 
 
 ### Only included with the DEBUG target
 
-### Debug
+#### Debug
 
 The debug library provides different debug commands. Debugging is available via UART or LUFA.
 It is recommend to debug with LUFA as it needed for uploading a bitfile to the FPGA. 
 
-### UART
+#### UART
 
 The UART library is one option for communication with the MCU when using the Debug library. 
 
-### Controlmanager 
+#### Controlmanager 
 
 The Controlmanager library has different basic elastic node middleware functions, 
 especially for starting the for uploading of bitfile to the FPGA.
@@ -123,38 +123,38 @@ especially for starting the for uploading of bitfile to the FPGA.
 - FlashFPGA: uploads bitfiles 
 - i: print the current User logic ID
 
-### Configuration
+#### Configuration
 
 The configuration library configures the FPGA for uploading a bitfile to it.
 
-### Flash
+#### Flash
 
 The Flash library is used for handling with the Flash memory of the FPGA.
 The Flash of the FPGA is needed for the communication between the FPGA and the MCU. 
 
-### Spi
+#### Spi
 
 The Spi library implements the [Serial Peripheral Interface](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) for the FPGA.
 
-## Monitoring
+### External Libraries
 
-The [Energy Monitoring Guide](docs/EnergyMonitoring.md) explains how to monitor the energy consumption via the monitoring MCU.
-It uses the [Elastic Node Monitoring Repository](https://github.com/es-ude/ElasticNodeMonitoring).
-
-## External Libraries
-
-### Bitmanipulation
+#### Bitmanipulation
 
 The Bitmanipulation library is an library from the [Embedded Utilities repository](https://github.com/es-ude/EmbeddedUtilities).
 It is used for setting and clearing bits.
 
-### LUFA
+#### LUFA
 
 The Lufa library is an library from the 
 [Peripheral Interface repositry](https://github.com/es-ude/PeripheralInterface).
 Lufa is a USB library for USB-enabled AVR microcontrollers and explained at 
 [fourwalledcubicle](http://www.fourwalledcubicle.com/files/LUFA/Doc/120219/html/index.html).
-It on of the library than can be used in the debug library.
+It is one option for communication with the MCU when using the Debug library. 
+
+## Monitoring
+
+The [Energy Monitoring Guide](docs/EnergyMonitoring.md) explains how to monitor the energy consumption via the monitoring MCU.
+It uses the [Elastic Node Monitoring Repository](https://github.com/es-ude/ElasticNodeMonitoring).
 
 ## Future Work
 
