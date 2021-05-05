@@ -62,7 +62,7 @@ typedef enum {
 
 void elasticnode_monitoring_change_running_state(uint8_t new_state);
 
-void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rate new_sample_rate);
+void elasticnode_monitoring_change_sample_rate(uint8_t new_sample_rate);
 
 void IIC_slave_init(uint8_t address);
 

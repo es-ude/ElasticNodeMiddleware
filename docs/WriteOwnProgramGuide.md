@@ -165,4 +165,4 @@ Run the upload script with
 After the flashing restart the MCU.
 
 For other possible actions to perform with the bitfiles, like verifying, take a look in the 
-[uploadMultiConfigS15.py](../scripts/uploadBitfiles.py) and the [scripts folder](../scripts) in general.
+[uploadBitfiles.py](../scripts/uploadBitfiles.py) and the [scripts folder](../scripts) in general.

@@ -22,9 +22,12 @@ void elasticnode_monitoring_change_running_state(uint8_t new_state) {
     //*state_of_the_mcu |= tmp_samplerate << 4;
 }
 
-void elasticnode_monitoring_change_sample_rate(elasticnode_monitoring_sample_rate new_sample_rate) {
+void elasticnode_monitoring_change_sample_rate(uint8_t new_sample_rate) {
 
     if (new_sample_rate <= 15) {
+
+        new_sample_rate = new_sample_rate << 4;
+
         BitManipulation_setByte(STATE_AND_SAMPLE_RATE_OF_THE_MCU, 0b11110000, new_sample_rate);
     }
 
