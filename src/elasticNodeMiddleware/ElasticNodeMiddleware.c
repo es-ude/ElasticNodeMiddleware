@@ -15,6 +15,7 @@
 
 #ifdef DEBUG
 #include "src/controlmanager/controlmanager.h"
+#include "src/configuration/configuration.h"
 #include "src/debug/debug.h"
 
 #ifdef UART
@@ -189,6 +190,12 @@ void elasticnode_control_handleChar(uint8_t currentData){
     control_handleChar(currentData);
 }
 // --------- CONTROLMANAGER> ---------
+
+// --------- <CONFIG ---------
+void elasticnode_configurationFlash(void (*readData)(uint8_t *, uint16_t)) {
+    configurationFlash(readData);
+}
+// --------- CONFIG> ---------
 
 // --------- <DEBUG ---------
 #ifdef LUFA

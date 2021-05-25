@@ -21,7 +21,7 @@
 uint32_t configAddress, configSize, configRemaining;
 uint8_t *buffer;
 
-void configurationUartFlash(void) {
+void configurationFlash(void (*readData)(uint8_t *, uint16_t)) {
 
     elasticnode_fpgaPowerOff_internal();
     elasticnode_setFpgaHardReset_internal();
@@ -62,11 +62,12 @@ void configurationUartFlash(void) {
 #ifndef TEST
     debugReady();
 #endif
+
     while (configRemaining > 0) {
         if (configRemaining < BUFFER_SIZE) {
             blockSize = configRemaining;
         }
-        readData_internal(buffer, blockSize);
+        readData(buffer, blockSize);
 #ifndef TEST
         led_mcu_turnOn(0);
 #endif
