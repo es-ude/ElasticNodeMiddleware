@@ -66,6 +66,10 @@ void elasticnode_control_setUserHandle(void (*userHandler)(uint8_t));
 void elasticnode_control_handleChar(uint8_t currentData);
 // --------- CONTROLMANAGER> ---------
 
+// --------- <CONFIG ---------
+void elasticnode_configurationFlash(void (*readData)(uint8_t *, uint16_t));
+// --------- CONFIG> ---------
+
 // --------- <DEBUG ---------
 void  elasticnode_debugTask(void);
 
