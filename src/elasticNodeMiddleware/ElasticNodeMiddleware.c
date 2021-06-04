@@ -13,10 +13,13 @@
 
 #include "src/xmem/xmem.h"
 
+#include "src/interruptManager/interruptManager.h"
+
 #ifdef DEBUG
 #include "src/controlmanager/controlmanager.h"
 #include "src/configuration/configuration.h"
 #include "src/debug/debug.h"
+#include "src/flash/flash.h"
 
 #ifdef UART
 #include "src/uart/uart.h"
@@ -180,6 +183,16 @@ uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void) {
 }
 // --------- RECONFIGURE_MULTIBOOT_AVR> ---------
 
+// --------- <INTERRUPT ---------
+void elasticnode_interruptManager_clearInterrupt(void) {
+    interruptManager_clearInterrupt();
+}
+
+void elasticnode_interruptManager_setInterrupt(void) {
+    interruptManager_setInterrupt();
+}
+// --------- INTERRUPT> ---------
+
 #ifdef DEBUG
 // --------- <CONTROLMANAGER ---------
 void elasticnode_control_setUserHandle(void (*userHandler)(uint8_t)){
@@ -193,9 +206,25 @@ void elasticnode_control_handleChar(uint8_t currentData){
 
 // --------- <CONFIG ---------
 void elasticnode_configurationFlash(void (*readData)(uint8_t *, uint16_t)) {
+    initFlash(); // SPI interface init and ..? Todo
+    unlockFlash(0);
     configurationFlash(readData);
 }
 // --------- CONFIG> ---------
+
+// --------- <FLASH ---------
+void elasticnode_eraseSectorFlash(uint32_t address, uint8_t mcuFlash) {
+    eraseSectorFlash(address, mcuFlash);
+}
+
+void elasticnode_flashEnableInterface(void) {
+    flashEnableInterface();
+}
+
+void elasticnode_writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mcuFlash) {
+    writeDataFlash(address, data, length, mcuFlash);
+}
+// --------- FLASH> ---------
 
 // --------- <DEBUG ---------
 #ifdef LUFA

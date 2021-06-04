@@ -59,6 +59,12 @@ uint32_t elasticnode_getLoadedConfigurationAddress(void);
 uint8_t elasticnode_reconfigure_fpgaMultibootComplete(void);
 // --------- RECONFIGURE_MULTIBOOT_AVR> ---------
 
+// --------- <INTERRUPT ---------
+void elasticnode_interruptManager_clearInterrupt(void);
+
+void elasticnode_interruptManager_setInterrupt(void);
+// --------- INTERRUPT> ---------
+
 #ifdef DEBUG
 // --------- <CONTROLMANAGER ---------
 void elasticnode_control_setUserHandle(void (*userHandler)(uint8_t));
@@ -69,6 +75,14 @@ void elasticnode_control_handleChar(uint8_t currentData);
 // --------- <CONFIG ---------
 void elasticnode_configurationFlash(void (*readData)(uint8_t *, uint16_t));
 // --------- CONFIG> ---------
+
+// --------- <FLASH ---------
+void elasticnode_eraseSectorFlash(uint32_t address, uint8_t mcuFlash);
+
+void elasticnode_flashEnableInterface(void);
+
+void elasticnode_writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mcuFlash);
+// --------- FLASH> ---------
 
 // --------- <DEBUG ---------
 void  elasticnode_debugTask(void);
