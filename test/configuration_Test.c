@@ -14,7 +14,7 @@
 extern uint32_t configAddress, configSize, configRemaining;
 extern uint8_t *buffer;
 
-void test_configurationUartFlash(void) {
+void test_configurationFlash(void) {
     // TODO: malloc test
     configAddress = 0;
     configSize = 3;
@@ -51,7 +51,7 @@ void test_configurationUartFlash(void) {
     free(buffer);
     interruptManager_setInterrupt_Expect();
 
-    configurationUartFlash();
+    configurationFlash(readData_internal);
 }
 
 

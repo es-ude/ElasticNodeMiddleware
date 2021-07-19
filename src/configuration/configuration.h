@@ -4,7 +4,7 @@
 
 #define BUFFER_SIZE 256
 
-void configurationUartFlash(void);
+void configurationFlash(void (*readData)(uint8_t *, uint16_t));
 
 void verifyConfigurationFlash(uint8_t mcuFlash);
 
