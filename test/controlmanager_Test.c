@@ -3,6 +3,7 @@
 #include "src/controlmanager/controlmanager.h"
 
 #include "src/configuration/Mockconfiguration.h"
+#include "src/configuration/Mockconfiguration_internal.h"
 #include "src/debug/Mockdebug.h"
 #include "src/flash/Mockflash.h"
 #include "src/controlmanager/Mockcontrolmanager_internal.h"
@@ -26,7 +27,8 @@ void test_control_handleChar_F_True(void) {
     }
     initFlash_Expect();
     unlockFlash_Expect(0);
-    configurationUartFlash_Expect();
+
+    configurationFlash_Expect(readData_internal);
     control_handleChar('F');
 }
 

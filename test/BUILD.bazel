@@ -391,6 +391,7 @@ unity_test(
     copts = ["-DTEST"],
     deps = [
         "mock_configuration",
+        "mock_configuration_internal",
         "mock_debug",
         "mock_flash",
         "mock_controlmanager_internal",
