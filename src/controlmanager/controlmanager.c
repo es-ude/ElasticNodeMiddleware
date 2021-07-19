@@ -3,6 +3,7 @@
 #include "src/controlmanager/controlmanager_internal.h"
 
 #include "src/configuration/configuration.h"
+#include "src/configuration/configuration_internal.h"
 #include "src/xmem/xmem.h"
 #include "src/flash/flash.h"
 
@@ -16,6 +17,8 @@ void dummyHandler(uint8_t currentData);
 void (*userDefinedHandler)(uint8_t) = &dummyHandler;
 
 // TODO: Necessary?
+void configurationUartFlash(void (*fun)(uint8_t *, uint16_t));
+
 /*
 uint8_t control_isUartIdle(void) {
     return currentUartReceiveMode != UART_IDLE;
@@ -103,7 +106,7 @@ void control_handleChar(uint8_t currentData) {
                     if (synced) {
                         initFlash(); // SPI interface init and ..? Todo
                         unlockFlash(0); // To write data on FLASH, must unlock the flash
-                        configurationUartFlash();
+                        configurationFlash(readData_internal);
                     }
                     break;
                 case 'i':
