@@ -29,7 +29,7 @@ void spiEnable_internal(void) {
 
     // TODO: how to use in tests
     // reset interrupts
-    while (*SPSR_SPI & (uint8_t) (1 << (SPIF))) {
+    while (*SPSR_SPI & (uint8_t)(1 << (SPIF))) {
         //while (SPSR & _BV(SPIF)) {
         //    SPDR;
     }
@@ -66,7 +66,7 @@ uint8_t SPI_internal(uint8_t data) {
     *SPDR_SPI = data;
 #ifndef TEST
     while (!(*SPSR_SPI & (1 << (SPIF)))) {}
-        //while (!(SPSR & _BV(SPIF))) {
+    //while (!(SPSR & _BV(SPIF))) {
 #endif
     return *SPDR_SPI;
 }

@@ -7,7 +7,7 @@
 
 #include "src/xmem/xmem.h"
 
-volatile uint8_t *fpgaResetOffset = (uint8_t *) (XMEM_OFFSET + 0x04);
+volatile uint8_t *fpgaResetOffset = (uint8_t * )(XMEM_OFFSET + 0x04);
 
 void elasticnode_fpgaPowerOn_internal(void) {
 

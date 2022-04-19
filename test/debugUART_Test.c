@@ -98,7 +98,7 @@ void test_debugWriteCharBlock(void) {
 }
 
 void test_debugReadCharAvailable(void) {
-    TEST_ASSERT_EQUAL(uartFlag,  debugReadCharAvailable());
+    TEST_ASSERT_EQUAL(uartFlag, debugReadCharAvailable());
 }
 
 void test_debugReadCharProcessed(void) {

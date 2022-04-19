@@ -66,9 +66,9 @@ void test_eraseSectorFlash(void) {
     eraseSectorFlash(address, mcuFlash);
 
     TEST_ASSERT_EQUAL(0x20, spi_buffer[0]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 16), spi_buffer[1]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 8), spi_buffer[2]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 0), spi_buffer[3]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 16), spi_buffer[1]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 8), spi_buffer[2]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 0), spi_buffer[3]);
 }
 
 void test_writeDataFlash_if(void) {
@@ -100,16 +100,16 @@ void test_writeDataFlash_else(void) {
     writeDataFlash(address, data, length, mcuFlash);
 
     TEST_ASSERT_EQUAL(0x02, spi_buffer[0]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 16), spi_buffer[1]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 8), spi_buffer[2]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 0), spi_buffer[3]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 16), spi_buffer[1]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 8), spi_buffer[2]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 0), spi_buffer[3]);
 }
 
 void readDataFlash_test_spi(uint32_t address) {
     TEST_ASSERT_EQUAL(0x03, spi_buffer[0]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 16), spi_buffer[1]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 8), spi_buffer[2]);
-    TEST_ASSERT_EQUAL((uint8_t) (address >> 0), spi_buffer[3]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 16), spi_buffer[1]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 8), spi_buffer[2]);
+    TEST_ASSERT_EQUAL((uint8_t)(address >> 0), spi_buffer[3]);
 }
 
 void test_readDataFlash_if(void) {
@@ -123,7 +123,8 @@ void test_readDataFlash_if(void) {
     spiPerformTaskBlocking_internal_Expect(4, spi_buffer, numBytes, spi_buffer + 4);
     deselectFlash_Expect(mcuFlash);
 
-    TEST_ASSERT_EQUAL(spi_buffer + 4, readDataFlash(address, numBytes, mcuFlash, readingCallbackFunction, finishedCallbackFunction));
+    TEST_ASSERT_EQUAL(spi_buffer + 4,
+                      readDataFlash(address, numBytes, mcuFlash, readingCallbackFunction, finishedCallbackFunction));
 
     readDataFlash_test_spi(address);
 }
@@ -137,9 +138,10 @@ void test_readDataFlash_else(void) {
 
     selectFlash_Expect(mcuFlash);
     spiPerformTaskBlockingWithCallback_internal_Expect(4, spi_buffer, numBytes, readingCallbackFunction,
-                                                finishedCallbackFunction);
+                                                       finishedCallbackFunction);
 
-    TEST_ASSERT_EQUAL(spi_buffer + 4, readDataFlash(address, numBytes, mcuFlash, readingCallbackFunction, finishedCallbackFunction));
+    TEST_ASSERT_EQUAL(spi_buffer + 4,
+                      readDataFlash(address, numBytes, mcuFlash, readingCallbackFunction, finishedCallbackFunction));
 
     readDataFlash_test_spi(address);
 }

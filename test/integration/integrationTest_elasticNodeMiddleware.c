@@ -26,9 +26,7 @@ int main() {
 
         BitManipulation_setBit(&PORTD, PD4);
         debugWriteLine("elasticnode_initialise() successful");
-    }
-    else
-    {
+    } else {
         debugWriteLine("elasticnode_initialise() NOT successful");
     }
 

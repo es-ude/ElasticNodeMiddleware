@@ -405,6 +405,7 @@ unity_test(
     copts = ["-DTEST"],
     deps = [
         "mock_Xmem",
+        "mock_debug",
         "//src:Controlmanager_internalTest",
     ],
 )
@@ -444,12 +445,16 @@ unity_test(
         "mock_controlmanager",
         "mock_debug",
         "mock_delay",
+        "mock_flash",
+        "mock_InterruptManager",
+        "mock_configuration",
+        "mock_Uart",
         "//src:ElasticNodeMiddlewareTest",
     ],
 )
 
 unity_test(
-    file_name = "ElasticNodeMiddleware_internal_Test.c",
+    file_name = "elasticNodeMiddleware_internal_Test.c",
     cexception = False,
     copts = ["-DTEST"],
     deps = [
@@ -511,7 +516,7 @@ unity_test(
     copts = ["-DTEST"],
     deps = [
         "mock_Bitmanipulation",
-        "//src:led_mcuTest",
+        "//src:Led_mcuTest",
     ],
 )
 
@@ -549,6 +554,7 @@ unity_test(
     deps = [
         "mock_InterruptManager",
         "mock_Bitmanipulation",
+        "mock_Spi",
         "//src:Spi_internalTest",
     ],
 )

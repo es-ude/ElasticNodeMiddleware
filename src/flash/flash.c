@@ -59,9 +59,9 @@ void eraseSectorFlash(uint32_t address, uint8_t mcuFlash) {
     selectFlash(mcuFlash);
 
     spi_buffer[0] = 0x20;
-    spi_buffer[1] = (uint8_t) (address >> 16);
-    spi_buffer[2] = (uint8_t) (address >> 8);
-    spi_buffer[3] = (uint8_t) (address >> 0);
+    spi_buffer[1] = (uint8_t)(address >> 16);
+    spi_buffer[2] = (uint8_t)(address >> 8);
+    spi_buffer[3] = (uint8_t)(address >> 0);
 
     spiPerformTaskBlocking_internal(4, spi_buffer, 0, NULL);
 
@@ -85,9 +85,9 @@ void writeDataFlash(uint32_t address, uint8_t *data, uint16_t length, uint8_t mc
 
         // put instructions in buffer
         spi_buffer[0] = 0x02;
-        spi_buffer[1] = (uint8_t) (address >> 16);
-        spi_buffer[2] = (uint8_t) (address >> 8);
-        spi_buffer[3] = (uint8_t) (address >> 0);
+        spi_buffer[1] = (uint8_t)(address >> 16);
+        spi_buffer[2] = (uint8_t)(address >> 8);
+        spi_buffer[3] = (uint8_t)(address >> 0);
 
         memcpy(spi_buffer + 4, data, length);
 
@@ -106,9 +106,9 @@ readDataFlash(uint32_t address, uint32_t numBytes, uint8_t mcuFlash, void (*read
 
     // put instructions backward in buffer
     spi_buffer[0] = 0x03;
-    spi_buffer[1] = (uint8_t) (address >> 16);
-    spi_buffer[2] = (uint8_t) (address >> 8);
-    spi_buffer[3] = (uint8_t) (address >> 0);
+    spi_buffer[1] = (uint8_t)(address >> 16);
+    spi_buffer[2] = (uint8_t)(address >> 8);
+    spi_buffer[3] = (uint8_t)(address >> 0);
 
 
     if (readingCallbackFunction == NULL) {

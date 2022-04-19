@@ -80,8 +80,8 @@ void test_uart_init(void) {
     uart_Init(receiveHandler);
 
     TEST_ASSERT_EQUAL_UINT8(sendingFlag, 0x0);
-    TEST_ASSERT_EQUAL(UBRR1H, (uint8_t) (my_bdr >> 8));
-    TEST_ASSERT_EQUAL(UBRR1L, (uint8_t) (my_bdr));
+    TEST_ASSERT_EQUAL(UBRR1H, (uint8_t)(my_bdr >> 8));
+    TEST_ASSERT_EQUAL(UBRR1L, (uint8_t)(my_bdr));
 }
 
 void test_uart_getUartReceiveHandler(void) {

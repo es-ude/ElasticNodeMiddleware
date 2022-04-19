@@ -14,6 +14,11 @@
 #include "src/xmem/Mockxmem.h"
 #include "src/delay/Mockdelay.h"
 
+#include "src/flash/Mockflash.h"
+#include "src/interruptManager/MockinterruptManager.h"
+#include "src/configuration/Mockconfiguration.h"
+#include "src/uart/Mockuart.h"
+
 uint8_t port_fpga_program_b;
 uint8_t ddr_fpga_program_b;
 

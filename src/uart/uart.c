@@ -47,8 +47,8 @@ void uart_WaitUntilDone(void) {
 }
 
 void uart_Init(void (*receiveHandler)(uint8_t)) {
-    UBRR1H = (uint8_t) (my_bdr >> 8);
-    UBRR1L = (uint8_t) (my_bdr);
+    UBRR1H = (uint8_t)(my_bdr >> 8);
+    UBRR1L = (uint8_t)(my_bdr);
 
 #if UART_2X
     BitManipulation_setBit(UART_UCSR1A, U2X1);

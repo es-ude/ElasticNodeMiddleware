@@ -4,8 +4,8 @@
 
 #include "src/debug/debug.h"
 
-volatile uint8_t *userlogic_reset_addr = (uint8_t *) (XMEM_OFFSET + 0x04);
-volatile uint8_t *userlogic_id_addr = (uint8_t *) (XMEM_USERLOGIC_OFFSET + 1500);
+volatile uint8_t *userlogic_reset_addr = (uint8_t * )(XMEM_OFFSET + 0x04);
+volatile uint8_t *userlogic_id_addr = (uint8_t * )(XMEM_USERLOGIC_OFFSET + 1500);
 
 /* function below is also the middleware level, for enabling the user_logic,
  * which is above the middleware.

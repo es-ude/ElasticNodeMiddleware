@@ -8,6 +8,7 @@
 #include "src/pinDefinition/fpgaPins.h"
 
 #include "src/interruptManager/MockinterruptManager.h"
+#include "src/spi/Mockspi.h"
 
 uint8_t spcr_spi;
 uint8_t portb_spi;

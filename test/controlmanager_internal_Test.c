@@ -4,6 +4,8 @@
 
 #include "src/xmem/Mockxmem.h"
 
+#include "src/debug/Mockdebug.h"
+
 uint8_t memoryarea[2000];
 const uint8_t *externalMockMemory = (const uint8_t *) &memoryarea;
 

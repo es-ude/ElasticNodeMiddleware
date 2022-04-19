@@ -29,11 +29,11 @@ void initalise_reconfigure_multiboot_mockRegister(void) {
 
 void writeMultiboot(uint32_t address) {
     //32 address
-    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (0 * 8))));
+    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot + 0), (uint8_t)(0xff & (address >> (0 * 8))));
 
-    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (1 * 8))));
+    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot + 0), (uint8_t)(0xff & (address >> (1 * 8))));
 
-    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot+0), (uint8_t) (0xff & (address >> (2 * 8))));
+    TEST_ASSERT_EQUAL_UINT8(*(AddressMultiboot + 0), (uint8_t)(0xff & (address >> (2 * 8))));
 }
 
 void test_reconfigure_fpgaMultiboot(void) {
@@ -57,7 +57,7 @@ void test_reconfigure_fpgaMultiboot(void) {
 }
 
 void test_getMultibootAddress(void) {
-    uint32_t address = (uint32_t) (*(AddressMultiboot) + *(AddressMultiboot + 1) + *(AddressMultiboot + 2));
+    uint32_t address = (uint32_t)(*(AddressMultiboot) + *(AddressMultiboot + 1) + *(AddressMultiboot + 2));
     TEST_ASSERT_EQUAL_UINT32(address, reconfigure_getMultibootAddress());
 }
 
